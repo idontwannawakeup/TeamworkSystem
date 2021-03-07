@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.DataAccessLayer.Data;
+using TeamworkSystem.DataAccessLayer.Infrastructure;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Models;
 
@@ -23,7 +24,13 @@ namespace TeamworkSystem.WebAPI
         // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ISqlConnectionFactory, SqlConnectionFactory>();
+
             services.AddTransient<IRepository<User, int>, UsersRepository>();
+            services.AddTransient<IRepository<Team, int>, TeamsRepository>();
+            services.AddTransient<IRepository<Project, int>, ProjectsRepository>();
+            services.AddTransient<IRepository<Ticket, int>, TicketsRepository>();
+            services.AddTransient<IRepository<Rating, (int, int)>, RatingsRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -1,8 +1,9 @@
 ﻿using System.Data.SqlClient;
+using TeamworkSystem.DataAccessLayer.Interfaces;
 
 namespace TeamworkSystem.DataAccessLayer.Models
 {
-    public class User
+    public class User : IIdentifiableEntity
     {
         public int Id { get; set; }
 
@@ -16,7 +17,7 @@ namespace TeamworkSystem.DataAccessLayer.Models
 
         public static User CreateInstanceFromReader(SqlDataReader reader)
         {
-            var id = (int) reader["Id"];
+            int id = (int) reader["Id"];
             string name = (string) reader["Name"];
             string surname = (string) reader["Surname"];
 
