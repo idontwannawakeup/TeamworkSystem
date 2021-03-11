@@ -3,16 +3,16 @@ using System.Threading.Tasks;
 
 namespace TeamworkSystem.DataAccessLayer.Interfaces
 {
-    public interface IRepository<TEntity, TKey>
+    public interface IRepository<TEntity>
     {
         Task<IEnumerable<TEntity>> GetAsync();
 
-        Task<TEntity> GetByKeyAsync(TKey key);
+        Task<TEntity> GetByIdAsync(int id);
 
         Task InsertAsync(TEntity obj);
 
-        Task UpdateAsync(TKey key, TEntity obj);
+        Task UpdateAsync(int id, TEntity obj);
 
-        Task DeleteAsync(TKey key);
+        Task DeleteAsync(int id);
     }
 }

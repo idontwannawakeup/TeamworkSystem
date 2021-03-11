@@ -6,7 +6,7 @@ using TeamworkSystem.DataAccessLayer.Interfaces;
 
 namespace TeamworkSystem.DataAccessLayer.Data
 {
-    public class GenericRepository<TEntity, TKey> : IRepository<TEntity, TKey>
+    public class GenericRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
         private readonly TeamworkSystemContext context;
@@ -18,9 +18,9 @@ namespace TeamworkSystem.DataAccessLayer.Data
             throw new NotImplementedException();
         }
 
-        public async Task<TEntity> GetByKeyAsync(TKey key)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
-            return await this.table.FindAsync(key);
+            return await this.table.FindAsync(id);
         }
 
         public Task InsertAsync(TEntity obj)
@@ -28,12 +28,12 @@ namespace TeamworkSystem.DataAccessLayer.Data
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(TKey key, TEntity obj)
+        public Task UpdateAsync(int id, TEntity obj)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(TKey key)
+        public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }

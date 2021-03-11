@@ -2,7 +2,7 @@
 
 namespace TeamworkSystem.DataAccessLayer.Data
 {
-    public class UsersRepository : GenericRepository<User, int>
+    public class UsersRepository : GenericRepository<User>
     {
         public UsersRepository(TeamworkSystemContext context)
             : base(context)
