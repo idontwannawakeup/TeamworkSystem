@@ -12,7 +12,7 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ProjectsController : ControllerBase
     {
-        private readonly IRepository<Project, int> repository;
+        private readonly IRepository<Project> repository;
 
         private readonly ILogger<ProjectsController> logger;
 
@@ -29,13 +29,13 @@ namespace TeamworkSystem.WebAPI.Controllers
                 return this.NotFound();
             }
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Project>>> Get([FromRoute] int id)
         {
             try
             {
-                return this.Ok(await this.repository.GetByKeyAsync(id));
+                return this.Ok(await this.repository.GetByIdAsync(id));
             }
             catch (Exception e)
             {
@@ -90,7 +90,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         public ProjectsController(
-            IRepository<Project, int> repository,
+            IRepository<Project> repository,
             ILogger<ProjectsController> logger)
         {
             this.repository = repository;

@@ -5,13 +5,13 @@ namespace TeamworkSystem.DataAccessLayer.Models
     public class Team : IIdentifiableEntity
     {
         public int Id { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public int? LeaderId { get; set; }
-        
+
         public string? Specialization { get; set; }
-        
+
         public string? About { get; set; }
 
         public Team(int id,

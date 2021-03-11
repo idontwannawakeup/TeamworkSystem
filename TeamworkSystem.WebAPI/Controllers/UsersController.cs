@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Models;
 
@@ -12,7 +12,7 @@ namespace TeamworkSystem.WebAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IRepository<User, int> repository;
+        private readonly IRepository<User> repository;
 
         private readonly ILogger<UsersController> logger;
 
@@ -35,7 +35,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.repository.GetByKeyAsync(id));
+                return this.Ok(await this.repository.GetByIdAsync(id));
             }
             catch (Exception e)
             {
@@ -90,7 +90,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         public UsersController(
-            IRepository<User, int> repository,
+            IRepository<User> repository,
             ILogger<UsersController> logger)
         {
             this.repository = repository;

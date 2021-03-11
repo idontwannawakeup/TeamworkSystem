@@ -1,5 +1,4 @@
-﻿using System.Data.SqlClient;
-using TeamworkSystem.DataAccessLayer.Interfaces;
+﻿using TeamworkSystem.DataAccessLayer.Interfaces;
 
 namespace TeamworkSystem.DataAccessLayer.Models
 {
@@ -14,27 +13,6 @@ namespace TeamworkSystem.DataAccessLayer.Models
         public string? Profession { get; set; }
 
         public string? Specialization { get; set; }
-
-        public static User CreateInstanceFromReader(SqlDataReader reader)
-        {
-            int id = (int) reader["Id"];
-            string name = (string) reader["Name"];
-            string surname = (string) reader["Surname"];
-
-            string? profession = !reader.IsDBNull(3)
-                ? (string) reader["Profession"]
-                : null;
-
-            string? specialization = !reader.IsDBNull(4)
-                ? (string) reader["Specialization"]
-                : null;
-
-            return new User(id,
-                name,
-                surname,
-                profession,
-                specialization);
-        }
 
         public User(int id,
             string name,

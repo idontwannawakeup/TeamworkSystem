@@ -12,11 +12,10 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class RatingsController : ControllerBase
     {
-        private readonly IRepository<Rating, (int, int)> repository;
+        private readonly IRepository<Rating> repository;
 
         private readonly ILogger<RatingsController> logger;
 
-        // TODO make api methods
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rating>>> Get()
         {
@@ -31,12 +30,12 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet("{from}/{to}")]
-        public async Task<ActionResult<Rating>> Get([FromRoute] int @from, [FromRoute] int to)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Rating>> Get([FromRoute] int id)
         {
             try
             {
-                return this.Ok(await this.repository.GetByKeyAsync((@from, to)));
+                return this.Ok(await this.repository.GetByIdAsync(id));
             }
             catch (Exception e)
             {
@@ -60,15 +59,13 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpPut("{from}/{to}")]
-        public async Task<ActionResult> Put(
-            [FromRoute] int @from,
-            [FromRoute] int to,
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put([FromRoute] int id,
             [FromBody] Rating rating)
         {
             try
             {
-                await this.repository.UpdateAsync((@from, to), rating);
+                await this.repository.UpdateAsync(id, rating);
                 return this.Ok();
             }
             catch (Exception e)
@@ -78,12 +75,12 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{from}/{to}")]
-        public async Task<ActionResult> Delete([FromRoute] int @from, [FromRoute] int to)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete([FromRoute] int id)
         {
             try
             {
-                await this.repository.DeleteAsync((@from, to));
+                await this.repository.DeleteAsync(id);
                 return this.Ok();
             }
             catch (Exception e)
@@ -94,7 +91,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         public RatingsController(
-            IRepository<Rating, (int, int)> repository,
+            IRepository<Rating> repository,
             ILogger<RatingsController> logger)
         {
             this.repository = repository;

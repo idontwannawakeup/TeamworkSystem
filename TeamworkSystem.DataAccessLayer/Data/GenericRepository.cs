@@ -29,7 +29,7 @@ namespace TeamworkSystem.DataAccessLayer.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<TEntity> GetByKeyAsync(int id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
             await using var connection = this.SqlConnectionFactory.Connection;
             return await connection.QuerySingleAsync<TEntity>(

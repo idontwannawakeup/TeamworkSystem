@@ -26,11 +26,11 @@ namespace TeamworkSystem.WebAPI
         {
             services.AddTransient<ISqlConnectionFactory, SqlConnectionFactory>();
 
-            services.AddTransient<IRepository<User, int>, UsersRepository>();
-            services.AddTransient<IRepository<Team, int>, TeamsRepository>();
-            services.AddTransient<IRepository<Project, int>, ProjectsRepository>();
-            services.AddTransient<IRepository<Ticket, int>, TicketsRepository>();
-            services.AddTransient<IRepository<Rating, (int, int)>, RatingsRepository>();
+            services.AddTransient<IRepository<User>, UsersRepository>();
+            services.AddTransient<IRepository<Team>, TeamsRepository>();
+            services.AddTransient<IRepository<Project>, ProjectsRepository>();
+            services.AddTransient<IRepository<Ticket>, TicketsRepository>();
+            services.AddTransient<IRepository<Rating>, RatingsRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

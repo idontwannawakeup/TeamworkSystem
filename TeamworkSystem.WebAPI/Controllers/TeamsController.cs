@@ -12,8 +12,8 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class TeamsController : ControllerBase
     {
-        private readonly IRepository<Team, int> repository;
-        
+        private readonly IRepository<Team> repository;
+
         private readonly ILogger<TeamsController> logger;
 
         [HttpGet]
@@ -35,7 +35,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.repository.GetByKeyAsync(id));
+                return this.Ok(await this.repository.GetByIdAsync(id));
             }
             catch (Exception e)
             {
@@ -90,7 +90,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         public TeamsController(
-            IRepository<Team, int> repository,
+            IRepository<Team> repository,
             ILogger<TeamsController> logger)
         {
             this.repository = repository;
