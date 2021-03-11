@@ -9,7 +9,7 @@ using TeamworkSystem.DataAccessLayer.Models;
 
 namespace TeamworkSystem.DataAccessLayer.Data
 {
-    public class UsersRepository : IRepository<User, int>
+    public class UsersRepository : IRepository<User>
     {
         private readonly IConfiguration configuration;
 
@@ -38,7 +38,7 @@ namespace TeamworkSystem.DataAccessLayer.Data
             return users;
         }
 
-        public async Task<User> GetByKeyAsync(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
             SqlParameter[]? parameters = new[]
             {

@@ -23,7 +23,7 @@ namespace TeamworkSystem.WebAPI
         // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IRepository<User, int>, UsersRepository>();
+            services.AddTransient<IRepository<User>, UsersRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
