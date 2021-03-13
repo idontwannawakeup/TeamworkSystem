@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.DataAccessLayer;
 
 namespace TeamworkSystem.WebAPI
 {
@@ -20,6 +22,12 @@ namespace TeamworkSystem.WebAPI
         // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<TeamworkSystemContext>(options =>
+            {
+                string connectionString = this.Configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlServer(connectionString);
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
