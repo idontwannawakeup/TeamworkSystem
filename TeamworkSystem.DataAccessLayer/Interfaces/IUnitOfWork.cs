@@ -11,6 +11,10 @@ namespace TeamworkSystem.DataAccessLayer.Interfaces
 
         IProjectsRepository ProjectsRepository { get; }
 
+        ITicketsRepository TicketsRepository { get; }
+
+        IRatingsRepository RatingsRepository { get; }
+
         Task SaveChangesAsync();
     }
 }

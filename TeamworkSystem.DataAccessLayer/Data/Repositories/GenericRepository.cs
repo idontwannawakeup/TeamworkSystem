@@ -9,9 +9,9 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     public class GenericRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
-        private readonly TeamworkSystemContext context;
+        protected readonly TeamworkSystemContext databaseContext;
 
-        private readonly DbSet<TEntity> table;
+        protected readonly DbSet<TEntity> table;
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
@@ -21,39 +21,31 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<TEntity> GetByIdAsync(int id)
         {
             return await this.table.FindAsync(id)
-                ?? throw new Exception("Entity not found.");
+                ?? throw new Exception($"{typeof(TEntity).Name} not found.");
         }
 
         public async Task InsertAsync(TEntity entity)
         {
             await this.table.AddAsync(entity);
-            await this.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(TEntity entity)
         {
-            this.table.Update(entity);
-            await this.SaveChangesAsync();
+            await Task.Run(() => this.table.Update(entity));
         }
 
         public async Task DeleteAsync(int id)
         {
-            TEntity objToDelete = await this.table.FindAsync(id)
-                ?? throw new Exception("Entity not found.");
+            TEntity entity = await this.table.FindAsync(id)
+                ?? throw new Exception($"{typeof(TEntity).Name} not found.");
 
-            this.table.Remove(objToDelete);
-            await this.SaveChangesAsync();
+            await Task.Run(() => this.table.Remove(entity));
         }
 
-        private async Task SaveChangesAsync()
+        public GenericRepository(TeamworkSystemContext databaseContext)
         {
-            await this.context.SaveChangesAsync();
-        }
-
-        public GenericRepository(TeamworkSystemContext context)
-        {
-            this.context = context;
-            this.table = this.context.Set<TEntity>();
+            this.databaseContext = databaseContext;
+            this.table = this.databaseContext.Set<TEntity>();
         }
     }
 }

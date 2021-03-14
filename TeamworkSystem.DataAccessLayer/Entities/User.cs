@@ -22,8 +22,8 @@ namespace TeamworkSystem.DataAccessLayer.Entities
         
         public List<Rating> RatingsFromMe { get; set; }
         
-        public List<User> FriendsFirst { get; set; }
+        public List<User> Friends { get; set; }
         
-        public List<User> FriendsSecond { get; set; }
+        public List<User> FriendForUsers { get; set; }
     }
 }
