@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TeamworkSystem.BusinessLogicLayer\TeamworkSystem.BusinessLogicLayer.csproj" />
     <ProjectReference Include="..\TeamworkSystem.DataAccessLayer\TeamworkSystem.DataAccessLayer.csproj" />
   </ItemGroup>
 

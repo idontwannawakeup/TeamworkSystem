@@ -19,6 +19,24 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             return team?.Members ?? throw new Exception($"{typeof(Team).Name} not found.");
         }
 
+        public async Task AddMemberAsync(int id, User member)
+        {
+            Team team = await this.table
+                .Include(team => team.Members)
+                .FirstOrDefaultAsync(team => team.Id == id);
+
+            team?.Members.Add(member);
+        }
+
+        public async Task DeleteMemberAsync(int id, User member)
+        {
+            Team team = await this.table
+                .Include(team => team.Members)
+                .FirstOrDefaultAsync(team => team.Id == id);
+
+            team?.Members.Remove(member);
+        }
+
         public TeamsRepository(TeamworkSystemContext databaseContext)
             : base(databaseContext)
         {

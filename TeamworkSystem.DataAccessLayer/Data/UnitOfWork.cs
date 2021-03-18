@@ -9,20 +9,15 @@ namespace TeamworkSystem.DataAccessLayer.Data
     {
         protected readonly TeamworkSystemContext databaseContext;
 
-        public IUsersRepository UsersRepository
-            => new UsersRepository(this.databaseContext);
+        public IUsersRepository UsersRepository { get; }
 
-        public ITeamsRepository TeamsRepository
-            => new TeamsRepository(this.databaseContext);
+        public ITeamsRepository TeamsRepository { get; }
 
-        public IProjectsRepository ProjectsRepository
-            => new ProjectsRepository(this.databaseContext);
+        public IProjectsRepository ProjectsRepository { get; }
 
-        public ITicketsRepository TicketsRepository
-            => new TicketsRepository(this.databaseContext);
+        public ITicketsRepository TicketsRepository { get; }
 
-        public IRatingsRepository RatingsRepository
-            => new RatingsRepository(this.databaseContext);
+        public IRatingsRepository RatingsRepository { get; }
 
         public async Task SaveChangesAsync()
         {
@@ -32,6 +27,11 @@ namespace TeamworkSystem.DataAccessLayer.Data
         public UnitOfWork(TeamworkSystemContext databaseContext)
         {
             this.databaseContext = databaseContext;
+            this.UsersRepository = new UsersRepository(this.databaseContext);
+            this.TeamsRepository = new TeamsRepository(this.databaseContext);
+            this.ProjectsRepository = new ProjectsRepository(this.databaseContext);
+            this.TicketsRepository = new TicketsRepository(this.databaseContext);
+            this.RatingsRepository = new RatingsRepository(this.databaseContext);
         }
     }
 }
