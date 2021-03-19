@@ -8,15 +8,13 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(user => user.Id)
-                   .UseIdentityColumn()
-                   .IsRequired();
+            builder.HasKey(user => user.Id);
 
-            builder.Property(user => user.Name)
+            builder.Property(user => user.FirstName)
                    .HasMaxLength(50)
                    .IsRequired();
 
-            builder.Property(user => user.Surname)
+            builder.Property(user => user.LastName)
                    .HasMaxLength(50)
                    .IsRequired();
 

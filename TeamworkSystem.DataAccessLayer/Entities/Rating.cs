@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public int FromId { get; set; }
+        public string FromId { get; set; }
 
-        public int ToId { get; set; }
+        public string ToId { get; set; }
 
         public int Social { get; set; }
 

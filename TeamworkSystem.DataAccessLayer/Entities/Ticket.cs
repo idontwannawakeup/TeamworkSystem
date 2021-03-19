@@ -8,7 +8,7 @@ namespace TeamworkSystem.DataAccessLayer.Entities
 
         public int ProjectId { get; set; }
 
-        public int? ExecutorId { get; set; }
+        public string ExecutorId { get; set; }
 
         public string Title { get; set; }
 

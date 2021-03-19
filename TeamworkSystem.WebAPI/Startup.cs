@@ -5,7 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.BusinessLogicLayer.Interfaces;
+using TeamworkSystem.BusinessLogicLayer.Services;
 using TeamworkSystem.DataAccessLayer;
+using TeamworkSystem.DataAccessLayer.Data;
+using TeamworkSystem.DataAccessLayer.Data.Repositories;
+using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.WebAPI
 {
@@ -27,6 +34,18 @@ namespace TeamworkSystem.WebAPI
                 string connectionString = this.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
+
+            services.AddIdentityCore<User>()
+                    .AddEntityFrameworkStores<TeamworkSystemContext>();
+
+            services.AddTransient<IProjectsRepository, ProjectsRepository>();
+            services.AddTransient<IRatingsRepository, RatingsRepository>();
+            services.AddTransient<ITeamsRepository, TeamsRepository>();
+            services.AddTransient<ITicketsRepository, TicketsRepository>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<IUsersService, UsersService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -55,6 +74,8 @@ namespace TeamworkSystem.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
