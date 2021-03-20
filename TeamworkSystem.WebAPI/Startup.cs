@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using TeamworkSystem.BusinessLogicLayer.Interfaces;
+using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.BusinessLogicLayer.Services;
 using TeamworkSystem.DataAccessLayer;
 using TeamworkSystem.DataAccessLayer.Data;
@@ -45,7 +46,13 @@ namespace TeamworkSystem.WebAPI
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
+            services.AddTransient<IProjectsService, ProjectsService>();
+            services.AddTransient<IRatingsService, RatingsService>();
+            services.AddTransient<ITeamsService, TeamsService>();
+            services.AddTransient<ITicketsService, TicketsService>();
             services.AddTransient<IUsersService, UsersService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

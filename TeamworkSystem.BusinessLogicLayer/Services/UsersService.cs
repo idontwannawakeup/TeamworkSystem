@@ -1,4 +1,4 @@
-﻿using TeamworkSystem.BusinessLogicLayer.Interfaces;
+﻿using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
