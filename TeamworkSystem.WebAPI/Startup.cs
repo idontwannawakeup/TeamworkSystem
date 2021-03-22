@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +37,8 @@ namespace TeamworkSystem.WebAPI
                 options.UseSqlServer(connectionString);
             });
 
-            services.AddIdentityCore<User>()
+            services.AddIdentity<User, IdentityRole>()
+                    .AddDefaultTokenProviders()
                     .AddEntityFrameworkStores<TeamworkSystemContext>();
 
             services.AddTransient<IProjectsRepository, ProjectsRepository>();

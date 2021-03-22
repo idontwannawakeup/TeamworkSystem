@@ -9,13 +9,15 @@ namespace TeamworkSystem.DataAccessLayer.Interfaces
     {
         UserManager<User> UserManager { get; }
 
-        ITeamsRepository TeamsRepository { get; }
+        SignInManager<User> SignInManager { get; }
 
         IProjectsRepository ProjectsRepository { get; }
 
-        ITicketsRepository TicketsRepository { get; }
-
         IRatingsRepository RatingsRepository { get; }
+
+        ITeamsRepository TeamsRepository { get; }
+
+        ITicketsRepository TicketsRepository { get; }
 
         Task SaveChangesAsync();
     }

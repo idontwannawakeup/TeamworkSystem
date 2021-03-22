@@ -10,11 +10,20 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     public class TeamsRepository
         : GenericRepository<Team>, ITeamsRepository
     {
+        public async Task<Team> GetCompleteTeamAsync(int id)
+        {
+            return await this.table
+                .Include(team => team.Leader)
+                .Include(team => team.Projects)
+                .Include(team => team.Members)
+                .SingleOrDefaultAsync(team => team.Id == id);
+        }
+
         public async Task<IEnumerable<User>> GetMembersAsync(int id)
         {
             Team team = await this.table
                 .Include(team => team.Members)
-                .FirstOrDefaultAsync(team => team.Id == id);
+                .SingleOrDefaultAsync(team => team.Id == id);
 
             return team?.Members ?? throw new Exception($"{typeof(Team).Name} not found.");
         }
@@ -23,7 +32,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         {
             Team team = await this.table
                 .Include(team => team.Members)
-                .FirstOrDefaultAsync(team => team.Id == id);
+                .SingleOrDefaultAsync(team => team.Id == id);
 
             team?.Members.Add(member);
         }

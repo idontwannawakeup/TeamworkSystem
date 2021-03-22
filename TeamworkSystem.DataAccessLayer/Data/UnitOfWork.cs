@@ -13,13 +13,15 @@ namespace TeamworkSystem.DataAccessLayer.Data
 
         public UserManager<User> UserManager { get; }
 
-        public ITeamsRepository TeamsRepository { get; }
+        public SignInManager<User> SignInManager { get; }
 
         public IProjectsRepository ProjectsRepository { get; }
 
-        public ITicketsRepository TicketsRepository { get; }
-
         public IRatingsRepository RatingsRepository { get; }
+
+        public ITeamsRepository TeamsRepository { get; }
+
+        public ITicketsRepository TicketsRepository { get; }
 
         public async Task SaveChangesAsync()
         {
@@ -27,10 +29,12 @@ namespace TeamworkSystem.DataAccessLayer.Data
         }
 
         public UnitOfWork(TeamworkSystemContext databaseContext,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             this.databaseContext = databaseContext;
             this.UserManager = userManager;
+            this.SignInManager = signInManager;
             this.TeamsRepository = new TeamsRepository(this.databaseContext);
             this.ProjectsRepository = new ProjectsRepository(this.databaseContext);
             this.TicketsRepository = new TicketsRepository(this.databaseContext);

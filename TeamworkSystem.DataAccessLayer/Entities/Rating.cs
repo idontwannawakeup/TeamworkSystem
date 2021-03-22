@@ -16,10 +16,10 @@
 
         public int? Punctuality { get; set; }
 
+        public string Comment { get; set; }
+
         public User From { get; set; }
 
         public User To { get; set; }
-
-        public string Comment { get; set; }
     }
 }
