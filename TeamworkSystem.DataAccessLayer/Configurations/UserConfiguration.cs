@@ -8,15 +8,13 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(user => user.Id)
-                   .UseIdentityColumn()
-                   .IsRequired();
+            builder.HasKey(user => user.Id);
 
-            builder.Property(user => user.Name)
+            builder.Property(user => user.FirstName)
                    .HasMaxLength(50)
                    .IsRequired();
 
-            builder.Property(user => user.Surname)
+            builder.Property(user => user.LastName)
                    .HasMaxLength(50)
                    .IsRequired();
 
@@ -26,13 +24,13 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
             builder.Property(user => user.Specialization)
                    .HasMaxLength(50);
 
-            builder.HasMany(user => user.FriendsFirst)
-                   .WithMany(user => user.FriendsSecond)
+            builder.HasMany(user => user.Friends)
+                   .WithMany(user => user.FriendForUsers)
                    .UsingEntity(entity =>
                    {
                        entity.ToTable("Friends");
-                       entity.Property("FriendsFirstId").HasColumnName("FirstId");
-                       entity.Property("FriendsSecondId").HasColumnName("SecondId");
+                       entity.Property("FriendsId").HasColumnName("FirstId");
+                       entity.Property("FriendForUsersId").HasColumnName("SecondId");
                    });
         }
     }

@@ -1,11 +1,20 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
+using TeamworkSystem.BusinessLogicLayer.Services;
 using TeamworkSystem.DataAccessLayer;
+using TeamworkSystem.DataAccessLayer.Data;
+using TeamworkSystem.DataAccessLayer.Data.Repositories;
+using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.WebAPI
 {
@@ -27,6 +36,25 @@ namespace TeamworkSystem.WebAPI
                 string connectionString = this.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
+
+            services.AddIdentity<User, IdentityRole>()
+                    .AddDefaultTokenProviders()
+                    .AddEntityFrameworkStores<TeamworkSystemContext>();
+
+            services.AddTransient<IProjectsRepository, ProjectsRepository>();
+            services.AddTransient<IRatingsRepository, RatingsRepository>();
+            services.AddTransient<ITeamsRepository, TeamsRepository>();
+            services.AddTransient<ITicketsRepository, TicketsRepository>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<IProjectsService, ProjectsService>();
+            services.AddTransient<IRatingsService, RatingsService>();
+            services.AddTransient<ITeamsService, TeamsService>();
+            services.AddTransient<ITicketsService, TicketsService>();
+            services.AddTransient<IUsersService, UsersService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -55,6 +83,8 @@ namespace TeamworkSystem.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

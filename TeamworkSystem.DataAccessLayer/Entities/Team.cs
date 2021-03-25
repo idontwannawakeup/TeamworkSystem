@@ -8,7 +8,7 @@ namespace TeamworkSystem.DataAccessLayer.Entities
 
         public string Name { get; set; }
 
-        public int? LeaderId { get; set; }
+        public string LeaderId { get; set; }
 
         public string Specialization { get; set; }
 

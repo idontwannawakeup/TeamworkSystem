@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace TeamworkSystem.DataAccessLayer.Entities
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
+        public string FirstName { get; set; }
 
-        public string Name { get; set; }
-
-        public string Surname { get; set; }
+        public string LastName { get; set; }
 
         public string Profession { get; set; }
 
@@ -17,13 +16,13 @@ namespace TeamworkSystem.DataAccessLayer.Entities
         public List<Team> Teams { get; set; }
 
         public List<Ticket> Tickets { get; set; }
-        
+
         public List<Rating> MyRatings { get; set; }
-        
+
         public List<Rating> RatingsFromMe { get; set; }
-        
-        public List<User> FriendsFirst { get; set; }
-        
-        public List<User> FriendsSecond { get; set; }
+
+        public List<User> Friends { get; set; }
+
+        public List<User> FriendForUsers { get; set; }
     }
 }
