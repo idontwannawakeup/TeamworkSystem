@@ -21,7 +21,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.usersServices.GetAllAsync());
+                return this.Ok(await this.usersServices.GetAllProfilesAsync());
             }
             catch (Exception e)
             {
@@ -35,7 +35,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.usersServices.GetByIdAsync(id));
+                return this.Ok(await this.usersServices.GetProfileByIdAsync(id));
             }
             catch (Exception e)
             {

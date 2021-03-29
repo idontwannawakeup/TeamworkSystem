@@ -3,7 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.BusinessLogicLayer.DTO;
+using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
+using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
@@ -16,21 +17,22 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly IMapper mapper;
 
-        public async Task<IEnumerable<UserDTO>> GetAllAsync()
+        public async Task SignUpAsync(UserSignUpDTO userSignUpDTO)
         {
-            var users = await this.unitOfWork.UserManager.Users.ToListAsync();
-            return users.Select(this.mapper.Map<User, UserDTO>);
+            User user = this.mapper.Map<UserSignUpDTO, User>(userSignUpDTO);
+            await this.unitOfWork.UserManager.CreateAsync(user, userSignUpDTO.Password);
         }
 
-        public async Task<UserDTO> GetByIdAsync(string id)
+        public async Task<IEnumerable<UserProfileDTO>> GetAllProfilesAsync()
+        {
+            List<User> users = await this.unitOfWork.UserManager.Users.ToListAsync();
+            return users.Select(this.mapper.Map<User, UserProfileDTO>);
+        }
+
+        public async Task<UserProfileDTO> GetProfileByIdAsync(string id)
         {
             User user = await this.unitOfWork.UserManager.FindByIdAsync(id);
-            return this.mapper.Map<User, UserDTO>(user);
-        }
-
-        public Task CreateAsync(UserDTO userDTO)
-        {
-            throw new System.NotImplementedException();
+            return this.mapper.Map<User, UserProfileDTO>(user);
         }
 
         public async Task DeleteAsync(string id)

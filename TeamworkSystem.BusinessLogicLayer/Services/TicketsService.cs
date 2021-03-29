@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TeamworkSystem.BusinessLogicLayer.DTO;
+using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;

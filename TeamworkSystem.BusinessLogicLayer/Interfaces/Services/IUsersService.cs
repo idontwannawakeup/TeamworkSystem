@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TeamworkSystem.BusinessLogicLayer.DTO;
-using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
+using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 
 namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface IUsersService
     {
-        Task<IEnumerable<UserDTO>> GetAllAsync();
+        Task SignUpAsync(UserSignUpDTO userSignUpDTO);
 
-        Task<UserDTO> GetByIdAsync(string id);
+        Task<IEnumerable<UserProfileDTO>> GetAllProfilesAsync();
 
-        Task CreateAsync(UserDTO userDTO);
+        Task<UserProfileDTO> GetProfileByIdAsync(string id);
 
         Task DeleteAsync(string id);
 

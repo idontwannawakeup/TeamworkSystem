@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TeamworkSystem.BusinessLogicLayer.DTO
+namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
 {
     public class TicketWithExtendedDeadlineDTO
     {
