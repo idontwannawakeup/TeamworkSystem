@@ -2,7 +2,7 @@
 
 namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
 {
-    public class TicketWithExtendedDeadlineDTO
+    public class TicketWithExtendedDeadlineRequest
     {
         public int Id { get; set; }
 

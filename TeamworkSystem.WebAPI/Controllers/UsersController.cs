@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
+using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
+using TeamworkSystem.BusinessLogicLayer.Exceptions;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 
@@ -16,8 +19,25 @@ namespace TeamworkSystem.WebAPI.Controllers
 
         private readonly ILogger<UsersController> logger;
 
+        [HttpPost]
+        [Route("signUp")]
+        public async Task<ActionResult> SignUpAsync([FromBody] UserSignUpRequest user)
+        {
+            try
+            {
+                await this.usersServices.SignUpAsync(user);
+                return this.Ok();
+            }
+            catch (ArgumentException e)
+            {
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.BadRequest(message);
+            }
+        }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<UserProfileResponse>>> GetAsync()
         {
             try
             {
@@ -31,16 +51,17 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetAsync([FromRoute] string id)
+        public async Task<ActionResult<UserProfileResponse>> GetAsync([FromRoute] string id)
         {
             try
             {
                 return this.Ok(await this.usersServices.GetProfileByIdAsync(id));
             }
-            catch (Exception e)
+            catch (EntityNotFoundException e)
             {
-                this.logger.LogError(e.Message);
-                return this.NotFound();
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.NotFound(message);
             }
         }
 
@@ -59,7 +80,8 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        public UsersController(IUsersService usersService,
+        public UsersController(
+            IUsersService usersService,
             ILogger<UsersController> logger)
         {
             this.usersServices = usersService;

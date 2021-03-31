@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using TeamworkSystem.DataAccessLayer.Data.Repositories;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
@@ -30,15 +29,19 @@ namespace TeamworkSystem.DataAccessLayer.Data
 
         public UnitOfWork(TeamworkSystemContext databaseContext,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            IProjectsRepository projectsRepository,
+            IRatingsRepository ratingsRepository,
+            ITeamsRepository teamsRepository,
+            ITicketsRepository ticketsRepository)
         {
             this.databaseContext = databaseContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
-            this.TeamsRepository = new TeamsRepository(this.databaseContext);
-            this.ProjectsRepository = new ProjectsRepository(this.databaseContext);
-            this.TicketsRepository = new TicketsRepository(this.databaseContext);
-            this.RatingsRepository = new RatingsRepository(this.databaseContext);
+            this.ProjectsRepository = projectsRepository;
+            this.RatingsRepository = ratingsRepository;
+            this.TeamsRepository = teamsRepository;
+            this.TicketsRepository = ticketsRepository;
         }
     }
 }

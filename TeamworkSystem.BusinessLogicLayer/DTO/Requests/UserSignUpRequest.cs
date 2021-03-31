@@ -1,6 +1,6 @@
 ﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
 {
-    public class UserSignUpDTO
+    public class UserSignUpRequest
     {
         public string UserName { get; set; }
 

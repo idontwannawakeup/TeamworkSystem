@@ -9,9 +9,9 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
     {
         public AutoMapperProfile()
         {
-            this.CreateMap<User, UserProfileDTO>();
+            this.CreateMap<User, UserProfileResponse>();
 
-            this.CreateMap<UserSignUpDTO, User>();
+            this.CreateMap<UserSignUpRequest, User>();
         }
     }
 }

@@ -7,11 +7,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface IUsersService
     {
-        Task SignUpAsync(UserSignUpDTO userSignUpDTO);
+        Task SignUpAsync(UserSignUpRequest userSignUpDTO);
 
-        Task<IEnumerable<UserProfileDTO>> GetAllProfilesAsync();
+        Task<IEnumerable<UserProfileResponse>> GetAllProfilesAsync();
 
-        Task<UserProfileDTO> GetProfileByIdAsync(string id);
+        Task<UserProfileResponse> GetProfileByIdAsync(string id);
 
         Task DeleteAsync(string id);
 

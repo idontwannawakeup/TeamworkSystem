@@ -4,6 +4,7 @@ using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
 {
@@ -11,15 +12,17 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public async Task ExtendDeadline(TicketWithExtendedDeadlineDTO ticketWithExtendedDeadline)
+        private readonly ITicketsRepository ticketsRepository;
+
+        public async Task ExtendDeadline(TicketWithExtendedDeadlineRequest ticketWithExtendedDeadline)
         {
-            Ticket ticket = await this.unitOfWork.TicketsRepository.GetByIdAsync(ticketWithExtendedDeadline.Id);
+            Ticket ticket = await this.ticketsRepository.GetByIdAsync(ticketWithExtendedDeadline.Id);
             if (ticket.Deadline > ticketWithExtendedDeadline.Deadline)
             {
                 throw new Exception("New date of deadline is sooner than current.");
             }
 
-            await this.unitOfWork.TicketsRepository.UpdateAsync(ticket);
+            await this.ticketsRepository.UpdateAsync(ticket);
             ticket.Deadline = ticketWithExtendedDeadline.Deadline;
             await this.unitOfWork.SaveChangesAsync();
         }
@@ -27,6 +30,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public TicketsService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+            this.ticketsRepository = this.unitOfWork.TicketsRepository;
         }
     }
 }
