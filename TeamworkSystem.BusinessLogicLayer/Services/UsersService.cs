@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
-using TeamworkSystem.BusinessLogicLayer.Exceptions;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
@@ -47,42 +47,52 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<UserProfileResponse> GetProfileByIdAsync(string id)
         {
             User user = await this.userManager.FindByIdAsync(id)
-                ?? throw new EntityNotFoundException(
-                    $"{typeof(User).Name} with id {id} not found.");
+                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
 
             return this.mapper.Map<User, UserProfileResponse>(user);
         }
 
         public async Task DeleteAsync(string id)
         {
-            User user = await this.userManager.FindByIdAsync(id);
+            User user = await this.userManager.FindByIdAsync(id)
+                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
+
             await this.unitOfWork.UserManager.DeleteAsync(user);
             await this.unitOfWork.SaveChangesAsync();
         }
 
         public async Task AddFriend(FriendsRequest friendsRequest)
         {
-            User firstUser = await this.userManager.FindByIdAsync(friendsRequest.FirstId)
-                ?? throw new EntityNotFoundException(
-                    $"{typeof(User).Name} with id {friendsRequest.FirstId} not found.");
-
-            User secondUser = await this.userManager.FindByIdAsync(friendsRequest.SecondId);
-            await this.userManager.UpdateAsync(firstUser);
-            await this.userManager.UpdateAsync(secondUser);
-            firstUser.Friends.Add(secondUser);
-            secondUser.Friends.Add(firstUser);
-
-            await this.unitOfWork.SaveChangesAsync();
+            await this.MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
+            {
+                firstUser.Friends.Add(secondUser);
+                secondUser.Friends.Add(firstUser);
+            });
         }
 
-        public async Task DeleteFriend(string id, string friendId)
+        public async Task DeleteFriend(FriendsRequest friendsRequest)
         {
-            User user = await this.userManager.FindByIdAsync(id);
-            User friend = await this.userManager.FindByIdAsync(friendId);
-            await this.userManager.UpdateAsync(user);
-            await this.userManager.UpdateAsync(friend);
-            user.Friends.Remove(friend);
-            friend.Friends.Remove(user);
+            await this.MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
+            {
+                firstUser.Friends.Remove(secondUser);
+                secondUser.Friends.Remove(firstUser);
+            });
+        }
+
+        public static string GetUserNotFoundErrorMessage(string id) =>
+            $"{nameof(User)} with id {id} not found.";
+
+        private async Task MakeActionWithFriends(FriendsRequest friendsRequest, Action<User, User> action)
+        {
+            User firstUser = await this.userManager.FindByIdAsync(friendsRequest.FirstId)
+                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(friendsRequest.FirstId));
+
+            User secondUser = await this.userManager.FindByIdAsync(friendsRequest.SecondId)
+                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(friendsRequest.SecondId));
+
+            await this.userManager.UpdateAsync(firstUser);
+            await this.userManager.UpdateAsync(secondUser);
+            action(firstUser, secondUser);
 
             await this.unitOfWork.SaveChangesAsync();
         }

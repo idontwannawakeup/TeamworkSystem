@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
@@ -16,23 +16,26 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .Include(team => team.Leader)
                 .Include(team => team.Projects)
                 .Include(team => team.Members)
-                .SingleOrDefaultAsync(team => team.Id == id);
+                .SingleOrDefaultAsync(team => team.Id == id)
+                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
         }
 
         public async Task<IEnumerable<User>> GetMembersAsync(int id)
         {
             Team team = await this.table
                 .Include(team => team.Members)
-                .SingleOrDefaultAsync(team => team.Id == id);
+                .SingleOrDefaultAsync(team => team.Id == id)
+                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
 
-            return team?.Members ?? throw new Exception($"{typeof(Team).Name} not found.");
+            return team?.Members;
         }
 
         public async Task AddMemberAsync(int id, User member)
         {
             Team team = await this.table
                 .Include(team => team.Members)
-                .SingleOrDefaultAsync(team => team.Id == id);
+                .SingleOrDefaultAsync(team => team.Id == id)
+                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
 
             team?.Members.Add(member);
         }
@@ -41,7 +44,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         {
             Team team = await this.table
                 .Include(team => team.Members)
-                .FirstOrDefaultAsync(team => team.Id == id);
+                .SingleOrDefaultAsync(team => team.Id == id)
+                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
 
             team?.Members.Remove(member);
         }

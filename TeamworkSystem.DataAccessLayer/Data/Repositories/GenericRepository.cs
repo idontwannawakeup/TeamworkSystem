@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
@@ -21,7 +21,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public virtual async Task<TEntity> GetByIdAsync(int id)
         {
             return await this.table.FindAsync(id)
-                ?? throw new Exception($"{typeof(TEntity).Name} not found.");
+                ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
         public virtual async Task InsertAsync(TEntity entity)
@@ -37,10 +37,13 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public virtual async Task DeleteAsync(int id)
         {
             TEntity entity = await this.table.FindAsync(id)
-                ?? throw new Exception($"{typeof(TEntity).Name} not found.");
+                ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
 
             await Task.Run(() => this.table.Remove(entity));
         }
+
+        protected string GetEntityNotFoundErrorMessage(int id) =>
+            $"{typeof(TEntity).Name} with id {id} not found.";
 
         public GenericRepository(TeamworkSystemContext databaseContext)
         {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TeamworkSystem.BusinessLogicLayer.Exceptions
+namespace TeamworkSystem.DataAccessLayer.Exceptions
 {
     public class EntityNotFoundException : Exception
     {

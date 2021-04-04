@@ -12,6 +12,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
             this.CreateMap<User, UserProfileResponse>();
 
             this.CreateMap<UserSignUpRequest, User>();
+
+            this.CreateMap<Ticket, TicketProfileResponse>();
         }
     }
 }

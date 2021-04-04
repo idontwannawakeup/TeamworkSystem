@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
@@ -13,7 +14,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             return await this.table
                 .Include(rating => rating.From)
                 .Include(rating => rating.To)
-                .SingleOrDefaultAsync(rating => rating.Id == id);
+                .SingleOrDefaultAsync(rating => rating.Id == id)
+                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
         public RatingsRepository(TeamworkSystemContext databaseContext)

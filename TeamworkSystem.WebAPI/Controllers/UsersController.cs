@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
-using TeamworkSystem.BusinessLogicLayer.Exceptions;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
-using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Exceptions;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -19,8 +18,7 @@ namespace TeamworkSystem.WebAPI.Controllers
 
         private readonly ILogger<UsersController> logger;
 
-        [HttpPost]
-        [Route("signUp")]
+        [HttpPost("signUp")]
         public async Task<ActionResult> SignUpAsync([FromBody] UserSignUpRequest user)
         {
             try

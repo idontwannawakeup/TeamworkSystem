@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
@@ -14,16 +14,18 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             return await this.table
                 .Include(project => project.Team)
                 .Include(project => project.Tickets)
-                .SingleOrDefaultAsync(project => project.Id == id);
+                .SingleOrDefaultAsync(project => project.Id == id)
+                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
         }
 
         public async Task<Team> GetRelatedTeamAsync(int id)
         {
             Project project = await this.table
                 .Include(rating => rating.Team)
-                .SingleOrDefaultAsync(rating => rating.Id == id);
+                .SingleOrDefaultAsync(rating => rating.Id == id)
+                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
 
-            return project?.Team ?? throw new Exception($"{typeof(Project).Name} not found.");
+            return project?.Team;
         }
 
         public ProjectsRepository(TeamworkSystemContext databaseContext)
