@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
@@ -19,6 +20,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         private readonly ILogger<UsersController> logger;
 
         [HttpPost("signUp")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> SignUpAsync([FromBody] UserSignUpRequest user)
         {
             try
@@ -35,6 +38,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<UserProfileResponse>>> GetAsync()
         {
             try
@@ -43,12 +48,16 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                this.logger.LogError(e.Message);
-                return this.NotFound();
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.NotFound(message);
             }
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserProfileResponse>> GetAsync([FromRoute] string id)
         {
             try
@@ -61,9 +70,18 @@ namespace TeamworkSystem.WebAPI.Controllers
                 this.logger.LogError(message);
                 return this.NotFound(message);
             }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.BadRequest(message);
+            }
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> DeleteAsync([FromRoute] string id)
         {
             try
@@ -71,10 +89,17 @@ namespace TeamworkSystem.WebAPI.Controllers
                 await this.usersServices.DeleteAsync(id);
                 return this.Ok();
             }
+            catch (EntityNotFoundException e)
+            {
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.NotFound(message);
+            }
             catch (Exception e)
             {
-                this.logger.LogError(e.Message);
-                return this.NotFound();
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.BadRequest(message);
             }
         }
 

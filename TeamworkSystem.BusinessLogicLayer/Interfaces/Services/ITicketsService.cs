@@ -13,6 +13,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task<TicketProfileResponse> GetProfileByIdAsync(int id);
 
+        Task InsertAsync(TicketRequest request);
+
         Task ExtendDeadlineAsync(TicketWithExtendedDeadlineRequest request);
 
         Task DeleteAsync(int id);

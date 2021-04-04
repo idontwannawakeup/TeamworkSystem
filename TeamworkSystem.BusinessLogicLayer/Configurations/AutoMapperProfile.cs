@@ -19,10 +19,17 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
             this.CreateMap<Ticket, TicketProfileResponse>();
         }
 
+        private void CreateTeamsMaps()
+        {
+            this.CreateMap<TeamRequest, Team>();
+            this.CreateMap<Team, TeamProfileResponse>();
+        }
+
         public AutoMapperProfile()
         {
             this.CreateUserMaps();
             this.CreateTicketsMaps();
+            this.CreateTeamsMaps();
         }
     }
 }

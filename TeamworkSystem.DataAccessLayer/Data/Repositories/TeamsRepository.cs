@@ -37,7 +37,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .SingleOrDefaultAsync(team => team.Id == id)
                     ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
 
-            team?.Members.Add(member);
+            team?.Members?.Add(member);
         }
 
         public async Task DeleteMemberAsync(int id, User member)
@@ -47,7 +47,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .SingleOrDefaultAsync(team => team.Id == id)
                     ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
 
-            team?.Members.Remove(member);
+            team?.Members?.Remove(member);
         }
 
         public TeamsRepository(TeamworkSystemContext databaseContext)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
@@ -19,6 +20,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         private readonly ILogger<TicketsController> logger;
 
         [HttpGet("profiles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<TicketProfileResponse>>> GetProfilesAsync()
         {
             try
@@ -34,6 +37,9 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         [HttpGet("profiles/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TicketProfileResponse>> GetProfileAsync([FromRoute] int id)
         {
             try
@@ -55,6 +61,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         }
 
         [HttpGet("profiles/status")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<TicketProfileResponse>>> GetProfilesAsync(
             [FromBody] TicketsByProjectAndStatusRequest request)
         {
@@ -70,7 +78,28 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> InsertAsync(TicketRequest request)
+        {
+            try
+            {
+                await this.ticketsService.InsertAsync(request);
+                return this.Ok();
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.BadRequest(message);
+            }
+        }
+
         [HttpPut("deadline")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> ExtendDeadlineAsync(TicketWithExtendedDeadlineRequest request)
         {
             try
@@ -92,8 +121,11 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteAsync(int id)
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteAsync([FromRoute] int id)
         {
             try
             {
