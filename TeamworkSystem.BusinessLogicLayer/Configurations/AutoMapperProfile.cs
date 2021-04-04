@@ -7,13 +7,22 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
 {
     public class AutoMapperProfile : Profile
     {
-        public AutoMapperProfile()
+        private void CreateUserMaps()
         {
             this.CreateMap<User, UserProfileResponse>();
-
             this.CreateMap<UserSignUpRequest, User>();
+        }
 
+        private void CreateTicketsMaps()
+        {
+            this.CreateMap<TicketRequest, Ticket>();
             this.CreateMap<Ticket, TicketProfileResponse>();
+        }
+
+        public AutoMapperProfile()
+        {
+            this.CreateUserMaps();
+            this.CreateTicketsMaps();
         }
     }
 }

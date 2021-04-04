@@ -41,7 +41,14 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             return this.mapper.Map<Ticket, TicketProfileResponse>(ticket);
         }
 
-        public async Task ExtendDeadline(TicketWithExtendedDeadlineRequest request)
+        public async Task InsertAsync(TicketRequest request)
+        {
+            Ticket ticket = this.mapper.Map<TicketRequest, Ticket>(request);
+            await this.ticketsRepository.InsertAsync(ticket);
+            await this.unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task ExtendDeadlineAsync(TicketWithExtendedDeadlineRequest request)
         {
             Ticket ticket = await this.ticketsRepository.GetByIdAsync(request.Id);
             if (ticket.Deadline > request.Deadline)
@@ -54,9 +61,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await this.unitOfWork.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             await this.ticketsRepository.DeleteAsync(id);
+            await this.unitOfWork.SaveChangesAsync();
         }
 
         public TicketsService(IUnitOfWork unitOfWork, IMapper mapper)

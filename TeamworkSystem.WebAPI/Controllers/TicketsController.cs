@@ -75,7 +75,29 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.ticketsService.ExtendDeadline(request);
+                await this.ticketsService.ExtendDeadlineAsync(request);
+                return this.Ok();
+            }
+            catch (EntityNotFoundException e)
+            {
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.NotFound(message);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                this.logger.LogError(message);
+                return this.BadRequest(message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteAsync(int id)
+        {
+            try
+            {
+                await this.ticketsService.DeleteAsync(id);
                 return this.Ok();
             }
             catch (EntityNotFoundException e)
