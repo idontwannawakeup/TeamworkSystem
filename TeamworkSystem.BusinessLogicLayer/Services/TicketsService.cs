@@ -20,7 +20,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly ITicketsRepository ticketsRepository;
 
-        public async Task<IEnumerable<TicketProfileResponse>> GetProfilesAsync()
+        public async Task<IEnumerable<TicketProfileResponse>> GetAllProfilesAsync()
         {
             IEnumerable<Ticket> tickets = await this.ticketsRepository.GetAllAsync();
             return tickets.Select(this.mapper.Map<Ticket, TicketProfileResponse>);
@@ -56,8 +56,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
                 throw new Exception("New date of deadline is sooner than current.");
             }
 
-            await this.ticketsRepository.UpdateAsync(ticket);
             ticket.Deadline = request.Deadline;
+            await this.ticketsRepository.UpdateAsync(ticket);
             await this.unitOfWork.SaveChangesAsync();
         }
 

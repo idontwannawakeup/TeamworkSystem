@@ -23,7 +23,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly UserManager<User> userManager;
 
-        public async Task<IEnumerable<TeamProfileResponse>> GetProfilesAsync()
+        public async Task<IEnumerable<TeamProfileResponse>> GetAllProfilesAsync()
         {
             IEnumerable<Team> teams = await this.teamsRepository.GetAllAsync();
             return teams.Select(this.mapper.Map<Team, TeamProfileResponse>);

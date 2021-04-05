@@ -7,7 +7,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface ITicketsService
     {
-        Task<IEnumerable<TicketProfileResponse>> GetProfilesAsync();
+        Task<IEnumerable<TicketProfileResponse>> GetAllProfilesAsync();
 
         Task<IEnumerable<TicketProfileResponse>> GetProfilesAsync(TicketsByProjectAndStatusRequest request);
 

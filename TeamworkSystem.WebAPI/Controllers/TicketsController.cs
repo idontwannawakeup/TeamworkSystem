@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
@@ -17,22 +16,18 @@ namespace TeamworkSystem.WebAPI.Controllers
     {
         private readonly ITicketsService ticketsService;
 
-        private readonly ILogger<TicketsController> logger;
-
         [HttpGet("profiles")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TicketProfileResponse>>> GetProfilesAsync()
+        public async Task<ActionResult<IEnumerable<TicketProfileResponse>>> GetAllProfilesAsync()
         {
             try
             {
-                return this.Ok(await this.ticketsService.GetProfilesAsync());
+                return this.Ok(await this.ticketsService.GetAllProfilesAsync());
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -48,15 +43,11 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (EntityNotFoundException e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.NotFound(message);
+                return this.NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -72,9 +63,7 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -90,9 +79,7 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -109,15 +96,11 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (EntityNotFoundException e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.NotFound(message);
+                return this.NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -134,24 +117,17 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (EntityNotFoundException e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.NotFound(message);
+                return this.NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
-        public TicketsController(
-            ITicketsService ticketsService,
-            ILogger<TicketsController> logger)
+        public TicketsController(ITicketsService ticketsService)
         {
             this.ticketsService = ticketsService;
-            this.logger = logger;
         }
     }
 }

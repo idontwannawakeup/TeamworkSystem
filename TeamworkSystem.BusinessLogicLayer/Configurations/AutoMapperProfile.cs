@@ -25,11 +25,25 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
             this.CreateMap<Team, TeamProfileResponse>();
         }
 
+        private void CreateProjectsMaps()
+        {
+            this.CreateMap<ProjectRequest, Project>();
+            this.CreateMap<Project, ProjectProfileResponse>();
+        }
+
+        private void CreateRatingsMaps()
+        {
+            this.CreateMap<RatingRequest, Rating>();
+            this.CreateMap<Rating, RatingProfileResponse>();
+        }
+
         public AutoMapperProfile()
         {
             this.CreateUserMaps();
             this.CreateTicketsMaps();
             this.CreateTeamsMaps();
+            this.CreateProjectsMaps();
+            this.CreateRatingsMaps();
         }
     }
 }

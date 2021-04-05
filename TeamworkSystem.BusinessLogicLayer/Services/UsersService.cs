@@ -79,7 +79,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             });
         }
 
-        public static string GetUserNotFoundErrorMessage(string id) =>
+        private static string GetUserNotFoundErrorMessage(string id) =>
             $"{nameof(User)} with id {id} not found.";
 
         private async Task MakeActionWithFriends(FriendsRequest friendsRequest, Action<User, User> action)
@@ -90,9 +90,9 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             User secondUser = await this.userManager.FindByIdAsync(friendsRequest.SecondId)
                 ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(friendsRequest.SecondId));
 
+            action(firstUser, secondUser);
             await this.userManager.UpdateAsync(firstUser);
             await this.userManager.UpdateAsync(secondUser);
-            action(firstUser, secondUser);
 
             await this.unitOfWork.SaveChangesAsync();
         }

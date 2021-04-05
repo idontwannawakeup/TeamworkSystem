@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
@@ -17,22 +16,18 @@ namespace TeamworkSystem.WebAPI.Controllers
     {
         private readonly ITeamsService teamsService;
 
-        private readonly ILogger<TeamsController> logger;
-
         [HttpGet("profiles")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TeamProfileResponse>>> GetProfilesAsync()
+        public async Task<ActionResult<IEnumerable<TeamProfileResponse>>> GetAllProfilesAsync()
         {
             try
             {
-                return this.Ok(await this.teamsService.GetProfilesAsync());
+                return this.Ok(await this.teamsService.GetAllProfilesAsync());
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -49,15 +44,11 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (EntityNotFoundException e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.NotFound(message);
+                return this.NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -73,15 +64,11 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (EntityNotFoundException e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.NotFound(message);
+                return this.NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -97,9 +84,7 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
@@ -116,24 +101,17 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (EntityNotFoundException e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.NotFound(message);
+                return this.NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                string message = e.Message;
-                this.logger.LogError(message);
-                return this.BadRequest(message);
+                return this.BadRequest(new { e.Message });
             }
         }
 
-        public TeamsController(
-            ITeamsService teamsService,
-            ILogger<TeamsController> logger)
+        public TeamsController(ITeamsService teamsService)
         {
             this.teamsService = teamsService;
-            this.logger = logger;
         }
     }
 }

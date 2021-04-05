@@ -7,7 +7,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface ITeamsService
     {
-        Task<IEnumerable<TeamProfileResponse>> GetProfilesAsync();
+        Task<IEnumerable<TeamProfileResponse>> GetAllProfilesAsync();
 
         Task<IEnumerable<TeamProfileResponse>> GetProfilesOfUserTeamsAsync(string userId);
 
