@@ -16,6 +16,41 @@ namespace TeamworkSystem.WebAPI.Controllers
     {
         private readonly IUsersService usersServices;
 
+        [HttpGet("profiles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<UserProfileResponse>>> GetAllProfilesAsync()
+        {
+            try
+            {
+                return this.Ok(await this.usersServices.GetAllProfilesAsync());
+            }
+            catch (Exception e)
+            {
+                return this.NotFound(new { e.Message });
+            }
+        }
+
+        [HttpGet("profiles/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserProfileResponse>> GetProfileByIdAsync([FromRoute] string id)
+        {
+            try
+            {
+                return this.Ok(await this.usersServices.GetProfileByIdAsync(id));
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { e.Message });
+            }
+        }
+
         [HttpPost("signUp")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -32,30 +67,37 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<UserProfileResponse>>> GetAllProfilesAsync()
-        {
-            try
-            {
-                return this.Ok(await this.usersServices.GetAllProfilesAsync());
-            }
-            catch (Exception e)
-            {
-                return this.NotFound(new { e.Message });
-            }
-        }
-
-        [HttpGet("{id}")]
+        [HttpPost("friends")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserProfileResponse>> GetProfileByIdAsync([FromRoute] string id)
+        public async Task<ActionResult> AddFriendAsync([FromBody] FriendsRequest request)
         {
             try
             {
-                return this.Ok(await this.usersServices.GetProfileByIdAsync(id));
+                await this.usersServices.AddFriendAsync(request);
+                return this.Ok();
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpDelete("friends")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteFriendAsync([FromBody] FriendsRequest request)
+        {
+            try
+            {
+                await this.usersServices.DeleteFriendAsync(request);
+                return this.Ok();
             }
             catch (EntityNotFoundException e)
             {

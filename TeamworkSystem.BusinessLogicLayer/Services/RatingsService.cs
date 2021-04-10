@@ -23,7 +23,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<RatingProfileResponse>> GetAllProfilesAsync()
         {
             IEnumerable<Rating> ratings = await this.ratingsRepository.GetAllAsync();
-            return ratings.Select(this.mapper.Map<Rating, RatingProfileResponse>);
+            return ratings?.Select(this.mapper.Map<Rating, RatingProfileResponse>);
         }
 
         public async Task<IEnumerable<RatingProfileResponse>> GetRatingProfilesFromUserAsync(string userId)

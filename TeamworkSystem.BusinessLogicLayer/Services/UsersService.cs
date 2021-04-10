@@ -41,7 +41,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<UserProfileResponse>> GetAllProfilesAsync()
         {
             List<User> users = await this.userManager.Users.ToListAsync();
-            return users.Select(this.mapper.Map<User, UserProfileResponse>);
+            return users?.Select(this.mapper.Map<User, UserProfileResponse>);
         }
 
         public async Task<UserProfileResponse> GetProfileByIdAsync(string id)
@@ -61,7 +61,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await this.unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AddFriend(FriendsRequest friendsRequest)
+        public async Task AddFriendAsync(FriendsRequest friendsRequest)
         {
             await this.MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
             {
@@ -70,7 +70,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             });
         }
 
-        public async Task DeleteFriend(FriendsRequest friendsRequest)
+        public async Task DeleteFriendAsync(FriendsRequest friendsRequest)
         {
             await this.MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
             {

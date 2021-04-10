@@ -15,8 +15,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task DeleteAsync(string id);
 
-        Task AddFriend(FriendsRequest friendsRequest);
+        Task AddFriendAsync(FriendsRequest friendsRequest);
 
-        Task DeleteFriend(FriendsRequest friendsRequest);
+        Task DeleteFriendAsync(FriendsRequest friendsRequest);
     }
 }

@@ -15,15 +15,15 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .Include(project => project.Team)
                 .Include(project => project.Tickets)
                 .SingleOrDefaultAsync(project => project.Id == id)
-                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
         public async Task<Team> GetRelatedTeamAsync(int id)
         {
             Project project = await this.table
-                .Include(rating => rating.Team)
-                .SingleOrDefaultAsync(rating => rating.Id == id)
-                    ?? throw new EntityNotFoundException(this.GetEntityNotFoundErrorMessage(id));
+                .Include(project => project.Team)
+                .SingleOrDefaultAsync(project => project.Id == id)
+                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
 
             return project?.Team;
         }

@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
@@ -16,6 +18,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await this.table.ToListAsync();
+        }
+
+        public virtual async Task<PagedList<TEntity>> GetPageAsync(PaginationParameters parameters)
+        {
+            return await PagedList<TEntity>.ToPagedListAsync(
+                this.table,
+                parameters.PageNumber,
+                parameters.PageSize);
         }
 
         public virtual async Task<TEntity> GetByIdAsync(int id)
@@ -42,7 +52,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             await Task.Run(() => this.table.Remove(entity));
         }
 
-        protected string GetEntityNotFoundErrorMessage(int id) =>
+        protected static string GetEntityNotFoundErrorMessage(int id) =>
             $"{typeof(TEntity).Name} with id {id} not found.";
 
         public GenericRepository(TeamworkSystemContext databaseContext)

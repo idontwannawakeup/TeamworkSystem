@@ -10,6 +10,8 @@ using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
 {
@@ -26,7 +28,14 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<TeamProfileResponse>> GetAllProfilesAsync()
         {
             IEnumerable<Team> teams = await this.teamsRepository.GetAllAsync();
-            return teams.Select(this.mapper.Map<Team, TeamProfileResponse>);
+            return teams?.Select(this.mapper.Map<Team, TeamProfileResponse>);
+        }
+
+        public async Task<PagedResponse<TeamProfileResponse>> GetProfilesPageAsync(PaginationParameters parameters)
+        {
+            PagedList<Team> teamsPage = await this.teamsRepository.GetPageAsync(parameters);
+            PagedList<TeamProfileResponse> mappedPage = teamsPage.Map(this.mapper.Map<Team, TeamProfileResponse>);
+            return this.mapper.Map<PagedList<TeamProfileResponse>, PagedResponse<TeamProfileResponse>>(mappedPage);
         }
 
         public async Task<IEnumerable<TeamProfileResponse>> GetProfilesOfUserTeamsAsync(string userId)
@@ -34,8 +43,20 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             User user = await this.userManager.FindByIdAsync(userId)
                 ?? throw new EntityNotFoundException($"{nameof(User)} with id {userId} not found.");
 
-            IEnumerable<Team> teams = user?.Teams;
+            IEnumerable<Team> teams = await this.teamsRepository.GetUserTeams(user);
             return teams?.Select(this.mapper.Map<Team, TeamProfileResponse>);
+        }
+
+        public async Task<PagedResponse<TeamProfileResponse>> GetProfilesPageOfUserTeamsAsync(
+            string userId,
+            PaginationParameters parameters)
+        {
+            User user = await this.userManager.FindByIdAsync(userId)
+                ?? throw new EntityNotFoundException($"{nameof(User)} with id {userId} not found.");
+
+            PagedList<Team> teamsPage = await this.teamsRepository.GetPageOfUserTeamsAsync(user, parameters);
+            PagedList<TeamProfileResponse> teamsMappedPage = teamsPage.Map(this.mapper.Map<Team, TeamProfileResponse>);
+            return this.mapper.Map<PagedList<TeamProfileResponse>, PagedResponse<TeamProfileResponse>>(teamsMappedPage);
         }
 
         public async Task<TeamProfileResponse> GetProfileByIdAsync(int id)

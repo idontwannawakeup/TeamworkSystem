@@ -23,7 +23,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<TicketProfileResponse>> GetAllProfilesAsync()
         {
             IEnumerable<Ticket> tickets = await this.ticketsRepository.GetAllAsync();
-            return tickets.Select(this.mapper.Map<Ticket, TicketProfileResponse>);
+            return tickets?.Select(this.mapper.Map<Ticket, TicketProfileResponse>);
         }
 
         public async Task<IEnumerable<TicketProfileResponse>> GetProfilesAsync(
@@ -32,7 +32,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             IEnumerable<Ticket> tickets = await this.ticketsRepository
                 .GetByProjectIdAndStatus(request.ProjectId, request.Status);
 
-            return tickets.Select(this.mapper.Map<Ticket, TicketProfileResponse>);
+            return tickets?.Select(this.mapper.Map<Ticket, TicketProfileResponse>);
         }
 
         public async Task<TicketProfileResponse> GetProfileByIdAsync(int id)

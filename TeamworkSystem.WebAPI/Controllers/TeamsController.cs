@@ -7,6 +7,7 @@ using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -24,6 +25,21 @@ namespace TeamworkSystem.WebAPI.Controllers
             try
             {
                 return this.Ok(await this.teamsService.GetAllProfilesAsync());
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpGet("profiles/page")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PagedResponse<TeamProfileResponse>>> GetProfilesPage([FromQuery] PaginationParameters parameters)
+        {
+            try
+            {
+                return this.Ok(await this.teamsService.GetProfilesPageAsync(parameters));
             }
             catch (Exception e)
             {
@@ -61,6 +77,28 @@ namespace TeamworkSystem.WebAPI.Controllers
             try
             {
                 return this.Ok(await this.teamsService.GetProfileByIdAsync(id));
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpGet("profiles/page/user/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<PagedResponse<TeamProfileResponse>>> GetProfilesPageOfUserTeamsAsync(
+            [FromRoute] string userId,
+            [FromQuery] PaginationParameters parameters)
+        {
+            try
+            {
+                return this.Ok(await this.teamsService.GetProfilesPageOfUserTeamsAsync(userId, parameters));
             }
             catch (EntityNotFoundException e)
             {

@@ -2,6 +2,7 @@
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Pagination;
 
 namespace TeamworkSystem.BusinessLogicLayer.Configurations
 {
@@ -23,6 +24,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         {
             this.CreateMap<TeamRequest, Team>();
             this.CreateMap<Team, TeamProfileResponse>();
+            this.CreatePageMap<TeamProfileResponse>();
         }
 
         private void CreateProjectsMaps()
@@ -35,6 +37,12 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         {
             this.CreateMap<RatingRequest, Rating>();
             this.CreateMap<Rating, RatingProfileResponse>();
+        }
+
+        private void CreatePageMap<T>()
+        {
+            this.CreateMap<PagedList<T>, PagedResponse<T>>()
+                .ForMember(response => response.Data, opt => opt.MapFrom(pagedList => pagedList));
         }
 
         public AutoMapperProfile()
