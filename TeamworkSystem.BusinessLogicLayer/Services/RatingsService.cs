@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,6 +8,8 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
 {
@@ -20,26 +21,34 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly IRatingsRepository ratingsRepository;
 
-        public async Task<IEnumerable<RatingProfileResponse>> GetAllProfilesAsync()
+        public async Task<IEnumerable<RatingResponse>> GetAsync()
         {
-            IEnumerable<Rating> ratings = await this.ratingsRepository.GetAllAsync();
-            return ratings?.Select(this.mapper.Map<Rating, RatingProfileResponse>);
+            IEnumerable<Rating> ratings = await this.ratingsRepository.GetAsync();
+            return ratings?.Select(this.mapper.Map<Rating, RatingResponse>);
         }
 
-        public async Task<IEnumerable<RatingProfileResponse>> GetRatingProfilesFromUserAsync(string userId)
+        public async Task<PagedList<RatingResponse>> GetAsync(RatingsParameters parameters)
         {
-            return await this.GetProfilesByPredicateAsync(rating => rating.FromId == userId);
+            PagedList<Rating> ratings = await this.ratingsRepository.GetAsync(parameters);
+            return ratings?.Map(this.mapper.Map<Rating, RatingResponse>);
         }
 
-        public async Task<IEnumerable<RatingProfileResponse>> GetRatingProfilesForUserAsync(string userId)
+        public async Task<IEnumerable<RatingResponse>> GetRatingProfilesFromUserAsync(string userId)
         {
-            return await this.GetProfilesByPredicateAsync(rating => rating.ToId == userId);
+            IEnumerable<Rating> ratings = await this.ratingsRepository.GetRatingsFromUserAsync(userId);
+            return ratings?.Select(this.mapper.Map<Rating, RatingResponse>);
         }
 
-        public async Task<RatingProfileResponse> GetProfileByIdAsync(int id)
+        public async Task<IEnumerable<RatingResponse>> GetRatingProfilesForUserAsync(string userId)
+        {
+            IEnumerable<Rating> ratings = await this.ratingsRepository.GetRatingsForUserAsync(userId);
+            return ratings?.Select(this.mapper.Map<Rating, RatingResponse>);
+        }
+
+        public async Task<RatingResponse> GetByIdAsync(int id)
         {
             Rating rating = await this.ratingsRepository.GetByIdAsync(id);
-            return this.mapper.Map<Rating, RatingProfileResponse>(rating);
+            return this.mapper.Map<Rating, RatingResponse>(rating);
         }
 
         public async Task InsertAsync(RatingRequest request)
@@ -53,15 +62,6 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         {
             await this.ratingsRepository.DeleteAsync(id);
             await this.unitOfWork.SaveChangesAsync();
-        }
-
-        private async Task<IEnumerable<RatingProfileResponse>> GetProfilesByPredicateAsync(
-            Func<Rating, bool> predicate)
-        {
-            IEnumerable<Rating> ratings = await this.ratingsRepository.GetAllAsync();
-            return ratings
-                .Where(rating => predicate(rating))
-                .Select(this.mapper.Map<Rating, RatingProfileResponse>);
         }
 
         public RatingsService(IUnitOfWork unitOfWork, IMapper mapper)

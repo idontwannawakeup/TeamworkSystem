@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +7,7 @@ using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
+using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.WebAPI.Controllers
@@ -17,14 +18,21 @@ namespace TeamworkSystem.WebAPI.Controllers
     {
         private readonly ITeamsService teamsService;
 
-        [HttpGet("profiles")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TeamProfileResponse>>> GetAllProfilesAsync()
+        public async Task<ActionResult<PagedList<TeamResponse>>> GetAsync(
+            [FromQuery] TeamsParameters parameters)
         {
             try
             {
-                return this.Ok(await this.teamsService.GetAllProfilesAsync());
+                PagedList<TeamResponse> profiles =
+                    await this.teamsService.GetAsync(parameters);
+
+                this.Response.Headers.Add("X-Pagination",
+                    JsonSerializer.Serialize(profiles.Metadata));
+
+                return this.Ok(profiles);
             }
             catch (Exception e)
             {
@@ -32,73 +40,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet("profiles/page")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PagedResponse<TeamProfileResponse>>> GetProfilesPage([FromQuery] PaginationParameters parameters)
-        {
-            try
-            {
-                return this.Ok(await this.teamsService.GetProfilesPageAsync(parameters));
-            }
-            catch (Exception e)
-            {
-                return this.BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpGet("profiles/user/{userId}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<TeamProfileResponse>>> GetProfilesOfUserTeamsAsync(
-            [FromRoute] string userId)
+        public async Task<ActionResult<TeamResponse>> GetByIdAsync([FromRoute] int id)
         {
             try
             {
-                return this.Ok(await this.teamsService.GetProfilesOfUserTeamsAsync(userId));
-            }
-            catch (EntityNotFoundException e)
-            {
-                return this.NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return this.BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpGet("profiles/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TeamProfileResponse>> GetProfileByIdAsync([FromRoute] int id)
-        {
-            try
-            {
-                return this.Ok(await this.teamsService.GetProfileByIdAsync(id));
-            }
-            catch (EntityNotFoundException e)
-            {
-                return this.NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return this.BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpGet("profiles/page/user/{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PagedResponse<TeamProfileResponse>>> GetProfilesPageOfUserTeamsAsync(
-            [FromRoute] string userId,
-            [FromQuery] PaginationParameters parameters)
-        {
-            try
-            {
-                return this.Ok(await this.teamsService.GetProfilesPageOfUserTeamsAsync(userId, parameters));
+                return this.Ok(await this.teamsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {

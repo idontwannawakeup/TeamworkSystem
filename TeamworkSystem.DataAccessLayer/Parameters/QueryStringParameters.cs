@@ -1,6 +1,6 @@
 ﻿namespace TeamworkSystem.DataAccessLayer.Parameters
 {
-    public class PaginationParameters
+    public abstract class QueryStringParameters
     {
         protected const int MaxPageSize = 50;
 

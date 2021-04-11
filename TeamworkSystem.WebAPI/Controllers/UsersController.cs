@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,8 @@ using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -14,16 +17,23 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUsersService usersServices;
+        private readonly IUsersService usersService;
 
-        [HttpGet("profiles")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<UserProfileResponse>>> GetAllProfilesAsync()
+        public async Task<ActionResult<PagedList<UserResponse>>> GetAsync(
+            [FromQuery] UsersParameters parameters)
         {
             try
             {
-                return this.Ok(await this.usersServices.GetAllProfilesAsync());
+                PagedList<UserResponse> users =
+                    await this.usersService.GetAsync(parameters);
+
+                this.Response.Headers.Add("X-Pagination",
+                    JsonSerializer.Serialize(users.Metadata));
+
+                return this.Ok(users);
             }
             catch (Exception e)
             {
@@ -31,15 +41,43 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet("profiles/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserProfileResponse>> GetProfileByIdAsync([FromRoute] string id)
+        public async Task<ActionResult<UserResponse>> GetByIdAsync([FromRoute] string id)
         {
             try
             {
-                return this.Ok(await this.usersServices.GetProfileByIdAsync(id));
+                return this.Ok(await this.usersService.GetByIdAsync(id));
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpGet("friends/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PagedList<UserResponse>>> GetFriends(
+            [FromRoute] string id,
+            [FromQuery] UsersParameters parameters)
+        {
+            try
+            {
+                PagedList<UserResponse> friends =
+                    await this.usersService.GetFriendsAsync(id, parameters);
+
+                this.Response.Headers.Add("X-Pagination",
+                    JsonSerializer.Serialize(friends.Metadata));
+
+                return this.Ok(friends);
             }
             catch (EntityNotFoundException e)
             {
@@ -58,7 +96,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersServices.SignUpAsync(user);
+                await this.usersService.SignUpAsync(user);
                 return this.Ok();
             }
             catch (ArgumentException e)
@@ -75,7 +113,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersServices.AddFriendAsync(request);
+                await this.usersService.AddFriendAsync(request);
                 return this.Ok();
             }
             catch (EntityNotFoundException e)
@@ -96,7 +134,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersServices.DeleteFriendAsync(request);
+                await this.usersService.DeleteFriendAsync(request);
                 return this.Ok();
             }
             catch (EntityNotFoundException e)
@@ -117,7 +155,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersServices.DeleteAsync(id);
+                await this.usersService.DeleteAsync(id);
                 return this.Ok();
             }
             catch (EntityNotFoundException e)
@@ -132,7 +170,7 @@ namespace TeamworkSystem.WebAPI.Controllers
 
         public UsersController(IUsersService usersService)
         {
-            this.usersServices = usersService;
+            this.usersService = usersService;
         }
     }
 }

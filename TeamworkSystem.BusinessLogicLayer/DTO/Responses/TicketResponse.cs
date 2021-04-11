@@ -2,7 +2,7 @@
 
 namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
 {
-    public class TicketProfileResponse
+    public class TicketResponse
     {
         public int Id { get; set; }
 

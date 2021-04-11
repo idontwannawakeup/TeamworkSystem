@@ -11,6 +11,8 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
 {
@@ -30,7 +32,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             if (!signUpResult.Succeeded)
             {
                 string errors = string.Join("\n",
-                    signUpResult.Errors.Select(error => $"{error.Description}"));
+                    signUpResult.Errors.Select(error => error.Description));
 
                 throw new ArgumentException(errors);
             }
@@ -38,25 +40,47 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await this.unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<UserProfileResponse>> GetAllProfilesAsync()
+        public async Task<IEnumerable<UserResponse>> GetAsync()
         {
             List<User> users = await this.userManager.Users.ToListAsync();
-            return users?.Select(this.mapper.Map<User, UserProfileResponse>);
+            return users?.Select(this.mapper.Map<User, UserResponse>);
         }
 
-        public async Task<UserProfileResponse> GetProfileByIdAsync(string id)
+        public async Task<PagedList<UserResponse>> GetAsync(UsersParameters parameters)
         {
-            User user = await this.userManager.FindByIdAsync(id)
-                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
+            IQueryable<User> source = this.userManager.Users;
+            PagedList<User> users = await PagedList<User>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
 
-            return this.mapper.Map<User, UserProfileResponse>(user);
+            return users?.Map(this.mapper.Map<User, UserResponse>);
+        }
+
+        public async Task<UserResponse> GetByIdAsync(string id)
+        {
+            User user = await this.GetCompleteUserByIdAsync(id);
+            return this.mapper.Map<User, UserResponse>(user);
+        }
+
+        public async Task<PagedList<UserResponse>> GetFriendsAsync(string id, UsersParameters parameters)
+        {
+            User user = await this.FindByIdAsync(id);
+
+            IQueryable<User> source = this.userManager.Users
+                .Where(secondUser => secondUser.Friends.Contains(user));
+
+            PagedList<User> friends = await PagedList<User>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
+
+            return friends?.Map(this.mapper.Map<User, UserResponse>);
         }
 
         public async Task DeleteAsync(string id)
         {
-            User user = await this.userManager.FindByIdAsync(id)
-                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
-
+            User user = await this.FindByIdAsync(id);
             await this.unitOfWork.UserManager.DeleteAsync(user);
             await this.unitOfWork.SaveChangesAsync();
         }
@@ -82,19 +106,43 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         private static string GetUserNotFoundErrorMessage(string id) =>
             $"{nameof(User)} with id {id} not found.";
 
-        private async Task MakeActionWithFriends(FriendsRequest friendsRequest, Action<User, User> action)
+        private async Task MakeActionWithFriends(
+            FriendsRequest friendsRequest,
+            Action<User, User> action)
         {
-            User firstUser = await this.userManager.FindByIdAsync(friendsRequest.FirstId)
-                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(friendsRequest.FirstId));
+            User firstUser = await this.GetCompleteUserByIdAsync(friendsRequest.FirstId);
+            User secondUser = await this.GetCompleteUserByIdAsync(friendsRequest.SecondId);
 
-            User secondUser = await this.userManager.FindByIdAsync(friendsRequest.SecondId)
-                ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(friendsRequest.SecondId));
-
-            action(firstUser, secondUser);
+            action?.Invoke(firstUser, secondUser);
             await this.userManager.UpdateAsync(firstUser);
             await this.userManager.UpdateAsync(secondUser);
 
             await this.unitOfWork.SaveChangesAsync();
+        }
+
+        private async Task<User> FindByIdAsync(string id)
+        {
+            User user = await this.userManager.FindByIdAsync(id)
+                ?? throw new EntityNotFoundException(
+                    GetUserNotFoundErrorMessage(id));
+
+            return user;
+        }
+
+        private async Task<User> GetCompleteUserByIdAsync(string id)
+        {
+            User user = await this.userManager.Users
+                .Include(user => user.Teams)
+                .Include(user => user.Tickets)
+                .Include(user => user.MyRatings)
+                .Include(user => user.RatingsFromMe)
+                .Include(user => user.Friends)
+                .Include(user => user.FriendForUsers)
+                .SingleOrDefaultAsync(user => user.Id == id)
+                    ?? throw new EntityNotFoundException(
+                        GetUserNotFoundErrorMessage(id));
+
+            return user;
         }
 
         public UsersService(IUnitOfWork unitOfWork, IMapper mapper)

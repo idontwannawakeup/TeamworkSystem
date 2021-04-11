@@ -8,11 +8,9 @@ namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
 {
     public interface ITeamsRepository : IRepository<Team>
     {
-        Task<IEnumerable<Team>> GetUserTeams(User user);
+        Task<PagedList<Team>> GetAsync(TeamsParameters parameters);
 
-        Task<PagedList<Team>> GetPageOfUserTeamsAsync(
-            User user,
-            PaginationParameters parameters);
+        Task<IEnumerable<Team>> GetUserTeams(User user);
 
         Task<Team> GetCompleteTeamAsync(int id);
 

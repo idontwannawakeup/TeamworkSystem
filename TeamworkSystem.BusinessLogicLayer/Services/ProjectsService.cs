@@ -8,6 +8,8 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
 {
@@ -19,23 +21,29 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly IProjectsRepository projectsRepository;
 
-        public async Task<IEnumerable<ProjectProfileResponse>> GetAllProfilesAsync()
+        public async Task<IEnumerable<ProjectResponse>> GetAsync()
         {
-            IEnumerable<Project> projects = await this.projectsRepository.GetAllAsync();
-            return projects?.Select(this.mapper.Map<Project, ProjectProfileResponse>);
+            IEnumerable<Project> projects = await this.projectsRepository.GetAsync();
+            return projects?.Select(this.mapper.Map<Project, ProjectResponse>);
         }
 
-        public async Task<IEnumerable<ProjectProfileResponse>> GetProfilesOfTeamProjectsAsync(int teamId)
+        public async Task<PagedList<ProjectResponse>> GetAsync(ProjectsParameters parameters)
+        {
+            PagedList<Project> projects = await this.projectsRepository.GetAsync(parameters);
+            return projects?.Map(this.mapper.Map<Project, ProjectResponse>);
+        }
+
+        public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId)
         {
             Team team = await this.unitOfWork.TeamsRepository.GetCompleteTeamAsync(teamId);
             IEnumerable<Project> projects = team?.Projects;
-            return projects?.Select(this.mapper.Map<Project, ProjectProfileResponse>);
+            return projects?.Select(this.mapper.Map<Project, ProjectResponse>);
         }
 
-        public async Task<ProjectProfileResponse> GetProfileByIdAsync(int id)
+        public async Task<ProjectResponse> GetByIdAsync(int id)
         {
             Project project = await this.projectsRepository.GetByIdAsync(id);
-            return this.mapper.Map<Project, ProjectProfileResponse>(project);
+            return this.mapper.Map<Project, ProjectResponse>(project);
         }
 
         public async Task InsertAsync(ProjectRequest request)

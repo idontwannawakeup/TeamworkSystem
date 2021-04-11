@@ -7,11 +7,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface IProjectsService
     {
-        Task<IEnumerable<ProjectProfileResponse>> GetAllProfilesAsync();
+        Task<IEnumerable<ProjectResponse>> GetAsync();
 
-        Task<IEnumerable<ProjectProfileResponse>> GetProfilesOfTeamProjectsAsync(int teamId);
+        Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId);
 
-        Task<ProjectProfileResponse> GetProfileByIdAsync(int id);
+        Task<ProjectResponse> GetByIdAsync(int id);
 
         Task InsertAsync(ProjectRequest request);
 

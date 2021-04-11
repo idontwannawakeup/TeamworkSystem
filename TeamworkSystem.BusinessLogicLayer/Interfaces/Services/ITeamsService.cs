@@ -2,23 +2,20 @@
 using System.Threading.Tasks;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
+using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface ITeamsService
     {
-        Task<IEnumerable<TeamProfileResponse>> GetAllProfilesAsync();
+        Task<IEnumerable<TeamResponse>> GetAsync();
 
-        Task<PagedResponse<TeamProfileResponse>> GetProfilesPageAsync(PaginationParameters parameters);
+        Task<PagedList<TeamResponse>> GetAsync(TeamsParameters parameters);
 
-        Task<IEnumerable<TeamProfileResponse>> GetProfilesOfUserTeamsAsync(string userId);
+        Task<IEnumerable<TeamResponse>> GetUserTeamsAsync(string userId);
 
-        Task<PagedResponse<TeamProfileResponse>> GetProfilesPageOfUserTeamsAsync(
-            string userId,
-            PaginationParameters parameters);
-
-        Task<TeamProfileResponse> GetProfileByIdAsync(int id);
+        Task<TeamResponse> GetByIdAsync(int id);
 
         Task InsertAsync(TeamRequest request);
 

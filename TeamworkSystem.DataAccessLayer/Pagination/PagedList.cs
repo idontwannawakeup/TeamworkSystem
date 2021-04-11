@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +20,16 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
 
         public bool HasNext => this.CurrentPage < this.TotalPages;
 
+        public object Metadata => new
+        {
+            this.CurrentPage,
+            this.TotalPages,
+            this.PageSize,
+            this.TotalEntitiesCount,
+            this.HasPrevious,
+            this.HasNext
+        };
+
         public PagedList<TOut> Map<TOut>(Func<T, TOut> selectExpression)
         {
             IEnumerable<TOut> mappedItems = this.Select(selectExpression);
@@ -36,20 +45,7 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
             int pageNumber,
             int pageSize)
         {
-            return await ToPagedListAsync(source, pageNumber, pageSize, null);
-        }
-
-        public async static Task<PagedList<T>> ToPagedListAsync(
-            IQueryable<T> source,
-            int pageNumber,
-            int pageSize,
-            Expression<Func<T, bool>> predicate)
-        {
             int totalEntitiesCount = source.Count();
-
-            source = predicate is not null
-                ? source.Where(predicate)
-                : source;
 
             IEnumerable<T> items = await source
                 .Skip((pageNumber - 1) * pageSize)
@@ -59,7 +55,11 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
             return new(items, totalEntitiesCount, pageNumber, pageSize);
         }
 
-        public PagedList(IEnumerable<T> items, int totalEntitiesCount, int pageNumber, int pageSize)
+        public PagedList(
+            IEnumerable<T> items,
+            int totalEntitiesCount,
+            int pageNumber,
+            int pageSize)
         {
             this.CurrentPage = pageNumber;
             this.PageSize = pageSize;

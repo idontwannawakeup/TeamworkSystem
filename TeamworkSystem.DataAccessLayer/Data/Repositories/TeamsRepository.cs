@@ -13,22 +13,22 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     public class TeamsRepository
         : GenericRepository<Team>, ITeamsRepository
     {
+        public async Task<PagedList<Team>> GetAsync(TeamsParameters parameters)
+        {
+            IQueryable<Team> source = this.table;
+            SearchByMemberId(ref source, parameters.UserId);
+            SearchBySpecialization(ref source, parameters.Specialization);
+            return await PagedList<Team>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
+        }
+
         public async Task<IEnumerable<Team>> GetUserTeams(User user)
         {
             return await this.table
                 .Where(team => team.Members.Contains(user))
                 .ToListAsync();
-        }
-
-        public async Task<PagedList<Team>> GetPageOfUserTeamsAsync(
-            User user,
-            PaginationParameters parameters)
-        {
-            return await PagedList<Team>.ToPagedListAsync(
-                this.table,
-                parameters.PageNumber,
-                parameters.PageSize,
-                team => team.Members.Contains(user));
         }
 
         public async Task<Team> GetCompleteTeamAsync(int id)
@@ -69,6 +69,31 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                     ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
 
             team?.Members?.Remove(member);
+        }
+
+        private static void SearchByMemberId(
+            ref IQueryable<Team> source,
+            string userId)
+        {
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return;
+            }
+
+            source = source.Where(team => team.Members.Any(
+                user => user.Id == userId));
+        }
+
+        private static void SearchBySpecialization(
+            ref IQueryable<Team> source,
+            string specialization)
+        {
+            if (string.IsNullOrWhiteSpace(specialization))
+            {
+                return;
+            }
+
+            source = source.Where(team => team.Specialization == specialization);
         }
 
         public TeamsRepository(TeamworkSystemContext databaseContext)

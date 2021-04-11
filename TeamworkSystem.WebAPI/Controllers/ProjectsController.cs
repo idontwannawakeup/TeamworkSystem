@@ -16,14 +16,14 @@ namespace TeamworkSystem.WebAPI.Controllers
     {
         private readonly IProjectsService projectsService;
 
-        [HttpGet("profiles")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<ProjectProfileResponse>>> GetAllProfilesAsync()
+        public async Task<ActionResult<IEnumerable<ProjectResponse>>> GetAsync()
         {
             try
             {
-                return this.Ok(await this.projectsService.GetAllProfilesAsync());
+                return this.Ok(await this.projectsService.GetAsync());
             }
             catch (Exception e)
             {
@@ -31,15 +31,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet("profiles/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProjectProfileResponse>> GetProfileByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<ProjectResponse>> GetByIdAsync([FromRoute] int id)
         {
             try
             {
-                return this.Ok(await this.projectsService.GetProfileByIdAsync(id));
+                return this.Ok(await this.projectsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {

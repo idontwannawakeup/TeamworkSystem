@@ -20,25 +20,25 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly ITicketsRepository ticketsRepository;
 
-        public async Task<IEnumerable<TicketProfileResponse>> GetAllProfilesAsync()
+        public async Task<IEnumerable<TicketResponse>> GetAsync()
         {
-            IEnumerable<Ticket> tickets = await this.ticketsRepository.GetAllAsync();
-            return tickets?.Select(this.mapper.Map<Ticket, TicketProfileResponse>);
+            IEnumerable<Ticket> tickets = await this.ticketsRepository.GetAsync();
+            return tickets?.Select(this.mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<IEnumerable<TicketProfileResponse>> GetProfilesAsync(
+        public async Task<IEnumerable<TicketResponse>> GetAsync(
             TicketsByProjectAndStatusRequest request)
         {
             IEnumerable<Ticket> tickets = await this.ticketsRepository
                 .GetByProjectIdAndStatus(request.ProjectId, request.Status);
 
-            return tickets?.Select(this.mapper.Map<Ticket, TicketProfileResponse>);
+            return tickets?.Select(this.mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<TicketProfileResponse> GetProfileByIdAsync(int id)
+        public async Task<TicketResponse> GetProfileByIdAsync(int id)
         {
             Ticket ticket = await this.ticketsRepository.GetByIdAsync(id);
-            return this.mapper.Map<Ticket, TicketProfileResponse>(ticket);
+            return this.mapper.Map<Ticket, TicketResponse>(ticket);
         }
 
         public async Task InsertAsync(TicketRequest request)

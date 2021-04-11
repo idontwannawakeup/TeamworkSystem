@@ -16,14 +16,14 @@ namespace TeamworkSystem.WebAPI.Controllers
     {
         private readonly ITicketsService ticketsService;
 
-        [HttpGet("profiles")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TicketProfileResponse>>> GetAllProfilesAsync()
+        public async Task<ActionResult<IEnumerable<TicketResponse>>> GetAsync()
         {
             try
             {
-                return this.Ok(await this.ticketsService.GetAllProfilesAsync());
+                return this.Ok(await this.ticketsService.GetAsync());
             }
             catch (Exception e)
             {
@@ -31,11 +31,11 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet("profiles/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TicketProfileResponse>> GetProfileAsync([FromRoute] int id)
+        public async Task<ActionResult<TicketResponse>> GetByIdAsync([FromRoute] int id)
         {
             try
             {
@@ -51,15 +51,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet("profiles/status")]
+        [HttpGet("status")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TicketProfileResponse>>> GetProfilesAsync(
+        public async Task<ActionResult<IEnumerable<TicketResponse>>> GetAsync(
             [FromBody] TicketsByProjectAndStatusRequest request)
         {
             try
             {
-                return this.Ok(await this.ticketsService.GetProfilesAsync(request));
+                return this.Ok(await this.ticketsService.GetAsync(request));
             }
             catch (Exception e)
             {

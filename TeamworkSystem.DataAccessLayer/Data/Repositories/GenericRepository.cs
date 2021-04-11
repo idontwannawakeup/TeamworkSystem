@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
-using TeamworkSystem.DataAccessLayer.Pagination;
-using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
@@ -15,17 +13,9 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         protected readonly DbSet<TEntity> table;
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> GetAsync()
         {
             return await this.table.ToListAsync();
-        }
-
-        public virtual async Task<PagedList<TEntity>> GetPageAsync(PaginationParameters parameters)
-        {
-            return await PagedList<TEntity>.ToPagedListAsync(
-                this.table,
-                parameters.PageNumber,
-                parameters.PageSize);
         }
 
         public virtual async Task<TEntity> GetByIdAsync(int id)

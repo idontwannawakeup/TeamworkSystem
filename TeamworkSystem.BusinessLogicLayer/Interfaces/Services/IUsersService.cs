@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
@@ -9,9 +11,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
     {
         Task SignUpAsync(UserSignUpRequest userSignUpDTO);
 
-        Task<IEnumerable<UserProfileResponse>> GetAllProfilesAsync();
+        Task<IEnumerable<UserResponse>> GetAsync();
 
-        Task<UserProfileResponse> GetProfileByIdAsync(string id);
+        Task<PagedList<UserResponse>> GetAsync(UsersParameters parameters);
+
+        Task<UserResponse> GetByIdAsync(string id);
+
+        Task<PagedList<UserResponse>> GetFriendsAsync(string id, UsersParameters parameters);
 
         Task DeleteAsync(string id);
 

@@ -1,6 +1,6 @@
 ﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
 {
-    public class ProjectProfileResponse
+    public class ProjectResponse
     {
         public int TeamId { get; set; }
 

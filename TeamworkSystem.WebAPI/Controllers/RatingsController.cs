@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,8 @@ using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -16,14 +19,21 @@ namespace TeamworkSystem.WebAPI.Controllers
     {
         private readonly IRatingsService ratingsService;
 
-        [HttpGet("profiles")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<RatingProfileResponse>>> GetAllProfilesAsync()
+        public async Task<ActionResult<PagedList<RatingResponse>>> GetAsync(
+            [FromQuery] RatingsParameters parameters)
         {
             try
             {
-                return this.Ok(await this.ratingsService.GetAllProfilesAsync());
+                PagedList<RatingResponse> ratings =
+                    await this.ratingsService.GetAsync(parameters);
+
+                this.Response.Headers.Add("X-Pagination",
+                    JsonSerializer.Serialize(ratings.Metadata));
+
+                return this.Ok(ratings);
             }
             catch (Exception e)
             {
@@ -31,15 +41,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpGet("profiles/{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<RatingProfileResponse>>> GetProfileByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync([FromRoute] int id)
         {
             try
             {
-                return this.Ok(await this.ratingsService.GetProfileByIdAsync(id));
+                return this.Ok(await this.ratingsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
