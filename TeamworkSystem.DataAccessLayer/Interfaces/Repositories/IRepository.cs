@@ -9,6 +9,8 @@ namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
 
         Task<TEntity> GetByIdAsync(int id);
 
+        Task<TEntity> GetCompleteEntityAsync(int id);
+
         Task InsertAsync(TEntity entity);
 
         Task UpdateAsync(TEntity entity);

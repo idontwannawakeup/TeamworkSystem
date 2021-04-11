@@ -8,7 +8,5 @@ namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
     public interface IProjectsRepository : IRepository<Project>
     {
         Task<PagedList<Project>> GetAsync(ProjectsParameters parameters);
-
-        Task<Project> GetCompleteProjectAsync(int id);
     }
 }

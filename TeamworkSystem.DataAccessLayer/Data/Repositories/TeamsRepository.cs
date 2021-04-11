@@ -13,6 +13,16 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     public class TeamsRepository
         : GenericRepository<Team>, ITeamsRepository
     {
+        public override async Task<Team> GetCompleteEntityAsync(int id)
+        {
+            return await this.table
+                .Include(team => team.Leader)
+                .Include(team => team.Projects)
+                .Include(team => team.Members)
+                .SingleOrDefaultAsync(team => team.Id == id)
+                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+        }
+
         public async Task<PagedList<Team>> GetAsync(TeamsParameters parameters)
         {
             IQueryable<Team> source = this.table;
@@ -29,16 +39,6 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             return await this.table
                 .Where(team => team.Members.Contains(user))
                 .ToListAsync();
-        }
-
-        public async Task<Team> GetCompleteTeamAsync(int id)
-        {
-            return await this.table
-                .Include(team => team.Leader)
-                .Include(team => team.Projects)
-                .Include(team => team.Members)
-                .SingleOrDefaultAsync(team => team.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
         public async Task<IEnumerable<User>> GetMembersAsync(int id)

@@ -13,6 +13,15 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     public class RatingsRepository
         : GenericRepository<Rating>, IRatingsRepository
     {
+        public override async Task<Rating> GetCompleteEntityAsync(int id)
+        {
+            return await this.table
+                .Include(rating => rating.From)
+                .Include(rating => rating.To)
+                .SingleOrDefaultAsync(rating => rating.Id == id)
+                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+        }
+
         public async Task<PagedList<Rating>> GetAsync(RatingsParameters parameters)
         {
             IQueryable<Rating> source = this.table;
@@ -20,15 +29,6 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 source,
                 parameters.PageNumber,
                 parameters.PageSize);
-        }
-
-        public async Task<Rating> GetCompleteRatingAsync(int id)
-        {
-            return await this.table
-                .Include(rating => rating.From)
-                .Include(rating => rating.To)
-                .SingleOrDefaultAsync(rating => rating.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
         public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId)

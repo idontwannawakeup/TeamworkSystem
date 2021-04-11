@@ -6,7 +6,7 @@ using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
-    public class GenericRepository<TEntity> : IRepository<TEntity>
+    public abstract class GenericRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
         protected readonly TeamworkSystemContext databaseContext;
@@ -23,6 +23,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             return await this.table.FindAsync(id)
                 ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
+
+        public abstract Task<TEntity> GetCompleteEntityAsync(int id);
 
         public virtual async Task InsertAsync(TEntity entity)
         {

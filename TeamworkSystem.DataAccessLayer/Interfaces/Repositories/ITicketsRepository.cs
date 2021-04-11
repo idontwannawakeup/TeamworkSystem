@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
 {
     public interface ITicketsRepository : IRepository<Ticket>
     {
-        Task<Ticket> GetCompleteTicketAsync(int id);
-
-        Task<IEnumerable<Ticket>> GetByProjectIdAndStatus(int projectId, string status);
+        Task<PagedList<Ticket>> GetAsync(TicketsParameters parameters);
     }
 }

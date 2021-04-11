@@ -10,8 +10,6 @@ namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
     {
         Task<PagedList<Rating>> GetAsync(RatingsParameters parameters);
 
-        Task<Rating> GetCompleteRatingAsync(int id);
-
         Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId);
 
         Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId);

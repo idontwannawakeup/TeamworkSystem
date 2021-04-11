@@ -9,6 +9,8 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services
 {
@@ -26,13 +28,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             return tickets?.Select(this.mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<IEnumerable<TicketResponse>> GetAsync(
-            TicketsByProjectAndStatusRequest request)
+        public async Task<PagedList<TicketResponse>> GetAsync(TicketsParameters parameters)
         {
-            IEnumerable<Ticket> tickets = await this.ticketsRepository
-                .GetByProjectIdAndStatus(request.ProjectId, request.Status);
-
-            return tickets?.Select(this.mapper.Map<Ticket, TicketResponse>);
+            PagedList<Ticket> tickets = await this.ticketsRepository.GetAsync(parameters);
+            return tickets?.Map(this.mapper.Map<Ticket, TicketResponse>);
         }
 
         public async Task<TicketResponse> GetProfileByIdAsync(int id)

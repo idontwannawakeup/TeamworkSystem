@@ -35,7 +35,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId)
         {
-            Team team = await this.unitOfWork.TeamsRepository.GetCompleteTeamAsync(teamId);
+            Team team = await this.unitOfWork.TeamsRepository.GetCompleteEntityAsync(teamId);
             IEnumerable<Project> projects = team?.Projects;
             return projects?.Select(this.mapper.Map<Project, ProjectResponse>);
         }
