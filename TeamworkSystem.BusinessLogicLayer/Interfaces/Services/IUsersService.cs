@@ -1,22 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TeamworkSystem.BusinessLogicLayer.DTO;
-using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
+using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface IUsersService
     {
-        Task<IEnumerable<UserDTO>> GetAllAsync();
+        Task SignUpAsync(UserSignUpRequest userSignUpDTO);
 
-        Task<UserDTO> GetByIdAsync(string id);
+        Task<IEnumerable<UserResponse>> GetAsync();
 
-        Task CreateAsync(UserDTO userDTO);
+        Task<PagedList<UserResponse>> GetAsync(UsersParameters parameters);
+
+        Task<UserResponse> GetByIdAsync(string id);
+
+        Task<PagedList<UserResponse>> GetFriendsAsync(string id, UsersParameters parameters);
 
         Task DeleteAsync(string id);
 
-        Task AddFriend(string id, string friendId);
+        Task AddFriendAsync(FriendsRequest friendsRequest);
 
-        Task DeleteFriend(string id, string friendId);
+        Task DeleteFriendAsync(FriendsRequest friendsRequest);
     }
 }

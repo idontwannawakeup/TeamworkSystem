@@ -1,16 +1,14 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO
+﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
 {
-    public class UserDTO
+    public class UserResponse
     {
         public string Id { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Email { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string Email { get; set; }
 
         public string Profession { get; set; }
 

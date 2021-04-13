@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 
 namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
 {
-    public interface IRepository<TEntity>
+    public interface IRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAsync();
 
         Task<TEntity> GetByIdAsync(int id);
+
+        Task<TEntity> GetCompleteEntityAsync(int id);
 
         Task InsertAsync(TEntity entity);
 

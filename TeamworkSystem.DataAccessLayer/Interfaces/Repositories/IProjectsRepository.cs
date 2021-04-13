@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
 {
     public interface IProjectsRepository : IRepository<Project>
     {
-        Task<Project> GetCompleteProjectAsync(int id);
+        Task<PagedList<Project>> GetAsync(ProjectsParameters parameters);
     }
 }

@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
 {
     public interface ITeamsRepository : IRepository<Team>
     {
-        Task<Team> GetCompleteTeamAsync(int id);
+        Task<PagedList<Team>> GetAsync(TeamsParameters parameters);
+
+        Task<IEnumerable<Team>> GetUserTeams(User user);
 
         Task<IEnumerable<User>> GetMembersAsync(int id);
 

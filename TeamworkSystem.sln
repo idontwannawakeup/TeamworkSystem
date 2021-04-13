@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WebAPI", "Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.DataAccessLayer", "TeamworkSystem.DataAccessLayer\TeamworkSystem.DataAccessLayer.csproj", "{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.BusinessLogicLayer", "TeamworkSystem.BusinessLogicLayer\TeamworkSystem.BusinessLogicLayer.csproj", "{44F5F84B-864B-43AE-B6C9-49BACA602BAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.BusinessLogicLayer", "TeamworkSystem.BusinessLogicLayer\TeamworkSystem.BusinessLogicLayer.csproj", "{44F5F84B-864B-43AE-B6C9-49BACA602BAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
