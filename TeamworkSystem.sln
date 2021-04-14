@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.DataAccessLa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.BusinessLogicLayer", "TeamworkSystem.BusinessLogicLayer\TeamworkSystem.BusinessLogicLayer.csproj", "{44F5F84B-864B-43AE-B6C9-49BACA602BAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WebClient", "TeamworkSystem.WebClient\TeamworkSystem.WebClient.csproj", "{D4A4D956-6237-4A89-876E-C33746DA18D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WebClient", "TeamworkSystem.WebClient\TeamworkSystem.WebClient.csproj", "{D4A4D956-6237-4A89-876E-C33746DA18D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FAB288F4-0D34-48D5-B967-B7984661F2ED}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
