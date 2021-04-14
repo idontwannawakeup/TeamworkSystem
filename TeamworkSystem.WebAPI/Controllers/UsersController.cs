@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +8,7 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
+using TeamworkSystem.WebAPI.Extensions;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -30,8 +29,9 @@ namespace TeamworkSystem.WebAPI.Controllers
                 PagedList<UserResponse> users =
                     await this.usersService.GetAsync(parameters);
 
-                this.Response.Headers.Add("X-Pagination",
-                    JsonSerializer.Serialize(users.Metadata));
+                this.Response.Headers.Add(
+                    "X-Pagination",
+                    users.SerializeMetadata());
 
                 return this.Ok(users);
             }
@@ -74,8 +74,9 @@ namespace TeamworkSystem.WebAPI.Controllers
                 PagedList<UserResponse> friends =
                     await this.usersService.GetFriendsAsync(id, parameters);
 
-                this.Response.Headers.Add("X-Pagination",
-                    JsonSerializer.Serialize(friends.Metadata));
+                this.Response.Headers.Add(
+                    "X-Pagination",
+                    friends.SerializeMetadata());
 
                 return this.Ok(friends);
             }

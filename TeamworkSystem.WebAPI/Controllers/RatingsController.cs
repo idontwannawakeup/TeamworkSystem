@@ -10,6 +10,7 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
+using TeamworkSystem.WebAPI.Extensions;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -30,8 +31,9 @@ namespace TeamworkSystem.WebAPI.Controllers
                 PagedList<RatingResponse> ratings =
                     await this.ratingsService.GetAsync(parameters);
 
-                this.Response.Headers.Add("X-Pagination",
-                    JsonSerializer.Serialize(ratings.Metadata));
+                this.Response.Headers.Add(
+                    "X-Pagination",
+                    ratings.SerializeMetadata());
 
                 return this.Ok(ratings);
             }
