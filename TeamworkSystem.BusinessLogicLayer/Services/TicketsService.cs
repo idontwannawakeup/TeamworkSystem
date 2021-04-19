@@ -24,14 +24,19 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task<IEnumerable<TicketResponse>> GetAsync()
         {
-            IEnumerable<Ticket> tickets = await this.ticketsRepository.GetAsync();
-            return tickets?.Select(this.mapper.Map<Ticket, TicketResponse>);
+            IEnumerable<Ticket> tickets =
+                await this.ticketsRepository.GetAsync();
+
+            return tickets?.Select(
+                this.mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<PagedList<TicketResponse>> GetAsync(TicketsParameters parameters)
+        public async Task<PagedList<TicketResponse>> GetAsync(
+            TicketsParameters parameters)
         {
             PagedList<Ticket> tickets = await this.ticketsRepository.GetAsync(parameters);
-            return tickets?.Map(this.mapper.Map<Ticket, TicketResponse>);
+            return tickets?.Map(
+                this.mapper.Map<Ticket, TicketResponse>);
         }
 
         public async Task<TicketResponse> GetProfileByIdAsync(int id)
@@ -47,12 +52,15 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await this.unitOfWork.SaveChangesAsync();
         }
 
-        public async Task ExtendDeadlineAsync(TicketWithExtendedDeadlineRequest request)
+        public async Task ExtendDeadlineAsync(
+            TicketWithExtendedDeadlineRequest request)
         {
             Ticket ticket = await this.ticketsRepository.GetByIdAsync(request.Id);
+
             if (ticket.Deadline > request.Deadline)
             {
-                throw new Exception("New date of deadline is sooner than current.");
+                throw new Exception(
+                    "New date of deadline is sooner than current.");
             }
 
             ticket.Deadline = request.Deadline;

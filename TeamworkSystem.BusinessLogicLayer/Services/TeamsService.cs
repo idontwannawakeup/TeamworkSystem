@@ -28,22 +28,27 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<TeamResponse>> GetAsync()
         {
             IEnumerable<Team> teams = await this.teamsRepository.GetAsync();
-            return teams?.Select(this.mapper.Map<Team, TeamResponse>);
+            return teams?.Select(
+                this.mapper.Map<Team, TeamResponse>);
         }
 
-        public async Task<PagedList<TeamResponse>> GetAsync(TeamsParameters parameters)
+        public async Task<PagedList<TeamResponse>> GetAsync(
+            TeamsParameters parameters)
         {
             PagedList<Team> teamsPage = await this.teamsRepository.GetAsync(parameters);
-            return teamsPage?.Map(this.mapper.Map<Team, TeamResponse>);
+            return teamsPage?.Map(
+                this.mapper.Map<Team, TeamResponse>);
         }
 
         public async Task<IEnumerable<TeamResponse>> GetUserTeamsAsync(string userId)
         {
             User user = await this.userManager.FindByIdAsync(userId)
-                ?? throw new EntityNotFoundException($"{nameof(User)} with id {userId} not found.");
+                ?? throw new EntityNotFoundException(
+                    $"{nameof(User)} with id {userId} not found.");
 
             IEnumerable<Team> teams = await this.teamsRepository.GetUserTeams(user);
-            return teams?.Select(this.mapper.Map<Team, TeamResponse>);
+            return teams?.Select(
+                this.mapper.Map<Team, TeamResponse>);
         }
 
         public async Task<TeamResponse> GetByIdAsync(int id)

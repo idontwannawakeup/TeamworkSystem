@@ -32,7 +32,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             if (!signUpResult.Succeeded)
             {
                 string errors = string.Join("\n",
-                    signUpResult.Errors.Select(error => error.Description));
+                    signUpResult.Errors.Select(
+                        error => error.Description));
 
                 throw new ArgumentException(errors);
             }
@@ -43,13 +44,16 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<UserResponse>> GetAsync()
         {
             List<User> users = await this.userManager.Users.ToListAsync();
-            return users?.Select(this.mapper.Map<User, UserResponse>);
+            return users?.Select(
+                this.mapper.Map<User, UserResponse>);
         }
 
-        public async Task<PagedList<UserResponse>> GetAsync(UsersParameters parameters)
+        public async Task<PagedList<UserResponse>> GetAsync(
+            UsersParameters parameters)
         {
             PagedList<User> users = await this.userManager.GetAsync(parameters);
-            return users?.Map(this.mapper.Map<User, UserResponse>);
+            return users?.Map(
+                this.mapper.Map<User, UserResponse>);
         }
 
         public async Task<UserResponse> GetByIdAsync(string id)
@@ -58,10 +62,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             return this.mapper.Map<User, UserResponse>(user);
         }
 
-        public async Task<PagedList<UserResponse>> GetFriendsAsync(string id, UsersParameters parameters)
+        public async Task<PagedList<UserResponse>> GetFriendsAsync(
+            string id,
+            UsersParameters parameters)
         {
             PagedList<User> friends = await this.userManager.GetFriendsAsync(id, parameters);
-            return friends?.Map(this.mapper.Map<User, UserResponse>);
+            return friends?.Map(
+                this.mapper.Map<User, UserResponse>);
         }
 
         public async Task DeleteAsync(string id)

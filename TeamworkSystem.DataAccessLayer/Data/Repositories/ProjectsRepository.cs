@@ -18,10 +18,12 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .Include(project => project.Team)
                 .Include(project => project.Tickets)
                 .SingleOrDefaultAsync(project => project.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<PagedList<Project>> GetAsync(ProjectsParameters parameters)
+        public async Task<PagedList<Project>> GetAsync(
+            ProjectsParameters parameters)
         {
             IQueryable<Project> source = this.table;
             return await PagedList<Project>.ToPagedListAsync(
@@ -35,7 +37,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             Project project = await this.table
                 .Include(project => project.Team)
                 .SingleOrDefaultAsync(project => project.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
 
             return project?.Team;
         }

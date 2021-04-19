@@ -24,10 +24,12 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<RatingResponse>> GetAsync()
         {
             IEnumerable<Rating> ratings = await this.ratingsRepository.GetAsync();
-            return ratings?.Select(this.mapper.Map<Rating, RatingResponse>);
+            return ratings?.Select(
+                this.mapper.Map<Rating, RatingResponse>);
         }
 
-        public async Task<PagedList<RatingResponse>> GetAsync(RatingsParameters parameters)
+        public async Task<PagedList<RatingResponse>> GetAsync(
+            RatingsParameters parameters)
         {
             PagedList<Rating> ratings = await this.ratingsRepository.GetAsync(parameters);
             return ratings?.Map(this.mapper.Map<Rating, RatingResponse>);
@@ -36,13 +38,15 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<RatingResponse>> GetRatingProfilesFromUserAsync(string userId)
         {
             IEnumerable<Rating> ratings = await this.ratingsRepository.GetRatingsFromUserAsync(userId);
-            return ratings?.Select(this.mapper.Map<Rating, RatingResponse>);
+            return ratings?.Select(
+                this.mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<IEnumerable<RatingResponse>> GetRatingProfilesForUserAsync(string userId)
         {
             IEnumerable<Rating> ratings = await this.ratingsRepository.GetRatingsForUserAsync(userId);
-            return ratings?.Select(this.mapper.Map<Rating, RatingResponse>);
+            return ratings?.Select(
+                this.mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<RatingResponse> GetByIdAsync(int id)

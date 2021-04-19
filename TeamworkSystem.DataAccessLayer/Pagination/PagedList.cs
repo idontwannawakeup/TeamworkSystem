@@ -64,7 +64,8 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
             this.CurrentPage = pageNumber;
             this.PageSize = pageSize;
             this.TotalEntitiesCount = totalEntitiesCount;
-            this.TotalPages = (int) Math.Ceiling(totalEntitiesCount / (double) pageSize);
+            this.TotalPages = (int) Math.Ceiling(
+                totalEntitiesCount / (double) pageSize);
 
             this.AddRange(items);
         }

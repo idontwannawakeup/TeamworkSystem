@@ -12,7 +12,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     public class TicketsRepository
         : GenericRepository<Ticket>, ITicketsRepository
     {
-        public async Task<PagedList<Ticket>> GetAsync(TicketsParameters parameters)
+        public async Task<PagedList<Ticket>> GetAsync(
+            TicketsParameters parameters)
         {
             IQueryable<Ticket> source = this.table;
             return await PagedList<Ticket>.ToPagedListAsync(
@@ -27,7 +28,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .Include(ticket => ticket.Project)
                 .Include(ticket => ticket.Executor)
                 .SingleOrDefaultAsync(ticket => ticket.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
         }
 
         public TicketsRepository(TeamworkSystemContext databaseContext)

@@ -21,23 +21,29 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly IProjectsRepository projectsRepository;
 
+        private readonly ITeamsRepository teamsRepository;
+
         public async Task<IEnumerable<ProjectResponse>> GetAsync()
         {
             IEnumerable<Project> projects = await this.projectsRepository.GetAsync();
-            return projects?.Select(this.mapper.Map<Project, ProjectResponse>);
+            return projects?.Select(
+                this.mapper.Map<Project, ProjectResponse>);
         }
 
-        public async Task<PagedList<ProjectResponse>> GetAsync(ProjectsParameters parameters)
+        public async Task<PagedList<ProjectResponse>> GetAsync(
+            ProjectsParameters parameters)
         {
             PagedList<Project> projects = await this.projectsRepository.GetAsync(parameters);
-            return projects?.Map(this.mapper.Map<Project, ProjectResponse>);
+            return projects?.Map(
+                this.mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId)
         {
-            Team team = await this.unitOfWork.TeamsRepository.GetCompleteEntityAsync(teamId);
+            Team team = await this.teamsRepository.GetCompleteEntityAsync(teamId);
             IEnumerable<Project> projects = team?.Projects;
-            return projects?.Select(this.mapper.Map<Project, ProjectResponse>);
+            return projects?.Select(
+                this.mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<ProjectResponse> GetByIdAsync(int id)
@@ -64,6 +70,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.projectsRepository = this.unitOfWork.ProjectsRepository;
+            this.teamsRepository = this.unitOfWork.TeamsRepository;
         }
     }
 }

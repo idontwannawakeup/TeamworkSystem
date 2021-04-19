@@ -19,10 +19,12 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .Include(rating => rating.From)
                 .Include(rating => rating.To)
                 .SingleOrDefaultAsync(rating => rating.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<PagedList<Rating>> GetAsync(RatingsParameters parameters)
+        public async Task<PagedList<Rating>> GetAsync(
+            RatingsParameters parameters)
         {
             IQueryable<Rating> source = this.table;
             return await PagedList<Rating>.ToPagedListAsync(

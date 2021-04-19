@@ -21,7 +21,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public virtual async Task<TEntity> GetByIdAsync(int id)
         {
             return await this.table.FindAsync(id)
-                ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                ?? throw new EntityNotFoundException(
+                    GetEntityNotFoundErrorMessage(id));
         }
 
         public abstract Task<TEntity> GetCompleteEntityAsync(int id);
@@ -38,9 +39,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public virtual async Task DeleteAsync(int id)
         {
-            TEntity entity = await this.table.FindAsync(id)
-                ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
-
+            TEntity entity = await this.GetByIdAsync(id);
             await Task.Run(() => this.table.Remove(entity));
         }
 

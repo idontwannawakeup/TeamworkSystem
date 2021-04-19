@@ -20,10 +20,12 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .Include(team => team.Projects)
                 .Include(team => team.Members)
                 .SingleOrDefaultAsync(team => team.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<PagedList<Team>> GetAsync(TeamsParameters parameters)
+        public async Task<PagedList<Team>> GetAsync(
+            TeamsParameters parameters)
         {
             IQueryable<Team> source = this.table;
             SearchByMemberId(ref source, parameters.UserId);
@@ -46,7 +48,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             Team team = await this.table
                 .Include(team => team.Members)
                 .SingleOrDefaultAsync(team => team.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
 
             return team?.Members;
         }
@@ -56,7 +59,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             Team team = await this.table
                 .Include(team => team.Members)
                 .SingleOrDefaultAsync(team => team.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
 
             team?.Members?.Add(member);
         }
@@ -66,7 +70,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             Team team = await this.table
                 .Include(team => team.Members)
                 .SingleOrDefaultAsync(team => team.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
 
             team?.Members?.Remove(member);
         }
@@ -93,7 +98,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 return;
             }
 
-            source = source.Where(team => team.Specialization == specialization);
+            source = source.Where(team =>
+                team.Specialization == specialization);
         }
 
         public TeamsRepository(TeamworkSystemContext databaseContext)
