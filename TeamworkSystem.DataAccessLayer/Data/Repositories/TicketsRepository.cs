@@ -15,7 +15,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Ticket>> GetAsync(
             TicketsParameters parameters)
         {
-            IQueryable<Ticket> source = this.table;
+            IQueryable<Ticket> source = table;
             return await PagedList<Ticket>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -24,7 +24,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public override async Task<Ticket> GetCompleteEntityAsync(int id)
         {
-            return await this.table
+            return await table
                 .Include(ticket => ticket.Project)
                 .Include(ticket => ticket.Executor)
                 .SingleOrDefaultAsync(ticket => ticket.Id == id)

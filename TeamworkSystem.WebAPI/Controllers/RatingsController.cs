@@ -27,18 +27,17 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                PagedList<RatingResponse> ratings =
-                    await this.ratingsService.GetAsync(parameters);
+                var ratings = await ratingsService.GetAsync(parameters);
 
-                this.Response.Headers.Add(
+                Response.Headers.Add(
                     "X-Pagination",
                     ratings.SerializeMetadata());
 
-                return this.Ok(ratings);
+                return Ok(ratings);
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -50,15 +49,15 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.ratingsService.GetByIdAsync(id));
+                return Ok(await ratingsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -69,12 +68,12 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.ratingsService.InsertAsync(request);
-                return this.Ok();
+                await ratingsService.InsertAsync(request);
+                return Ok();
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -86,16 +85,16 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.ratingsService.DeleteAsync(id);
-                return this.Ok();
+                await ratingsService.DeleteAsync(id);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 

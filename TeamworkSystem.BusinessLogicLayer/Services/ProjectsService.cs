@@ -25,52 +25,49 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task<IEnumerable<ProjectResponse>> GetAsync()
         {
-            IEnumerable<Project> projects = await this.projectsRepository.GetAsync();
-            return projects?.Select(
-                this.mapper.Map<Project, ProjectResponse>);
+            var projects = await projectsRepository.GetAsync();
+            return projects?.Select(mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<PagedList<ProjectResponse>> GetAsync(
             ProjectsParameters parameters)
         {
-            PagedList<Project> projects = await this.projectsRepository.GetAsync(parameters);
-            return projects?.Map(
-                this.mapper.Map<Project, ProjectResponse>);
+            var projects = await projectsRepository.GetAsync(parameters);
+            return projects?.Map(mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId)
         {
-            Team team = await this.teamsRepository.GetCompleteEntityAsync(teamId);
-            IEnumerable<Project> projects = team?.Projects;
-            return projects?.Select(
-                this.mapper.Map<Project, ProjectResponse>);
+            var team = await teamsRepository.GetCompleteEntityAsync(teamId);
+            var projects = team?.Projects;
+            return projects?.Select(mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<ProjectResponse> GetByIdAsync(int id)
         {
-            Project project = await this.projectsRepository.GetByIdAsync(id);
-            return this.mapper.Map<Project, ProjectResponse>(project);
+            var project = await projectsRepository.GetByIdAsync(id);
+            return mapper.Map<Project, ProjectResponse>(project);
         }
 
         public async Task InsertAsync(ProjectRequest request)
         {
-            Project project = this.mapper.Map<ProjectRequest, Project>(request);
-            await this.projectsRepository.InsertAsync(project);
-            await this.unitOfWork.SaveChangesAsync();
+            var project = mapper.Map<ProjectRequest, Project>(request);
+            await projectsRepository.InsertAsync(project);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            await this.projectsRepository.DeleteAsync(id);
-            await this.unitOfWork.SaveChangesAsync();
+            await projectsRepository.DeleteAsync(id);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public ProjectsService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.projectsRepository = this.unitOfWork.ProjectsRepository;
-            this.teamsRepository = this.unitOfWork.TeamsRepository;
+            projectsRepository = this.unitOfWork.ProjectsRepository;
+            teamsRepository = this.unitOfWork.TeamsRepository;
         }
     }
 }

@@ -9,41 +9,41 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
     {
         private void CreateUserMaps()
         {
-            this.CreateMap<User, UserResponse>();
-            this.CreateMap<UserSignUpRequest, User>();
+            CreateMap<User, UserResponse>();
+            CreateMap<UserSignUpRequest, User>();
         }
 
         private void CreateTicketsMaps()
         {
-            this.CreateMap<TicketRequest, Ticket>();
-            this.CreateMap<Ticket, TicketResponse>();
+            CreateMap<TicketRequest, Ticket>();
+            CreateMap<Ticket, TicketResponse>();
         }
 
         private void CreateTeamsMaps()
         {
-            this.CreateMap<TeamRequest, Team>();
-            this.CreateMap<Team, TeamResponse>();
+            CreateMap<TeamRequest, Team>();
+            CreateMap<Team, TeamResponse>();
         }
 
         private void CreateProjectsMaps()
         {
-            this.CreateMap<ProjectRequest, Project>();
-            this.CreateMap<Project, ProjectResponse>();
+            CreateMap<ProjectRequest, Project>();
+            CreateMap<Project, ProjectResponse>();
         }
 
         private void CreateRatingsMaps()
         {
-            this.CreateMap<RatingRequest, Rating>();
-            this.CreateMap<Rating, RatingResponse>();
+            CreateMap<RatingRequest, Rating>();
+            CreateMap<Rating, RatingResponse>();
         }
 
         public AutoMapperProfile()
         {
-            this.CreateUserMaps();
-            this.CreateTicketsMaps();
-            this.CreateTeamsMaps();
-            this.CreateProjectsMaps();
-            this.CreateRatingsMaps();
+            CreateUserMaps();
+            CreateTicketsMaps();
+            CreateTeamsMaps();
+            CreateProjectsMaps();
+            CreateRatingsMaps();
         }
     }
 }

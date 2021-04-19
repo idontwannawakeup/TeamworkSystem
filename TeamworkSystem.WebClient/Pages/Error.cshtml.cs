@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Diagnostics;
 
 namespace TeamworkSystem.WebClient.Pages
 {
@@ -13,7 +13,7 @@ namespace TeamworkSystem.WebClient.Pages
     {
         public string RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(this.RequestId);
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
         public ErrorModel()
         {
@@ -21,7 +21,7 @@ namespace TeamworkSystem.WebClient.Pages
 
         public void OnGet()
         {
-            this.RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier;
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }
 }

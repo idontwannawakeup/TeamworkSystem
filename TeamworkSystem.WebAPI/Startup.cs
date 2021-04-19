@@ -22,7 +22,7 @@ namespace TeamworkSystem.WebAPI
     {
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -33,7 +33,7 @@ namespace TeamworkSystem.WebAPI
         {
             services.AddDbContext<TeamworkSystemContext>(options =>
             {
-                string connectionString = this.Configuration.GetConnectionString("DefaultConnection");
+                string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
 

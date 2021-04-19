@@ -15,7 +15,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     {
         public override async Task<Team> GetCompleteEntityAsync(int id)
         {
-            return await this.table
+            return await table
                 .Include(team => team.Leader)
                 .Include(team => team.Projects)
                 .Include(team => team.Members)
@@ -27,7 +27,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Team>> GetAsync(
             TeamsParameters parameters)
         {
-            IQueryable<Team> source = this.table;
+            IQueryable<Team> source = table;
             SearchByMemberId(ref source, parameters.UserId);
             SearchBySpecialization(ref source, parameters.Specialization);
             return await PagedList<Team>.ToPagedListAsync(
@@ -38,14 +38,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<IEnumerable<Team>> GetUserTeams(User user)
         {
-            return await this.table
+            return await table
                 .Where(team => team.Members.Contains(user))
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<User>> GetMembersAsync(int id)
         {
-            Team team = await this.table
+            var team = await table
                 .Include(team => team.Members)
                 .SingleOrDefaultAsync(team => team.Id == id)
                     ?? throw new EntityNotFoundException(
@@ -56,7 +56,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task AddMemberAsync(int id, User member)
         {
-            Team team = await this.table
+            var team = await table
                 .Include(team => team.Members)
                 .SingleOrDefaultAsync(team => team.Id == id)
                     ?? throw new EntityNotFoundException(
@@ -67,7 +67,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task DeleteMemberAsync(int id, User member)
         {
-            Team team = await this.table
+            var team = await table
                 .Include(team => team.Members)
                 .SingleOrDefaultAsync(team => team.Id == id)
                     ?? throw new EntityNotFoundException(

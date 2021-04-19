@@ -15,12 +15,12 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public virtual async Task<IEnumerable<TEntity>> GetAsync()
         {
-            return await this.table.ToListAsync();
+            return await table.ToListAsync();
         }
 
         public virtual async Task<TEntity> GetByIdAsync(int id)
         {
-            return await this.table.FindAsync(id)
+            return await table.FindAsync(id)
                 ?? throw new EntityNotFoundException(
                     GetEntityNotFoundErrorMessage(id));
         }
@@ -29,18 +29,18 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public virtual async Task InsertAsync(TEntity entity)
         {
-            await this.table.AddAsync(entity);
+            await table.AddAsync(entity);
         }
 
         public virtual async Task UpdateAsync(TEntity entity)
         {
-            await Task.Run(() => this.table.Update(entity));
+            await Task.Run(() => table.Update(entity));
         }
 
         public virtual async Task DeleteAsync(int id)
         {
-            TEntity entity = await this.GetByIdAsync(id);
-            await Task.Run(() => this.table.Remove(entity));
+            var entity = await GetByIdAsync(id);
+            await Task.Run(() => table.Remove(entity));
         }
 
         protected static string GetEntityNotFoundErrorMessage(int id) =>
@@ -49,7 +49,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public GenericRepository(TeamworkSystemContext databaseContext)
         {
             this.databaseContext = databaseContext;
-            this.table = this.databaseContext.Set<TEntity>();
+            table = this.databaseContext.Set<TEntity>();
         }
     }
 }

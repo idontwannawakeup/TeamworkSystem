@@ -10,9 +10,9 @@
 
         public int PageSize
         {
-            get => this.pageSize;
+            get => pageSize;
 
-            set => this.pageSize = (value > MaxPageSize)
+            set => pageSize = (value > MaxPageSize)
                 ? MaxPageSize
                 : value;
         }

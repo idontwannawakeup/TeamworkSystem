@@ -14,7 +14,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     {
         public override async Task<Project> GetCompleteEntityAsync(int id)
         {
-            return await this.table
+            return await table
                 .Include(project => project.Team)
                 .Include(project => project.Tickets)
                 .SingleOrDefaultAsync(project => project.Id == id)
@@ -25,7 +25,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Project>> GetAsync(
             ProjectsParameters parameters)
         {
-            IQueryable<Project> source = this.table;
+            IQueryable<Project> source = table;
             return await PagedList<Project>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -34,7 +34,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<Team> GetRelatedTeamAsync(int id)
         {
-            Project project = await this.table
+            var project = await table
                 .Include(project => project.Team)
                 .SingleOrDefaultAsync(project => project.Id == id)
                     ?? throw new EntityNotFoundException(

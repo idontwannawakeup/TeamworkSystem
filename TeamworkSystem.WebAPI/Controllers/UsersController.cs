@@ -26,18 +26,13 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                PagedList<UserResponse> users =
-                    await this.usersService.GetAsync(parameters);
-
-                this.Response.Headers.Add(
-                    "X-Pagination",
-                    users.SerializeMetadata());
-
-                return this.Ok(users);
+                var users = await usersService.GetAsync(parameters);
+                Response.Headers.Add("X-Pagination", users.SerializeMetadata());
+                return Ok(users);
             }
             catch (Exception e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
         }
 
@@ -49,15 +44,15 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.usersService.GetByIdAsync(id));
+                return Ok(await usersService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -71,22 +66,17 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                PagedList<UserResponse> friends =
-                    await this.usersService.GetFriendsAsync(id, parameters);
-
-                this.Response.Headers.Add(
-                    "X-Pagination",
-                    friends.SerializeMetadata());
-
-                return this.Ok(friends);
+                var friends = await usersService.GetFriendsAsync(id, parameters);
+                Response.Headers.Add("X-Pagination", friends.SerializeMetadata());
+                return Ok(friends);
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -97,12 +87,12 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersService.SignUpAsync(user);
-                return this.Ok();
+                await usersService.SignUpAsync(user);
+                return Ok();
             }
             catch (ArgumentException e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -114,16 +104,16 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersService.AddFriendAsync(request);
-                return this.Ok();
+                await usersService.AddFriendAsync(request);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -135,16 +125,16 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersService.DeleteFriendAsync(request);
-                return this.Ok();
+                await usersService.DeleteFriendAsync(request);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -156,16 +146,16 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersService.DeleteAsync(id);
-                return this.Ok();
+                await usersService.DeleteAsync(id);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 

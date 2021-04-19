@@ -26,8 +26,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task SignUpAsync(UserSignUpRequest userSignUp)
         {
-            User user = this.mapper.Map<UserSignUpRequest, User>(userSignUp);
-            IdentityResult signUpResult = await this.userManager.CreateAsync(user, userSignUp.Password);
+            var user = mapper.Map<UserSignUpRequest, User>(userSignUp);
+            var signUpResult = await userManager.CreateAsync(user, userSignUp.Password);
 
             if (!signUpResult.Succeeded)
             {
@@ -38,49 +38,46 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
                 throw new ArgumentException(errors);
             }
 
-            await this.unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<UserResponse>> GetAsync()
         {
-            List<User> users = await this.userManager.Users.ToListAsync();
-            return users?.Select(
-                this.mapper.Map<User, UserResponse>);
+            var users = await userManager.Users.ToListAsync();
+            return users?.Select(mapper.Map<User, UserResponse>);
         }
 
         public async Task<PagedList<UserResponse>> GetAsync(
             UsersParameters parameters)
         {
-            PagedList<User> users = await this.userManager.GetAsync(parameters);
-            return users?.Map(
-                this.mapper.Map<User, UserResponse>);
+            var users = await userManager.GetAsync(parameters);
+            return users?.Map(mapper.Map<User, UserResponse>);
         }
 
         public async Task<UserResponse> GetByIdAsync(string id)
         {
-            User user = await this.userManager.GetCompleteEntityAsync(id);
-            return this.mapper.Map<User, UserResponse>(user);
+            var user = await userManager.GetCompleteEntityAsync(id);
+            return mapper.Map<User, UserResponse>(user);
         }
 
         public async Task<PagedList<UserResponse>> GetFriendsAsync(
             string id,
             UsersParameters parameters)
         {
-            PagedList<User> friends = await this.userManager.GetFriendsAsync(id, parameters);
-            return friends?.Map(
-                this.mapper.Map<User, UserResponse>);
+            var friends = await userManager.GetFriendsAsync(id, parameters);
+            return friends?.Map(mapper.Map<User, UserResponse>);
         }
 
         public async Task DeleteAsync(string id)
         {
-            User user = await this.userManager.GetByIdAsync(id);
-            await this.unitOfWork.UserManager.DeleteAsync(user);
-            await this.unitOfWork.SaveChangesAsync();
+            var user = await userManager.GetByIdAsync(id);
+            await unitOfWork.UserManager.DeleteAsync(user);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task AddFriendAsync(FriendsRequest friendsRequest)
         {
-            await this.MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
+            await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
             {
                 firstUser.Friends.Add(secondUser);
                 secondUser.Friends.Add(firstUser);
@@ -89,7 +86,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task DeleteFriendAsync(FriendsRequest friendsRequest)
         {
-            await this.MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
+            await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
             {
                 firstUser.Friends.Remove(secondUser);
                 secondUser.Friends.Remove(firstUser);
@@ -100,21 +97,21 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             FriendsRequest friendsRequest,
             Action<User, User> action)
         {
-            User firstUser = await this.userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
-            User secondUser = await this.userManager.GetCompleteEntityAsync(friendsRequest.SecondId);
+            var firstUser = await userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
+            var secondUser = await userManager.GetCompleteEntityAsync(friendsRequest.SecondId);
 
             action?.Invoke(firstUser, secondUser);
-            await this.userManager.UpdateAsync(firstUser);
-            await this.userManager.UpdateAsync(secondUser);
+            await userManager.UpdateAsync(firstUser);
+            await userManager.UpdateAsync(secondUser);
 
-            await this.unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         public UsersService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.userManager = this.unitOfWork.UserManager;
+            userManager = this.unitOfWork.UserManager;
         }
     }
 }

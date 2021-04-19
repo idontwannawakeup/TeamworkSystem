@@ -26,18 +26,13 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                PagedList<ProjectResponse> projects =
-                    await this.projectsService.GetAsync(parameters);
-
-                this.Response.Headers.Add(
-                    "X-Pagination",
-                    projects.SerializeMetadata());
-
-                return this.Ok(projects);
+                var projects = await projectsService.GetAsync(parameters);
+                Response.Headers.Add("X-Pagination", projects.SerializeMetadata());
+                return Ok(projects);
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -49,15 +44,15 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.projectsService.GetByIdAsync(id));
+                return Ok(await projectsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -68,12 +63,12 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.projectsService.InsertAsync(request);
-                return this.Ok();
+                await projectsService.InsertAsync(request);
+                return Ok();
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -85,16 +80,16 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.projectsService.DeleteAsync(id);
-                return this.Ok();
+                await projectsService.DeleteAsync(id);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 

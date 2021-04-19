@@ -23,56 +23,53 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task<IEnumerable<RatingResponse>> GetAsync()
         {
-            IEnumerable<Rating> ratings = await this.ratingsRepository.GetAsync();
-            return ratings?.Select(
-                this.mapper.Map<Rating, RatingResponse>);
+            var ratings = await ratingsRepository.GetAsync();
+            return ratings?.Select(mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<PagedList<RatingResponse>> GetAsync(
             RatingsParameters parameters)
         {
-            PagedList<Rating> ratings = await this.ratingsRepository.GetAsync(parameters);
-            return ratings?.Map(this.mapper.Map<Rating, RatingResponse>);
+            var ratings = await ratingsRepository.GetAsync(parameters);
+            return ratings?.Map(mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<IEnumerable<RatingResponse>> GetRatingProfilesFromUserAsync(string userId)
         {
-            IEnumerable<Rating> ratings = await this.ratingsRepository.GetRatingsFromUserAsync(userId);
-            return ratings?.Select(
-                this.mapper.Map<Rating, RatingResponse>);
+            var ratings = await ratingsRepository.GetRatingsFromUserAsync(userId);
+            return ratings?.Select(mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<IEnumerable<RatingResponse>> GetRatingProfilesForUserAsync(string userId)
         {
-            IEnumerable<Rating> ratings = await this.ratingsRepository.GetRatingsForUserAsync(userId);
-            return ratings?.Select(
-                this.mapper.Map<Rating, RatingResponse>);
+            var ratings = await ratingsRepository.GetRatingsForUserAsync(userId);
+            return ratings?.Select(mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<RatingResponse> GetByIdAsync(int id)
         {
-            Rating rating = await this.ratingsRepository.GetByIdAsync(id);
-            return this.mapper.Map<Rating, RatingResponse>(rating);
+            var rating = await ratingsRepository.GetByIdAsync(id);
+            return mapper.Map<Rating, RatingResponse>(rating);
         }
 
         public async Task InsertAsync(RatingRequest request)
         {
-            Rating rating = this.mapper.Map<RatingRequest, Rating>(request);
-            await this.ratingsRepository.InsertAsync(rating);
-            await this.unitOfWork.SaveChangesAsync();
+            var rating = mapper.Map<RatingRequest, Rating>(request);
+            await ratingsRepository.InsertAsync(rating);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            await this.ratingsRepository.DeleteAsync(id);
-            await this.unitOfWork.SaveChangesAsync();
+            await ratingsRepository.DeleteAsync(id);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public RatingsService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.ratingsRepository = this.unitOfWork.RatingsRepository;
+            ratingsRepository = this.unitOfWork.RatingsRepository;
         }
     }
 }

@@ -26,18 +26,17 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                PagedList<TeamResponse> profiles =
-                    await this.teamsService.GetAsync(parameters);
+                var profiles = await teamsService.GetAsync(parameters);
 
-                this.Response.Headers.Add(
+                Response.Headers.Add(
                     "X-Pagination",
                     profiles.SerializeMetadata());
 
-                return this.Ok(profiles);
+                return Ok(profiles);
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -49,15 +48,15 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.teamsService.GetByIdAsync(id));
+                return Ok(await teamsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -68,12 +67,12 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.teamsService.InsertAsync(request);
-                return this.Ok();
+                await teamsService.InsertAsync(request);
+                return Ok();
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -85,16 +84,16 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.teamsService.DeleteAsync(id);
-                return this.Ok();
+                await teamsService.DeleteAsync(id);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 

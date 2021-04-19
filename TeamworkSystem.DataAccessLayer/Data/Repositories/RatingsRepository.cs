@@ -15,7 +15,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     {
         public override async Task<Rating> GetCompleteEntityAsync(int id)
         {
-            return await this.table
+            return await table
                 .Include(rating => rating.From)
                 .Include(rating => rating.To)
                 .SingleOrDefaultAsync(rating => rating.Id == id)
@@ -26,7 +26,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Rating>> GetAsync(
             RatingsParameters parameters)
         {
-            IQueryable<Rating> source = this.table;
+            IQueryable<Rating> source = table;
             return await PagedList<Rating>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -35,14 +35,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId)
         {
-            return await this.table
+            return await table
                 .Where(rating => rating.FromId == userId)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId)
         {
-            return await this.table
+            return await table
                 .Where(rating => rating.ToId == userId)
                 .ToListAsync();
         }

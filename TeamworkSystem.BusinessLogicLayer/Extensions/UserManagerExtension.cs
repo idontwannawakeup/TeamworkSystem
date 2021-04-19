@@ -15,7 +15,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             this UserManager<User> userManager,
             UsersParameters parameters)
         {
-            IQueryable<User> source = userManager.Users;
+            var source = userManager.Users;
             return await PagedList<User>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -27,9 +27,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             string id,
             UsersParameters parameters)
         {
-            User user = await userManager.GetByIdAsync(id);
-
-            IQueryable<User> source = userManager.Users
+            var user = await userManager.GetByIdAsync(id);
+            var source = userManager.Users
                 .Where(secondUser => secondUser.Friends.Contains(user));
 
             return await PagedList<User>.ToPagedListAsync(
@@ -42,7 +41,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             this UserManager<User> userManager,
             string id)
         {
-            User user = await userManager.FindByIdAsync(id)
+            var user = await userManager.FindByIdAsync(id)
                 ?? throw new EntityNotFoundException(
                     GetUserNotFoundErrorMessage(id));
 
@@ -53,7 +52,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             this UserManager<User> userManager,
             string id)
         {
-            User user = await userManager.Users
+            var user = await userManager.Users
                 .Include(user => user.Teams)
                 .Include(user => user.Tickets)
                 .Include(user => user.MyRatings)
