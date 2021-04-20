@@ -1,0 +1,44 @@
+﻿@page "/profile"
+
+<MudText Class="mt-md-12 pb-16" Typo="@Typo.h3" Align="@Align.Center">User Information</MudText>
+
+<MudContainer Class="mx-auto" MaxWidth="@MaxWidth.Small">
+
+    <MudCard Elevation="4"
+             Class="px-sm-4 px-md-12 py-sm-4 py-md-6 py-lg-8 mt-8 mt-md-12 mt-lg-16 mx-auto d-flex justify-center align-center"
+             Style="position: relative;">
+        <MudElement HtmlTag="div"
+                    Class="rounded-circle d-flex justify-center align-end mx-auto"
+                    Style="position: absolute; top: -110px; width: 150px; height: 150px; background: grey;">
+            @* NEED TO ADD for PARAMETER *@
+            <MudFab HtmlTag="label"
+                    Class="mb-n4"
+                    Size="@Size.Large"
+                    Color="@Color.Success"
+                    Icon="@Icons.Material.Filled.Photo"
+                    IconSize="@Size.Large" />
+        </MudElement>
+        <MudCardContent Style="width: 100%">
+            @foreach (var number in Enumerable.Range(0, 5))
+            {
+                <MudText Class="mb-1" Typo="@Typo.h5">Text</MudText>
+                <MudElement HtmlTag="div" Class="d-flex justify-space-between align-center mb-6" Style="gap: 5px;">
+                    <MudTextField Class="mt-0" T="@string" Variant="@Variant.Outlined" />
+                    <MudIconButton Class="d-none"
+                                   Color="@Color.Success"
+                                   Size="@Size.Large"
+                                   Icon="@Icons.Filled.CheckCircle" />
+                    <MudIconButton Class="d-none"
+                                   Color="@Color.Error"
+                                   Size="@Size.Large"
+                                   Icon="@Icons.Filled.Cancel" />
+                </MudElement>
+            }
+        </MudCardContent>
+    </MudCard>
+
+</MudContainer>
+
+@code {
+
+}

@@ -1,0 +1,33 @@
+﻿@page "/signUp"
+@layout EmptyLayout
+
+<MudContainer Class="pb-8" MaxWidth="@MaxWidth.Medium">
+    <MudCard Elevation="4" Class="px-sm-4 px-md-12 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
+        <MudCardContent>
+            <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">Please sign up!</MudText>
+            <MudGrid>
+                @foreach (var number in Enumerable.Range(0, 8))
+                {
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="@string"
+                                      Class="my-2"
+                                      Label="Item"
+                                      Variant="Variant.Outlined" />
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Class="mx-auto mt-8 py-2 px-12"
+                       Size="@Size.Large"
+                       Color="@Color.Primary"
+                       Variant="@Variant.Filled">
+                Sign Up
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+@code {
+
+}

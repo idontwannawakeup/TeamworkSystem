@@ -4,14 +4,17 @@
 
 <MudTable Items="@(Enumerable.Range(0, 15))" Hover="@true" Outlined="@false">
     <HeaderContent>
-        <MudTh>Name</MudTh>
+        <MudTh Class="ml-3">Name</MudTh>
         <MudTh>Specialization</MudTh>
         <MudTh>Leader</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Name">Name</MudTd>
+        <MudTd Class="ml-3" DataLabel="Name">Name</MudTd>
         <MudTd DataLabel="Specialization">Specialization</MudTd>
-        <MudTd DataLabel="Leader">Leader</MudTd>
+        <MudTd DataLabel="Leader">
+            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+            <span class="ml-2">LeaderName</span>
+        </MudTd>
     </RowTemplate>
 </MudTable>
 
@@ -19,7 +22,6 @@
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
         Label="Project" />
-
 
 @code {
 
