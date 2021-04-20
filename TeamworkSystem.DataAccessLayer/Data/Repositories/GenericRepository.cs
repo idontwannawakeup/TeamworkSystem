@@ -13,29 +13,21 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         protected readonly DbSet<TEntity> table;
 
-        public virtual async Task<IEnumerable<TEntity>> GetAsync()
-        {
-            return await table.ToListAsync();
-        }
+        public virtual async Task<IEnumerable<TEntity>> GetAsync() =>
+            await table.ToListAsync();
 
-        public virtual async Task<TEntity> GetByIdAsync(int id)
-        {
-            return await table.FindAsync(id)
+        public virtual async Task<TEntity> GetByIdAsync(int id) =>
+            await table.FindAsync(id)
                 ?? throw new EntityNotFoundException(
                     GetEntityNotFoundErrorMessage(id));
-        }
 
         public abstract Task<TEntity> GetCompleteEntityAsync(int id);
 
-        public virtual async Task InsertAsync(TEntity entity)
-        {
+        public virtual async Task InsertAsync(TEntity entity) =>
             await table.AddAsync(entity);
-        }
 
-        public virtual async Task UpdateAsync(TEntity entity)
-        {
+        public virtual async Task UpdateAsync(TEntity entity) =>
             await Task.Run(() => table.Update(entity));
-        }
 
         public virtual async Task DeleteAsync(int id)
         {

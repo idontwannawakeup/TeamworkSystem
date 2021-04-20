@@ -1,7 +1,30 @@
-﻿@page "/"
+﻿@page "/" 
+@layout EmptyLayout
 
-<h1>Hello, world!</h1>
+<MudContainer MaxWidth="@MaxWidth.ExtraSmall">
 
-Welcome to your new app.
+    <MudText Class="mt-10 py-1" Typo="@Typo.h3" Align="@Align.Center">
+        Hello, User!
+    </MudText>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <MudText Class="py-1" Typo="@Typo.subtitle1" Align="@Align.Center">
+        Welcome to TeamworkSystem app.
+    </MudText>
+
+    <MudButton Link="/signIn"
+               Class="my-2 py-2"
+               Color="@Color.Primary"
+               Variant="@Variant.Filled"
+               FullWidth="@true">
+        Sign In
+    </MudButton>
+
+    <MudButton Link="/signUp"
+               Class="my-2 py-2"
+               Color="@Color.Primary"
+               Variant="@Variant.Filled"
+               FullWidth="@true">
+        Sign Up
+    </MudButton>
+
+</MudContainer>

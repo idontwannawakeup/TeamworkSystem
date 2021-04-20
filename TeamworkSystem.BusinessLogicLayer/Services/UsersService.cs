@@ -75,23 +75,19 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AddFriendAsync(FriendsRequest friendsRequest)
-        {
+        public async Task AddFriendAsync(FriendsRequest friendsRequest) =>
             await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
             {
                 firstUser.Friends.Add(secondUser);
                 secondUser.Friends.Add(firstUser);
             });
-        }
 
-        public async Task DeleteFriendAsync(FriendsRequest friendsRequest)
-        {
+        public async Task DeleteFriendAsync(FriendsRequest friendsRequest) =>
             await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
             {
                 firstUser.Friends.Remove(secondUser);
                 secondUser.Friends.Remove(firstUser);
             });
-        }
 
         private async Task MakeActionWithFriends(
             FriendsRequest friendsRequest,

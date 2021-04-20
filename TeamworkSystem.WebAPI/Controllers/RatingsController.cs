@@ -28,11 +28,7 @@ namespace TeamworkSystem.WebAPI.Controllers
             try
             {
                 var ratings = await ratingsService.GetAsync(parameters);
-
-                Response.Headers.Add(
-                    "X-Pagination",
-                    ratings.SerializeMetadata());
-
+                Response.Headers.Add("X-Pagination", ratings.SerializeMetadata());
                 return Ok(ratings);
             }
             catch (Exception e)

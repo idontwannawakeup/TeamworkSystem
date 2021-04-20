@@ -26,13 +26,9 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var profiles = await teamsService.GetAsync(parameters);
-
-                Response.Headers.Add(
-                    "X-Pagination",
-                    profiles.SerializeMetadata());
-
-                return Ok(profiles);
+                var teams = await teamsService.GetAsync(parameters);
+                Response.Headers.Add("X-Pagination", teams.SerializeMetadata());
+                return Ok(teams);
             }
             catch (Exception e)
             {

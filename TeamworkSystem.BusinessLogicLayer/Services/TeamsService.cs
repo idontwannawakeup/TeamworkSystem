@@ -8,7 +8,6 @@ using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Extensions;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 using TeamworkSystem.DataAccessLayer.Pagination;

@@ -1,4 +1,6 @@
 using System;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.BusinessLogicLayer.Services;
+using TeamworkSystem.BusinessLogicLayer.Validation;
 using TeamworkSystem.DataAccessLayer;
 using TeamworkSystem.DataAccessLayer.Data;
 using TeamworkSystem.DataAccessLayer.Data.Repositories;
@@ -20,10 +23,8 @@ namespace TeamworkSystem.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
+        public Startup(IConfiguration configuration) =>
             Configuration = configuration;
-        }
 
         public IConfiguration Configuration { get; }
 
@@ -36,10 +37,6 @@ namespace TeamworkSystem.WebAPI
                 string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
-
-            services.AddIdentity<User, IdentityRole>()
-                    .AddDefaultTokenProviders()
-                    .AddEntityFrameworkStores<TeamworkSystemContext>();
 
             services.AddTransient<IProjectsRepository, ProjectsRepository>();
             services.AddTransient<IRatingsRepository, RatingsRepository>();
@@ -55,6 +52,22 @@ namespace TeamworkSystem.WebAPI
             services.AddTransient<IUsersService, UsersService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
+            services.AddMvc(options =>
+                    {
+                        options.EnableEndpointRouting = false;
+                        options.Filters.Add<ValidationFilter>();
+                    })
+                    .AddFluentValidation(configuration =>
+                    {
+                        configuration.RegisterValidatorsFromAssemblies(
+                            AppDomain.CurrentDomain.GetAssemblies());
+                    });
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<TeamworkSystemContext>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

@@ -3,16 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TeamworkSystem.WebClient.Data;
+using MudBlazor.Services;
 
 namespace TeamworkSystem.WebClient
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
+        public Startup(IConfiguration configuration) =>
             Configuration = configuration;
-        }
 
         public IConfiguration Configuration { get; }
 
@@ -24,7 +22,7 @@ namespace TeamworkSystem.WebClient
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddMudServices();
         }
 
         // This method gets called by the runtime.

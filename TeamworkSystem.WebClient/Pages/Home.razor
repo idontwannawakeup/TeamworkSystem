@@ -1,0 +1,41 @@
+﻿@page "/home"
+
+
+<MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
+    Hello, UserName!
+</MudText>
+
+<MudText Class="mt-2 mb-6" Style="@subtitleStyle" Typo="@Typo.h5" Align="@Align.Center">
+    Welcome to our platform
+</MudText>
+
+<MudGrid Spacing="4">
+
+    @foreach (var i in Enumerable.Range(0, 4))
+    {
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard>
+                <MudCardMedia Height="200"
+                                Image="assets/home/projects.png" />
+                <MudCardContent>
+                    <MudText Typo="@Typo.body1">Here you can look up all projects of your teams!</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Link="/"
+                               Variant="@Variant.Text"
+                               Color="@Color.Primary">
+                        Projects
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    }
+
+</MudGrid>
+
+
+@code {
+
+    private string subtitleStyle = $"color: {Colors.Grey.Default};";
+
+}
