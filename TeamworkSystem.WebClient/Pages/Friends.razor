@@ -2,17 +2,29 @@
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Friends</MudText>
 
-@foreach (var number in Enumerable.Range(0, 10))
-{
-    <MudPaper Elevation="4" Class="d-flex justify-space-between align-center py-2 px-6 my-4">
-        <MudElement HtmlTag="div" Class="d-flex align-center">
-            <MudAvatar Color="@Color.Secondary">A</MudAvatar>
-            <MudText Typo="@Typo.h6" Class="ml-4">FriendName</MudText>
-        </MudElement>
-        <MudText Typo="@Typo.h6">Profession</MudText>
-        <MudFab Color="@Color.Primary" Size="@Size.Small" Icon="@Icons.Material.Filled.Close" IconSize="@Size.Large" />
-    </MudPaper>
-}
+<MudTable Items="@Enumerable.Range(0, 10)" Hover="@true" Elevation="0" Dense="@true" >
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Profession</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">
+            <MudElement HtmlTag="div" Class="d-flex align-center">
+                <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
+                <MudText Typo="@Typo.subtitle1" Class="ml-4">FriendName</MudText>
+            </MudElement>
+        </MudTd>
+        <MudTd DataLabel="Profession">Profession</MudTd>
+        <MudTd Class="d-flex">
+            <MudFab Color="@Color.Error"
+                    Size="@Size.Small"
+                    Icon="@Icons.Material.Filled.Close"
+                    IconColor="@Color.Inherit"
+                    Class="ml-auto" />
+        </MudTd>
+    </RowTemplate>
+</MudTable>
 
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"

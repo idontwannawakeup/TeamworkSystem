@@ -41,9 +41,9 @@
 
             <MudDivider Class="my-2" />
 
-            <MudList Clickable="@true" @onclick="@(e => IncrementCount())">
+            <MudList Clickable="@true">
 
-                @foreach (var number in Enumerable.Range(0, 5))
+                @foreach (var number in Enumerable.Range(0, membersCount))
                 {
                     <MudListItem>
                         <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
@@ -58,10 +58,41 @@
 
             </MudList>
 
-            <MudButton Disabled="@ShowLess" Variant="@Variant.Outlined" Color="@Color.Tertiary" FullWidth="@true">Show more</MudButton>
+            <MudButton Class="@(ShowLess ? "d-none" : null)"
+                       Variant="@Variant.Outlined"
+                       Color="@Color.Tertiary"
+                       FullWidth="@true">
+                Show more
+            </MudButton>
 
         </MudPaper>
 
+    </MudItem>
+
+    <MudItem xs="12" md="9">
+        <MudText Typo="@Typo.h4" Align="@Align.Left" Class="mb-4">Projects</MudText>
+        <MudTable Items="@Enumerable.Range(0, 5)" Hover="@true" Elevation="4">
+            <ToolBarContent>
+                <MudTextField T="@string"
+                              Adornment="@Adornment.End"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Variant="@Variant.Text"
+                              Label="Search" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Leader</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">ProjectName</MudTd>
+                <MudTd DataLabel="Type">Type</MudTd>
+                <MudTd DataLabel="Leader">
+                    <MudAvatar Class="ml-auto" Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                    <span class="ml-2">LeaderName</span>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
     </MudItem>
 
 </MudGrid>
@@ -69,8 +100,6 @@
 @code {
 
     private int membersCount = 5;
-
-    private void IncrementCount() => membersCount++;
 
     private bool ShowLess => membersCount < 10;
 
