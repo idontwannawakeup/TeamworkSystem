@@ -13,7 +13,10 @@
                           Class="my-4"
                           Label="Password"
                           Variant="@Variant.Outlined"
-                          InputType="@InputType.Password" />
+                          InputType="@passwordType"
+                          Adornment="@Adornment.End"
+                          AdornmentIcon="@passwordIcon"
+                          OnAdornmentClick="@(e => ChangePasswordIcon())" />
         </MudCardContent>
         <MudCardActions>
             <MudButton Class="mx-auto mt-8 py-2 px-12"
@@ -27,5 +30,24 @@
 </MudContainer>
 
 @code {
+
+    private readonly string showIcon = Icons.Material.Filled.VisibilityOff;
+
+    private readonly string hideIcon = Icons.Material.Filled.Visibility;
+
+    private bool passwordShow = false;
+
+    private InputType passwordType = InputType.Password;
+
+    private string passwordIcon = Icons.Material.Filled.Visibility;
+
+    private void ChangePasswordIcon()
+    {
+        (passwordType, passwordIcon) = passwordShow
+            ? (InputType.Password, hideIcon)
+            : (InputType.Text, showIcon);
+
+        passwordShow = !passwordShow;
+    }
 
 }

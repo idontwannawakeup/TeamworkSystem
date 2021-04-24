@@ -33,7 +33,12 @@
 
                 </MudNavMenu>
             </MudPopover>
-            <MudOverlay @bind-Visible="@avatarMenuOpen" DarkBackground="@true" AutoClose="@true" />
+
+            @* Overlay for MudPopover for automatic close on click *@          
+            <MudOverlay @bind-Visible="@avatarMenuOpen"
+                        DarkBackground="@false"
+                        AutoClose="@true"
+                        LockScroll="@false" />
         </MudElement>
 
     </MudAppBar>

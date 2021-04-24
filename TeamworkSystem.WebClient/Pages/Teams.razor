@@ -2,7 +2,10 @@
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Teams</MudText>
 
-<MudTable Items="@(Enumerable.Range(0, 15))" Hover="@true" Outlined="@false">
+<MudTable Class="mb-12"
+          Items="@(Enumerable.Range(0, 15))"
+          Hover="@true"
+          Breakpoint="@Breakpoint.Sm">
     <HeaderContent>
         <MudTh Class="ml-3">Name</MudTh>
         <MudTh>Specialization</MudTh>
@@ -12,7 +15,7 @@
         <MudTd Class="ml-3" DataLabel="Name">Name</MudTd>
         <MudTd DataLabel="Specialization">Specialization</MudTd>
         <MudTd DataLabel="Leader">
-            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+            <MudAvatar Class="ml-auto" Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
             <span class="ml-2">LeaderName</span>
         </MudTd>
     </RowTemplate>

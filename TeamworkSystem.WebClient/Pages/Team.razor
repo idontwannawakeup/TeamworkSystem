@@ -1,0 +1,79 @@
+﻿@page "/team"
+
+<MudGrid Spacing="3">
+
+    <MudItem xs="12" md="3" Class="d-flex flex-column gap-4">
+
+        <MudPaper Elevation="4" Class="pa-4">
+
+            <MudText Typo="@Typo.h6"
+                     Class="py-1">
+                TeamName
+            </MudText>
+
+            <MudText Typo="@Typo.subtitle1"
+                     Class="py-1">
+                Status
+            </MudText>
+
+            <MudButton Variant="@Variant.Outlined"
+                       Color="@Color.Tertiary"
+                       EndIcon="@Icons.Material.Filled.Add"
+                       IconColor="@Color.Inherit"
+                       Class="my-1">
+                Add member
+            </MudButton>
+
+        </MudPaper>
+
+        <MudPaper Elevation="4" Class="pa-4">
+
+            <MudText Typo="@Typo.h6"
+                     Class="py-1">
+                Members
+            </MudText>
+
+            <MudText Typo="@Typo.subtitle1"
+                     Style="@colorGrey"
+                     Class="pb-1">
+                Total count: @membersCount
+            </MudText>
+
+            <MudDivider Class="my-2" />
+
+            <MudList Clickable="@true" @onclick="@(e => IncrementCount())">
+
+                @foreach (var number in Enumerable.Range(0, 5))
+                {
+                    <MudListItem>
+                        <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                            <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                            <MudElement HtmlTag="div" Class="d-flex flex-column">
+                                <MudText Typo="@Typo.subtitle2">MemberName</MudText>
+                                <MudText Typo="@Typo.caption" Style="@colorGrey">Profession</MudText>
+                            </MudElement>
+                        </MudElement>
+                    </MudListItem>
+                }
+
+            </MudList>
+
+            <MudButton Disabled="@ShowLess" Variant="@Variant.Outlined" Color="@Color.Tertiary" FullWidth="@true">Show more</MudButton>
+
+        </MudPaper>
+
+    </MudItem>
+
+</MudGrid>
+
+@code {
+
+    private int membersCount = 5;
+
+    private void IncrementCount() => membersCount++;
+
+    private bool ShowLess => membersCount < 10;
+
+    private string colorGrey = $"color: {Colors.Grey.Default};";
+
+}

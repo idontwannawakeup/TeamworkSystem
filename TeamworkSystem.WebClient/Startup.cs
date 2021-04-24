@@ -46,7 +46,7 @@ namespace TeamworkSystem.WebClient
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
