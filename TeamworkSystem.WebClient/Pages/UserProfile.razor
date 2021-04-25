@@ -12,7 +12,7 @@
                     <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">Profession</MudText>
                 </MudElement>
                 <MudElement HtmlTag="div" Class="user-profile__ratings mt-4">
-                    <MudText Typo="@Typo.h6" Style="@greyColor">Rankings</MudText>
+                    <MudText Typo="@Typo.h6" Style="@colorGrey">Rankings</MudText>
                     <MudRating ReadOnly="@true" SelectedValue="3" />
                 </MudElement>
                 <MudElement HtmlTag="div" Class="user-profile__add-to-friends mt-4">
@@ -30,13 +30,13 @@
 <MudGrid Spacing="4">
     <MudItem xs="12" md="4">
         <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
-            <MudText Typo="@Typo.h6" Style="@greyColor">Profession</MudText>
+            <MudText Typo="@Typo.h6" Style="@colorGrey">Profession</MudText>
             <MudText Typo="@Typo.subtitle2">UserProfession</MudText>
             <MudDivider Class="mt-2 mb-4" />
-            <MudText Typo="@Typo.h6" Style="@greyColor">Specialization</MudText>
+            <MudText Typo="@Typo.h6" Style="@colorGrey">Specialization</MudText>
             <MudText Typo="@Typo.subtitle2">UserSpecialization</MudText>
             <MudDivider Class="mt-2 mb-4" />
-            <MudText Typo="@Typo.h6" Style="@greyColor">Email</MudText>
+            <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
             <MudText Typo="@Typo.subtitle2">UserEmail</MudText>
             <MudDivider Class="mt-2 mb-4" />
             @*<MudButton FullWidth="@true"
@@ -55,7 +55,27 @@
 
             <MudTabPanel Text="Teams">
                 <MudElement HtmlTag="div" Class="pa-6">
-                    <MudText>Here will be list of user teams</MudText>
+                    <MudList Clickable="@true">
+                        @foreach (var number in Enumerable.Range(0, 4))
+                        {
+                            <MudListItem>
+                                <MudElement HtmlTag="div" Class="d-flex justify-space-between align-center">
+                                    <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                                        <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                                        <MudElement HtmlTag="div" Class="d-flex flex-column">
+                                            <MudText Typo="@Typo.subtitle2">TeamName</MudText>
+                                            <MudText Typo="@Typo.caption" Style="@colorGrey">Specializarion</MudText>
+                                        </MudElement>
+                                    </MudElement>
+                                    <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                                        <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                                        <span>LeaderName</span>
+                                    </MudElement>
+                                </MudElement>
+                            </MudListItem>
+                            <MudDivider Class="mb-4" />
+                        }
+                    </MudList>
                 </MudElement>
             </MudTabPanel>
             <MudTabPanel Text="Ratings">
@@ -74,7 +94,7 @@
                                     <MudElement HtmlTag="div"
                                                 Class="rating-item__average d-flex flex-column align-center gap-1">
                                         <MudText Typo="@Typo.subtitle2">Average: 15.5</MudText>
-                                        <MudRating SelectedValue="1" />
+                                        <MudRating SelectedValue="1" ReadOnly="@true" />
                                     </MudElement>
                                 </MudElement>
                             </MudListItem>
@@ -88,22 +108,22 @@
                 <MudElement HtmlTag="div" Class="pa-6">
                     <MudText Typo="@Typo.h5">Rate this user!</MudText>
                     <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@greyColor">Social</MudText>
+                        <MudText Typo="@Typo.h6" Style="@colorGrey">Social</MudText>
                         <MudRating SelectedValue="3" />
                         <MudDivider Class="mt-2 mb-4" />
                     </MudElement>
                     <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@greyColor">Skills</MudText>
+                        <MudText Typo="@Typo.h6" Style="@colorGrey">Skills</MudText>
                         <MudRating />
                         <MudDivider Class="mt-2 mb-4" />
                     </MudElement>
                     <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@greyColor">Responsibility</MudText>
+                        <MudText Typo="@Typo.h6" Style="@colorGrey">Responsibility</MudText>
                         <MudRating />
                         <MudDivider Class="mt-2 mb-4" />
                     </MudElement>
                     <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@greyColor">Punctuality</MudText>
+                        <MudText Typo="@Typo.h6" Style="@colorGrey">Punctuality</MudText>
                         <MudRating />
                         <MudDivider Class="mt-2 mb-4" />
                     </MudElement>
@@ -125,7 +145,7 @@
 
 @code {
 
-    private readonly string greyColor = $"color: {Colors.Grey.Default};";
+    private readonly string colorGrey = $"color: {Colors.Grey.Default};";
 
     private readonly int elevation = 4;
 

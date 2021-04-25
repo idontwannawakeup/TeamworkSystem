@@ -16,12 +16,10 @@
             </MudElement>
         </MudTd>
         <MudTd DataLabel="Profession">Profession</MudTd>
-        <MudTd Class="d-flex">
-            <MudFab Color="@Color.Error"
-                    Size="@Size.Small"
-                    Icon="@Icons.Material.Filled.Close"
-                    IconColor="@Color.Inherit"
-                    Class="ml-auto" />
+        <MudTd>
+            <MudElement HtmlTag="div" Class="d-flex">
+                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="@Color.Inherit" Class="ml-auto" />
+            </MudElement>
         </MudTd>
     </RowTemplate>
 </MudTable>

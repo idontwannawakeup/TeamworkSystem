@@ -5,17 +5,14 @@
     <MudItem xs="12" md="3" Class="d-flex flex-column gap-4">
 
         <MudPaper Elevation="4" Class="pa-4">
-
             <MudText Typo="@Typo.h6"
                      Class="py-1">
                 TeamName
             </MudText>
-
             <MudText Typo="@Typo.subtitle1"
                      Class="py-1">
                 Status
             </MudText>
-
             <MudButton Variant="@Variant.Outlined"
                        Color="@Color.Tertiary"
                        EndIcon="@Icons.Material.Filled.Add"
@@ -23,26 +20,20 @@
                        Class="my-1">
                 Add member
             </MudButton>
-
         </MudPaper>
 
         <MudPaper Elevation="4" Class="pa-4">
-
             <MudText Typo="@Typo.h6"
                      Class="py-1">
                 Members
             </MudText>
-
             <MudText Typo="@Typo.subtitle1"
                      Style="@colorGrey"
                      Class="pb-1">
                 Total count: @membersCount
             </MudText>
-
             <MudDivider Class="my-2" />
-
             <MudList Clickable="@true">
-
                 @foreach (var number in Enumerable.Range(0, membersCount))
                 {
                     <MudListItem>
@@ -55,16 +46,13 @@
                         </MudElement>
                     </MudListItem>
                 }
-
             </MudList>
-
             <MudButton Class="@(ShowLess ? "d-none" : null)"
                        Variant="@Variant.Outlined"
                        Color="@Color.Tertiary"
                        FullWidth="@true">
                 Show more
             </MudButton>
-
         </MudPaper>
 
     </MudItem>

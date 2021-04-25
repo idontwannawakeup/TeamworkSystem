@@ -27,7 +27,8 @@ namespace TeamworkSystem.DataAccessLayer.Data
             await databaseContext.SaveChangesAsync();
         }
 
-        public UnitOfWork(TeamworkSystemContext databaseContext,
+        public UnitOfWork(
+            TeamworkSystemContext databaseContext,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IProjectsRepository projectsRepository,
