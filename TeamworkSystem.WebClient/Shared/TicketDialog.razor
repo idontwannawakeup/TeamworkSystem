@@ -1,0 +1,73 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudGrid Spacing="2">
+            <MudItem xs="12" md="7" Class="pb-md-4">
+                <MudText Typo="@Typo.h6" Style="@colorGrey">Description</MudText>
+                <MudText Typo="@Typo.body1">Nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante.</MudText>
+            </MudItem>
+            @* Attributes *@
+            <MudItem xs="12" md="5" Class="pb-md-4">
+                <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                    <MudIcon Icon="@Icons.Material.Filled.ViewList" Style="@fillGrey" />
+                    <MudText Typo="@Typo.h6" Style="@colorGrey">Attributes</MudText>
+                </MudElement>
+                <MudDivider Class="mt-2 mb-4" />
+                <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
+                    <MudChipSet Filter="@true" Mandatory="@true">
+                        <MudChip Color="@Color.Default" Text="backlog" Default="@true">Backlog</MudChip>
+                        <MudChip Color="@Color.Secondary" Text="selected">Selected for development</MudChip>
+                        <MudChip Color="@Color.Primary" Text="progress">In progress</MudChip>
+                        <MudChip Color="@Color.Success" Text="done">Done</MudChip>
+                    </MudChipSet>
+                    <MudElement Class="d-flex justify-space-between">
+                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
+                        </MudElement>
+                    </MudElement>
+                    <MudElement Class="d-flex justify-space-between">
+                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
+                        </MudElement>
+                    </MudElement>
+                    <MudElement Class="d-flex justify-space-between">
+                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
+                        </MudElement>
+                    </MudElement>
+                    <MudElement Class="d-flex justify-space-between">
+                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
+                        </MudElement>
+                    </MudElement>
+                </MudElement>
+            </MudItem>
+            <MudItem xs="12" md="7" Class="pb-md-4">
+                <MudElement HtmlTag="div" Class="d-flex justify-start align-center gap-3">
+                    <MudButton Variant="@Variant.Outlined"
+                                Color="@Color.Info"
+                                EndIcon="@Icons.Material.Filled.Edit">
+                        Edit
+                    </MudButton>
+                </MudElement>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private readonly string colorGrey = $"color: {Colors.Grey.Default};";
+
+    private readonly string fillGrey = $"fill: {Colors.Grey.Default};";
+
+}

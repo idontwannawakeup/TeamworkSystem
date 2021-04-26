@@ -6,75 +6,11 @@
     @foreach (var number in Enumerable.Range(0, 5))
     {
         <MudItem xs="12" sm="6" md="3">
-            <MudCard Outlined="@true">
-                <MudCardContent>
-                    <MudText Typo="@Typo.body1">TicketTitle</MudText>
-
-                    <MudChip Color="@Color.Primary"
-                             Size="@Size.Small"
-                             Label="@true"
-                             Class="mx-0 my-3">TicketEpicName</MudChip>
-
-                    <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-
-                        <MudElement HtmlTag="div"
-                                    Class="ticket__priority"
-                                    Style="position: relative;"
-                                    @onmouseover="ShowTypePopover"
-                                    @onmouseout="HideTypePopover">
-                            <MudIcon Icon="@Icons.Material.Filled.Explicit"
-                                     Color="@Color.Primary"
-                                     Size="@Size.Small" />
-                            <MudPopover Open="@typePopover" Class="py-1 px-2" Style="width: 60px">
-                                <MudText Typo="@Typo.caption">Epic</MudText>
-                            </MudPopover>
-                        </MudElement>
-
-                        <MudElement HtmlTag="div"
-                                    Class="ticket__priority"
-                                    Style="position: relative;"
-                                    @onmouseover="ShowPriorityPopover"
-                                    @onmouseout="HidePriorityPopover">
-                            <MudIcon Icon="@Icons.Material.Filled.CompareArrows"
-                                     Color="@Color.Warning"
-                                     Size="@Size.Small" />
-                            <MudPopover Open="@priorityPopover" Class="py-1 px-2" Style="width: 130px">
-                                <MudText Typo="@Typo.caption">Priority: Medium</MudText>
-                            </MudPopover>
-                        </MudElement>
-
-                        <MudIconButton Icon="@Icons.Material.Filled.OpenInFull"
-                                       Size="@Size.Small"
-                                       Color="@Color.Primary"
-                                       Class="ml-auto" />
-
-                        <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz"
-                                       Size="@Size.Small" />
-
-                    </MudElement>
-                </MudCardContent>
-            </MudCard>
+            <TicketCard />
         </MudItem>
-
     }
 </MudGrid>
 
 @code {
-
-    private bool priorityPopover = false;
-
-    private void ShowPriorityPopover() =>
-        priorityPopover = true;
-
-    private void HidePriorityPopover() =>
-        priorityPopover = false;
-
-    private bool typePopover = false;
-
-    private void ShowTypePopover() =>
-        typePopover = true;
-
-    private void HideTypePopover() =>
-        typePopover = false;
 
 }
