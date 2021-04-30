@@ -1,0 +1,47 @@
+﻿@page "/project"
+@layout ContainerlessLayout
+
+<MudTabs Position="@Position.Left">
+    <MudTabPanel Text="Overview">
+        <MudElement HtmlTag="div" Class="pa-6">
+            <MudText>Here will be a project overview</MudText>
+        </MudElement>
+    </MudTabPanel>
+    <MudTabPanel Text="Board">
+        <MudElement HtmlTag="div" Class="d-flex w-100p pa-6">
+            <MudGrid Spacing="3">
+                @foreach (var number in Enumerable.Range(0, 4))
+                {
+                    <MudItem xs="12" md="3">
+                        <MudPaper Elevation="3" Class="pa-5">
+                            <MudText Typo="@Typo.h5" Class="py-1">Backlog</MudText>
+                            <MudDivider Class="mb-4" />
+
+                            <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                                @foreach (var number in Enumerable.Range(0, new Random().Next(1, 5)))
+                                {
+                                    <TicketCard />
+                                }
+                            </MudElement>
+
+                        </MudPaper>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudElement>
+    </MudTabPanel>
+    <MudTabPanel Text="Tickets">
+        <MudElement HtmlTag="div" Class="pa-6">
+            <MudText>Here will be a list of tickets</MudText>
+        </MudElement>
+    </MudTabPanel>
+    <MudTabPanel Text="Settings">
+        <MudElement HtmlTag="div" Class="pa-6">
+            <MudText>Here will be a project settings</MudText>
+        </MudElement>
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+
+}

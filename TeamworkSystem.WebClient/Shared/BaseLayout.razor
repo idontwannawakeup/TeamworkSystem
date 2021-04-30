@@ -1,0 +1,98 @@
+﻿<MudLayout>
+
+    <MudAppBar Dense="@true" Color="@Color.Primary" Fixed="@true">
+
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="@Color.Inherit"
+                       Edge="@Edge.Start"
+                       OnClick="@(e => ToggleNavigationMenu())" />
+
+        <MudAppBarSpacer />
+
+        <MudElement Class="avatar-menu d-flex" HtmlTag="div" Style="position: relative;">
+            <MudIconButton OnClick="@(e => ToggleAvatarMenu())">
+                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+            </MudIconButton>
+            <MudPopover Class="py-3"
+                        Square="@true"
+                        Open="@avatarMenuOpen"
+                        OffsetX="@true"
+                        Direction="@Direction.Left"
+                        Style="width: 250px; top: 12px;">
+                <MudNavMenu>
+
+                    <MudText Typo="Typo.h6" Class="px-4">UserName</MudText>
+                    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Email</MudText>
+                    <MudDivider Class="my-2" />
+                    <MudNavLink Href="/profile" Icon="@Icons.Filled.AccountCircle">Profile</MudNavLink>
+                    <MudNavLink Href="/settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
+                    <MudDivider Class="my-2" />
+                    <MudNavLink Href="/signOut" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
+
+                </MudNavMenu>
+            </MudPopover>
+
+            @* Overlay for MudPopover for automatic close on click *@          
+            <MudOverlay @bind-Visible="@avatarMenuOpen"
+                        DarkBackground="@false"
+                        AutoClose="@true"
+                        LockScroll="@false" />
+        </MudElement>
+
+    </MudAppBar>
+
+    @* Sidebar menu *@
+    <MudDrawer @bind-Open="@navigationMenuOpen" ClipMode="@DrawerClipMode.Always" Elevation="2">
+        <MudNavMenu>
+            <MudText Typo="@Typo.h6" Class="py-2 px-4">TeamworkSystem</MudText>
+            <MudDivider Class="my-2" />
+            @* Adding Match to avoid always active state *@
+            <MudNavLink Href="/home"
+                        Match="@NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Home">
+                <span>Home</span>
+            </MudNavLink>
+            <MudNavLink Href="/teams"
+                        Match="@NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Groups">
+                <span>Teams</span>
+            </MudNavLink>
+            <MudNavLink Href="/projects"
+                        Match="@NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Folder">
+                <span>Projects</span>
+            </MudNavLink>
+            <MudNavLink Href="/tickets"
+                        Match="@NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Assignment">
+                <span>Tickets</span>
+            </MudNavLink>
+            <MudNavLink Href="/friends"
+                        Match="@NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Group">
+                <span>Friends</span>
+            </MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+
+</MudLayout>
+
+@code {
+
+    [Parameter] public RenderFragment Body { get; set; }
+
+    private bool navigationMenuOpen = false;
+
+    private bool avatarMenuOpen = false;
+
+    private void ToggleNavigationMenu() =>
+        navigationMenuOpen = !navigationMenuOpen;
+
+    private void ToggleAvatarMenu() =>
+        avatarMenuOpen = !avatarMenuOpen;
+
+}

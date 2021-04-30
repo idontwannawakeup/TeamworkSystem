@@ -66,8 +66,8 @@ namespace TeamworkSystem.WebAPI
                     });
 
             services.AddIdentity<User, IdentityRole>()
-                .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<TeamworkSystemContext>();
+                    .AddDefaultTokenProviders()
+                    .AddEntityFrameworkStores<TeamworkSystemContext>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
