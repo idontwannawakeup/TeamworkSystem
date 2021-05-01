@@ -1,0 +1,59 @@
+﻿<MudDrawer @bind-Open="@open"
+           Elevation="1"
+           ClipMode="DrawerClipMode.Always"
+           Anchor="Anchor.Right">
+    <MudDrawerHeader>
+        <MudText Typo="@Typo.h6">ProjectName</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Visibility"
+                    Href="/project/overview">
+            <span>Overview</span>
+        </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.DeveloperBoard"
+                    Href="/project/board">
+            <span>Kanban Board</span>
+        </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Assignment"
+                    Href="/project/tickets">
+            <span>Tickets</span>
+        </MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All"
+                    Icon="@Icons.Material.Filled.Settings"
+                    Href="/project/settings">
+            <span>Settings</span>
+        </MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+
+<MudElement HtmlTag="div" Class="w-100p" Style="position: relative;">
+    <MudFab Style="position: absolute; right: 5px; top: 70px;"
+            Color="Color.Primary"
+            Icon="@drawerIcon"
+            IconSize="@Size.Large"
+            Size="@Size.Small"
+            OnClick="@ToggleDrawer" />
+
+    @ChildContent
+
+</MudElement>
+
+@code {
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private readonly string showIcon = Icons.Material.Filled.KeyboardArrowLeft;
+
+    private readonly string hideIcon = Icons.Material.Filled.KeyboardArrowRight;
+
+    private string drawerIcon = Icons.Material.Filled.KeyboardArrowLeft;
+
+    bool open = false;
+
+    void ToggleDrawer() =>
+        (open, drawerIcon) = open ? (false, showIcon) : (true, hideIcon);
+
+}

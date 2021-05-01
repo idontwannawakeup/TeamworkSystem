@@ -1,12 +1,15 @@
 ﻿@page "/teams"
+@inject NavigationManager NavigationManager  
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Teams</MudText>
 
 <MudTable Class="mb-12"
+          T="@int"
           Items="@(Enumerable.Range(0, 15))"
           Hover="@true"
           Breakpoint="@Breakpoint.Sm"
-          Elevation="0">
+          Elevation="0"
+          OnRowClick="@OnRowClick">
     <HeaderContent>
         <MudTh Class="ml-3">Name</MudTh>
         <MudTh>Specialization</MudTh>
@@ -28,5 +31,8 @@
         Label="Team" />
 
 @code {
+
+    private void OnRowClick(TableRowClickEventArgs<int> args) =>
+        NavigationManager.NavigateTo("/team");
 
 }

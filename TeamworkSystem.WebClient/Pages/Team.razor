@@ -1,6 +1,7 @@
 ﻿@page "/team"
+@inject NavigationManager NavigationManager
 
-<MudGrid Spacing="3">
+<MudGrid Spacing="3" Class="mt-8">
 
     <MudItem xs="12" md="3" Class="d-flex flex-column gap-4">
 
@@ -59,7 +60,7 @@
 
     <MudItem xs="12" md="9">
         <MudText Typo="@Typo.h4" Align="@Align.Left" Class="mb-4">Projects</MudText>
-        <MudTable Items="@Enumerable.Range(0, 5)" Hover="@true" Elevation="4">
+        <MudTable T="@int" Items="@Enumerable.Range(0, 5)" Hover="@true" Elevation="4" OnRowClick="@OnRowClick">
             <ToolBarContent>
                 <MudTextField T="@string"
                               Adornment="@Adornment.End"
@@ -92,5 +93,8 @@
     private bool ShowLess => membersCount < 10;
 
     private string colorGrey = $"color: {Colors.Grey.Default};";
+
+    private void OnRowClick(TableRowClickEventArgs<int> args) =>
+        NavigationManager.NavigateTo("/project/overview");
 
 }

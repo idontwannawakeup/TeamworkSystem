@@ -1,4 +1,4 @@
-﻿@inject IDialogService DialogService
+﻿@inject IDialogService DialogService 
 
 <MudCard Outlined="@true">
     <MudCardContent>
@@ -10,76 +10,43 @@
                  Class="mx-0 my-3">TicketEpicName</MudChip>
 
         <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-
-            <MudElement HtmlTag="div"
-                        Class="ticket__priority"
-                        Style="position: relative;"
-                        @onmouseover="ShowTypePopover"
-                        @onmouseout="HideTypePopover">
+            <MudTooltip Text="Epic">
                 <MudIcon Icon="@Icons.Material.Filled.Explicit"
                          Color="@Color.Primary"
                          Size="@Size.Small" />
-                <MudPopover Open="@typePopover" Class="py-1 px-2" Style="width: 60px">
-                    <MudText Typo="@Typo.caption">Epic</MudText>
-                </MudPopover>
-            </MudElement>
+            </MudTooltip>
 
-            <MudElement HtmlTag="div"
-                        Class="ticket__priority"
-                        Style="position: relative;"
-                        @onmouseover="ShowPriorityPopover"
-                        @onmouseout="HidePriorityPopover">
+            <MudTooltip Text="Priority: Medium">
                 <MudIcon Icon="@Icons.Material.Filled.CompareArrows"
                          Color="@Color.Warning"
                          Size="@Size.Small" />
-                <MudPopover Open="@priorityPopover" Class="py-1 px-2" Style="width: 130px">
-                    <MudText Typo="@Typo.caption">Priority: Medium</MudText>
-                </MudPopover>
-            </MudElement>
+            </MudTooltip>
 
-            <MudIconButton Icon="@Icons.Material.Filled.OpenInFull"
+            <MudIconButton Icon="@Icons.Material.Filled.OpenInNew"
                            Size="@Size.Small"
                            Color="@Color.Primary"
                            Class="ml-auto"
-                           OnClick="@(e => ShowDialog())"/>
+                           Link="/project/ticket" />
 
-            <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz"
-                           Size="@Size.Small" />
-
+            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="@Size.Small" Dense="@true">
+                <MudMenuItem>Edit</MudMenuItem>
+                <MudMenuItem OnClick="OnDeleteClickAsync">Delete</MudMenuItem>
+            </MudMenu>
         </MudElement>
     </MudCardContent>
 </MudCard>
 
 @code {
 
-    private void ShowDialog() =>
-        DialogService.Show<TicketDialog>(
-            "TicketTitle",
-            new DialogParameters()
+    protected async Task OnDeleteClickAsync() =>
+        await DialogService.ShowMessageBox(
+            title: "Confirm deleting",
+            message: "Are you sure you want to delete this ticket?",
+            cancelText: "Cancel",
+            options: new DialogOptions
             {
-                @*["Text"] = "Ticket"*@
-            },
-            new DialogOptions
-            {
-                CloseButton = true,
-                MaxWidth = MaxWidth.Large,
-                FullWidth = true
+                FullWidth = true,
+                MaxWidth = MaxWidth.Small
             });
-
-    private bool priorityPopover = false;
-
-    private void ShowPriorityPopover() =>
-        priorityPopover = true;
-
-    private void HidePriorityPopover() =>
-        priorityPopover = false;
-
-    private bool typePopover = false;
-
-    private void ShowTypePopover() =>
-        typePopover = true;
-
-    private void HideTypePopover() =>
-        typePopover = false;
 
 }

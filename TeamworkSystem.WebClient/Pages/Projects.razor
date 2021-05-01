@@ -1,8 +1,9 @@
 ﻿@page "/projects"
+@inject NavigationManager NavigationManager
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Projects</MudText>
 
-<MudTable Items="@Enumerable.Range(0, 5)" Hover="@true" Elevation="0" Dense="@true">
+<MudTable T="@int" Items="@Enumerable.Range(0, 5)" Hover="@true" Elevation="0" Dense="@true" OnRowClick="@OnRowClick">
     <HeaderContent>
         <MudTh>Name</MudTh>
         <MudTh>Type</MudTh>
@@ -25,7 +26,9 @@
         </MudTd>
         <MudTd>
             <MudElement HtmlTag="div" Class="d-flex">
-                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="@Color.Inherit" Class="ml-auto" />
+                <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
+                    <MudMenuItem>Item</MudMenuItem>
+                </MudMenu>
             </MudElement>
         </MudTd>
     </RowTemplate>
@@ -37,5 +40,8 @@
         Label="Project" />
 
 @code {
+
+    private void OnRowClick(TableRowClickEventArgs<int> args) =>
+        NavigationManager.NavigateTo("/project/overview");
 
 }
