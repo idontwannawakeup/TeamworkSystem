@@ -10,27 +10,70 @@
 </MudText>
 
 <MudGrid Spacing="4">
-
-    @foreach (var i in Enumerable.Range(0, 4))
-    {
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard>
-                <MudCardMedia Height="200"
-                              Image="assets/home/projects.png" />
-                <MudCardContent>
-                    <MudText Typo="@Typo.body1">Here you can look up all projects of your teams!</MudText>
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton Link="/"
-                               Variant="@Variant.Text"
-                               Color="@Color.Primary">
-                        Projects
-                    </MudButton>
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
-    }
-
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/teams.png" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">Here you cand find all your teams!</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/teams"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    Teams
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/projects.png" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">Here you can look up all projects of your teams!</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/projects"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    Projects
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/tickets.jpg" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">Here you can find all tickets, which are active for you</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/tickets"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    Tickets
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/friends.png" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">Here you will find all your friends!</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/friends"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    Friends
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
 </MudGrid>
 
 @code {

@@ -1,8 +1,12 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .w-100p {
     width: 100%;
 }
 
-.img-response {
+.img-responsive {
     width: 100%;
     height: auto;
 }
