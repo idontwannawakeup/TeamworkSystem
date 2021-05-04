@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.BusinessLogicLayer.Configurations;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.BusinessLogicLayer.Services;
 using TeamworkSystem.BusinessLogicLayer.Validation;
@@ -50,8 +51,11 @@ namespace TeamworkSystem.WebAPI
             services.AddTransient<ITeamsService, TeamsService>();
             services.AddTransient<ITicketsService, TicketsService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IIdentityService, IdentityService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddTransient<JwtTokenConfiguration>();
 
             services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
             services.AddMvc(options =>
