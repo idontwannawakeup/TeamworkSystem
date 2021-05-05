@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
+using TeamworkSystem.WebClient.Interfaces;
+using TeamworkSystem.WebClient.Services;
 
 namespace TeamworkSystem.WebClient
 {
@@ -23,6 +25,38 @@ namespace TeamworkSystem.WebClient
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddMudServices();
+
+            string apiUrl = Configuration["ApiUrl"];
+
+            services.AddHttpClient<IIdentityService, IdentityService>(httpClient =>
+            {
+                httpClient.BaseAddress = new($"{apiUrl}/api/Identity/");
+            });
+
+            services.AddHttpClient<IProjectsService, ProjectsService>(httpClient =>
+            {
+                httpClient.BaseAddress = new($"{apiUrl}/api/Projects/");
+            });
+
+            services.AddHttpClient<IRatingsService, RatingsService>(httpClient =>
+            {
+                httpClient.BaseAddress = new($"{apiUrl}/api/Ratings/");
+            });
+
+            services.AddHttpClient<ITeamsService, TeamsService>(httpClient =>
+            {
+                httpClient.BaseAddress = new($"{apiUrl}/api/Teams/");
+            });
+
+            services.AddHttpClient<ITicketsService, TicketsService>(httpClient =>
+            {
+                httpClient.BaseAddress = new($"{apiUrl}/api/Tickets/");
+            });
+
+            services.AddHttpClient<IUsersService, UsersService>(httpClient =>
+            {
+                httpClient.BaseAddress = new($"{apiUrl}/api/Users/");
+            });
         }
 
         // This method gets called by the runtime.

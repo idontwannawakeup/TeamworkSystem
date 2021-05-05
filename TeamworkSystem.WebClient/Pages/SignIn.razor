@@ -1,5 +1,7 @@
-﻿@page "/signIn"
+﻿@using TeamworkSystem.WebClient.Interfaces
+@page "/signIn"
 @layout EmptyLayout
+@inject IIdentityService IdentityService
 
 <MudContainer Class="pb-8" MaxWidth="@MaxWidth.Small">
     <MudCard Elevation="4" Class="px-sm-4 px-md-12 px-lg-16 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
@@ -7,7 +9,7 @@
             <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">Please sign in</MudText>
             <MudTextField T="@string"
                           Class="my-4"
-                          Label="Email"
+                          Label="UserName"
                           Variant="Variant.Outlined"/>
             <MudTextField T="@string"
                           Class="my-4"
@@ -22,7 +24,8 @@
             <MudButton Class="mx-auto mt-8 py-2 px-12"
                        Size="@Size.Large"
                        Color="@Color.Primary"
-                       Variant="@Variant.Filled">
+                       Variant="@Variant.Filled"
+                       OnClick="@OnSignInClick">
                 Sign In
             </MudButton>
         </MudCardActions>
@@ -49,5 +52,8 @@
 
         passwordShow = !passwordShow;
     }
+
+    private async Task OnSignInClick() =>
+        await IdentityService.SignInAsync(new());
 
 }
