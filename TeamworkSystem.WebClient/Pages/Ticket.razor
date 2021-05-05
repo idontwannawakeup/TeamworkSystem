@@ -5,7 +5,14 @@
 <ProjectLayout>
     <MudContainer MaxWidth="@MaxWidth.Large">
         <MudElement HtmlTag="div" Class="d-flex flex-wrap justify-space-between mb-2">
-            <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">TicketName</MudText>
+            @if (loaded)
+            {
+                <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">TicketName</MudText>
+            }
+            else
+            {
+                <MudSkeleton Width="25%" Height="45px" Class="mt-3 mt-md-8 mb-4" />
+            }
             <MudElement HtmlTag="div" Class="d-flex align-center gap-4">
                 <MudButton Variant="@Variant.Outlined"
                            Color="@Color.Info"
@@ -25,7 +32,15 @@
         <MudGrid Spacing="2">
             <MudItem xs="12" md="7" Class="pb-md-4">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Description</MudText>
-                <MudText Typo="@Typo.body1">Nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante.</MudText>
+                @if (loaded)
+                {
+                    <MudText Typo="@Typo.body1">Nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante.</MudText>
+                }
+                else
+                {
+                    <MudSkeleton Width="100%" Height="120px" />
+                }
+
             </MudItem>
             @* Attributes *@
             <MudItem xs="12" md="5" Class="pb-md-4">
@@ -35,40 +50,30 @@
                 </MudElement>
                 <MudDivider Class="mt-2 mb-4" />
                 <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
-                    <MudChipSet Filter="@true" Mandatory="@true">
-                        <MudChip Color="@Color.Default" Text="backlog" Default="@true">Backlog</MudChip>
-                        <MudChip Color="@Color.Secondary" Text="selected">Selected for development</MudChip>
-                        <MudChip Color="@Color.Primary" Text="progress">In progress</MudChip>
-                        <MudChip Color="@Color.Success" Text="done">Done</MudChip>
-                    </MudChipSet>
-                    <MudElement Class="d-flex justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
-                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
-                        </MudElement>
-                    </MudElement>
-                    <MudElement Class="d-flex justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
-                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
-                        </MudElement>
-                    </MudElement>
-                    <MudElement Class="d-flex justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
-                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
-                        </MudElement>
-                    </MudElement>
-                    <MudElement Class="d-flex justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
-                        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-                            <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
-                        </MudElement>
-                    </MudElement>
+                    @if (loaded)
+                    {
+                        <MudChipSet Filter="@true" Mandatory="@true">
+                            <MudChip Color="@Color.Default" Text="backlog" Default="@true">Backlog</MudChip>
+                            <MudChip Color="@Color.Secondary" Text="selected">Selected for development</MudChip>
+                            <MudChip Color="@Color.Primary" Text="progress">In progress</MudChip>
+                            <MudChip Color="@Color.Success" Text="done">Done</MudChip>
+                        </MudChipSet>
+                        @foreach (var number in Enumerable.Range(0, 4))
+                        {
+                            <MudElement Class="d-flex justify-space-between">
+                                <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                                <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                                    <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                                    <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
+                                </MudElement>
+                            </MudElement>
+                        }
+                    }
+                    else
+                    {
+                        <TicketAttributesSkeleton />
+                    }
+
                 </MudElement>
             </MudItem>
         </MudGrid>
@@ -76,6 +81,8 @@
 </ProjectLayout>
 
 @code {
+
+    private bool loaded = false;
 
     private readonly string colorGrey = $"color: {Colors.Grey.Default};";
 

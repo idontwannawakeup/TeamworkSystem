@@ -19,21 +19,39 @@
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Title">TicketTitle</MudTd>
-                <MudTd DataLabel="Type">
-                    <MudChip Color="@Color.Primary"
-                             Size="@Size.Small"
-                             Label="@true"
-                             Class="mx-0 my-3">TicketEpicName</MudChip>
-                </MudTd>
-                <MudTd>
-                    <MudElement HtmlTag="div" Class="d-flex">
-                        <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
-                            <MudMenuItem Link="/project/ticket/properties">Edit</MudMenuItem>
-                            <MudMenuItem OnClick="@OnDeleteClickAsync">Delete</MudMenuItem>
-                        </MudMenu>
-                    </MudElement>
-                </MudTd>
+                @if (loaded)
+                {
+                    <MudTd DataLabel="Title">TicketTitle</MudTd>
+                    <MudTd DataLabel="Type">
+                        <MudChip Color="@Color.Primary"
+                                 Size="@Size.Small"
+                                 Label="@true"
+                                 Class="mx-0 my-3">TicketEpicName</MudChip>
+                    </MudTd>
+                    <MudTd>
+                        <MudElement HtmlTag="div" Class="d-flex">
+                            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
+                                <MudMenuItem Link="/project/ticket/properties">Edit</MudMenuItem>
+                                <MudMenuItem OnClick="@OnDeleteClickAsync">Delete</MudMenuItem>
+                            </MudMenu>
+                        </MudElement>
+                    </MudTd>
+                }
+                else
+                {
+                    <MudTd DataLabel="Title">
+                        <MudSkeleton Width="30%" />
+                    </MudTd>
+                    <MudTd DataLabel="Type">
+                        <MudSkeleton Width="40%" Height="35px" />
+                    </MudTd>
+                    <MudTd>
+                        <MudSkeleton SkeletonType="SkeletonType.Circle"
+                                     Animation="Animation.Wave"
+                                     Height="30px" Width="30px"
+                                     Class="ml-auto" />
+                    </MudTd>
+                }
             </RowTemplate>
         </MudTable>
 
@@ -45,6 +63,8 @@
 </ProjectLayout>  
 
 @code {
+
+    private bool loaded = false;
 
     private void OnRowClick(TableRowClickEventArgs<int> args) =>
         NavigationManager.NavigateTo("/project/ticket");

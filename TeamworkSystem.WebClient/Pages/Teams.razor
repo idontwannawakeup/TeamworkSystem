@@ -1,5 +1,5 @@
 ﻿@page "/teams"
-@inject NavigationManager NavigationManager  
+@inject NavigationManager NavigationManager
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Teams</MudText>
 
@@ -17,12 +17,28 @@
         <MudTh>Leader</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd Class="ml-3" DataLabel="Name">Name</MudTd>
-        <MudTd DataLabel="Specialization">Specialization</MudTd>
-        <MudTd DataLabel="Leader">
-            <MudAvatar Class="ml-auto" Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-            <span class="ml-2">LeaderName</span>
-        </MudTd>
+        @if (loaded)
+        {
+            <MudTd Class="ml-3" DataLabel="Name">Name</MudTd>
+            <MudTd DataLabel="Specialization">Specialization</MudTd>
+            <MudTd DataLabel="Leader">
+                <MudAvatar Class="ml-auto" Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                <span class="ml-2">LeaderName</span>
+            </MudTd>
+        }
+        else
+        {
+            @*Loading skeleton*@
+            <MudTd Class="ml-3" DataLabel="Name">
+                <MudSkeleton Width="30%" />
+            </MudTd>
+            <MudTd DataLabel="Specialization">
+                <MudSkeleton Width="40%" />
+            </MudTd>
+            <MudTd DataLabel="Leader">
+                <MudSkeleton Width="40%" />
+            </MudTd>
+        }
     </RowTemplate>
 </MudTable>
 
@@ -32,6 +48,8 @@
         Label="Team" />
 
 @code {
+
+    private bool loaded = true;
 
     private void OnRowClick(TableRowClickEventArgs<int> args) =>
         NavigationManager.NavigateTo("/team");

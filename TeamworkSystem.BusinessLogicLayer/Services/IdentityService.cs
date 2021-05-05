@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using TeamworkSystem.BusinessLogicLayer.Configurations;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces;
@@ -32,6 +29,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             var user = await userManager.FindByNameAsync(request.UserName)
                 ?? throw new EntityNotFoundException(
                     $"{nameof(User)} with user name {request.UserName} not found.");
+
+            if (!await userManager.CheckPasswordAsync(user, request.Password))
+            {
+                throw new EntityNotFoundException("Incorrect password.");
+            }
 
             var jwtToken = tokenFactory.BuildToken(user);
             return new() { Token = SerializeToken(jwtToken) };

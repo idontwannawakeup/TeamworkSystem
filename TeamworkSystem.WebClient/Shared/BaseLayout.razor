@@ -1,4 +1,6 @@
-﻿<MudLayout>
+﻿@inject NavigationManager NavigationManager
+
+<MudLayout>
 
     <MudAppBar Color="@Color.Primary" Fixed="@true">
 
@@ -27,7 +29,7 @@
                     <MudNavLink Href="/profile" Icon="@Icons.Filled.AccountCircle">Profile</MudNavLink>
                     <MudNavLink Href="/settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
                     <MudDivider Class="my-2" />
-                    <MudNavLink Href="/signOut" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
+                    <MudNavLink OnClick="@SignOut" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
 
                 </MudNavMenu>
             </MudPopover>
@@ -94,5 +96,8 @@
 
     private void ToggleAvatarMenu() =>
         avatarMenuOpen = !avatarMenuOpen;
+
+    private void SignOut() =>
+        NavigationManager.NavigateTo("/");
 
 }

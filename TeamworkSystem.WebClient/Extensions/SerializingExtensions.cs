@@ -10,7 +10,10 @@ namespace TeamworkSystem.WebClient.Extensions
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
-        public static TOut Deserialize<TOut>(this string obj)
-            => JsonSerializer.Deserialize<TOut>(obj);
+        public static TOut Deserialize<TOut>(this string obj) =>
+            JsonSerializer.Deserialize<TOut>(obj, new()
+            {
+                PropertyNameCaseInsensitive = true
+            });
     }
 }

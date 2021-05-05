@@ -15,7 +15,14 @@
                         <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
                             @foreach (var number in Enumerable.Range(0, new Random().Next(1, 5)))
                             {
-                                <TicketCard />
+                                if (loaded)
+                                {
+                                    <TicketCard />
+                                }
+                                else
+                                {
+                                    <TicketCardSkeleton />
+                                }
                             }
                         </MudElement>
 
@@ -27,5 +34,7 @@
 </ProjectLayout>
 
 @code {
+
+    private bool loaded = true;
 
 }

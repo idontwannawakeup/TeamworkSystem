@@ -1,0 +1,12 @@
+﻿<MudSkeleton Width="100%" Height="30px" />
+@foreach (var number in Enumerable.Range(0, 4))
+{
+    <MudElement Class="d-flex justify-space-between">
+        <MudSkeleton Width="30%" />
+        <MudSkeleton Width="30%" />
+    </MudElement>
+}
+
+@code {
+
+}

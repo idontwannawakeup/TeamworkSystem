@@ -9,18 +9,38 @@
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Name">
-            <MudElement HtmlTag="div" Class="d-flex align-center">
-                <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
-                <MudText Typo="@Typo.subtitle1" Class="ml-4">FriendName</MudText>
-            </MudElement>
-        </MudTd>
-        <MudTd DataLabel="Profession">Profession</MudTd>
-        <MudTd>
-            <MudElement HtmlTag="div" Class="d-flex">
-                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="@Color.Inherit" Class="ml-auto" />
-            </MudElement>
-        </MudTd>
+        @if (loaded)
+        {
+            <MudTd DataLabel="Name">
+                <MudElement HtmlTag="div" Class="d-flex align-center">
+                    <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
+                    <MudText Typo="@Typo.subtitle1" Class="ml-4">FriendName</MudText>
+                </MudElement>
+            </MudTd>
+            <MudTd DataLabel="Profession">Profession</MudTd>
+            <MudTd>
+                <MudElement HtmlTag="div" Class="d-flex">
+                    <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="@Color.Inherit" Class="ml-auto" />
+                </MudElement>
+            </MudTd>
+        }
+        else
+        {
+            @*Loading skeleton*@
+            <MudTd DataLabel="Name">
+                <MudSkeleton Width="40%" Height="40px" />
+            </MudTd>
+            <MudTd DataLabel="Profession">
+                <MudSkeleton Width="30%" />
+            </MudTd>
+            <MudTd>
+                <MudSkeleton SkeletonType="SkeletonType.Circle"
+                             Animation="Animation.Wave"
+                             Height="30px" Width="30px"
+                             Class="ml-auto" />
+            </MudTd>
+        }
+
     </RowTemplate>
 </MudTable>
 
@@ -30,5 +50,7 @@
         Label="Friend" />
 
 @code {
+
+    private bool loaded = true;
 
 }
