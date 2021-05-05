@@ -9,8 +9,6 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 {
     public interface IUsersService
     {
-        Task SignUpAsync(UserSignUpRequest userSignUpDTO);
-
         Task<IEnumerable<UserResponse>> GetAsync();
 
         Task<PagedList<UserResponse>> GetAsync(UsersParameters parameters);

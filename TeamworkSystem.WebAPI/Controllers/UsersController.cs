@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
@@ -19,6 +20,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         private readonly IUsersService usersService;
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<PagedList<UserResponse>>> GetAsync(
@@ -75,22 +77,6 @@ namespace TeamworkSystem.WebAPI.Controllers
                 return NotFound(new { e.Message });
             }
             catch (Exception e)
-            {
-                return BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpPost("signUp")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> SignUpAsync([FromBody] UserSignUpRequest user)
-        {
-            try
-            {
-                await usersService.SignUpAsync(user);
-                return Ok();
-            }
-            catch (ArgumentException e)
             {
                 return BadRequest(new { e.Message });
             }

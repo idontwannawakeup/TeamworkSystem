@@ -24,23 +24,6 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly UserManager<User> userManager;
 
-        public async Task SignUpAsync(UserSignUpRequest userSignUp)
-        {
-            var user = mapper.Map<UserSignUpRequest, User>(userSignUp);
-            var signUpResult = await userManager.CreateAsync(user, userSignUp.Password);
-
-            if (!signUpResult.Succeeded)
-            {
-                string errors = string.Join("\n",
-                    signUpResult.Errors.Select(
-                        error => error.Description));
-
-                throw new ArgumentException(errors);
-            }
-
-            await unitOfWork.SaveChangesAsync();
-        }
-
         public async Task<IEnumerable<UserResponse>> GetAsync()
         {
             var users = await userManager.Users.ToListAsync();

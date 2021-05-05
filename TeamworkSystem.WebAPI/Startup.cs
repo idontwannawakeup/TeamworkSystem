@@ -1,6 +1,8 @@
 using System;
+using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,8 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.BusinessLogicLayer.Configurations;
+using TeamworkSystem.BusinessLogicLayer.Factories;
+using TeamworkSystem.BusinessLogicLayer.Interfaces;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.BusinessLogicLayer.Services;
 using TeamworkSystem.BusinessLogicLayer.Validation;
@@ -56,6 +61,7 @@ namespace TeamworkSystem.WebAPI
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddTransient<JwtTokenConfiguration>();
+            services.AddTransient<IJwtSecurityTokenFactory, JwtSecurityTokenFactory>();
 
             services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
             services.AddMvc(options =>
@@ -69,9 +75,26 @@ namespace TeamworkSystem.WebAPI
                             AppDomain.CurrentDomain.GetAssemblies());
                     });
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentityCore<User>()
+                    .AddRoles<IdentityRole>()
+                    .AddSignInManager<SignInManager<User>>()
                     .AddDefaultTokenProviders()
                     .AddEntityFrameworkStores<TeamworkSystemContext>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new()
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"])),
+                            ClockSkew = TimeSpan.Zero,
+                        };
+                    });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
