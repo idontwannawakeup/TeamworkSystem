@@ -1,4 +1,4 @@
-﻿@page "/project/ticket/properties"
+﻿@page "/project/ticket/{TicketId:int}/properties"
 
 <MudContainer MaxWidth="@MaxWidth.Small">
     <MudGrid Spacing="2" Class="mt-8">
@@ -23,5 +23,7 @@
 </MudContainer>
 
 @code {
+
+    [Parameter] public int TicketId { get; set; }
 
 }

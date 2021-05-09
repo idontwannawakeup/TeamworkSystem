@@ -36,7 +36,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             }
 
             var jwtToken = tokenFactory.BuildToken(user);
-            return new() { Token = SerializeToken(jwtToken) };
+            return new() { Token = SerializeToken(jwtToken), UserId = user.Id };
         }
 
         public async Task<JwtResponse> SignUpAsync(UserSignUpRequest request)

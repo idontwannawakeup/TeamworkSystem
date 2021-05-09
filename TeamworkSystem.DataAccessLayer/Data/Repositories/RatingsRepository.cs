@@ -35,16 +35,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId)
         {
-            return await table
-                .Where(rating => rating.FromId == userId)
-                .ToListAsync();
+            return await table.Where(rating => rating.FromId == userId)
+                              .ToListAsync();
         }
 
         public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId)
         {
-            return await table
-                .Where(rating => rating.ToId == userId)
-                .ToListAsync();
+            return await table.Where(rating => rating.ToId == userId)
+                              .ToListAsync();
         }
 
         public RatingsRepository(TeamworkSystemContext databaseContext)

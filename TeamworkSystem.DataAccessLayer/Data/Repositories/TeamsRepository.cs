@@ -38,9 +38,8 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<IEnumerable<Team>> GetUserTeams(User user)
         {
-            return await table
-                .Where(team => team.Members.Contains(user))
-                .ToListAsync();
+            return await table.Where(team => team.Members.Contains(user))
+                              .ToListAsync();
         }
 
         public async Task<IEnumerable<User>> GetMembersAsync(int id)
@@ -85,8 +84,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 return;
             }
 
-            source = source.Where(team => team.Members.Any(
-                user => user.Id == userId));
+            source = source.Where(team => team.Members.Any(user => user.Id == userId));
         }
 
         private static void SearchBySpecialization(
@@ -98,8 +96,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 return;
             }
 
-            source = source.Where(team =>
-                team.Specialization == specialization);
+            source = source.Where(team => team.Specialization == specialization);
         }
 
         public TeamsRepository(TeamworkSystemContext databaseContext)

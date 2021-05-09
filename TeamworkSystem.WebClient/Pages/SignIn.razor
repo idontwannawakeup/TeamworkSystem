@@ -68,7 +68,7 @@
         try
         {
             var token = await IdentityService.SignInAsync(userModel);
-            NavigationManager.NavigateTo("/home");
+            NavigationManager.NavigateTo($"/home/{token.UserId}");
             Snackbar.Add("You logged in succesfull!", Severity.Success);
         }
         catch (ValidationException e)

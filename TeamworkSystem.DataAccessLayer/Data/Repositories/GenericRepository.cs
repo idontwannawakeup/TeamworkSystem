@@ -16,10 +16,12 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public virtual async Task<IEnumerable<TEntity>> GetAsync() =>
             await table.ToListAsync();
 
-        public virtual async Task<TEntity> GetByIdAsync(int id) =>
-            await table.FindAsync(id)
+        public virtual async Task<TEntity> GetByIdAsync(int id)
+        {
+            return await table.FindAsync(id)
                 ?? throw new EntityNotFoundException(
                     GetEntityNotFoundErrorMessage(id));
+        }
 
         public abstract Task<TEntity> GetCompleteEntityAsync(int id);
 

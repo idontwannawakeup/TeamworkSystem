@@ -1,5 +1,6 @@
 ﻿@page "/" 
 @layout EmptyLayout
+@inject NavigationManager NavigationManager 
 
 <MudContainer MaxWidth="@MaxWidth.ExtraSmall">
 
@@ -28,3 +29,11 @@
     </MudButton>
 
 </MudContainer>
+
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        NavigationManager.NavigateTo("/project/ticket/2");
+    }
+}

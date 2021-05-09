@@ -1,13 +1,16 @@
-﻿@page "/project/ticket"
+﻿@using TeamworkSystem.WebClient.ViewModels
+@using TeamworkSystem.WebClient.Interfaces
+@page "/project/ticket/{TicketId:int}"
 @layout ContainerlessLayout
-@inject IDialogService DialogService  
+@inject IDialogService DialogService
+@inject ITicketsService TicketsService  
 
 <ProjectLayout>
     <MudContainer MaxWidth="@MaxWidth.Large">
         <MudElement HtmlTag="div" Class="d-flex flex-wrap justify-space-between mb-2">
-            @if (loaded)
+            @if (Loaded)
             {
-                <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">TicketName</MudText>
+                <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">@ticket.Title</MudText>
             }
             else
             {
@@ -32,13 +35,17 @@
         <MudGrid Spacing="2">
             <MudItem xs="12" md="7" Class="pb-md-4">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Description</MudText>
-                @if (loaded)
+                @if (Loaded)
                 {
-                    <MudText Typo="@Typo.body1">Nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue cras ut metus a risus iaculis scelerisque eu ac ante.</MudText>
+                    <MudText Typo="@Typo.body1">@ticket.Description</MudText>
                 }
                 else
                 {
-                    <MudSkeleton Width="100%" Height="120px" />
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
                 }
 
             </MudItem>
@@ -50,7 +57,7 @@
                 </MudElement>
                 <MudDivider Class="mt-2 mb-4" />
                 <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
-                    @if (loaded)
+                    @if (Loaded)
                     {
                         <MudChipSet Filter="@true" Mandatory="@true">
                             <MudChip Color="@Color.Default" Text="backlog" Default="@true">Backlog</MudChip>
@@ -82,7 +89,13 @@
 
 @code {
 
-    private bool loaded = false;
+    [Parameter] public int TicketId { get; set; }
+
+    private TicketViewModel ticket = null;
+
+    private bool Loaded => ticket is not null;
+
+    private string PropertiesLink => $"/project/ticket/{TicketId}/properties";
 
     private readonly string colorGrey = $"color: {Colors.Grey.Default};";
 
@@ -98,5 +111,11 @@
                 FullWidth = true,
                 MaxWidth = MaxWidth.Small
             });
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        ticket = await TicketsService.GetByIdAsync(TicketId);
+    }
 
 }
