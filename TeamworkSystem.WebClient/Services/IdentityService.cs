@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Exceptions;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Factories;
@@ -13,6 +14,8 @@ namespace TeamworkSystem.WebClient.Services
     public class IdentityService : IIdentityService
     {
         private readonly HttpClient httpClient;
+
+        private readonly ApiAuthenticationStateProvider stateProvider;
 
         public async Task<JwtViewModel> SignInAsync(UserSignInViewModel viewModel) =>
             await ExecuteQueryAsync("signIn", viewModel);
@@ -39,10 +42,17 @@ namespace TeamworkSystem.WebClient.Services
                 throw new Exception(errorModel.Message);
             }
 
-            return responseBody.Deserialize<JwtViewModel>();
+            var jwtModel = responseBody.Deserialize<JwtViewModel>();
+            await stateProvider.MarkUserAsAuthenticatedAsync(jwtModel.Token);
+            return jwtModel;
         }
 
-        public IdentityService(HttpClient httpClient) =>
+        public IdentityService(
+            HttpClient httpClient,
+            ApiAuthenticationStateProvider stateProvider)
+        {
             this.httpClient = httpClient;
+            this.stateProvider = stateProvider;
+        }
     }
 }

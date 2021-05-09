@@ -1,9 +1,12 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
+using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Services;
 
@@ -25,6 +28,11 @@ namespace TeamworkSystem.WebClient
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddMudServices();
+            services.AddBlazoredLocalStorage();
+            services.AddAuthorizationCore();
+
+            services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+            services.AddScoped<ApiAuthenticationStateProvider>();
 
             string apiUrl = Configuration["ApiUrl"];
 

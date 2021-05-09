@@ -31,9 +31,18 @@
 </MudContainer>
 
 @code {
-    protected override void OnAfterRender(bool firstRender)
+
+    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        base.OnAfterRender(firstRender);
-        NavigationManager.NavigateTo("/project/ticket/2");
+        await base.OnInitializedAsync();
+        var state = await StateAsync;
+        var isAuthenticated = state.User.Identity.IsAuthenticated;
+        if (isAuthenticated)
+        {
+            NavigationManager.NavigateTo("/home");
+        }
     }
+
 }

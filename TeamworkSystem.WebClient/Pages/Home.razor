@@ -1,5 +1,5 @@
-﻿@page "/home/{UserId}"
-
+﻿@using System.Security.Claims
+@page "/home"
 
 <MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
     Hello, UserName!
@@ -78,16 +78,19 @@
 
 @code {
 
-    [Parameter] public string UserId { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
 
     private string TicketsLink => $"/tickets/{UserId}";
 
+    private string UserId { get; set; } = null;
+
     private string subtitleStyle = $"color: {Colors.Grey.Default};";
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        System.Console.WriteLine(TicketsLink);
+        await base.OnInitializedAsync();
+        var state = await StateAsync;
+        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
     }
 
 }
