@@ -17,6 +17,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task InsertAsync(RatingRequest request);
 
+        Task UpdateAsync(RatingRequest request);
+
         Task DeleteAsync(int id);
     }
 }

@@ -17,6 +17,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task InsertAsync(TicketRequest request);
 
+        Task UpdateAsync(TicketRequest request);
+
         Task ExtendDeadlineAsync(TicketWithExtendedDeadlineRequest request);
 
         Task DeleteAsync(int id);

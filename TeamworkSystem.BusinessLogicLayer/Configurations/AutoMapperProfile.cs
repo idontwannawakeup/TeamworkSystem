@@ -10,6 +10,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         private void CreateUserMaps()
         {
             CreateMap<UserSignUpRequest, User>();
+            CreateMap<UserRequest, User>();
             CreateMap<User, UserResponse>().ForMember(
                 response => response.FullName,
                 options => options.MapFrom(team => $"{team.FirstName} {team.LastName}"));

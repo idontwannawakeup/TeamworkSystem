@@ -48,6 +48,21 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(TicketRequest request)
+        {
+            var ticket = await ticketsRepository.GetByIdAsync(request.Id);
+            ticket.ProjectId = request.ProjectId;
+            ticket.ExecutorId = request.ExecutorId;
+            ticket.Title = request.Title;
+            ticket.Type = request.Type;
+            ticket.Description = request.Description;
+            ticket.Status = request.Status;
+            ticket.Priority = request.Priority;
+            ticket.Deadline = request.Deadline;
+            await ticketsRepository.UpdateAsync(ticket);
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task ExtendDeadlineAsync(
             TicketWithExtendedDeadlineRequest request)
         {

@@ -58,6 +58,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(TeamRequest request)
+        {
+            var team = mapper.Map<TeamRequest, Team>(request);
+            await teamsRepository.UpdateAsync(team);
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(int id)
         {
             await teamsRepository.DeleteAsync(id);

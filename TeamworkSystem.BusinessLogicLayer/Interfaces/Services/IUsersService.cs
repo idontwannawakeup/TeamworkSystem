@@ -17,6 +17,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task<PagedList<UserResponse>> GetFriendsAsync(string id, UsersParameters parameters);
 
+        Task UpdateAsync(UserRequest request);
+
         Task DeleteAsync(string id);
 
         Task AddFriendAsync(FriendsRequest friendsRequest);

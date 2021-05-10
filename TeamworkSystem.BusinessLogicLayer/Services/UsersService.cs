@@ -51,6 +51,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             return friends?.Map(mapper.Map<User, UserResponse>);
         }
 
+        public async Task UpdateAsync(UserRequest request)
+        {
+            var user = mapper.Map<UserRequest, User>(request);
+            await userManager.UpdateAsync(user);
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(string id)
         {
             var user = await userManager.GetByIdAsync(id);

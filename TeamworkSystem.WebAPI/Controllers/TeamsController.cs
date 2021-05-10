@@ -72,6 +72,22 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateAsync([FromBody] TeamRequest request)
+        {
+            try
+            {
+                await teamsService.UpdateAsync(request);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

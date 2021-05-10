@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
@@ -46,6 +45,44 @@ namespace TeamworkSystem.WebAPI.Controllers
             try
             {
                 return Ok(await usersService.GetByIdAsync(id));
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateAsync([FromBody] UserRequest request)
+        {
+            try
+            {
+                await usersService.UpdateAsync(request);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteAsync([FromRoute] string id)
+        {
+            try
+            {
+                await usersService.DeleteAsync(id);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
@@ -111,27 +148,6 @@ namespace TeamworkSystem.WebAPI.Controllers
             try
             {
                 await usersService.DeleteFriendAsync(request);
-                return Ok();
-            }
-            catch (EntityNotFoundException e)
-            {
-                return NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> DeleteAsync([FromRoute] string id)
-        {
-            try
-            {
-                await usersService.DeleteAsync(id);
                 return Ok();
             }
             catch (EntityNotFoundException e)

@@ -19,6 +19,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task InsertAsync(ProjectRequest request);
 
+        Task UpdateAsync(ProjectRequest request);
+
         Task DeleteAsync(int id);
     }
 }

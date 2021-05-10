@@ -59,7 +59,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> InsertAsync(TicketRequest request)
+        public async Task<ActionResult> InsertAsync([FromBody] TicketRequest request)
         {
             try
             {
@@ -72,11 +72,28 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateAsync([FromBody] TicketRequest request)
+        {
+            try
+            {
+                await ticketsService.UpdateAsync(request);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
         [HttpPut("deadline")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> ExtendDeadlineAsync(TicketWithExtendedDeadlineRequest request)
+        public async Task<ActionResult> ExtendDeadlineAsync(
+            [FromBody] TicketWithExtendedDeadlineRequest request)
         {
             try
             {

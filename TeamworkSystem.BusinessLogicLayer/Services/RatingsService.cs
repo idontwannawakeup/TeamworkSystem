@@ -59,6 +59,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(RatingRequest request)
+        {
+            var rating = mapper.Map<RatingRequest, Rating>(request);
+            await ratingsRepository.UpdateAsync(rating);
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(int id)
         {
             await ratingsRepository.DeleteAsync(id);
