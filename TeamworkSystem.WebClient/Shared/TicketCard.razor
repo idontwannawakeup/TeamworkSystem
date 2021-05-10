@@ -1,5 +1,4 @@
-﻿@using TeamworkSystem.WebClient.ViewModels
-@inject IDialogService DialogService
+﻿@inject IDialogService DialogService
 
 <MudCard Outlined="@true">
     <MudCardContent>
@@ -8,16 +7,18 @@
         <MudChip Color="@Color.Primary"
                  Size="@Size.Small"
                  Label="@true"
-                 Class="mx-0 my-3">TicketEpicName</MudChip>
+                 Class="mx-0 my-3">
+            @Ticket.Type
+        </MudChip>
 
         <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-            <MudTooltip Text="Epic">
+            <MudTooltip Text="@Ticket.Type">
                 <MudIcon Icon="@Icons.Material.Filled.Explicit"
                          Color="@Color.Primary"
                          Size="@Size.Small" />
             </MudTooltip>
 
-            <MudTooltip Text="Priority: Medium">
+            <MudTooltip Text="@($"Priority: {Ticket.Priority}")">
                 <MudIcon Icon="@Icons.Material.Filled.CompareArrows"
                          Color="@Color.Warning"
                          Size="@Size.Small" />

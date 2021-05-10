@@ -1,8 +1,6 @@
-﻿@using System.Security.Claims
-@using TeamworkSystem.WebClient.ViewModels
-@using TeamworkSystem.WebClient.Interfaces
-@page "/profile"
+﻿@page "/profile"
 @inject IUsersService UsersService
+@inject IRatingsService RatingsService 
 
 @if (user is not null)
 {
@@ -36,7 +34,14 @@
                 <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
                 <MudDivider Class="mt-2 mb-4" />
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
-                <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
+                @if (user.Email is not null)
+                {
+                    <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
+                }
+                else
+                {
+                    @NoneChip
+                }
                 <MudDivider Class="mt-2 mb-4" />
                 <MudButton FullWidth="@true"
                            Variant="@Variant.Outlined"
@@ -55,24 +60,27 @@
                 <MudTabPanel Text="Ratings">
                     <MudElement HtmlTag="div" Class="pa-6">
                         <MudList Clickable="@true">
-                            @foreach (var number in Enumerable.Range(0, 7))
+                            @if (ratings is not null)
                             {
-                                <MudListItem>
-                                    <MudElement HtmlTag="div"
-                                                Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
+                                @foreach (var rating in ratings)
+                                {
+                                    <MudListItem>
                                         <MudElement HtmlTag="div"
-                                                    Class="rating-item__author d-flex align-center gap-4">
-                                            <MudAvatar Color="@Color.Secondary">A</MudAvatar>
-                                            <MudText Typo="@Typo.subtitle1">AuthorName</MudText>
+                                                    Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
+                                            <MudElement HtmlTag="div"
+                                                        Class="rating-item__author d-flex align-center gap-4">
+                                                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                                                <MudText Typo="@Typo.subtitle1">@rating.From.FullName</MudText>
+                                            </MudElement>
+                                            <MudElement HtmlTag="div"
+                                                        Class="rating-item__average d-flex flex-column align-center gap-1">
+                                                <MudText Typo="@Typo.subtitle2">Average: 50</MudText>
+                                                <MudRating SelectedValue="3" ReadOnly="@true" />
+                                            </MudElement>
                                         </MudElement>
-                                        <MudElement HtmlTag="div"
-                                                    Class="rating-item__average d-flex flex-column align-center gap-1">
-                                            <MudText Typo="@Typo.subtitle2">Average: 15.5</MudText>
-                                            <MudRating SelectedValue="1" ReadOnly="@true" />
-                                        </MudElement>
-                                    </MudElement>
-                                </MudListItem>
-                                <MudDivider Class="mb-4" />
+                                    </MudListItem>
+                                    <MudDivider Class="mb-4" />
+                                }
                             }
                         </MudList>
                     </MudElement>
@@ -89,6 +97,8 @@
 
     private UserViewModel user = null;
 
+    private List<RatingViewModel> ratings = null;
+
     private readonly string colorGrey = $"color: {Colors.Grey.Default};";
 
     private readonly int elevation = 4;
@@ -99,6 +109,10 @@
         var state = await StateAsync;
         var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
         user = await UsersService.GetByIdAsync(userId);
+        ratings = await RatingsService.GetByRatedUserId(userId) as List<RatingViewModel>;
     }
+
+    private RenderFragment NoneChip =>
+        @<MudChip Label="@true" Color="@Color.Default" Class="ma-0" Size="@Size.Small">None</MudChip>;
 
 }

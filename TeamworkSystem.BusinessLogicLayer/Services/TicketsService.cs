@@ -35,9 +35,9 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             return tickets?.Map(mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<TicketResponse> GetProfileByIdAsync(int id)
+        public async Task<TicketResponse> GetByIdAsync(int id)
         {
-            var ticket = await ticketsRepository.GetByIdAsync(id);
+            var ticket = await ticketsRepository.GetCompleteEntityAsync(id);
             return mapper.Map<Ticket, TicketResponse>(ticket);
         }
 

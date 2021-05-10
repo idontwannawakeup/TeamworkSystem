@@ -1,4 +1,6 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
+﻿using System;
+
+namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
 {
     public class TicketResponse
     {
@@ -8,8 +10,16 @@
 
         public string Type { get; set; }
 
+        public string Description { get; set; }
+
+        public string Status { get; set; }
+
         public string Priority { get; set; }
 
-        public string Description { get; set; }
+        public DateTime CreationTime { get; set; }
+
+        public DateTime? Deadline { get; set; }
+
+        public UserResponse Executor { get; set; }
     }
 }

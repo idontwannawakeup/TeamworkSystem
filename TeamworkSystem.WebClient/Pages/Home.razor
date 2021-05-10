@@ -1,7 +1,4 @@
-﻿@using System.Security.Claims
-@using TeamworkSystem.WebClient.ViewModels
-@using TeamworkSystem.WebClient.Interfaces
-@page "/home"
+﻿@page "/home"
 @inject IUsersService UsersService
 
 <AuthorizeView>
@@ -10,6 +7,12 @@
         {
             <MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
                 Hello, @user.FullName!
+            </MudText>
+        }
+        else
+        {
+            <MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
+                Hello!
             </MudText>
         }
 

@@ -45,7 +45,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task<ProjectResponse> GetByIdAsync(int id)
         {
-            var project = await projectsRepository.GetByIdAsync(id);
+            var project = await projectsRepository.GetCompleteEntityAsync(id);
             return mapper.Map<Project, ProjectResponse>(project);
         }
 

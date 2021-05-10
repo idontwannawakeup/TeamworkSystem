@@ -1,6 +1,4 @@
-﻿@using TeamworkSystem.WebClient.ViewModels
-@using TeamworkSystem.WebClient.Interfaces
-@page "/project/ticket/{TicketId:int}"
+﻿@page "/project/ticket/{TicketId:int}"
 @layout ContainerlessLayout
 @inject IDialogService DialogService
 @inject ITicketsService TicketsService  
@@ -59,7 +57,7 @@
                 <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
                     @if (Loaded)
                     {
-                        <MudChipSet Filter="@true" Mandatory="@true">
+                        @*<MudChipSet Filter="@true" Mandatory="@true">
                             <MudChip Color="@Color.Default" Text="backlog" Default="@true">Backlog</MudChip>
                             <MudChip Color="@Color.Secondary" Text="selected">Selected for development</MudChip>
                             <MudChip Color="@Color.Primary" Text="progress">In progress</MudChip>
@@ -67,20 +65,61 @@
                         </MudChipSet>
                         @foreach (var number in Enumerable.Range(0, 4))
                         {
-                            <MudElement Class="d-flex justify-space-between">
+                            <MudElement Class="d-flex align-center justify-space-between">
                                 <MudText Typo="@Typo.subtitle1">Executor</MudText>
                                 <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
                                     <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
                                     <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
                                 </MudElement>
                             </MudElement>
-                        }
+                        }*@
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                            @if (ticket.Executor is not null)
+                            {
+                                <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                                    <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                                    <MudText Typo="@Typo.subtitle2">@ticket.Executor.FullName</MudText>
+                                </MudElement>
+                            }
+                            else
+                            {
+                                <MudChip Color="@Color.Default"
+                                         Size="@Size.Small"
+                                         Label="@true">
+                                    None
+                                </MudChip>
+                            }
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Type</MudText>
+                            <MudChip Color="@Color.Primary"
+                                     Size="@Size.Small"
+                                     Label="@true">
+                                @ticket.Type
+                            </MudChip>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Status</MudText>
+                            <MudChip Color="@Color.Default" Text="@ticket.Status" Class="ma-0">Backlog</MudChip>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Priority</MudText>
+                            <MudText Typo="@Typo.subtitle2">@ticket.Priority</MudText>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Created At</MudText>
+                            <MudText Typo="@Typo.subtitle2">@ticket.CreationTime</MudText>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Deadline</MudText>
+                            <MudText Typo="@Typo.subtitle2">@ticket.Deadline</MudText>
+                        </MudElement>
                     }
                     else
                     {
                         <TicketAttributesSkeleton />
                     }
-
                 </MudElement>
             </MudItem>
         </MudGrid>

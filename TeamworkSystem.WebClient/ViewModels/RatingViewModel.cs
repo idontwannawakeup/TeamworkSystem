@@ -1,6 +1,6 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
+﻿namespace TeamworkSystem.WebClient.ViewModels
 {
-    public class RatingResponse
+    public class RatingViewModel
     {
         public int Id { get; set; }
 
@@ -14,8 +14,8 @@
 
         public string Comment { get; set; }
 
-        public UserResponse From { get; set; }
+        public UserViewModel From { get; set; }
 
-        public UserResponse To { get; set; }
+        public UserViewModel To { get; set; }
     }
 }

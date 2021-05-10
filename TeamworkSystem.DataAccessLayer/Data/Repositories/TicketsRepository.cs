@@ -15,7 +15,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Ticket>> GetAsync(
             TicketsParameters parameters)
         {
-            IQueryable<Ticket> source = table;
+            IQueryable<Ticket> source = table.Include(ticket => ticket.Executor);
             SearchByProjectId(ref source, parameters.ProjectId);
             SearchByExecutorId(ref source, parameters.ExecutorId);
             return await PagedList<Ticket>.ToPagedListAsync(

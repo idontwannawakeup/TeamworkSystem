@@ -13,7 +13,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task<PagedList<TicketResponse>> GetAsync(TicketsParameters parameters);
 
-        Task<TicketResponse> GetProfileByIdAsync(int id);
+        Task<TicketResponse> GetByIdAsync(int id);
 
         Task InsertAsync(TicketRequest request);
 

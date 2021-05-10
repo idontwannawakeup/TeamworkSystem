@@ -44,7 +44,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return Ok(await ticketsService.GetProfileByIdAsync(id));
+                return Ok(await ticketsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {

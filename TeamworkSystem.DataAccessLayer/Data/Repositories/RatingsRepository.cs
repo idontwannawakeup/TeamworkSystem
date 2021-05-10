@@ -26,7 +26,10 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Rating>> GetAsync(
             RatingsParameters parameters)
         {
-            IQueryable<Rating> source = table;
+            IQueryable<Rating> source = table.Include(rating => rating.From)
+                                             .Include(rating => rating.To);
+
+            SearchByRatedUserId(ref source, parameters.RatedUserId);
             return await PagedList<Rating>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -43,6 +46,18 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         {
             return await table.Where(rating => rating.ToId == userId)
                               .ToListAsync();
+        }
+
+        private static void SearchByRatedUserId(
+            ref IQueryable<Rating> source,
+            string ratedUserId)
+        {
+            if (string.IsNullOrWhiteSpace(ratedUserId))
+            {
+                return;
+            }
+
+            source = source.Where(rating => rating.ToId == ratedUserId);
         }
 
         public RatingsRepository(TeamworkSystemContext databaseContext)

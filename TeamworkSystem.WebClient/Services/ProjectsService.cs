@@ -26,6 +26,13 @@ namespace TeamworkSystem.WebClient.Services
             return responseBody.Deserialize<List<ProjectViewModel>>();
         }
 
+        public async Task<ProjectViewModel> GetByIdAsync(int id)
+        {
+            var response = await httpClient.GetAsync($"{id}");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody.Deserialize<ProjectViewModel>();
+        }
+
         public ProjectsService(HttpClient httpClient) =>
             this.httpClient = httpClient;
     }

@@ -1,5 +1,6 @@
 ﻿@page "/project/{ProjectId:int}/overview"
 @layout ContainerlessLayout
+@inject IProjectsService ProjectsService  
 
 <ProjectLayout ProjectId="@ProjectId">
     <MudPaper Width="100%"
@@ -7,9 +8,18 @@
               Elevation="3"
               Class="py-12 px-4"
               Style="@backgroundColorStyle">
-        <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@textColorStyle">
-            Here will be project overview
-        </MudText>
+        @if (project is not null)
+        {
+            <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@textColorStyle">
+                @project.Title
+            </MudText>
+        }
+        else
+        {
+            <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@textColorStyle">
+                Loading...
+            </MudText>
+        }
     </MudPaper>
 </ProjectLayout>
 
@@ -17,8 +27,16 @@
 
     [Parameter] public int ProjectId { get; set; }
 
+    private ProjectViewModel project = null;
+
     private string backgroundColorStyle = $"background-color: {Colors.Teal.Darken1}";
 
     private string textColorStyle = $"color: {Colors.Shades.White}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        project = await ProjectsService.GetByIdAsync(ProjectId);
+    }
 
 }
