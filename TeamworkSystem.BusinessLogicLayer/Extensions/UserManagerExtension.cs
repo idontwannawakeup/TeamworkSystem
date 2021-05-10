@@ -16,6 +16,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             UsersParameters parameters)
         {
             var source = userManager.Users;
+            SearchByTeamId(ref source, parameters.TeamId);
             return await PagedList<User>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -63,6 +64,18 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
                         GetUserNotFoundErrorMessage(id));
 
             return user;
+        }
+
+        private static void SearchByTeamId(
+            ref IQueryable<User> source,
+            int? teamId)
+        {
+            if (teamId is null || teamId == 0)
+            {
+                return;
+            }
+
+            source = source.Where(user => user.Teams.Any(team => team.Id == teamId));
         }
 
         private static string GetUserNotFoundErrorMessage(string id) =>

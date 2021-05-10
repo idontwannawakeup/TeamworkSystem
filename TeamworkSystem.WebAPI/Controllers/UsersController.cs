@@ -20,7 +20,6 @@ namespace TeamworkSystem.WebAPI.Controllers
         private readonly IUsersService usersService;
 
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<PagedList<UserResponse>>> GetAsync(

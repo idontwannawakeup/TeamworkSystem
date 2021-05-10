@@ -27,7 +27,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Team>> GetAsync(
             TeamsParameters parameters)
         {
-            IQueryable<Team> source = table;
+            IQueryable<Team> source = table.Include(team => team.Leader);
             SearchByMemberId(ref source, parameters.UserId);
             SearchBySpecialization(ref source, parameters.Specialization);
             return await PagedList<Team>.ToPagedListAsync(

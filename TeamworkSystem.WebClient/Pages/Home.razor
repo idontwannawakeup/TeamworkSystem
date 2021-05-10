@@ -1,9 +1,15 @@
 ﻿@using System.Security.Claims
+@using TeamworkSystem.WebClient.ViewModels
+@using TeamworkSystem.WebClient.Interfaces
 @page "/home"
+@inject IUsersService UsersService
 
-<MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
-    Hello, UserName!
-</MudText>
+@if (user is not null)
+{
+    <MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
+        Hello, @user.FullName!
+    </MudText>
+}
 
 <MudText Class="mt-2 mb-6" Style="@subtitleStyle" Typo="@Typo.h5" Align="@Align.Center">
     Welcome to our platform
@@ -50,7 +56,7 @@
                 <MudText Typo="@Typo.body1">Here you can find all tickets, which are active for you</MudText>
             </MudCardContent>
             <MudCardActions Class="mt-auto">
-                <MudButton Link="@TicketsLink"
+                <MudButton Link="/tickets"
                            Variant="@Variant.Text"
                            Color="@Color.Primary">
                     Tickets
@@ -80,9 +86,7 @@
 
     [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
 
-    private string TicketsLink => $"/tickets/{UserId}";
-
-    private string UserId { get; set; } = null;
+    private UserViewModel user = null;
 
     private string subtitleStyle = $"color: {Colors.Grey.Default};";
 
@@ -91,6 +95,7 @@
         await base.OnInitializedAsync();
         var state = await StateAsync;
         var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        user = await UsersService.GetByIdAsync(userId);
     }
 
 }

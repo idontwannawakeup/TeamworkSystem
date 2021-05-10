@@ -1,6 +1,6 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
+﻿namespace TeamworkSystem.WebClient.ViewModels
 {
-    public class ProjectResponse
+    public class ProjectViewModel
     {
         public int Id { get; set; }
 

@@ -26,6 +26,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             ProjectsParameters parameters)
         {
             IQueryable<Project> source = table;
+            SearchByTeamId(ref source, parameters.TeamId);
             return await PagedList<Project>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -41,6 +42,18 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                         GetEntityNotFoundErrorMessage(id));
 
             return project?.Team;
+        }
+
+        public static void SearchByTeamId(
+            ref IQueryable<Project> source,
+            int? teamId)
+        {
+            if (teamId is null || teamId == 0)
+            {
+                return;
+            }
+
+            source = source.Where(project => project.TeamId == teamId);
         }
 
         public ProjectsRepository(TeamworkSystemContext databaseContext)

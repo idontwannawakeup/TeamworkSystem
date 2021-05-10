@@ -1,6 +1,6 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
+﻿namespace TeamworkSystem.WebClient.ViewModels
 {
-    public class TeamResponse
+    public class TeamViewModel
     {
         public int Id { get; set; }
 
@@ -8,6 +8,6 @@
 
         public string Specialization { get; set; }
 
-        public UserResponse Leader { get; set; }
+        public UserViewModel Leader { get; set; }
     }
 }

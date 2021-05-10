@@ -1,6 +1,6 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
+﻿namespace TeamworkSystem.WebClient.ViewModels
 {
-    public class UserResponse
+    public class UserViewModel
     {
         public string Id { get; set; }
 
