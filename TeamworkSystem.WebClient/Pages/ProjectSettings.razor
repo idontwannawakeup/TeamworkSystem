@@ -1,7 +1,7 @@
-﻿@page "/project/settings"
+﻿@page "/project/{ProjectId:int}/settings"
 @layout  ContainerlessLayout
 
-<ProjectLayout>
+<ProjectLayout ProjectId="@ProjectId">
     <MudContainer MaxWidth="@MaxWidth.Small">
         <MudGrid Spacing="2" Class="mt-8">
             @foreach (var setting in Enumerable.Range(0, 4))
@@ -26,5 +26,7 @@
 </ProjectLayout> 
 
 @code {
+
+    [Parameter] public int ProjectId { get; set; }
 
 }

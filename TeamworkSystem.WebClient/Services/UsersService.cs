@@ -25,6 +25,13 @@ namespace TeamworkSystem.WebClient.Services
             return responseBody.Deserialize<UserViewModel>();
         }
 
+        public async Task<IEnumerable<UserViewModel>> GetFriendsAsync(string id)
+        {
+            var response = await httpClient.GetAsync($"friends/{id}");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody.Deserialize<List<UserViewModel>>();
+        }
+
         public UsersService(HttpClient httpClient) =>
             this.httpClient = httpClient;
     }

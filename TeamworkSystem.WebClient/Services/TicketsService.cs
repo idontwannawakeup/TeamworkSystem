@@ -25,6 +25,13 @@ namespace TeamworkSystem.WebClient.Services
             return responseBody.Deserialize<TicketViewModel>();
         }
 
+        public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId)
+        {
+            var response = await httpClient.GetAsync($"?ProjectId={projectId}");
+            var responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody.Deserialize<List<TicketViewModel>>();
+        }
+
         public TicketsService(HttpClient httpClient) =>
             this.httpClient = httpClient;
     }

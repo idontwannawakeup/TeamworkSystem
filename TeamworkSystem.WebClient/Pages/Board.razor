@@ -1,7 +1,7 @@
-﻿@page "/project/board"
+﻿@page "/project/{ProjectId:int}/board"
 @layout ContainerlessLayout 
 
-<ProjectLayout>
+<ProjectLayout ProjectId="@ProjectId">
     <MudContainer MaxWidth="@MaxWidth.ExtraLarge">
         <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">Kanban board</MudText>
         <MudGrid Spacing="3">
@@ -15,14 +15,7 @@
                         <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
                             @foreach (var number in Enumerable.Range(0, new Random().Next(1, 5)))
                             {
-                                if (loaded)
-                                {
-                                    <TicketCard />
-                                }
-                                else
-                                {
-                                    <TicketCardSkeleton />
-                                }
+                                <TicketCardSkeleton />
                             }
                         </MudElement>
 
@@ -34,6 +27,8 @@
 </ProjectLayout>
 
 @code {
+
+    [Parameter] public int ProjectId { get; set; }
 
     private bool loaded = true;
 

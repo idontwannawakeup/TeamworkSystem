@@ -1,73 +1,72 @@
-﻿@page "/project/tickets"
+﻿@page "/project/{ProjectId:int}/tickets"
 @layout ContainerlessLayout
 @inject NavigationManager NavigationManager
-@inject IDialogService DialogService 
+@inject IDialogService DialogService
+@inject ITicketsService TicketsService  
 
-<ProjectLayout>
+<ProjectLayout ProjectId="@ProjectId">
     <MudContainer MaxWidth="@MaxWidth.Large">
         <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Tickets</MudText>
 
-        <MudTable T="@int"
-                  Items="@Enumerable.Range(0, 10)"
-                  Hover="@true"
-                  Elevation="0"
-                  Dense="@true"
-                  OnRowClick="@OnRowClick">
-            <HeaderContent>
-                <MudTh>Title</MudTh>
-                <MudTh>Type</MudTh>
-                <MudTh></MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                @if (loaded)
-                {
-                    <MudTd DataLabel="Title">TicketTitle</MudTd>
+        @if (Loaded)
+        {
+            <MudTable T="@TicketViewModel"
+                      Items="@tickets"
+                      Hover="@true"
+                      Elevation="0"
+                      Dense="@true"
+                      OnRowClick="@OnRowClick">
+                <HeaderContent>
+                    <MudTh>Title</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Title">@context.Title</MudTd>
                     <MudTd DataLabel="Type">
                         <MudChip Color="@Color.Primary"
                                  Size="@Size.Small"
                                  Label="@true"
-                                 Class="mx-0 my-3">TicketEpicName</MudChip>
+                                 Class="mx-0 my-3">
+                            TicketEpicName
+                        </MudChip>
                     </MudTd>
                     <MudTd>
                         <MudElement HtmlTag="div" Class="d-flex">
                             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
-                                <MudMenuItem Link="/project/ticket/properties">Edit</MudMenuItem>
+                                <MudMenuItem Link="@GetPropertiesLink(context.Id)">Edit</MudMenuItem>
                                 <MudMenuItem OnClick="@OnDeleteClickAsync">Delete</MudMenuItem>
                             </MudMenu>
                         </MudElement>
                     </MudTd>
-                }
-                else
-                {
-                    <MudTd DataLabel="Title">
-                        <MudSkeleton Width="30%" />
-                    </MudTd>
-                    <MudTd DataLabel="Type">
-                        <MudSkeleton Width="40%" Height="35px" />
-                    </MudTd>
-                    <MudTd>
-                        <MudSkeleton SkeletonType="SkeletonType.Circle"
-                                     Animation="Animation.Wave"
-                                     Height="30px" Width="30px"
-                                     Class="ml-auto" />
-                    </MudTd>
-                }
-            </RowTemplate>
-        </MudTable>
+                </RowTemplate>
+            </MudTable>
+        }
+        else
+        {
+            <Loader />
+        }
 
         <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
                 Color="Color.Primary"
                 Icon="@Icons.Material.Filled.Add"
                 Label="Ticket" />
     </MudContainer>
-</ProjectLayout>  
+</ProjectLayout>
 
 @code {
 
-    private bool loaded = false;
+    [Parameter] public int ProjectId { get; set; }
 
-    private void OnRowClick(TableRowClickEventArgs<int> args) =>
-        NavigationManager.NavigateTo("/project/ticket");
+    private List<TicketViewModel> tickets = null;
+
+    private bool Loaded => tickets is not null;
+
+    private string GetPropertiesLink(int ticketId) =>
+        $"/project/ticket/{ticketId}/properties";
+
+    private void OnRowClick(TableRowClickEventArgs<TicketViewModel> args) =>
+        NavigationManager.NavigateTo($"/project/ticket/{args.Item.Id}");
 
     private async Task OnDeleteClickAsync() =>
         await DialogService.ShowMessageBox(
@@ -80,4 +79,9 @@
                 MaxWidth = MaxWidth.Small
             });
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        tickets = await TicketsService.GetByProjectIdAsync(ProjectId) as List<TicketViewModel>;
+    }
 }

@@ -1,7 +1,7 @@
-﻿@page "/project/overview"
+﻿@page "/project/{ProjectId:int}/overview"
 @layout ContainerlessLayout
 
-<ProjectLayout>
+<ProjectLayout ProjectId="@ProjectId">
     <MudPaper Width="100%"
               Square="@true"
               Elevation="3"
@@ -14,6 +14,8 @@
 </ProjectLayout>
 
 @code {
+
+    [Parameter] public int ProjectId { get; set; }
 
     private string backgroundColorStyle = $"background-color: {Colors.Teal.Darken1}";
 

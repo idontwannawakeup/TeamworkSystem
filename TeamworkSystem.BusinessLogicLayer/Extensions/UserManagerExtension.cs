@@ -29,7 +29,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             UsersParameters parameters)
         {
             var user = await userManager.GetByIdAsync(id);
-            var source = userManager.Users.Where(secondUser => secondUser.Friends.Contains(user));
+            var source = userManager.Users.Where(
+                secondUser => secondUser.Friends.Contains(user));
 
             return await PagedList<User>.ToPagedListAsync(
                 source,

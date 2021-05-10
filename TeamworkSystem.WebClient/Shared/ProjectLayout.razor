@@ -8,22 +8,22 @@
     <MudNavMenu>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.Visibility"
-                    Href="/project/overview">
+                    Href="@OverviewLink">
             <span>Overview</span>
         </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.DeveloperBoard"
-                    Href="/project/board">
+                    Href="@BoardLink">
             <span>Kanban Board</span>
         </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.Assignment"
-                    Href="/project/tickets">
+                    Href="@TicketsLink">
             <span>Tickets</span>
         </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.Settings"
-                    Href="/project/settings">
+                    Href="@SettingsLink">
             <span>Settings</span>
         </MudNavLink>
     </MudNavMenu>
@@ -43,7 +43,17 @@
 
 @code {
 
+    [Parameter] public int ProjectId { get; set; }
+
     [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private string OverviewLink => $"/project/{ProjectId}/overview";
+
+    private string BoardLink => $"/project/{ProjectId}/board";
+
+    private string TicketsLink => $"/project/{ProjectId}/tickets";
+
+    private string SettingsLink => $"/project/{ProjectId}/settings";
 
     private readonly string showIcon = Icons.Material.Filled.KeyboardArrowLeft;
 

@@ -9,5 +9,7 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId);
 
         Task<TicketViewModel> GetByIdAsync(int id);
+
+        Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId);
     }
 }

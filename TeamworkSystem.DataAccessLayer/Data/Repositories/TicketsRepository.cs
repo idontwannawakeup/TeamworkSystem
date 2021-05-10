@@ -16,6 +16,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             TicketsParameters parameters)
         {
             IQueryable<Ticket> source = table;
+            SearchByProjectId(ref source, parameters.ProjectId);
             SearchByExecutorId(ref source, parameters.ExecutorId);
             return await PagedList<Ticket>.ToPagedListAsync(
                 source,
@@ -31,6 +32,18 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 .SingleOrDefaultAsync(ticket => ticket.Id == id)
                     ?? throw new EntityNotFoundException(
                         GetEntityNotFoundErrorMessage(id));
+        }
+
+        private static void SearchByProjectId(
+            ref IQueryable<Ticket> source,
+            int? projectId)
+        {
+            if (projectId is null || projectId == 0)
+            {
+                return;
+            }
+
+            source = source.Where(ticket => ticket.ProjectId == projectId);
         }
 
         private static void SearchByExecutorId(

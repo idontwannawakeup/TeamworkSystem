@@ -1,48 +1,40 @@
 ﻿@page "/friends"
+@inject IUsersService UsersService
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Friends</MudText>
 
-<MudTable Items="@Enumerable.Range(0, 10)" Hover="@true" Elevation="0" Dense="@true" >
-    <HeaderContent>
-        <MudTh>Name</MudTh>
-        <MudTh>Profession</MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        @if (loaded)
-        {
+@if (Loaded)
+{
+    <MudTable T="@UserViewModel"
+              Items="@friends"
+              Hover="@true"
+              Elevation="0"
+              Dense="@true">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Profession</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
             <MudTd DataLabel="Name">
                 <MudElement HtmlTag="div" Class="d-flex align-center">
                     <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
-                    <MudText Typo="@Typo.subtitle1" Class="ml-4">FriendName</MudText>
+                    <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.FullName</MudText>
                 </MudElement>
             </MudTd>
-            <MudTd DataLabel="Profession">Profession</MudTd>
+            <MudTd DataLabel="Profession">@context.Profession</MudTd>
             <MudTd>
                 <MudElement HtmlTag="div" Class="d-flex">
                     <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="@Color.Inherit" Class="ml-auto" />
                 </MudElement>
             </MudTd>
-        }
-        else
-        {
-            @*Loading skeleton*@
-            <MudTd DataLabel="Name">
-                <MudSkeleton Width="40%" Height="40px" />
-            </MudTd>
-            <MudTd DataLabel="Profession">
-                <MudSkeleton Width="30%" />
-            </MudTd>
-            <MudTd>
-                <MudSkeleton SkeletonType="SkeletonType.Circle"
-                             Animation="Animation.Wave"
-                             Height="30px" Width="30px"
-                             Class="ml-auto" />
-            </MudTd>
-        }
-
-    </RowTemplate>
-</MudTable>
+        </RowTemplate>
+    </MudTable>
+}
+else
+{
+    <Loader />
+}
 
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
@@ -51,6 +43,17 @@
 
 @code {
 
-    private bool loaded = true;
+    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
 
+    private List<UserViewModel> friends = null;
+
+    private bool Loaded => friends is not null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await StateAsync;
+        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
+    }
 }

@@ -124,7 +124,7 @@
     private string colorGrey = $"color: {Colors.Grey.Default};";
 
     private void OnRowClick(TableRowClickEventArgs<ProjectViewModel> args) =>
-        NavigationManager.NavigateTo("/project/overview");
+        NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
 
     protected override async Task OnInitializedAsync()
     {
