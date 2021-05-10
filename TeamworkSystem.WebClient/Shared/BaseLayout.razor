@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager NavigationManager
+@inject ApiAuthenticationStateProvider StateProvider 
 
 <MudLayout>
 
@@ -29,7 +30,7 @@
                     <MudNavLink Href="/profile" Icon="@Icons.Filled.AccountCircle">Profile</MudNavLink>
                     <MudNavLink Href="/settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
                     <MudDivider Class="my-2" />
-                    <MudNavLink OnClick="@SignOut" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
+                    <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
 
                 </MudNavMenu>
             </MudPopover>
@@ -97,7 +98,10 @@
     private void ToggleAvatarMenu() =>
         avatarMenuOpen = !avatarMenuOpen;
 
-    private void SignOut() =>
+    private async Task SignOutAsync()
+    {
+        await StateProvider.MarkUserAsLoggedOutAsync();
         NavigationManager.NavigateTo("/");
+    }
 
 }

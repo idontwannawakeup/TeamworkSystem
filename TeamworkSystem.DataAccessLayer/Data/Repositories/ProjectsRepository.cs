@@ -25,8 +25,9 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public async Task<PagedList<Project>> GetAsync(
             ProjectsParameters parameters)
         {
-            IQueryable<Project> source = table;
+            IQueryable<Project> source = table.Include(project => project.Team);
             SearchByTeamId(ref source, parameters.TeamId);
+            SearchByTeamMemberId(ref source, parameters.TeamMemberId);
             return await PagedList<Project>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -54,6 +55,19 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             }
 
             source = source.Where(project => project.TeamId == teamId);
+        }
+
+        public static void SearchByTeamMemberId(
+            ref IQueryable<Project> source,
+            string teamMemberId)
+        {
+            if (string.IsNullOrWhiteSpace(teamMemberId))
+            {
+                return;
+            }
+
+            source = source.Where(
+                project => project.Team.Members.Any(user => user.Id == teamMemberId));
         }
 
         public ProjectsRepository(TeamworkSystemContext databaseContext)

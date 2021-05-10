@@ -1,60 +1,51 @@
 ﻿@page "/projects"
 @inject NavigationManager NavigationManager
+@inject IProjectsService ProjectsService
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Projects</MudText>
 
-<MudTable T="@int" Items="@Enumerable.Range(0, 5)" Hover="@true" Elevation="0" Dense="@true" OnRowClick="@OnRowClick">
-    <HeaderContent>
-        <MudTh>Name</MudTh>
-        <MudTh>Type</MudTh>
-        <MudTh>Team</MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        @if (loaded)
-        {
+@if (Loaded)
+{
+    <MudTable T="@ProjectViewModel"
+              Items="@projects"
+              Hover="@true"
+              Elevation="0"
+              Dense="@true"
+              OnRowClick="@OnRowClick">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Type</MudTh>
+            <MudTh>Team</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
             <MudTd DataLabel="Name">
                 <MudElement HtmlTag="div" Class="d-flex align-center">
                     <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
-                    <MudText Typo="@Typo.subtitle1" Class="ml-4">ProjectName</MudText>
+                    <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Title</MudText>
                 </MudElement>
             </MudTd>
-            <MudTd DataLabel="Profession">Type</MudTd>
+            <MudTd DataLabel="Profession">@context.Type</MudTd>
             <MudTd DataLabel="Team">
                 <MudElement HtmlTag="div" Class="d-flex align-center">
                     <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
-                    <MudText Typo="@Typo.subtitle1" Class="ml-4">Team</MudText>
+                    <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Team.Name</MudText>
                 </MudElement>
             </MudTd>
             <MudTd>
                 <MudElement HtmlTag="div" Class="d-flex">
                     <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
-                        <MudMenuItem>Item</MudMenuItem>
+                        <MudMenuItem>Edit</MudMenuItem>
                     </MudMenu>
                 </MudElement>
             </MudTd>
-        }
-        else
-        {
-            @*Loading skeleton*@
-            <MudTd DataLabel="Name">
-                <MudSkeleton Width="40%" Height="40px" />
-            </MudTd>
-            <MudTd DataLabel="Profession">
-                <MudSkeleton Width="30%" />
-            </MudTd>
-            <MudTd DataLabel="Team">
-                <MudSkeleton Width="50%" Height="40px" />
-            </MudTd>
-            <MudTd>
-                <MudSkeleton SkeletonType="SkeletonType.Circle"
-                             Animation="Animation.Wave"
-                             Height="30px" Width="30px"
-                             Class="ml-auto" />
-            </MudTd>
-        }
-    </RowTemplate>
-</MudTable>
+        </RowTemplate>
+    </MudTable>
+}
+else
+{
+    <Loader />
+}
 
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
@@ -63,9 +54,20 @@
 
 @code {
 
-    private bool loaded = true;
+    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
 
-    private void OnRowClick(TableRowClickEventArgs<int> args) =>
+    private List<ProjectViewModel> projects = null;
+
+    private bool Loaded => projects is not null;
+
+    private void OnRowClick(TableRowClickEventArgs<ProjectViewModel> args) =>
         NavigationManager.NavigateTo("/project/overview");
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await StateAsync;
+        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        projects = await ProjectsService.GetProjectsForTeamMemberAsync(userId) as List<ProjectViewModel>;
+    }
 }

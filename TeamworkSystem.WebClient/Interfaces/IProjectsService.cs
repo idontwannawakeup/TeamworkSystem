@@ -7,5 +7,7 @@ namespace TeamworkSystem.WebClient.Interfaces
     public interface IProjectsService
     {
         Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId);
+
+        Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(string teamMemberId);
     }
 }

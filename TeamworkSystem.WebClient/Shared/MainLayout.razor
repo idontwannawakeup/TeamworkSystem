@@ -1,12 +1,16 @@
 ﻿@inherits LayoutComponentBase
 
-<BaseLayout>
-    <Body>
-        <MudContainer MaxWidth="@MaxWidth.Large" Class="pb-8">
-            @Body
-        </MudContainer>
-    </Body>
-</BaseLayout>
+<AuthorizeView>
+    <Authorized>
+        <BaseLayout>
+            <Body>
+                <MudContainer MaxWidth="@MaxWidth.Large" Class="pb-8">
+                    @Body
+                </MudContainer>
+            </Body>
+        </BaseLayout>
+    </Authorized>
+</AuthorizeView>
 
 @code {
 

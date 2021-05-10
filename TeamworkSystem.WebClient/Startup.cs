@@ -31,7 +31,9 @@ namespace TeamworkSystem.WebClient
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
 
-            services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+            services.AddScoped<AuthenticationStateProvider>(
+                provider => provider.GetRequiredService<ApiAuthenticationStateProvider>());
+
             services.AddScoped<ApiAuthenticationStateProvider>();
 
             string apiUrl = Configuration["ApiUrl"];

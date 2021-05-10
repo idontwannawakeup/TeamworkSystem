@@ -33,7 +33,7 @@ namespace TeamworkSystem.WebClient.Authentication
             NotifyAuthenticationStateChanged(Task.FromResult(state));
         }
 
-        public async Task MarkUserAsLoggedOut()
+        public async Task MarkUserAsLoggedOutAsync()
         {
             await localStorage.RemoveItemAsync("securityToken");
             NotifyAuthenticationStateChanged(Task.FromResult(AnonymousState));

@@ -1,6 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
-<BaseLayout Body="@Body" />
+<AuthorizeView>
+    <Authorized>
+        <BaseLayout Body="@Body" />
+    </Authorized>
+</AuthorizeView>
 
 @code {
 
