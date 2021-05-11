@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.DataAccessLa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.BusinessLogicLayer", "TeamworkSystem.BusinessLogicLayer\TeamworkSystem.BusinessLogicLayer.csproj", "{44F5F84B-864B-43AE-B6C9-49BACA602BAA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WebClient", "TeamworkSystem.WebClient\TeamworkSystem.WebClient.csproj", "{D4A4D956-6237-4A89-876E-C33746DA18D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A4D956-6237-4A89-876E-C33746DA18D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A4D956-6237-4A89-876E-C33746DA18D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A4D956-6237-4A89-876E-C33746DA18D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A4D956-6237-4A89-876E-C33746DA18D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

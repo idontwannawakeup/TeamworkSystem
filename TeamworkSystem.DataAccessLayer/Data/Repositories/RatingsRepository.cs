@@ -15,16 +15,21 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     {
         public override async Task<Rating> GetCompleteEntityAsync(int id)
         {
-            return await this.table
+            return await table
                 .Include(rating => rating.From)
                 .Include(rating => rating.To)
                 .SingleOrDefaultAsync(rating => rating.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<PagedList<Rating>> GetAsync(RatingsParameters parameters)
+        public async Task<PagedList<Rating>> GetAsync(
+            RatingsParameters parameters)
         {
-            IQueryable<Rating> source = this.table;
+            IQueryable<Rating> source = table.Include(rating => rating.From)
+                                             .Include(rating => rating.To);
+
+            SearchByRatedUserId(ref source, parameters.RatedUserId);
             return await PagedList<Rating>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -33,16 +38,26 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId)
         {
-            return await this.table
-                .Where(rating => rating.FromId == userId)
-                .ToListAsync();
+            return await table.Where(rating => rating.FromId == userId)
+                              .ToListAsync();
         }
 
         public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId)
         {
-            return await this.table
-                .Where(rating => rating.ToId == userId)
-                .ToListAsync();
+            return await table.Where(rating => rating.ToId == userId)
+                              .ToListAsync();
+        }
+
+        private static void SearchByRatedUserId(
+            ref IQueryable<Rating> source,
+            string ratedUserId)
+        {
+            if (string.IsNullOrWhiteSpace(ratedUserId))
+            {
+                return;
+            }
+
+            source = source.Where(rating => rating.ToId == ratedUserId);
         }
 
         public RatingsRepository(TeamworkSystemContext databaseContext)

@@ -1,0 +1,135 @@
+﻿@page "/team/{TeamId:int}"
+@inject NavigationManager NavigationManager
+@inject ITeamsService TeamsService
+@inject IProjectsService ProjectsService
+@inject IUsersService UsersService  
+
+<MudGrid Spacing="3" Class="mt-8">
+
+    <MudItem xs="12" md="3" Class="d-flex flex-column gap-4">
+
+        <MudPaper Elevation="4" Class="pa-4">
+            @if (Loaded)
+            {
+                <MudText Typo="@Typo.h6" Class="py-1">@team.Name</MudText>
+                <MudText Typo="@Typo.subtitle1" Class="py-1">@team.Specialization</MudText>
+                <MudButton Variant="@Variant.Outlined"
+                           Color="@Color.Tertiary"
+                           EndIcon="@Icons.Material.Filled.Add"
+                           IconColor="@Color.Inherit"
+                           Class="my-1">
+                    Add member
+                </MudButton>
+            }
+            else
+            {
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+            }
+        </MudPaper>
+
+        <MudPaper Elevation="4" Class="pa-4">
+            @if (members is not null)
+            {
+                <MudText Typo="@Typo.h6" Class="py-1">Members</MudText>
+                <MudText Typo="@Typo.subtitle1"
+                         Style="@colorGrey"
+                         Class="pb-1">
+                    Total count: @members.Count
+                </MudText>
+                <MudDivider Class="my-2" />
+                <MudList Clickable="@true">
+                    @foreach (var member in members)
+                    {
+                        <MudListItem>
+                            <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                                <MudElement HtmlTag="div" Class="d-flex flex-column">
+                                    <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
+                                    <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
+                                </MudElement>
+                            </MudElement>
+                        </MudListItem>
+                    }
+                </MudList>
+                <MudButton Class="@(ShowLess ? "d-none" : null)"
+                           Variant="@Variant.Outlined"
+                           Color="@Color.Tertiary"
+                           FullWidth="@true">
+                    Show more
+                </MudButton>
+            }
+            else
+            {
+                <Loader />
+            }
+        </MudPaper>
+
+    </MudItem>
+
+    <MudItem xs="12" md="9">
+        @if (projects is not null)
+        {
+            <MudTable T="@ProjectViewModel"
+                      Items="@projects"
+                      Hover="@true"
+                      Elevation="4"
+                      OnRowClick="@OnRowClick">
+                <ToolBarContent>
+                    <MudText Typo="@Typo.h4">Projects</MudText>
+                    <MudToolBarSpacer />
+                    @*<MudTextField T="@string"
+                                  Adornment="@Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.Search"
+                                  Variant="@Variant.Text"
+                                  Label="Search" />*@
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>Name</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh>Url</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Name">@context.Title</MudTd>
+                    <MudTd DataLabel="Type">@context.Type</MudTd>
+                    <MudTd DataLabel="Url">@context.Url</MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+        else
+        {
+            <Loader />
+        }
+    </MudItem>
+
+</MudGrid>
+
+@code {
+
+    [Parameter] public int TeamId { get; set; }
+
+    private TeamViewModel team = null;
+
+    private List<ProjectViewModel> projects = null;
+
+    private List<UserViewModel> members = null;
+
+    private bool Loaded => team is not null;
+
+    private bool ShowLess => members.Count < 10;
+
+    private string colorGrey = $"color: {Colors.Grey.Default};";
+
+    private void OnRowClick(TableRowClickEventArgs<ProjectViewModel> args) =>
+        NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        team = await TeamsService.GetByIdAsync(TeamId);
+        projects = await ProjectsService.GetByTeamIdAsync(TeamId) as List<ProjectViewModel>;
+        members = await UsersService.GetByTeamIdAsync(TeamId) as List<UserViewModel>;
+    }
+
+}

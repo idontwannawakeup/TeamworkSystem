@@ -1,0 +1,46 @@
+﻿@page "/tickets"
+@inject ITicketsService TicketsService
+
+<MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Your active tickets</MudText>
+
+<MudGrid Spacing="3">
+    @if (Loaded && tickets.Count != 0)
+    {
+        @foreach (var ticket in tickets)
+        {
+            <MudItem xs="12" sm="6" md="3">
+                <TicketCard Ticket="@ticket" />
+            </MudItem>
+        }
+    }
+    else if (Loaded)
+    {
+        <MudItem xs="12">
+            <MudText Typo="@Typo.h5" Align="@Align.Center">You don't have any active tickets.</MudText>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" Class="d-flex justify-center">
+            <Loader />
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+
+    private List<TicketViewModel> tickets = null;
+
+    private bool Loaded => tickets is not null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await StateAsync;
+        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        tickets = await TicketsService.GetTicketsForUserAsync(userId) as List<TicketViewModel>;
+    }
+
+}

@@ -4,6 +4,8 @@ namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
 {
     public class TicketRequest
     {
+        public int Id { get; set; }
+
         public int ProjectId { get; set; }
 
         public string ExecutorId { get; set; }

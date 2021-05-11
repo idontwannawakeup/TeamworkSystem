@@ -14,16 +14,20 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
     {
         public override async Task<Project> GetCompleteEntityAsync(int id)
         {
-            return await this.table
+            return await table
                 .Include(project => project.Team)
                 .Include(project => project.Tickets)
                 .SingleOrDefaultAsync(project => project.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<PagedList<Project>> GetAsync(ProjectsParameters parameters)
+        public async Task<PagedList<Project>> GetAsync(
+            ProjectsParameters parameters)
         {
-            IQueryable<Project> source = this.table;
+            IQueryable<Project> source = table.Include(project => project.Team);
+            SearchByTeamId(ref source, parameters.TeamId);
+            SearchByTeamMemberId(ref source, parameters.TeamMemberId);
             return await PagedList<Project>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -32,12 +36,38 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<Team> GetRelatedTeamAsync(int id)
         {
-            Project project = await this.table
+            var project = await table
                 .Include(project => project.Team)
                 .SingleOrDefaultAsync(project => project.Id == id)
-                    ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+                    ?? throw new EntityNotFoundException(
+                        GetEntityNotFoundErrorMessage(id));
 
             return project?.Team;
+        }
+
+        public static void SearchByTeamId(
+            ref IQueryable<Project> source,
+            int? teamId)
+        {
+            if (teamId is null || teamId == 0)
+            {
+                return;
+            }
+
+            source = source.Where(project => project.TeamId == teamId);
+        }
+
+        public static void SearchByTeamMemberId(
+            ref IQueryable<Project> source,
+            string teamMemberId)
+        {
+            if (string.IsNullOrWhiteSpace(teamMemberId))
+            {
+                return;
+            }
+
+            source = source.Where(
+                project => project.Team.Members.Any(user => user.Id == teamMemberId));
         }
 
         public ProjectsRepository(TeamworkSystemContext databaseContext)

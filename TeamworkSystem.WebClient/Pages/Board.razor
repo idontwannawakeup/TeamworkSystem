@@ -1,0 +1,77 @@
+﻿@page "/project/{ProjectId:int}/board"
+@layout ContainerlessLayout 
+
+<ProjectLayout ProjectId="@ProjectId">
+    <MudContainer MaxWidth="@MaxWidth.ExtraLarge">
+        <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">Kanban board</MudText>
+        <MudGrid Spacing="3">
+
+            <MudItem xs="12" md="6" lg="3">
+                <MudPaper Elevation="3" Class="pa-5">
+                    <MudText Typo="@Typo.h5" Class="py-1">Backlog</MudText>
+                    <MudDivider Class="mb-4" />
+
+                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                        @foreach (var number in Enumerable.Range(0, 5))
+                        {
+                            <TicketCardSkeleton />
+                        }
+                    </MudElement>
+
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" md="6" lg="3">
+                <MudPaper Elevation="3" Class="pa-5">
+                    <MudText Typo="@Typo.h5" Class="py-1">Chosen For Development</MudText>
+                    <MudDivider Class="mb-4" />
+
+                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                        @foreach (var number in Enumerable.Range(0, 5))
+                        {
+                            <TicketCardSkeleton />
+                        }
+                    </MudElement>
+
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" md="6" lg="3">
+                <MudPaper Elevation="3" Class="pa-5">
+                    <MudText Typo="@Typo.h5" Class="py-1">In Progress</MudText>
+                    <MudDivider Class="mb-4" />
+
+                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                        @foreach (var number in Enumerable.Range(0, 5))
+                        {
+                            <TicketCardSkeleton />
+                        }
+                    </MudElement>
+
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" md="6" lg="3">
+                <MudPaper Elevation="3" Class="pa-5">
+                    <MudText Typo="@Typo.h5" Class="py-1">Done</MudText>
+                    <MudDivider Class="mb-4" />
+
+                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                        @foreach (var number in Enumerable.Range(0, 5))
+                        {
+                            <TicketCardSkeleton />
+                        }
+                    </MudElement>
+
+                </MudPaper>
+            </MudItem>
+
+        </MudGrid>
+    </MudContainer>
+</ProjectLayout>
+
+@code {
+
+    [Parameter] public int ProjectId { get; set; }
+
+}

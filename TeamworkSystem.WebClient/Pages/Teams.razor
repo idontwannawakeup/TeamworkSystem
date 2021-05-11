@@ -1,0 +1,61 @@
+﻿@page "/teams"
+@inject NavigationManager NavigationManager
+@inject ITeamsService TeamsService
+
+<MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Teams</MudText>
+
+@if (Loaded)
+{
+    <MudTable Class="mb-12"
+              T="@TeamViewModel"
+              Items="@teams"
+              Hover="@true"
+              Breakpoint="@Breakpoint.Sm"
+              Elevation="0"
+              OnRowClick="@OnRowClick"
+              RowClass="cursor-pointer">
+        <HeaderContent>
+            <MudTh Class="ml-3">Name</MudTh>
+            <MudTh>Specialization</MudTh>
+            <MudTh>Leader</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd Class="ml-3" DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Specialization">@context.Specialization</MudTd>
+            <MudTd DataLabel="Leader">
+                <MudAvatar Class="ml-auto" Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                <span class="ml-2">@context.Leader.FullName</span>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else
+{
+    <Loader />
+}
+
+<MudFab Style="position: fixed; bottom: 20px; right: 20px;"
+        Color="Color.Primary"
+        Icon="@Icons.Material.Filled.Add"
+        Label="Team" />
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+
+    private List<TeamViewModel> teams = null;
+
+    private bool Loaded => teams is not null;
+
+    private void OnRowClick(TableRowClickEventArgs<TeamViewModel> args) =>
+        NavigationManager.NavigateTo($"/team/{args.Item.Id}");
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await StateAsync;
+        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        teams = await TeamsService.GetTeamsForUserAsync(userId) as List<TeamViewModel>;
+    }
+
+}

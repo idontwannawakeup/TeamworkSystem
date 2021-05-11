@@ -24,10 +24,11 @@ namespace TeamworkSystem.DataAccessLayer.Data
 
         public async Task SaveChangesAsync()
         {
-            await this.databaseContext.SaveChangesAsync();
+            await databaseContext.SaveChangesAsync();
         }
 
-        public UnitOfWork(TeamworkSystemContext databaseContext,
+        public UnitOfWork(
+            TeamworkSystemContext databaseContext,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IProjectsRepository projectsRepository,
@@ -36,12 +37,12 @@ namespace TeamworkSystem.DataAccessLayer.Data
             ITicketsRepository ticketsRepository)
         {
             this.databaseContext = databaseContext;
-            this.UserManager = userManager;
-            this.SignInManager = signInManager;
-            this.ProjectsRepository = projectsRepository;
-            this.RatingsRepository = ratingsRepository;
-            this.TeamsRepository = teamsRepository;
-            this.TicketsRepository = ticketsRepository;
+            UserManager = userManager;
+            SignInManager = signInManager;
+            ProjectsRepository = projectsRepository;
+            RatingsRepository = ratingsRepository;
+            TeamsRepository = teamsRepository;
+            TicketsRepository = ticketsRepository;
         }
     }
 }

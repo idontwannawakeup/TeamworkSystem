@@ -15,7 +15,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             this UserManager<User> userManager,
             UsersParameters parameters)
         {
-            IQueryable<User> source = userManager.Users;
+            var source = userManager.Users;
+            SearchByTeamId(ref source, parameters.TeamId);
             return await PagedList<User>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -27,10 +28,9 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             string id,
             UsersParameters parameters)
         {
-            User user = await userManager.GetByIdAsync(id);
-
-            IQueryable<User> source = userManager.Users
-                .Where(secondUser => secondUser.Friends.Contains(user));
+            var user = await userManager.GetByIdAsync(id);
+            var source = userManager.Users.Where(
+                secondUser => secondUser.Friends.Contains(user));
 
             return await PagedList<User>.ToPagedListAsync(
                 source,
@@ -42,7 +42,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             this UserManager<User> userManager,
             string id)
         {
-            User user = await userManager.FindByIdAsync(id)
+            var user = await userManager.FindByIdAsync(id)
                 ?? throw new EntityNotFoundException(
                     GetUserNotFoundErrorMessage(id));
 
@@ -53,7 +53,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             this UserManager<User> userManager,
             string id)
         {
-            User user = await userManager.Users
+            var user = await userManager.Users
                 .Include(user => user.Teams)
                 .Include(user => user.Tickets)
                 .Include(user => user.MyRatings)
@@ -65,6 +65,18 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
                         GetUserNotFoundErrorMessage(id));
 
             return user;
+        }
+
+        private static void SearchByTeamId(
+            ref IQueryable<User> source,
+            int? teamId)
+        {
+            if (teamId is null || teamId == 0)
+            {
+                return;
+            }
+
+            source = source.Where(user => user.Teams.Any(team => team.Id == teamId));
         }
 
         private static string GetUserNotFoundErrorMessage(string id) =>

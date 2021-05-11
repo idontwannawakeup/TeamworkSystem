@@ -24,53 +24,72 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task<IEnumerable<TicketResponse>> GetAsync()
         {
-            IEnumerable<Ticket> tickets = await this.ticketsRepository.GetAsync();
-            return tickets?.Select(this.mapper.Map<Ticket, TicketResponse>);
+            var tickets = await ticketsRepository.GetAsync();
+            return tickets?.Select(mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<PagedList<TicketResponse>> GetAsync(TicketsParameters parameters)
+        public async Task<PagedList<TicketResponse>> GetAsync(
+            TicketsParameters parameters)
         {
-            PagedList<Ticket> tickets = await this.ticketsRepository.GetAsync(parameters);
-            return tickets?.Map(this.mapper.Map<Ticket, TicketResponse>);
+            var tickets = await ticketsRepository.GetAsync(parameters);
+            return tickets?.Map(mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<TicketResponse> GetProfileByIdAsync(int id)
+        public async Task<TicketResponse> GetByIdAsync(int id)
         {
-            Ticket ticket = await this.ticketsRepository.GetByIdAsync(id);
-            return this.mapper.Map<Ticket, TicketResponse>(ticket);
+            var ticket = await ticketsRepository.GetCompleteEntityAsync(id);
+            return mapper.Map<Ticket, TicketResponse>(ticket);
         }
 
         public async Task InsertAsync(TicketRequest request)
         {
-            Ticket ticket = this.mapper.Map<TicketRequest, Ticket>(request);
-            await this.ticketsRepository.InsertAsync(ticket);
-            await this.unitOfWork.SaveChangesAsync();
+            var ticket = mapper.Map<TicketRequest, Ticket>(request);
+            await ticketsRepository.InsertAsync(ticket);
+            await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task ExtendDeadlineAsync(TicketWithExtendedDeadlineRequest request)
+        public async Task UpdateAsync(TicketRequest request)
         {
-            Ticket ticket = await this.ticketsRepository.GetByIdAsync(request.Id);
+            var ticket = await ticketsRepository.GetByIdAsync(request.Id);
+            ticket.ProjectId = request.ProjectId;
+            ticket.ExecutorId = request.ExecutorId;
+            ticket.Title = request.Title;
+            ticket.Type = request.Type;
+            ticket.Description = request.Description;
+            ticket.Status = request.Status;
+            ticket.Priority = request.Priority;
+            ticket.Deadline = request.Deadline;
+            await ticketsRepository.UpdateAsync(ticket);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task ExtendDeadlineAsync(
+            TicketWithExtendedDeadlineRequest request)
+        {
+            var ticket = await ticketsRepository.GetByIdAsync(request.Id);
+
             if (ticket.Deadline > request.Deadline)
             {
-                throw new Exception("New date of deadline is sooner than current.");
+                throw new Exception(
+                    "New date of deadline is sooner than current.");
             }
 
             ticket.Deadline = request.Deadline;
-            await this.ticketsRepository.UpdateAsync(ticket);
-            await this.unitOfWork.SaveChangesAsync();
+            await ticketsRepository.UpdateAsync(ticket);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            await this.ticketsRepository.DeleteAsync(id);
-            await this.unitOfWork.SaveChangesAsync();
+            await ticketsRepository.DeleteAsync(id);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public TicketsService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.ticketsRepository = this.unitOfWork.TicketsRepository;
+            ticketsRepository = this.unitOfWork.TicketsRepository;
         }
     }
 }

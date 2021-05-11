@@ -10,6 +10,16 @@ namespace TeamworkSystem.BusinessLogicLayer.DTO.Responses
 
         public string Type { get; set; }
 
-        public DateTime Deadline { get; set; }
+        public string Description { get; set; }
+
+        public string Status { get; set; }
+
+        public string Priority { get; set; }
+
+        public DateTime CreationTime { get; set; }
+
+        public DateTime? Deadline { get; set; }
+
+        public UserResponse Executor { get; set; }
     }
 }

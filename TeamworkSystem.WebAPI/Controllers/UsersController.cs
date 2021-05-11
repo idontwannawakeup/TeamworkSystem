@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +8,7 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
+using TeamworkSystem.WebAPI.Extensions;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -27,17 +26,13 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                PagedList<UserResponse> users =
-                    await this.usersService.GetAsync(parameters);
-
-                this.Response.Headers.Add("X-Pagination",
-                    JsonSerializer.Serialize(users.Metadata));
-
-                return this.Ok(users);
+                var users = await usersService.GetAsync(parameters);
+                Response.Headers.Add("X-Pagination", users.SerializeMetadata());
+                return Ok(users);
             }
             catch (Exception e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
         }
 
@@ -49,101 +44,32 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.usersService.GetByIdAsync(id));
+                return Ok(await usersService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
-        [HttpGet("friends/{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PagedList<UserResponse>>> GetFriends(
-            [FromRoute] string id,
-            [FromQuery] UsersParameters parameters)
+        public async Task<ActionResult> UpdateAsync([FromBody] UserRequest request)
         {
             try
             {
-                PagedList<UserResponse> friends =
-                    await this.usersService.GetFriendsAsync(id, parameters);
-
-                this.Response.Headers.Add("X-Pagination",
-                    JsonSerializer.Serialize(friends.Metadata));
-
-                return this.Ok(friends);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return this.NotFound(new { e.Message });
+                await usersService.UpdateAsync(request);
+                return Ok();
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpPost("signUp")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> SignUpAsync([FromBody] UserSignUpRequest user)
-        {
-            try
-            {
-                await this.usersService.SignUpAsync(user);
-                return this.Ok();
-            }
-            catch (ArgumentException e)
-            {
-                return this.BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpPost("friends")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> AddFriendAsync([FromBody] FriendsRequest request)
-        {
-            try
-            {
-                await this.usersService.AddFriendAsync(request);
-                return this.Ok();
-            }
-            catch (EntityNotFoundException e)
-            {
-                return this.NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return this.BadRequest(new { e.Message });
-            }
-        }
-
-        [HttpDelete("friends")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> DeleteFriendAsync([FromBody] FriendsRequest request)
-        {
-            try
-            {
-                await this.usersService.DeleteFriendAsync(request);
-                return this.Ok();
-            }
-            catch (EntityNotFoundException e)
-            {
-                return this.NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -155,16 +81,82 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.usersService.DeleteAsync(id);
-                return this.Ok();
+                await usersService.DeleteAsync(id);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpGet("friends/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PagedList<UserResponse>>> GetFriendsAsync(
+            [FromRoute] string id,
+            [FromQuery] UsersParameters parameters)
+        {
+            try
+            {
+                var friends = await usersService.GetFriendsAsync(id, parameters);
+                Response.Headers.Add("X-Pagination", friends.SerializeMetadata());
+                return Ok(friends);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpPost("friends")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> AddFriendAsync([FromBody] FriendsRequest request)
+        {
+            try
+            {
+                await usersService.AddFriendAsync(request);
+                return Ok();
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpDelete("friends")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteFriendAsync([FromBody] FriendsRequest request)
+        {
+            try
+            {
+                await usersService.DeleteFriendAsync(request);
+                return Ok();
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
             }
         }
 

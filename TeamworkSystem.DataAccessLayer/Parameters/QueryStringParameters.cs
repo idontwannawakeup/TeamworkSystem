@@ -1,6 +1,6 @@
 ﻿namespace TeamworkSystem.DataAccessLayer.Parameters
 {
-    public abstract class QueryStringParameters
+    public class QueryStringParameters
     {
         protected const int MaxPageSize = 50;
 
@@ -10,9 +10,9 @@
 
         public int PageSize
         {
-            get => this.pageSize;
+            get => pageSize;
 
-            set => this.pageSize = (value > MaxPageSize)
+            set => pageSize = (value > MaxPageSize)
                 ? MaxPageSize
                 : value;
         }

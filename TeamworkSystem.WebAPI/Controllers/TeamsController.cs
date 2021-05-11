@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,7 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
+using TeamworkSystem.WebAPI.Extensions;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -26,17 +26,13 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                PagedList<TeamResponse> profiles =
-                    await this.teamsService.GetAsync(parameters);
-
-                this.Response.Headers.Add("X-Pagination",
-                    JsonSerializer.Serialize(profiles.Metadata));
-
-                return this.Ok(profiles);
+                var teams = await teamsService.GetAsync(parameters);
+                Response.Headers.Add("X-Pagination", teams.SerializeMetadata());
+                return Ok(teams);
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -48,15 +44,15 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return this.Ok(await this.teamsService.GetByIdAsync(id));
+                return Ok(await teamsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -67,12 +63,28 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.teamsService.InsertAsync(request);
-                return this.Ok();
+                await teamsService.InsertAsync(request);
+                return Ok();
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateAsync([FromBody] TeamRequest request)
+        {
+            try
+            {
+                await teamsService.UpdateAsync(request);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
             }
         }
 
@@ -84,16 +96,16 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await this.teamsService.DeleteAsync(id);
-                return this.Ok();
+                await teamsService.DeleteAsync(id);
+                return Ok();
             }
             catch (EntityNotFoundException e)
             {
-                return this.NotFound(new { e.Message });
+                return NotFound(new { e.Message });
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { e.Message });
+                return BadRequest(new { e.Message });
             }
         }
 

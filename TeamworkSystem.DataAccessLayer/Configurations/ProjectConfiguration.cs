@@ -18,7 +18,7 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
 
             builder.Property(project => project.Type)
                    .HasMaxLength(50);
-            
+
             builder.Property(project => project.Url)
                    .HasMaxLength(50);
 

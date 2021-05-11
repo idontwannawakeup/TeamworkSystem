@@ -1,4 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.BusinessLogicLayer.Configurations;
+using TeamworkSystem.BusinessLogicLayer.Factories;
+using TeamworkSystem.BusinessLogicLayer.Interfaces;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.BusinessLogicLayer.Services;
 using TeamworkSystem.DataAccessLayer;
@@ -20,10 +29,8 @@ namespace TeamworkSystem.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            this.Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) =>
+            Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -33,13 +40,9 @@ namespace TeamworkSystem.WebAPI
         {
             services.AddDbContext<TeamworkSystemContext>(options =>
             {
-                string connectionString = this.Configuration.GetConnectionString("DefaultConnection");
+                string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
-
-            services.AddIdentity<User, IdentityRole>()
-                    .AddDefaultTokenProviders()
-                    .AddEntityFrameworkStores<TeamworkSystemContext>();
 
             services.AddTransient<IProjectsRepository, ProjectsRepository>();
             services.AddTransient<IRatingsRepository, RatingsRepository>();
@@ -53,8 +56,44 @@ namespace TeamworkSystem.WebAPI
             services.AddTransient<ITeamsService, TeamsService>();
             services.AddTransient<ITicketsService, TicketsService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IIdentityService, IdentityService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddTransient<JwtTokenConfiguration>();
+            services.AddTransient<IJwtSecurityTokenFactory, JwtSecurityTokenFactory>();
+
+            services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
+            services.AddMvc(options =>
+                    {
+                        options.EnableEndpointRouting = false;
+                    })
+                    .AddFluentValidation(configuration =>
+                    {
+                        configuration.RegisterValidatorsFromAssemblies(
+                            AppDomain.CurrentDomain.GetAssemblies());
+                    });
+
+            services.AddIdentityCore<User>()
+                    .AddRoles<IdentityRole>()
+                    .AddSignInManager<SignInManager<User>>()
+                    .AddDefaultTokenProviders()
+                    .AddEntityFrameworkStores<TeamworkSystemContext>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new()
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"])),
+                            ClockSkew = TimeSpan.Zero,
+                        };
+                    });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -63,6 +102,36 @@ namespace TeamworkSystem.WebAPI
                 {
                     Title = "TeamworkSystem.WebAPI",
                     Version = "v1"
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme.
+                                    Enter 'Bearer' [space] and then your token in the
+                                    text input below. Example: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                        },
+                        new List<string>()
+                    }
                 });
             });
         }

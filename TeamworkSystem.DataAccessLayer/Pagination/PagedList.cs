@@ -16,31 +16,31 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
 
         public int TotalEntitiesCount { get; private set; }
 
-        public bool HasPrevious => this.CurrentPage > 1;
+        public bool HasPrevious => CurrentPage > 1;
 
-        public bool HasNext => this.CurrentPage < this.TotalPages;
+        public bool HasNext => CurrentPage < TotalPages;
 
         public object Metadata => new
         {
-            this.CurrentPage,
-            this.TotalPages,
-            this.PageSize,
-            this.TotalEntitiesCount,
-            this.HasPrevious,
-            this.HasNext
+            CurrentPage,
+            TotalPages,
+            PageSize,
+            TotalEntitiesCount,
+            HasPrevious,
+            HasNext
         };
 
         public PagedList<TOut> Map<TOut>(Func<T, TOut> selectExpression)
         {
-            IEnumerable<TOut> mappedItems = this.Select(selectExpression);
+            var mappedItems = this.Select(selectExpression);
             return new(
                 mappedItems,
-                this.TotalEntitiesCount,
-                this.CurrentPage,
-                this.PageSize);
+                TotalEntitiesCount,
+                CurrentPage,
+                PageSize);
         }
 
-        public async static Task<PagedList<T>> ToPagedListAsync(
+        public static async Task<PagedList<T>> ToPagedListAsync(
             IQueryable<T> source,
             int pageNumber,
             int pageSize)
@@ -61,12 +61,13 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
             int pageNumber,
             int pageSize)
         {
-            this.CurrentPage = pageNumber;
-            this.PageSize = pageSize;
-            this.TotalEntitiesCount = totalEntitiesCount;
-            this.TotalPages = (int) Math.Ceiling(totalEntitiesCount / (double) pageSize);
+            CurrentPage = pageNumber;
+            PageSize = pageSize;
+            TotalEntitiesCount = totalEntitiesCount;
+            TotalPages = (int) Math.Ceiling(
+                totalEntitiesCount / (double) pageSize);
 
-            this.AddRange(items);
+            AddRange(items);
         }
     }
 }

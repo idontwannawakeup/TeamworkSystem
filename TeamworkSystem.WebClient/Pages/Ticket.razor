@@ -1,0 +1,160 @@
+﻿@page "/project/ticket/{TicketId:int}"
+@layout ContainerlessLayout
+@inject IDialogService DialogService
+@inject ITicketsService TicketsService  
+
+<ProjectLayout>
+    <MudContainer MaxWidth="@MaxWidth.Large">
+        <MudElement HtmlTag="div" Class="d-flex flex-wrap justify-space-between mb-2">
+            @if (Loaded)
+            {
+                <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">@ticket.Title</MudText>
+            }
+            else
+            {
+                <MudSkeleton Width="25%" Height="45px" Class="mt-3 mt-md-8 mb-4" />
+            }
+            <MudElement HtmlTag="div" Class="d-flex align-center gap-4">
+                <MudButton Variant="@Variant.Outlined"
+                           Color="@Color.Info"
+                           EndIcon="@Icons.Material.Filled.Edit"
+                           Link="@PropertiesLink">
+                    Edit
+                </MudButton>
+                <MudButton Variant="@Variant.Outlined"
+                           Color="@Color.Error"
+                           EndIcon="@Icons.Material.Filled.Delete"
+                           OnClick="@OnDeleteClickAsync">
+                    Delete
+                </MudButton>
+            </MudElement>
+        </MudElement>
+        
+        <MudGrid Spacing="2">
+            <MudItem xs="12" md="7" Class="pb-md-4">
+                <MudText Typo="@Typo.h6" Style="@colorGrey">Description</MudText>
+                @if (Loaded)
+                {
+                    <MudText Typo="@Typo.body1">@ticket.Description</MudText>
+                }
+                else
+                {
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
+                    <MudSkeleton Width="100%" />
+                }
+
+            </MudItem>
+            @* Attributes *@
+            <MudItem xs="12" md="5" Class="pb-md-4">
+                <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                    <MudIcon Icon="@Icons.Material.Filled.ViewList" Style="@fillGrey" />
+                    <MudText Typo="@Typo.h6" Style="@colorGrey">Attributes</MudText>
+                </MudElement>
+                <MudDivider Class="mt-2 mb-4" />
+                <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
+                    @if (Loaded)
+                    {
+                        @*<MudChipSet Filter="@true" Mandatory="@true">
+                            <MudChip Color="@Color.Default" Text="backlog" Default="@true">Backlog</MudChip>
+                            <MudChip Color="@Color.Secondary" Text="selected">Selected for development</MudChip>
+                            <MudChip Color="@Color.Primary" Text="progress">In progress</MudChip>
+                            <MudChip Color="@Color.Success" Text="done">Done</MudChip>
+                        </MudChipSet>
+                        @foreach (var number in Enumerable.Range(0, 4))
+                        {
+                            <MudElement Class="d-flex align-center justify-space-between">
+                                <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                                <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                                    <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                                    <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
+                                </MudElement>
+                            </MudElement>
+                        }*@
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                            @if (ticket.Executor is not null)
+                            {
+                                <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+                                    <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                                    <MudText Typo="@Typo.subtitle2">@ticket.Executor.FullName</MudText>
+                                </MudElement>
+                            }
+                            else
+                            {
+                                <MudChip Color="@Color.Default"
+                                         Size="@Size.Small"
+                                         Label="@true">
+                                    None
+                                </MudChip>
+                            }
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Type</MudText>
+                            <MudChip Color="@Color.Primary"
+                                     Size="@Size.Small"
+                                     Label="@true">
+                                @ticket.Type
+                            </MudChip>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Status</MudText>
+                            <MudChip Color="@Color.Default" Text="@ticket.Status" Class="ma-0">Backlog</MudChip>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Priority</MudText>
+                            <MudText Typo="@Typo.subtitle2">@ticket.Priority</MudText>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Created At</MudText>
+                            <MudText Typo="@Typo.subtitle2">@ticket.CreationTime</MudText>
+                        </MudElement>
+                        <MudElement Class="d-flex align-center justify-space-between">
+                            <MudText Typo="@Typo.subtitle1">Deadline</MudText>
+                            <MudText Typo="@Typo.subtitle2">@ticket.Deadline</MudText>
+                        </MudElement>
+                    }
+                    else
+                    {
+                        <TicketAttributesSkeleton />
+                    }
+                </MudElement>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</ProjectLayout>
+
+@code {
+
+    [Parameter] public int TicketId { get; set; }
+
+    private TicketViewModel ticket = null;
+
+    private bool Loaded => ticket is not null;
+
+    private string PropertiesLink => $"/project/ticket/{TicketId}/properties";
+
+    private readonly string colorGrey = $"color: {Colors.Grey.Default};";
+
+    private readonly string fillGrey = $"fill: {Colors.Grey.Default};";
+
+    private async Task OnDeleteClickAsync() =>
+        await DialogService.ShowMessageBox(
+            title: "Confirm deleting",
+            message: "Are you sure you want to delete this ticket?",
+            cancelText: "Cancel",
+            options: new DialogOptions
+            {
+                FullWidth = true,
+                MaxWidth = MaxWidth.Small
+            });
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        ticket = await TicketsService.GetByIdAsync(TicketId);
+    }
+
+}
