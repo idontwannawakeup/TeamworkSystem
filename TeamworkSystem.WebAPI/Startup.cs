@@ -18,7 +18,6 @@ using TeamworkSystem.BusinessLogicLayer.Factories;
 using TeamworkSystem.BusinessLogicLayer.Interfaces;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.BusinessLogicLayer.Services;
-using TeamworkSystem.BusinessLogicLayer.Validation;
 using TeamworkSystem.DataAccessLayer;
 using TeamworkSystem.DataAccessLayer.Data;
 using TeamworkSystem.DataAccessLayer.Data.Repositories;
@@ -68,7 +67,6 @@ namespace TeamworkSystem.WebAPI
             services.AddMvc(options =>
                     {
                         options.EnableEndpointRouting = false;
-                        options.Filters.Add<ValidationFilter>();
                     })
                     .AddFluentValidation(configuration =>
                     {
