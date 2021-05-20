@@ -7,7 +7,11 @@ namespace TeamworkSystem.WebClient.Exceptions
     {
         public Dictionary<string, List<string>> Errors { get; }
 
-        public ValidationException(Dictionary<string, List<string>> errors) =>
+        public ValidationException() : this(default)
+        {
+        }
+
+        public ValidationException(Dictionary<string, List<string>> errors) : base() =>
             Errors = errors;
     }
 }
