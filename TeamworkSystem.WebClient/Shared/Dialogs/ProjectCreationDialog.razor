@@ -1,0 +1,18 @@
+﻿<MudDialog>
+
+    <DialogContent>
+        <MudTextField T="@string" Label="Name" />
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Color="@Color.Primary">Create</MudButton>
+        <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+    </DialogActions>
+
+</MudDialog>
+
+@code {
+
+    [CascadingParameter] MudDialogInstance DialogInstance { get; set; }
+
+}

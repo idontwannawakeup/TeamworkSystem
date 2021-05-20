@@ -9,30 +9,21 @@ namespace TeamworkSystem.WebClient.Services
 {
     public class TicketsService : ITicketsService
     {
-        private readonly HttpClient httpClient;
+        private readonly ApiHttpClient httpClient;
 
-        public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId)
-        {
-            var response = await httpClient.GetAsync($"?ExecutorId={userId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<TicketViewModel>>();
-        }
+        public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId) =>
+            await httpClient.GetAsync<List<TicketViewModel>>($"?ExecutorId={userId}");
 
-        public async Task<TicketViewModel> GetByIdAsync(int id)
-        {
-            var response = await httpClient.GetAsync($"{id}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<TicketViewModel>();
-        }
+        public async Task<TicketViewModel> GetByIdAsync(int id) =>
+            await httpClient.GetAsync<TicketViewModel>($"{id}");
 
-        public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId)
-        {
-            var response = await httpClient.GetAsync($"?ProjectId={projectId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<TicketViewModel>>();
-        }
+        public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId) =>
+            await httpClient.GetAsync<List<TicketViewModel>>($"?ProjectId={projectId}");
+
+        public async Task DeleteAsync(int id) =>
+            await httpClient.DeleteAsync($"{id}");
 
         public TicketsService(HttpClient httpClient) =>
-            this.httpClient = httpClient;
+            this.httpClient = new(httpClient);
     }
 }

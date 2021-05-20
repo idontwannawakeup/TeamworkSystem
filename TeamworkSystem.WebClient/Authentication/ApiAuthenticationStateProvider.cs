@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
@@ -38,6 +39,9 @@ namespace TeamworkSystem.WebClient.Authentication
             await localStorage.RemoveItemAsync("securityToken");
             NotifyAuthenticationStateChanged(Task.FromResult(AnonymousState));
         }
+
+        public static async Task<string> GetUserIdFromStateAsync(Task<AuthenticationState> state) =>
+            (await state).User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
 
         private static AuthenticationState GenerateStateFromToken(JwtSecurityToken token)
         {

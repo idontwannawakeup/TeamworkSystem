@@ -1,4 +1,5 @@
 ﻿@page "/teams"
+@inject IDialogService DialogService 
 @inject NavigationManager NavigationManager
 @inject ITeamsService TeamsService
 
@@ -37,11 +38,12 @@ else
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="Team" />
+        Label="Team"
+        OnClick="@ShowTeamCreationDialog" />
 
 @code {
 
-    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
     private List<TeamViewModel> teams = null;
 
@@ -53,9 +55,23 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var state = await StateAsync;
-        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        await InitializeTeamsAsync();
+    }
+
+    private async Task InitializeTeamsAsync()
+    {
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         teams = await TeamsService.GetTeamsForUserAsync(userId) as List<TeamViewModel>;
+    }
+
+    private async Task ShowTeamCreationDialog()
+    {
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        DialogService.ShowTeamCreationDialog(userId, async () =>
+        {
+            await InitializeTeamsAsync();
+            StateHasChanged();
+        });
     }
 
 }

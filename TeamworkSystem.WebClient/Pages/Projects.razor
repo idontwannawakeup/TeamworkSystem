@@ -1,4 +1,5 @@
 ﻿@page "/projects"
+@inject IDialogService DialogService 
 @inject NavigationManager NavigationManager
 @inject IProjectsService ProjectsService
 
@@ -16,7 +17,6 @@
             <MudTh>Name</MudTh>
             <MudTh>Type</MudTh>
             <MudTh>Team</MudTh>
-            <MudTh></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">
@@ -32,13 +32,6 @@
                     <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Team.Name</MudText>
                 </MudElement>
             </MudTd>
-            <MudTd>
-                <MudElement HtmlTag="div" Class="d-flex">
-                    <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
-                        <MudMenuItem>Edit</MudMenuItem>
-                    </MudMenu>
-                </MudElement>
-            </MudTd>
         </RowTemplate>
     </MudTable>
 }
@@ -50,11 +43,12 @@ else
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="Project" />
+        Label="Project"
+        OnClick="@DialogService.ShowProjectCreationDialog" />
 
 @code {
 
-    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
     private List<ProjectViewModel> projects = null;
 
@@ -66,8 +60,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var state = await StateAsync;
-        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        await InitializeProjectsAsync();
+    }
+
+    private async Task InitializeProjectsAsync()
+    {
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         projects = await ProjectsService.GetProjectsForTeamMemberAsync(userId) as List<ProjectViewModel>;
     }
+
 }

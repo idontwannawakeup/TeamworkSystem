@@ -9,5 +9,7 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(string userId);
 
         Task<TeamViewModel> GetByIdAsync(int id);
+
+        Task CreateAsync(TeamViewModel viewModel);
     }
 }

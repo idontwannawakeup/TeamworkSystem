@@ -1,4 +1,5 @@
 ﻿@inject IDialogService DialogService
+@inject ITicketsService TicketsService
 
 <MudCard Outlined="@true">
     <MudCardContent>
@@ -42,25 +43,20 @@
 
     [Parameter] public TicketViewModel Ticket { get; set; }
 
+    [Parameter] public EventCallback DeleteCallback { get; set; }
+
     private string TicketLink => $"/project/ticket/{Ticket.Id}";
 
     private string PropertiesLink => $"/project/ticket/{Ticket.Id}/properties";
 
     private async Task OnDeleteClickAsync()
     {
-        var confirmed = await DialogService.ShowMessageBox(
-            title: "Confirm deleting",
-            message: "Are you sure you want to delete this ticket?",
-            cancelText: "Cancel",
-            options: new DialogOptions
-            {
-                FullWidth = true,
-                MaxWidth = MaxWidth.Small
-            }) ?? false;
+        var confirmed = await DialogService.ShowTicketDeleteConfirmingDialog() ?? false;
 
         if (confirmed)
         {
-            // TODO call delete method from TicketsService
+            await TicketsService.DeleteAsync(Ticket.Id);
+            await DeleteCallback.InvokeAsync();
         }
     }
 

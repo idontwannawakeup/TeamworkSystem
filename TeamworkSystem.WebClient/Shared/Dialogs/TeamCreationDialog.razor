@@ -1,0 +1,66 @@
+﻿@inject ISnackbar Snackbar
+@inject ITeamsService TeamsService
+
+<EditForm Model="@teamModel" OnValidSubmit="@OnCreateClickAsync">
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField T="@string" Label="Name" @bind-Value="@teamModel.Name" />
+            <MudTextField T="@string" Label="Specialization" @bind-Value="@teamModel.Specialization" />
+            <MudTextField T="@string" Label="About" @bind-Value="@teamModel.About" Lines="10" />
+
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Color="@Color.Primary"
+                       ButtonType="@ButtonType.Submit">
+                Create
+            </MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+        </DialogActions>
+
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public string UserId { get; set; }
+
+    [Parameter] public Func<Task> OnTeamCreated { get; set; }
+
+    [CascadingParameter] MudDialogInstance DialogInstance { get; set; }
+
+    private TeamViewModel teamModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        teamModel = new() { LeaderId = UserId };
+    }
+
+    private async Task OnCreateClickAsync()
+    {
+        try
+        {
+            await TeamsService.CreateAsync(teamModel);
+            DialogInstance.Close();
+            Snackbar.Add("Team created", Severity.Success);
+            await OnTeamCreated?.Invoke();
+        }
+        catch (ValidationException e)
+        {
+            foreach (var (property, errors) in e.Errors)
+            {
+                foreach (var error in errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                }
+            }
+        }
+        catch (ServerResponseException e)
+        {
+            Snackbar.Add(e.Error, Severity.Error);
+        }
+    }
+
+}

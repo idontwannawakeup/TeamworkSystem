@@ -9,23 +9,18 @@ namespace TeamworkSystem.WebClient.Services
 {
     public class TeamsService : ITeamsService
     {
-        private readonly HttpClient httpClient;
+        private readonly ApiHttpClient httpClient;
 
-        public async Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(string userId)
-        {
-            var response = await httpClient.GetAsync($"?UserId={userId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<TeamViewModel>>();
-        }
+        public async Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(string userId) =>
+            await httpClient.GetAsync<List<TeamViewModel>>($"?UserId={userId}");
 
-        public async Task<TeamViewModel> GetByIdAsync(int id)
-        {
-            var response = await httpClient.GetAsync($"{id}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<TeamViewModel>();
-        }
+        public async Task<TeamViewModel> GetByIdAsync(int id) =>
+            await httpClient.GetAsync<TeamViewModel>($"{id}");
+
+        public async Task CreateAsync(TeamViewModel viewModel) =>
+            await httpClient.PostAsync(string.Empty, viewModel);
 
         public TeamsService(HttpClient httpClient) =>
-            this.httpClient = httpClient;
+            this.httpClient = new(httpClient);
     }
 }

@@ -9,7 +9,7 @@
         @foreach (var ticket in tickets)
         {
             <MudItem xs="12" sm="6" md="3">
-                <TicketCard Ticket="@ticket" />
+                <TicketCard Ticket="@ticket" DeleteCallback="@(async () => await InitializeTicketsAsync())" />
             </MudItem>
         }
     }
@@ -29,7 +29,7 @@
 
 @code {
 
-    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
     private List<TicketViewModel> tickets = null;
 
@@ -38,8 +38,12 @@
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var state = await StateAsync;
-        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        await InitializeTicketsAsync();
+    }
+
+    private async Task InitializeTicketsAsync()
+    {
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         tickets = await TicketsService.GetTicketsForUserAsync(userId) as List<TicketViewModel>;
     }
 

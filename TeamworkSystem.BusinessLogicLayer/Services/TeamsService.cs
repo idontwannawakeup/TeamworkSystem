@@ -54,6 +54,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task InsertAsync(TeamRequest request)
         {
             var team = mapper.Map<TeamRequest, Team>(request);
+            var leader = await userManager.GetByIdAsync(team.LeaderId);
+            team.Members = new() { leader };
             await teamsRepository.InsertAsync(team);
             await unitOfWork.SaveChangesAsync();
         }
