@@ -44,7 +44,7 @@ else
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
         Label="Project"
-        OnClick="@DialogService.ShowProjectCreationDialog" />
+        OnClick="@ShowProjectCreationDialog" />
 
 @code {
 
@@ -67,6 +67,16 @@ else
     {
         var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         projects = await ProjectsService.GetProjectsForTeamMemberAsync(userId) as List<ProjectViewModel>;
+    }
+
+    private async Task ShowProjectCreationDialog()
+    {
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        DialogService.ShowProjectCreationDialog(userId, async () =>
+        {
+            await InitializeProjectsAsync();
+            StateHasChanged();
+        });
     }
 
 }

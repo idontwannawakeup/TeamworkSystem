@@ -1,18 +1,86 @@
-﻿<MudDialog>
+﻿@inject ISnackbar Snackbar 
+@inject IProjectsService ProjectsService
+@inject ITeamsService TeamsService   
 
-    <DialogContent>
-        <MudTextField T="@string" Label="Name" />
-    </DialogContent>
+<EditForm Model="@projectModel" OnValidSubmit="@OnValidSubmitAsync">
+    <MudDialog>
 
-    <DialogActions>
-        <MudButton Color="@Color.Primary">Create</MudButton>
-        <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
-    </DialogActions>
+        <DialogContent>
+            <MudTextField T="@string" Label="Title" @bind-Value="@projectModel.Title" />
+            <MudSelect T="@TeamViewModel"
+                       Label="Team"
+                       Value="@projectModel.Team"
+                       ValueChanged="@(e => (projectModel.Team, projectModel.TeamId) = (e, e.Id))"
+                       ToStringFunc="@(team => team?.Name)">
+                @if (teams is not null)
+                {
+                    @foreach (var team in teams)
+                    {
+                        <MudSelectItem T="@TeamViewModel" Value="@team" />
+                    }
+                }
+            </MudSelect>
+            <MudTextField T="@string" Label="Type" @bind-Value="@projectModel.Type" />
+            <MudTextField T="@string" Label="Url" @bind-Value="@projectModel.Url" />
+            <MudTextField T="@string" Label="Description" @bind-Value="@projectModel.Description" Lines="10" />
 
-</MudDialog>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">Create</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+        </DialogActions>
+
+    </MudDialog>
+</EditForm>
 
 @code {
 
-    [CascadingParameter] MudDialogInstance DialogInstance { get; set; }
+    [Parameter] public string UserId { get; set; }
+
+    [Parameter] public Func<Task> OnProjectCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private ProjectViewModel projectModel = new();
+
+    private List<TeamViewModel> teams = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeTeamsAsync();
+    }
+
+    private async Task InitializeTeamsAsync()
+    {
+        teams = await TeamsService.GetTeamsForUserAsync(UserId) as List<TeamViewModel>;
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+
+        try
+        {
+            await ProjectsService.CreateAsync(projectModel);
+            DialogInstance.Close();
+            Snackbar.Add("Project created", Severity.Success);
+            await OnProjectCreated?.Invoke();
+        }
+        catch (ValidationException e)
+        {
+            foreach (var (property, errors) in e.Errors)
+            {
+                foreach (var error in errors)
+                {
+                    Snackbar.Add(error, Severity.Error);
+                }
+            }
+        }
+        catch (ServerResponseException e)
+        {
+            Snackbar.Add(e.Error, Severity.Error);
+        }
+    }
 
 }

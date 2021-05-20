@@ -9,31 +9,21 @@ namespace TeamworkSystem.WebClient.Services
 {
     public class ProjectsService : IProjectsService
     {
-        private readonly HttpClient httpClient;
+        private readonly ApiHttpClient httpClient;
 
-        public async Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId)
-        {
-            var response = await httpClient.GetAsync($"?TeamId={teamId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<ProjectViewModel>>();
-        }
+        public async Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId) =>
+            await httpClient.GetAsync<List<ProjectViewModel>>($"?TeamId={teamId}");
 
-        public async Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(
-            string teamMemberId)
-        {
-            var response = await httpClient.GetAsync($"?TeamMemberId={teamMemberId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<ProjectViewModel>>();
-        }
+        public async Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(string teamMemberId) =>
+            await httpClient.GetAsync<List<ProjectViewModel>>($"?TeamMemberId={teamMemberId}");
 
-        public async Task<ProjectViewModel> GetByIdAsync(int id)
-        {
-            var response = await httpClient.GetAsync($"{id}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<ProjectViewModel>();
-        }
+        public async Task<ProjectViewModel> GetByIdAsync(int id) =>
+            await httpClient.GetAsync<ProjectViewModel>($"{id}");
+
+        public async Task CreateAsync(ProjectViewModel viewModel) =>
+            await httpClient.PostAsync(string.Empty, viewModel);
 
         public ProjectsService(HttpClient httpClient) =>
-            this.httpClient = httpClient;
+            this.httpClient = new(httpClient);
     }
 }

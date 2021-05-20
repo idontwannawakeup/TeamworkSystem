@@ -20,7 +20,8 @@ namespace TeamworkSystem.WebClient.Extensions
             string userId,
             Func<Task> onTeamCreated)
         {
-            dialogService.Show<TeamCreationDialog>("Create team",
+            dialogService.Show<TeamCreationDialog>(
+                "Create team",
                 new DialogParameters()
                 {
                     ["UserId"] = userId,
@@ -30,8 +31,20 @@ namespace TeamworkSystem.WebClient.Extensions
         }
 
 
-        public static void ShowProjectCreationDialog(this IDialogService dialogService) =>
-            dialogService.Show<ProjectCreationDialog>("Create project", DialogOptions);
+        public static void ShowProjectCreationDialog(
+            this IDialogService dialogService,
+            string userId,
+            Func<Task> onProjectCreated)
+        {
+            dialogService.Show<ProjectCreationDialog>(
+                "Create project",
+                new DialogParameters()
+                {
+                    ["UserId"] = userId,
+                    ["OnProjectCreated"] = onProjectCreated
+                },
+                DialogOptions);
+        }
 
         public static async Task<bool?> ShowTicketDeleteConfirmingDialog(this IDialogService dialogService) =>
             await dialogService.ShowMessageBox(

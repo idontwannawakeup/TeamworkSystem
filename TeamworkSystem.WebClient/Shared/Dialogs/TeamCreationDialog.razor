@@ -1,7 +1,7 @@
 ﻿@inject ISnackbar Snackbar
 @inject ITeamsService TeamsService
 
-<EditForm Model="@teamModel" OnValidSubmit="@OnCreateClickAsync">
+<EditForm Model="@teamModel" OnValidSubmit="@OnValidSubmitAsync">
     <MudDialog>
         <DialogContent>
 
@@ -28,7 +28,7 @@
 
     [Parameter] public Func<Task> OnTeamCreated { get; set; }
 
-    [CascadingParameter] MudDialogInstance DialogInstance { get; set; }
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
     private TeamViewModel teamModel;
 
@@ -38,7 +38,7 @@
         teamModel = new() { LeaderId = UserId };
     }
 
-    private async Task OnCreateClickAsync()
+    private async Task OnValidSubmitAsync()
     {
         try
         {

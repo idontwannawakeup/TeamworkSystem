@@ -11,5 +11,7 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(string teamMemberId);
 
         Task<ProjectViewModel> GetByIdAsync(int id);
+
+        Task CreateAsync(ProjectViewModel viewModel);
     }
 }
