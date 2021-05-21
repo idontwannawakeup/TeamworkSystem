@@ -1,5 +1,8 @@
 ﻿@page "/friends"
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @inject IUsersService UsersService
+@inject RequestErrorsHandler RequestErrorsHandler
 
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Friends</MudText>
 
@@ -25,7 +28,11 @@
             <MudTd DataLabel="Profession">@context.Profession</MudTd>
             <MudTd>
                 <MudElement HtmlTag="div" Class="d-flex">
-                    <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="@Color.Inherit" Class="ml-auto" />
+                    <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
+                        <MudMenuItem OnClick="@(async e => await OnDeleteClickAsync(context.Id))">
+                            Delete
+                        </MudMenuItem>
+                    </MudMenu>
                 </MudElement>
             </MudTd>
         </RowTemplate>
@@ -39,21 +46,49 @@ else
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="Friend" />
+        Label="Friend"
+        OnClick="@ShowFriendsCreationDialog" />
 
 @code {
 
-    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
     private List<UserViewModel> friends = null;
+
+    private string userId = null;
 
     private bool Loaded => friends is not null;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var state = await StateAsync;
-        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        await InitializeFriendsAsync();
+    }
+
+    private async Task InitializeFriendsAsync()
+    {
         friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
     }
+
+    private async Task OnDeleteClickAsync(string friendId)
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            var viewModel = new FriendsViewModel() { FirstId = userId, SecondId = friendId };
+            await UsersService.DeleteFriendsAsync(viewModel);
+            friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
+            Snackbar.Add("Friend deleted.", Severity.Success);
+        });
+    }
+
+    private void ShowFriendsCreationDialog()
+    {
+        DialogService.ShowFriendsCreationDialog(userId, async () =>
+        {
+            await InitializeFriendsAsync();
+            StateHasChanged();
+        });
+    }
+
 }

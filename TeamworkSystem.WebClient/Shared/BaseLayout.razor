@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavigationManager
-@inject ApiAuthenticationStateProvider StateProvider 
+@inject ApiAuthenticationStateProvider StateProvider
+@inject IUsersService UsersService 
 
 <MudLayout>
 
@@ -24,8 +25,8 @@
                         Style="width: 250px; top: 12px;">
                 <MudNavMenu>
 
-                    <MudText Typo="Typo.h6" Class="px-4">UserName</MudText>
-                    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Email</MudText>
+                    <MudText Typo="Typo.h6" Class="px-4">@(userModel?.FullName ?? "Error.")</MudText>
+                    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@(userModel?.Email)</MudText>
                     <MudDivider Class="my-2" />
                     <MudNavLink Href="/profile" Icon="@Icons.Filled.AccountCircle">Profile</MudNavLink>
                     @*<MudNavLink Href="/settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>*@
@@ -88,9 +89,20 @@
 
     [Parameter] public RenderFragment Body { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private UserViewModel userModel;
+
     private bool navigationMenuOpen = false;
 
     private bool avatarMenuOpen = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        userModel = await UsersService.GetByIdAsync(userId);
+    }
 
     private void ToggleNavigationMenu() =>
         navigationMenuOpen = !navigationMenuOpen;

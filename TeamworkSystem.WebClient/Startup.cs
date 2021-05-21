@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 using TeamworkSystem.WebClient.Authentication;
+using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Services;
 
@@ -30,6 +31,8 @@ namespace TeamworkSystem.WebClient
             services.AddMudServices();
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
+
+            services.AddTransient<RequestErrorsHandler>();
 
             services.AddScoped<AuthenticationStateProvider>(
                 provider => provider.GetRequiredService<ApiAuthenticationStateProvider>());

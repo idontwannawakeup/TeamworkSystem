@@ -142,15 +142,23 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
-        [HttpDelete("friends")]
+        [HttpDelete("friends/{firstId}/{secondId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteFriendAsync([FromBody] FriendsRequest request)
+        public async Task<ActionResult> DeleteFriendAsync(
+            [FromRoute] string firstId,
+            [FromRoute] string secondId)
         {
             try
             {
+                var request = new FriendsRequest()
+                {
+                    FirstId = firstId,
+                    SecondId = secondId
+                };
+
                 await usersService.DeleteFriendAsync(request);
                 return Ok();
             }

@@ -1,0 +1,67 @@
+﻿@inject ISnackbar Snackbar  
+@inject IUsersService UsersService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@friendsModel" OnValidSubmit="@OnValidSubmitAsync">
+    <MudDialog>
+
+        <DialogContent>
+            <MudSelect T="@UserViewModel"
+                       Label="Friend"
+                       Value="@friendsModel.Second"
+                       ValueChanged="@(e => (friendsModel.Second, friendsModel.SecondId) = (e, e.Id))"
+                       ToStringFunc="@(user => user?.FullName)">
+                @if (users is not null)
+                {
+                    @foreach (var user in users)
+                    {
+                        <MudSelectItem T="@UserViewModel" Value="@user" />
+                    }
+                }
+            </MudSelect>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">Create</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+        </DialogActions>
+
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public string UserId { get; set; }
+
+    [Parameter] public Func<Task> OnCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private FriendsViewModel friendsModel = new();
+
+    private List<UserViewModel> users = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeUsersAsync();
+        friendsModel.FirstId = UserId;
+    }
+
+    private async Task InitializeUsersAsync()
+    {
+        users = await UsersService.GetAsync() as List<UserViewModel>;
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await UsersService.AddFriendsAsync(friendsModel);
+            DialogInstance.Close();
+            Snackbar.Add("Friend added", Severity.Success);
+            OnCreated?.Invoke();
+        });
+    }
+
+}

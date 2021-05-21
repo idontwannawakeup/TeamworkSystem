@@ -45,6 +45,8 @@ else
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
+    private string userId = null;
+
     private List<TeamViewModel> teams = null;
 
     private bool Loaded => teams is not null;
@@ -55,18 +57,17 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeTeamsAsync();
     }
 
     private async Task InitializeTeamsAsync()
     {
-        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         teams = await TeamsService.GetTeamsForUserAsync(userId) as List<TeamViewModel>;
     }
 
-    private async Task ShowTeamCreationDialog()
+    private void ShowTeamCreationDialog()
     {
-        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         DialogService.ShowTeamCreationDialog(userId, async () =>
         {
             await InitializeTeamsAsync();

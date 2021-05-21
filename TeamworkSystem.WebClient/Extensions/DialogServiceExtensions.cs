@@ -46,6 +46,21 @@ namespace TeamworkSystem.WebClient.Extensions
                 DialogOptions);
         }
 
+        public static void ShowFriendsCreationDialog(
+            this IDialogService dialogService,
+            string userId,
+            Func<Task> onCreated)
+        {
+            dialogService.Show<FriendsCreationDialog>(
+                "Add friend",
+                new DialogParameters()
+                {
+                    ["UserId"] = userId,
+                    ["OnCreated"] = onCreated
+                },
+                DialogOptions);
+        }
+
         public static async Task<bool?> ShowTicketDeleteConfirmingDialog(this IDialogService dialogService) =>
             await dialogService.ShowMessageBox(
                 title: "Confirm deleting",
