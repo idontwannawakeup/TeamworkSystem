@@ -1,47 +1,119 @@
 ﻿@page "/project/{ProjectId:int}/settings"
-@layout  ContainerlessLayout
+@layout ContainerlessLayout
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IProjectsService ProjectsService
+@inject RequestErrorsHandler RequestErrorsHandler
 
-<ProjectLayout ProjectId="@ProjectId">
-    <MudContainer MaxWidth="@MaxWidth.Small">
-        <MudGrid Spacing="2" Class="mt-8">
-            <MudItem xs="12" md="6" Class="d-flex align-center">
-                <MudText Typo="@Typo.h6">Title</MudText>
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <MudTextField T="@string" Text="Title" Variant="@Variant.Outlined" />
-            </MudItem>
-            <MudItem xs="12" md="6" Class="d-flex align-center">
-                <MudText Typo="@Typo.h6">Type</MudText>
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <MudTextField T="@string" Text="Type" Variant="@Variant.Outlined" />
-            </MudItem>
-            <MudItem xs="12" md="6" Class="d-flex align-center">
-                <MudText Typo="@Typo.h6">Url</MudText>
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <MudTextField T="@string" Text="Url" Variant="@Variant.Outlined" />
-            </MudItem>
-            <MudItem xs="12" Class="d-flex align-center">
-                <MudText Typo="@Typo.h6">Description</MudText>
-            </MudItem>
-            <MudItem xs="12">
-                <MudTextField T="@string" Text="Description" Variant="@Variant.Outlined" Lines="15" />
-            </MudItem>
-        </MudGrid>
-        <div class="d-flex justify-center align-center">
-            <MudButton Variant="@Variant.Filled"
-                       Color="@Color.Primary"
-                       EndIcon="@Icons.Material.Filled.Save"
-                       Class="mt-4">
-                Save changes
-            </MudButton>
-        </div>
-    </MudContainer>
-</ProjectLayout> 
+@if (projectModel is not null)
+{
+    <ProjectLayout ProjectId="@ProjectId">
+
+        <EditForm Model="@projectModel" OnValidSubmit="OnValidSubmitAsync">
+            <MudContainer MaxWidth="@MaxWidth.Small">
+                <MudGrid Spacing="2" Class="mt-8">
+                    <MudItem xs="12" md="6" Class="d-flex align-center">
+                        <MudText Typo="@Typo.h6">Title</MudText>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="@string"
+                                      @bind-Value="@projectModel.Title"
+                                      Variant="@Variant.Outlined" />
+                    </MudItem>
+                    <MudItem xs="12" md="6" Class="d-flex align-center">
+                        <MudText Typo="@Typo.h6">Type</MudText>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="@string"
+                                      @bind-Value="@projectModel.Type"
+                                      Variant="@Variant.Outlined" />
+                    </MudItem>
+                    <MudItem xs="12" md="6" Class="d-flex align-center">
+                        <MudText Typo="@Typo.h6">Url</MudText>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="@string"
+                                      @bind-Value="@projectModel.Url"
+                                      Variant="@Variant.Outlined" />
+                    </MudItem>
+                    <MudItem xs="12" Class="d-flex align-center">
+                        <MudText Typo="@Typo.h6">Description</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField T="@string"
+                                      @bind-Value="@projectModel.Description"
+                                      Variant="@Variant.Outlined"
+                                      Lines="15" />
+                    </MudItem>
+                </MudGrid>
+                @if (userId == projectModel.Team.LeaderId)
+                {
+                    <div class="d-flex justify-center align-center">
+                        <MudButton Variant="@Variant.Filled"
+                                   Color="@Color.Error"
+                                   EndIcon="@Icons.Material.Filled.Delete"
+                                   Class="mt-4"
+                                   OnClick="@OnDeleteClickAsync">
+                            Delete project
+                        </MudButton>
+                    </div>
+                }
+                <div class="d-flex justify-center align-center">
+                    <MudButton Variant="@Variant.Filled"
+                               Color="@Color.Primary"
+                               EndIcon="@Icons.Material.Filled.Save"
+                               Class="mt-4"
+                               ButtonType="@ButtonType.Submit">
+                        Save changes
+                    </MudButton>
+                </div>
+            </MudContainer>
+        </EditForm>
+
+    </ProjectLayout>
+}
+else
+{
+    <Loader />
+}
 
 @code {
 
     [Parameter] public int ProjectId { get; set; }
+
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private ProjectViewModel projectModel = null;
+
+    private string userId = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        projectModel = await ProjectsService.GetByIdAsync(ProjectId);
+    }
+
+    private async Task OnDeleteClickAsync()
+    {
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
+            "Are you sure you want to delete this project?") ?? false;
+
+        if (confirmed)
+        {
+            await RequestErrorsHandler.HandleRequestAsync(async () =>
+            {
+                await ProjectsService.DeleteAsync(ProjectId);
+                Snackbar.Add("Project deleted", Severity.Success);
+                NavigationManager.NavigateTo("/home");
+            });
+        }
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await Task.Run(() => System.Console.WriteLine("Submit"));
+    }
 
 }

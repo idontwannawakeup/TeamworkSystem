@@ -11,8 +11,8 @@
               Items="@projects"
               Hover="@true"
               Elevation="0"
-              Dense="@true"
-              OnRowClick="@OnRowClick">
+              OnRowClick="@OnRowClick"
+              Dense="@true">
         <HeaderContent>
             <MudTh>Name</MudTh>
             <MudTh>Type</MudTh>
@@ -21,14 +21,14 @@
         <RowTemplate>
             <MudTd DataLabel="Name">
                 <MudElement HtmlTag="div" Class="d-flex align-center">
-                    <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
+                    <MudAvatar Color="@Color.Secondary">A</MudAvatar>
                     <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Title</MudText>
                 </MudElement>
             </MudTd>
             <MudTd DataLabel="Profession">@context.Type</MudTd>
             <MudTd DataLabel="Team">
                 <MudElement HtmlTag="div" Class="d-flex align-center">
-                    <MudAvatar Size="@Size.Small" Color="@Color.Secondary">A</MudAvatar>
+                    <MudAvatar Color="@Color.Secondary">A</MudAvatar>
                     <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Team.Name</MudText>
                 </MudElement>
             </MudTd>

@@ -142,7 +142,8 @@
 
     private async Task OnDeleteClickAsync()
     {
-        await DialogService.ShowTicketDeleteConfirmingDialog();
+        await DialogService.ShowDeleteConfirmingDialog(
+            "Are you sure you want to delete this ticket?");
     }
 
     protected override async Task OnInitializedAsync()

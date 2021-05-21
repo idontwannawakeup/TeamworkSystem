@@ -14,7 +14,8 @@
               Breakpoint="@Breakpoint.Sm"
               Elevation="0"
               OnRowClick="@OnRowClick"
-              RowClass="cursor-pointer">
+              RowClass="cursor-pointer"
+              Dense="@true">
         <HeaderContent>
             <MudTh Class="ml-3">Name</MudTh>
             <MudTh>Specialization</MudTh>
@@ -24,8 +25,10 @@
             <MudTd Class="ml-3" DataLabel="Name">@context.Name</MudTd>
             <MudTd DataLabel="Specialization">@context.Specialization</MudTd>
             <MudTd DataLabel="Leader">
-                <MudAvatar Class="ml-auto" Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-                <span class="ml-2">@context.Leader.FullName</span>
+                <MudElement HtmlTag="div" Class="d-flex align-center">
+                    <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                    <span class="ml-2">@context.Leader.FullName</span>
+                </MudElement>
             </MudTd>
         </RowTemplate>
     </MudTable>

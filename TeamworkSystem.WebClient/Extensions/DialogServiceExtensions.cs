@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using TeamworkSystem.WebClient.Shared.Dialogs;
 
@@ -29,7 +28,6 @@ namespace TeamworkSystem.WebClient.Extensions
                 },
                 DialogOptions);
         }
-
 
         public static void ShowProjectCreationDialog(
             this IDialogService dialogService,
@@ -61,11 +59,15 @@ namespace TeamworkSystem.WebClient.Extensions
                 DialogOptions);
         }
 
-        public static async Task<bool?> ShowTicketDeleteConfirmingDialog(this IDialogService dialogService) =>
-            await dialogService.ShowMessageBox(
+        public static async Task<bool?> ShowDeleteConfirmingDialog(
+            this IDialogService dialogService,
+            string message = "Are you sure you want to delete this item?")
+        {
+            return await dialogService.ShowMessageBox(
                 title: "Confirm deleting",
-                message: "Are you sure you want to delete this ticket?",
+                message: message,
                 cancelText: "Cancel",
                 options: DialogOptions);
+        }
     }
 }
