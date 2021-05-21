@@ -29,6 +29,14 @@ namespace TeamworkSystem.WebClient.Extensions
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
         }
 
+        public async Task<TOut> PostAsync<T, TOut>(string requestUri, T viewModel)
+        {
+            var response = await httpClient.PostAsJsonAsync(requestUri, viewModel, options);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
+            return responseBody.Deserialize<TOut>();
+        }
+
         public async Task PutAsync<T>(string requestUri, T viewModel)
         {
             var response = await httpClient.PutAsJsonAsync(requestUri, viewModel, options);

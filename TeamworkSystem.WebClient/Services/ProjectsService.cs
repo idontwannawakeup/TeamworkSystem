@@ -23,6 +23,12 @@ namespace TeamworkSystem.WebClient.Services
         public async Task CreateAsync(ProjectViewModel viewModel) =>
             await httpClient.PostAsync(string.Empty, viewModel);
 
+        public async Task UpdateAsync(ProjectViewModel viewModel) =>
+            await httpClient.PutAsync(string.Empty, viewModel);
+
+        public async Task DeleteAsync(int id) =>
+            await httpClient.DeleteAsync($"{id}");
+
         public ProjectsService(HttpClient httpClient) =>
             this.httpClient = new(httpClient);
     }

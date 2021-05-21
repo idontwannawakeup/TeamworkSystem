@@ -20,6 +20,12 @@ namespace TeamworkSystem.WebClient.Services
         public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId) =>
             await httpClient.GetAsync<List<TicketViewModel>>($"?ProjectId={projectId}");
 
+        public async Task CreateAsync(TicketViewModel viewModel) =>
+            await httpClient.PostAsync(string.Empty, viewModel);
+
+        public async Task UpdateAsync(TicketViewModel viewModel) =>
+            await httpClient.PutAsync(string.Empty, viewModel);
+
         public async Task DeleteAsync(int id) =>
             await httpClient.DeleteAsync($"{id}");
 

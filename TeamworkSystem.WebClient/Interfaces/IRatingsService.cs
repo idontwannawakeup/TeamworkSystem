@@ -7,5 +7,11 @@ namespace TeamworkSystem.WebClient.Interfaces
     public interface IRatingsService
     {
         Task<IEnumerable<RatingViewModel>> GetByRatedUserId(string userId);
+
+        Task CreateAsync(RatingViewModel viewModel);
+
+        Task UpdateAsync(RatingViewModel viewModel);
+
+        Task DeleteAsync(int id);
     }
 }

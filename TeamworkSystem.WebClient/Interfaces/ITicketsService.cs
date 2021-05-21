@@ -12,6 +12,10 @@ namespace TeamworkSystem.WebClient.Interfaces
 
         Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId);
 
+        Task CreateAsync(TicketViewModel viewModel);
+
+        Task UpdateAsync(TicketViewModel viewModel);
+
         Task DeleteAsync(int id);
     }
 }
