@@ -33,7 +33,7 @@
 
             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="@Size.Small" Dense="@true">
                 <MudMenuItem Link="@PropertiesLink">Edit</MudMenuItem>
-                <MudMenuItem OnClick="OnDeleteClickAsync">Delete</MudMenuItem>
+                <MudMenuItem OnClick="@OnDeleteClickAsync">Delete</MudMenuItem>
             </MudMenu>
         </MudElement>
     </MudCardContent>
@@ -45,9 +45,9 @@
 
     [Parameter] public EventCallback DeleteCallback { get; set; }
 
-    private string TicketLink => $"/project/ticket/{Ticket.Id}";
+    private string TicketLink => $"/ticket/{Ticket.Id}";
 
-    private string PropertiesLink => $"/project/ticket/{Ticket.Id}/properties";
+    private string PropertiesLink => $"/ticket/{Ticket.Id}/properties";
 
     private async Task OnDeleteClickAsync()
     {

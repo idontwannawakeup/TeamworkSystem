@@ -1,0 +1,73 @@
+﻿@inject ISnackbar Snackbar
+@inject ITicketsService TicketsService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@ticket" OnValidSubmit="@OnValidSubmitAsync">
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField T="@string"
+                          Label="@nameof(ticket.Title)"
+                          @bind-Value="@ticket.Title" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(ticket.Type)"
+                          @bind-Value="@ticket.Type" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(ticket.Status)"
+                          @bind-Value="@ticket.Status" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(ticket.Priority)"
+                          @bind-Value="@ticket.Priority" />
+
+            <MudDatePicker Label="@nameof(ticket.Deadline)"
+                           @bind-Date="ticket.Deadline" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(ticket.Description)"
+                          @bind-Value="@ticket.Description"
+                          Lines="10" />
+
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Color="@Color.Primary"
+                       ButtonType="@ButtonType.Submit">
+                Create
+            </MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+        </DialogActions>
+
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public int ProjectId { get; set; }
+
+    [Parameter] public Func<Task> OnCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private TicketViewModel ticket;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        ticket = new() { ProjectId = ProjectId };
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TicketsService.CreateAsync(ticket);
+            DialogInstance.Close();
+            Snackbar.Add("Ticket created", Severity.Success);
+            await OnCreated?.Invoke();
+        });
+    }
+
+}

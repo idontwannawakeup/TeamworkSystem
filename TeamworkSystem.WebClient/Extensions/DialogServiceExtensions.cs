@@ -17,14 +17,14 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowTeamCreationDialog(
             this IDialogService dialogService,
             string userId,
-            Func<Task> onTeamCreated)
+            Func<Task> onCreated)
         {
             dialogService.Show<TeamCreationDialog>(
                 "Create team",
                 new DialogParameters()
                 {
                     ["UserId"] = userId,
-                    ["OnTeamCreated"] = onTeamCreated
+                    ["OnCreated"] = onCreated
                 },
                 DialogOptions);
         }
@@ -32,14 +32,29 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowProjectCreationDialog(
             this IDialogService dialogService,
             string userId,
-            Func<Task> onProjectCreated)
+            Func<Task> onCreated)
         {
             dialogService.Show<ProjectCreationDialog>(
                 "Create project",
                 new DialogParameters()
                 {
                     ["UserId"] = userId,
-                    ["OnProjectCreated"] = onProjectCreated
+                    ["OnCreated"] = onCreated
+                },
+                DialogOptions);
+        }
+
+        public static void ShowTicketCreationDialog(
+            this IDialogService dialogService,
+            int projectId,
+            Func<Task> onCreated)
+        {
+            dialogService.Show<TicketCreationDialog>(
+                "Create ticket",
+                new DialogParameters()
+                {
+                    ["ProjectId"] = projectId,
+                    ["OnCreated"] = onCreated
                 },
                 DialogOptions);
         }

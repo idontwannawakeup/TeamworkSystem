@@ -1,6 +1,7 @@
-﻿@inject ISnackbar Snackbar 
+﻿@inject ISnackbar Snackbar
 @inject IProjectsService ProjectsService
-@inject ITeamsService TeamsService   
+@inject ITeamsService TeamsService
+@inject RequestErrorsHandler RequestErrorsHandler
 
 <EditForm Model="@projectModel" OnValidSubmit="@OnValidSubmitAsync">
     <MudDialog>
@@ -38,7 +39,7 @@
 
     [Parameter] public string UserId { get; set; }
 
-    [Parameter] public Func<Task> OnProjectCreated { get; set; }
+    [Parameter] public Func<Task> OnCreated { get; set; }
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
@@ -59,28 +60,13 @@
 
     private async Task OnValidSubmitAsync()
     {
-
-        try
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
             await ProjectsService.CreateAsync(projectModel);
             DialogInstance.Close();
             Snackbar.Add("Project created", Severity.Success);
-            await OnProjectCreated?.Invoke();
-        }
-        catch (ValidationException e)
-        {
-            foreach (var (property, errors) in e.Errors)
-            {
-                foreach (var error in errors)
-                {
-                    Snackbar.Add(error, Severity.Error);
-                }
-            }
-        }
-        catch (ServerResponseException e)
-        {
-            Snackbar.Add(e.Error, Severity.Error);
-        }
+            await OnCreated?.Invoke();
+        });
     }
 
 }

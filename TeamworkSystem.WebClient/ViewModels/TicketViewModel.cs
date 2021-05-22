@@ -6,6 +6,10 @@ namespace TeamworkSystem.WebClient.ViewModels
     {
         public int Id { get; set; }
 
+        public int ProjectId { get; set; }
+
+        public string ExecutorId { get; set; }
+
         public string Title { get; set; }
 
         public string Type { get; set; }
@@ -19,6 +23,8 @@ namespace TeamworkSystem.WebClient.ViewModels
         public DateTime CreationTime { get; set; }
 
         public DateTime? Deadline { get; set; }
+
+        public ProjectViewModel Project { get; set; }
 
         public UserViewModel Executor { get; set; }
     }

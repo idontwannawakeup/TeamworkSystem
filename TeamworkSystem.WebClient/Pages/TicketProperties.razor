@@ -1,56 +1,100 @@
-﻿@page "/project/ticket/{TicketId:int}/properties"
+﻿@page "/ticket/{TicketId:int}/properties"
+@inject ISnackbar Snackbar
+@inject ITicketsService TicketsService
+@inject RequestErrorsHandler RequestErrorsHandler
 
-<MudContainer MaxWidth="@MaxWidth.Small">
-    <MudGrid Spacing="2" Class="mt-8">
-        <MudItem xs="12" md="6" Class="d-flex align-center">
-            <MudText Typo="@Typo.h6">Title</MudText>
-        </MudItem>
-        <MudItem xs="12" md="6">
-            <MudTextField T="@string" Text="Title" Variant="@Variant.Outlined" />
-        </MudItem>
-        <MudItem xs="12" md="6" Class="d-flex align-center">
-            <MudText Typo="@Typo.h6">Type</MudText>
-        </MudItem>
-        <MudItem xs="12" md="6">
-            <MudTextField T="@string" Text="Type" Variant="@Variant.Outlined" />
-        </MudItem>
-        <MudItem xs="12" md="6" Class="d-flex align-center">
-            <MudText Typo="@Typo.h6">Status</MudText>
-        </MudItem>
-        <MudItem xs="12" md="6">
-            <MudTextField T="@string" Text="Status" Variant="@Variant.Outlined" />
-        </MudItem>
-        <MudItem xs="12" md="6" Class="d-flex align-center">
-            <MudText Typo="@Typo.h6">Priority</MudText>
-        </MudItem>
-        <MudItem xs="12" md="6">
-            <MudTextField T="@string" Text="Priority" Variant="@Variant.Outlined" />
-        </MudItem>
-        <MudItem xs="12" md="6" Class="d-flex align-center">
-            <MudText Typo="@Typo.h6">Deadline</MudText>
-        </MudItem>
-        <MudItem xs="12" md="6">
-            <MudTextField T="@string" Text="Deadline" Variant="@Variant.Outlined" />
-        </MudItem>
-        <MudItem xs="12" Class="d-flex align-center">
-            <MudText Typo="@Typo.h6">Description</MudText>
-        </MudItem>
-        <MudItem xs="12">
-            <MudTextField T="@string" Text="Description" Variant="@Variant.Outlined" Lines="15" />
-        </MudItem>
-    </MudGrid>
-    <div class="d-flex justify-center align-center">
-        <MudButton Variant="@Variant.Filled"
-                   Color="@Color.Primary"
-                   EndIcon="@Icons.Material.Filled.Save"
-                   Class="mt-4">
-            Save changes
-        </MudButton>
-    </div>
-</MudContainer>
+@if (ticket is not null)
+{
+    <EditForm Model="@ticket" OnValidSubmit="@OnValidSubmitAsync">
+        <MudContainer MaxWidth="@MaxWidth.Small">
+            <MudGrid Spacing="2" Class="mt-8">
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">Title</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@ticket.Title"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">Type</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@ticket.Type"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">Status</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@ticket.Status"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">Priority</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@ticket.Priority"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">Deadline</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudDatePicker @bind-Date="@ticket.Deadline" />
+                </MudItem>
+                <MudItem xs="12" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">Description</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField T="@string"
+                                  @bind-Value="@ticket.Description"
+                                  Variant="@Variant.Outlined"
+                                  Lines="15" />
+                </MudItem>
+            </MudGrid>
+            <div class="d-flex justify-center align-center">
+                <MudButton Variant="@Variant.Filled"
+                           Color="@Color.Primary"
+                           EndIcon="@Icons.Material.Filled.Save"
+                           Class="mt-4"
+                           ButtonType="@ButtonType.Submit">
+                    Save changes
+                </MudButton>
+            </div>
+        </MudContainer>
+    </EditForm>
+}
+else
+{
+    <Loader />
+}
 
 @code {
 
     [Parameter] public int TicketId { get; set; }
+
+    private TicketViewModel ticket = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeTicketAsync();
+    }
+
+    private async Task InitializeTicketAsync() =>
+        ticket = await TicketsService.GetByIdAsync(TicketId);
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TicketsService.UpdateAsync(ticket);
+            Snackbar.Add("Ticket updated", Severity.Success);
+        });
+    }
 
 }

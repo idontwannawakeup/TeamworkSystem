@@ -8,7 +8,7 @@
     <MudContainer MaxWidth="@MaxWidth.Large">
         <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Tickets</MudText>
 
-        @if (Loaded)
+        @if (tickets is not null)
         {
             <MudTable T="@TicketViewModel"
                       Items="@tickets"
@@ -52,7 +52,9 @@
         <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
                 Color="Color.Primary"
                 Icon="@Icons.Material.Filled.Add"
-                Label="Ticket" />
+                Label="Ticket"
+                OnClick="@ShowTicketCreationDialog" />
+
     </MudContainer>
 </ProjectLayout>
 
@@ -62,25 +64,25 @@
 
     private List<TicketViewModel> tickets = null;
 
-    private bool Loaded => tickets is not null;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeTicketsAsync();
+    }
 
     private string GetPropertiesLink(int ticketId) =>
-        $"/project/ticket/{ticketId}/properties";
+        $"/ticket/{ticketId}/properties";
 
     private void OnRowClick(TableRowClickEventArgs<TicketViewModel> args) =>
-        NavigationManager.NavigateTo($"/project/ticket/{args.Item.Id}");
+        NavigationManager.NavigateTo($"/ticket/{args.Item.Id}");
+
+    private async Task InitializeTicketsAsync() =>
+        tickets = await TicketsService.GetByProjectIdAsync(ProjectId) as List<TicketViewModel>;
 
     private async Task OnDeleteClickAsync(int id)
     {
-        var confirmed = await DialogService.ShowMessageBox(
-            title: "Confirm deleting",
-            message: "Are you sure you want to delete this ticket?",
-            cancelText: "Cancel",
-            options: new DialogOptions
-            {
-                FullWidth = true,
-                MaxWidth = MaxWidth.Small
-            }) ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
+            "Are you sure you want to delete this ticket?") ?? false;
 
         if (confirmed)
         {
@@ -89,14 +91,13 @@
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    private void ShowTicketCreationDialog()
     {
-        await base.OnInitializedAsync();
-        await InitializeTicketsAsync();
+        DialogService.ShowTicketCreationDialog(ProjectId, async () =>
+        {
+            await InitializeTicketsAsync();
+            StateHasChanged();
+        });
     }
 
-    private async Task InitializeTicketsAsync()
-    {
-        tickets = await TicketsService.GetByProjectIdAsync(ProjectId) as List<TicketViewModel>;
-    }
 }

@@ -1,13 +1,14 @@
 ﻿@inject ISnackbar Snackbar
 @inject ITeamsService TeamsService
+@inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@teamModel" OnValidSubmit="@OnValidSubmitAsync">
+<EditForm Model="@team" OnValidSubmit="@OnValidSubmitAsync">
     <MudDialog>
         <DialogContent>
 
-            <MudTextField T="@string" Label="Name" @bind-Value="@teamModel.Name" />
-            <MudTextField T="@string" Label="Specialization" @bind-Value="@teamModel.Specialization" />
-            <MudTextField T="@string" Label="About" @bind-Value="@teamModel.About" Lines="10" />
+            <MudTextField T="@string" Label="Name" @bind-Value="@team.Name" />
+            <MudTextField T="@string" Label="Specialization" @bind-Value="@team.Specialization" />
+            <MudTextField T="@string" Label="About" @bind-Value="@team.About" Lines="10" />
 
         </DialogContent>
 
@@ -26,41 +27,27 @@
 
     [Parameter] public string UserId { get; set; }
 
-    [Parameter] public Func<Task> OnTeamCreated { get; set; }
+    [Parameter] public Func<Task> OnCreated { get; set; }
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private TeamViewModel teamModel;
+    private TeamViewModel team;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        teamModel = new() { LeaderId = UserId };
+        team = new() { LeaderId = UserId };
     }
 
     private async Task OnValidSubmitAsync()
     {
-        try
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await TeamsService.CreateAsync(teamModel);
+            await TeamsService.CreateAsync(team);
             DialogInstance.Close();
             Snackbar.Add("Team created", Severity.Success);
-            await OnTeamCreated?.Invoke();
-        }
-        catch (ValidationException e)
-        {
-            foreach (var (property, errors) in e.Errors)
-            {
-                foreach (var error in errors)
-                {
-                    Snackbar.Add(error, Severity.Error);
-                }
-            }
-        }
-        catch (ServerResponseException e)
-        {
-            Snackbar.Add(e.Error, Severity.Error);
-        }
+            await OnCreated?.Invoke();
+        });
     }
 
 }
