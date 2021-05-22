@@ -1,0 +1,109 @@
+﻿@page "/team/{TeamId:int}/settings"
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar  
+@inject ITeamsService TeamsService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+@if (teamModel is not null)
+{
+    <EditForm Model="@teamModel" OnValidSubmit="OnValidSubmitAsync">
+        <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
+            <MudGrid Spacing="2" Class="mt-8">
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@nameof(teamModel.Name)</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@teamModel.Name"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@nameof(teamModel.Specialization)</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@teamModel.Specialization"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@nameof(teamModel.About)</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField T="@string"
+                                  @bind-Value="@teamModel.About"
+                                  Variant="@Variant.Outlined"
+                                  Lines="15" />
+                </MudItem>
+            </MudGrid>
+            @if (userId == teamModel.LeaderId)
+            {
+                <div class="d-flex justify-center align-center">
+                    <MudButton Variant="@Variant.Filled"
+                               Color="@Color.Error"
+                               EndIcon="@Icons.Material.Filled.Delete"
+                               Class="mt-4"
+                               OnClick="@OnDeleteClickAsync">
+                        Delete team
+                    </MudButton>
+                </div>
+            }
+            <div class="d-flex justify-center align-center">
+                <MudButton Variant="@Variant.Filled"
+                           Color="@Color.Primary"
+                           EndIcon="@Icons.Material.Filled.Save"
+                           Class="mt-4"
+                           ButtonType="@ButtonType.Submit">
+                    Save changes
+                </MudButton>
+            </div>
+        </MudContainer>
+    </EditForm>
+}
+else
+{
+    <Loader />
+}
+
+@code {
+
+    [Parameter] public int TeamId { get; set; }
+
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private TeamViewModel teamModel = null;
+
+    private string userId = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeUserIdAsync();
+        await InitializeTeamAsync();
+    }
+
+    private async Task InitializeUserIdAsync() =>
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+
+    private async Task InitializeTeamAsync() =>
+        teamModel = await TeamsService.GetByIdAsync(TeamId);
+
+    private async Task OnDeleteClickAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TeamsService.DeleteAsync(TeamId);
+            Snackbar.Add("Team deleted", Severity.Success);
+            NavigationManager.NavigateTo("/home");
+        });
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TeamsService.UpdateAsync(teamModel);
+            Snackbar.Add("Team updated", Severity.Success);
+        });
+    }
+
+}

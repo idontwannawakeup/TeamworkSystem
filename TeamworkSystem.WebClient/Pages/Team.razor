@@ -1,25 +1,38 @@
 ﻿@page "/team/{TeamId:int}"
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar 
+@inject IDialogService DialogService  
 @inject ITeamsService TeamsService
 @inject IProjectsService ProjectsService
-@inject IUsersService UsersService  
+@inject IUsersService UsersService
+@inject RequestErrorsHandler RequestErrorsHandler
 
 <MudGrid Spacing="3" Class="mt-8">
 
     <MudItem xs="12" md="3" Class="d-flex flex-column gap-4">
 
-        <MudPaper Elevation="4" Class="pa-4">
-            @if (Loaded)
+        <MudPaper Elevation="4" Class="d-flex flex-column align-start gap-2 pa-4">
+            @if (team is not null)
             {
-                <MudText Typo="@Typo.h6" Class="py-1">@team.Name</MudText>
-                <MudText Typo="@Typo.subtitle1" Class="py-1">@team.Specialization</MudText>
-                <MudButton Variant="@Variant.Outlined"
-                           Color="@Color.Tertiary"
-                           EndIcon="@Icons.Material.Filled.Add"
-                           IconColor="@Color.Inherit"
-                           Class="my-1">
-                    Add member
-                </MudButton>
+                <MudText Typo="@Typo.h6">@team.Name</MudText>
+                <MudText Typo="@Typo.subtitle1">@team.Specialization</MudText>
+                    <MudButton Variant="@Variant.Outlined"
+                               Color="@Color.Tertiary"
+                               EndIcon="@Icons.Material.Filled.Add"
+                               IconColor="@Color.Inherit"
+                               OnClick="@ShowMemberAddingDialog">
+                        Add member
+                    </MudButton>
+                    @if (userId == team.LeaderId)
+                    {
+                        <MudButton Variant="@Variant.Outlined"
+                                   Color="@Color.Info"
+                                   EndIcon="@Icons.Material.Filled.Edit"
+                                   IconColor="@Color.Inherit"
+                                   Link="@EditLink">
+                            Edit
+                        </MudButton>
+                    }
             }
             else
             {
@@ -44,21 +57,39 @@
                     {
                         <MudListItem>
                             <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+
                                 <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+
                                 <MudElement HtmlTag="div" Class="d-flex flex-column">
                                     <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
                                     <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
                                 </MudElement>
+
+                                @if (userId == team.LeaderId)
+                                {
+                                    <MudMenu Class="ml-auto"
+                                             Icon="@Icons.Material.Filled.MoreHoriz"
+                                             Dense="@true"
+                                             OffsetX="true"
+                                             Direction="@Direction.Left">
+                                        <MudMenuItem OnClick="@(async e => await OnMemberDeleteClickAsync(member))">
+                                            Remove
+                                        </MudMenuItem>
+                                    </MudMenu>
+                                }
+
                             </MudElement>
                         </MudListItem>
                     }
                 </MudList>
-                <MudButton Class="@(ShowLess ? "d-none" : null)"
-                           Variant="@Variant.Outlined"
-                           Color="@Color.Tertiary"
-                           FullWidth="@true">
-                    Show more
-                </MudButton>
+                @if (ShowMore)
+                {
+                    <MudButton Variant="@Variant.Outlined"
+                               Color="@Color.Tertiary"
+                               FullWidth="@true">
+                        Show more
+                    </MudButton>
+                }
             }
             else
             {
@@ -109,27 +140,62 @@
 
     [Parameter] public int TeamId { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private string EditLink => $"/team/{TeamId}/settings";
+
+    private bool ShowMore => members.Count > 10;
+
     private TeamViewModel team = null;
 
     private List<ProjectViewModel> projects = null;
 
     private List<UserViewModel> members = null;
 
-    private bool Loaded => team is not null;
-
-    private bool ShowLess => members.Count < 10;
+    private string userId = null;
 
     private string colorGrey = $"color: {Colors.Grey.Default};";
-
-    private void OnRowClick(TableRowClickEventArgs<ProjectViewModel> args) =>
-        NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        team = await TeamsService.GetByIdAsync(TeamId);
-        projects = await ProjectsService.GetByTeamIdAsync(TeamId) as List<ProjectViewModel>;
-        members = await UsersService.GetByTeamIdAsync(TeamId) as List<UserViewModel>;
+        await InitializeUserIdAsync();
+        await InitializeTeamAsync();
+        await InitializeProjectsAsync();
+        await InitializeMembersAsync();
     }
 
+    private void OnRowClick(TableRowClickEventArgs<ProjectViewModel> args) =>
+        NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
+
+    private async Task InitializeUserIdAsync() =>
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+
+    private async Task InitializeTeamAsync() =>
+        team = await TeamsService.GetByIdAsync(TeamId);
+
+    private async Task InitializeProjectsAsync() =>
+        projects = await ProjectsService.GetByTeamIdAsync(TeamId) as List<ProjectViewModel>;
+
+    private async Task InitializeMembersAsync() =>
+        members = await UsersService.GetByTeamIdAsync(TeamId) as List<UserViewModel>;
+
+    private async Task OnMemberDeleteClickAsync(UserViewModel user)
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TeamsService.DeleteMemberAsync(new() { TeamId = team.Id, UserId = user.Id });
+            Snackbar.Add("Member deleted", Severity.Success);
+            await InitializeMembersAsync();
+        });
+    }
+
+    private void ShowMemberAddingDialog()
+    {
+        DialogService.ShowMemberAddingDialog(TeamId, async () =>
+        {
+            await InitializeMembersAsync();
+            StateHasChanged();
+        });
+    }
 }

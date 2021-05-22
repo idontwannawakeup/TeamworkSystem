@@ -1,15 +1,16 @@
-﻿@inject ISnackbar Snackbar  
+﻿@inject ISnackbar Snackbar
 @inject IUsersService UsersService
+@inject ITeamsService TeamsService 
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@friends" OnValidSubmit="@OnValidSubmitAsync">
+<EditForm Model="@teamMember" OnValidSubmit="@OnValidSubmitAsync">
     <MudDialog>
 
         <DialogContent>
             <MudSelect T="@UserViewModel"
-                       Label="Friend"
-                       Value="@friends.Second"
-                       ValueChanged="@(e => (friends.Second, friends.SecondId) = (e, e.Id))"
+                       Label="Member"
+                       Value="@teamMember.User"
+                       ValueChanged="@(e => (teamMember.User, teamMember.UserId) = (e, e.Id))"
                        ToStringFunc="@(user => user?.FullName)">
                 @if (users is not null)
                 {
@@ -31,13 +32,13 @@
 
 @code {
 
-    [Parameter] public string UserId { get; set; }
+    [Parameter] public int TeamId { get; set; }
 
     [Parameter] public Func<Task> OnCreated { get; set; }
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private FriendsViewModel friends = new();
+    private TeamMemberViewModel teamMember = new();
 
     private List<UserViewModel> users = null;
 
@@ -45,7 +46,7 @@
     {
         await base.OnInitializedAsync();
         await InitializeUsersAsync();
-        friends.FirstId = UserId;
+        teamMember.TeamId = TeamId;
     }
 
     private async Task InitializeUsersAsync()
@@ -57,9 +58,9 @@
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await UsersService.AddFriendsAsync(friends);
+            await TeamsService.AddMemberAsync(teamMember);
             DialogInstance.Close();
-            Snackbar.Add("Friend added", Severity.Success);
+            Snackbar.Add("Member added", Severity.Success);
             OnCreated?.Invoke();
         });
     }

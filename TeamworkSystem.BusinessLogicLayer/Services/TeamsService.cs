@@ -73,6 +73,20 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task AddMemberAsync(TeamMemberRequest request)
+        {
+            var member = await userManager.GetByIdAsync(request.UserId);
+            await teamsRepository.AddMemberAsync(request.TeamId, member);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DeleteMemberAsync(TeamMemberRequest request)
+        {
+            var member = await userManager.GetByIdAsync(request.UserId);
+            await teamsRepository.DeleteMemberAsync(request.TeamId, member);
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public TeamsService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;

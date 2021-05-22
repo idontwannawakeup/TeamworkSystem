@@ -26,6 +26,12 @@ namespace TeamworkSystem.WebClient.Services
         public async Task DeleteAsync(int id) =>
             await httpClient.DeleteAsync($"{id}");
 
+        public async Task AddMemberAsync(TeamMemberViewModel viewModel) =>
+            await httpClient.PostAsync($"members", viewModel);
+
+        public async Task DeleteMemberAsync(TeamMemberViewModel viewModel) =>
+            await httpClient.DeleteAsync($"members/{viewModel.TeamId}/{viewModel.UserId}");
+
         public TeamsService(HttpClient httpClient) =>
             this.httpClient = new(httpClient);
     }

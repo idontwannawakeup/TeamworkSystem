@@ -1,9 +1,11 @@
-﻿<MudDrawer @bind-Open="@open"
+﻿@inject IProjectsService ProjectsService 
+
+<MudDrawer @bind-Open="@open"
            Elevation="1"
            ClipMode="DrawerClipMode.Always"
            Anchor="Anchor.Right">
     <MudDrawerHeader>
-        <MudText Typo="@Typo.h6">ProjectName</MudText>
+        <MudText Typo="@Typo.h6">@(projectModel?.Title)</MudText>
     </MudDrawerHeader>
     <MudNavMenu>
         <MudNavLink Match="NavLinkMatch.All"
@@ -47,6 +49,8 @@
 
     [Parameter] public RenderFragment ChildContent { get; set; }
 
+    private ProjectViewModel projectModel = null;
+
     private string OverviewLink => $"/project/{ProjectId}/overview";
 
     private string BoardLink => $"/project/{ProjectId}/board";
@@ -61,9 +65,18 @@
 
     private string drawerIcon = Icons.Material.Filled.KeyboardArrowLeft;
 
-    bool open = false;
+    private bool open = false;
 
-    void ToggleDrawer() =>
+    private void ToggleDrawer() =>
         (open, drawerIcon) = open ? (false, showIcon) : (true, hideIcon);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeProjectAsync();
+    }
+
+    private async Task InitializeProjectAsync() =>
+        projectModel = await ProjectsService.GetByIdAsync(ProjectId);
 
 }

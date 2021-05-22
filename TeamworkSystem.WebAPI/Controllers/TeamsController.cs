@@ -111,6 +111,47 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
+        [HttpPost("members")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> AddMemberAsync([FromBody] TeamMemberRequest request)
+        {
+            try
+            {
+                await teamsService.AddMemberAsync(request);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
+            }
+        }
+
+        [HttpDelete("members/{teamId}/{memberId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteMemberAsync(
+            [FromRoute] int teamId,
+            [FromRoute] string memberId)
+        {
+            try
+            {
+                var request = new TeamMemberRequest() { TeamId = teamId, UserId = memberId };
+                await teamsService.DeleteMemberAsync(request);
+                return Ok();
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
+            }
+        }
+
         public TeamsController(ITeamsService teamsService)
         {
             this.teamsService = teamsService;

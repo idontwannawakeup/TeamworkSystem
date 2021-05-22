@@ -15,5 +15,9 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task UpdateAsync(TeamViewModel viewModel);
 
         Task DeleteAsync(int id);
+
+        Task AddMemberAsync(TeamMemberViewModel viewModel);
+
+        Task DeleteMemberAsync(TeamMemberViewModel viewModel);
     }
 }

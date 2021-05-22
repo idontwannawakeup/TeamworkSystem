@@ -11,7 +11,7 @@
     <ProjectLayout ProjectId="@ProjectId">
 
         <EditForm Model="@projectModel" OnValidSubmit="OnValidSubmitAsync">
-            <MudContainer MaxWidth="@MaxWidth.Small">
+            <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
                 <MudGrid Spacing="2" Class="mt-8">
                     <MudItem xs="12" md="6" Class="d-flex align-center">
                         <MudText Typo="@Typo.h6">Title</MudText>
@@ -113,7 +113,11 @@ else
 
     private async Task OnValidSubmitAsync()
     {
-        await Task.Run(() => System.Console.WriteLine("Submit"));
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await ProjectsService.UpdateAsync(projectModel);
+            Snackbar.Add("Project updated", Severity.Success);
+        });
     }
 
 }

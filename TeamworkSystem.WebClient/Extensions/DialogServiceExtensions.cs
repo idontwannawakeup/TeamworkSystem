@@ -59,6 +59,21 @@ namespace TeamworkSystem.WebClient.Extensions
                 DialogOptions);
         }
 
+        public static void ShowMemberAddingDialog(
+            this IDialogService dialogService,
+            int teamId,
+            Func<Task> onCreated)
+        {
+            dialogService.Show<MemberAddingDialog>(
+                "Add member",
+                new DialogParameters()
+                {
+                    ["TeamId"] = teamId,
+                    ["OnCreated"] = onCreated
+                },
+                DialogOptions);
+        }
+
         public static async Task<bool?> ShowDeleteConfirmingDialog(
             this IDialogService dialogService,
             string message = "Are you sure you want to delete this item?")
