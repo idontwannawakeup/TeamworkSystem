@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using FluentValidation;
-using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
+using TeamworkSystem.WebClient.ViewModels;
 
-namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
+namespace TeamworkSystem.WebClient.Validation
 {
-    public class UserSignUpRequestValidator : AbstractValidator<UserSignUpRequest>
+    public class UserSignUpViewModelValidator : AbstractValidator<UserSignUpViewModel>
     {
-        public UserSignUpRequestValidator()
+        public UserSignUpViewModelValidator()
         {
             RuleFor(request => request.UserName)
                 .NotEmpty()

@@ -6,65 +6,65 @@
 @inject RequestErrorsHandler RequestErrorsHandler
 
 <EditForm Model="userModel" OnValidSubmit="@SignUpAsync">
+    <FluentValidationValidator />
     <MudContainer Class="pb-8" MaxWidth="@MaxWidth.Medium">
         <MudCard Elevation="4" Class="px-sm-4 px-md-12 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
             <MudCardContent>
-                <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">Please sign up!</MudText>
-                <MudGrid>
+                <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">Please sign up</MudText>
+                <MudGrid Spacing="2">
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="@nameof(userModel.UserName)"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@userModel.UserName" />
+                                      @bind-Value="@userModel.UserName"
+                                      For="@(() => userModel.UserName)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="@nameof(userModel.Email)"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@userModel.Email" />
+                                      @bind-Value="@userModel.Email"
+                                      For="@(() => userModel.Email)"/>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="@nameof(userModel.Password)"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@userModel.Password" />
+                                      @bind-Value="@userModel.Password"
+                                      For="@(() => userModel.Password)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="Confirm password"
                                       Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="@nameof(userModel.FirstName)"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@userModel.FirstName" />
+                                      @bind-Value="@userModel.FirstName"
+                                      For="@(() => userModel.FirstName)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="@nameof(userModel.LastName)"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@userModel.LastName" />
+                                      @bind-Value="@userModel.LastName"
+                                      For="@(() => userModel.LastName)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="@nameof(userModel.Profession)"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@userModel.Profession" />
+                                      @bind-Value="@userModel.Profession"
+                                      For="@(() => userModel.Profession)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Class="my-2"
                                       Label="@nameof(userModel.Specialization)"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@userModel.Specialization" />
+                                      @bind-Value="@userModel.Specialization"
+                                      For="@(() => userModel.Specialization)" />
                     </MudItem>
                 </MudGrid>
             </MudCardContent>

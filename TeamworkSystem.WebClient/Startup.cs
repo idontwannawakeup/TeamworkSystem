@@ -1,4 +1,6 @@
+using System;
 using Blazored.LocalStorage;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +33,13 @@ namespace TeamworkSystem.WebClient
             services.AddMudServices();
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
+
+            services.AddMvc()
+                    .AddFluentValidation(configuration =>
+                    {
+                        configuration.RegisterValidatorsFromAssemblies(
+                            AppDomain.CurrentDomain.GetAssemblies());
+                    });
 
             services.AddTransient<RequestErrorsHandler>();
 

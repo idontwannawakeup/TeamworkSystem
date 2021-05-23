@@ -6,24 +6,27 @@
 @inject RequestErrorsHandler RequestErrorsHandler
 
 <EditForm Model="@userModel" OnValidSubmit="@SignInAsync">
+    <FluentValidationValidator />
     <MudContainer Class="pb-8" MaxWidth="@MaxWidth.Small">
         <MudCard Elevation="4" Class="px-sm-4 px-md-12 px-lg-16 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
             <MudCardContent>
                 <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">Please sign in</MudText>
-                <MudTextField T="@string"
-                              Class="my-4"
-                              Label="@nameof(userModel.UserName)"
-                              Variant="Variant.Outlined"
-                              @bind-Value="@userModel.UserName" />
-                <MudTextField T="@string"
-                              Class="my-4"
-                              Label="@nameof(userModel.Password)"
-                              Variant="@Variant.Outlined"
-                              @bind-Value="@userModel.Password"
-                              InputType="@passwordType"
-                              Adornment="@Adornment.End"
-                              AdornmentIcon="@passwordIcon"
-                              OnAdornmentClick="@(e => ChangePasswordIcon())" />
+                <MudElement HtmlTag="div" Class="d-flex flex-column gap-2">
+                    <MudTextField T="@string"
+                                  Label="@nameof(userModel.UserName)"
+                                  Variant="Variant.Outlined"
+                                  @bind-Value="@userModel.UserName"
+                                  For="@(() => userModel.UserName)" />
+                    <MudTextField T="@string"
+                                  Label="@nameof(userModel.Password)"
+                                  Variant="@Variant.Outlined"
+                                  @bind-Value="@userModel.Password"
+                                  For="@(() => userModel.Password)"
+                                  InputType="@passwordType"
+                                  Adornment="@Adornment.End"
+                                  AdornmentIcon="@passwordIcon"
+                                  OnAdornmentClick="@(e => ChangePasswordIcon())" />
+                </MudElement>
             </MudCardContent>
             <MudCardActions>
                 <MudButton Class="mx-auto mt-8 py-2 px-12"
