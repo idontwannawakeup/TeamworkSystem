@@ -1,6 +1,7 @@
 ﻿@page "/ticket/{TicketId:int}/settings"
 @inject ISnackbar Snackbar
 @inject ITicketsService TicketsService
+@inject IUsersService UsersService
 @inject RequestErrorsHandler RequestErrorsHandler
 
 @if (ticket is not null)
@@ -18,6 +19,21 @@
                                   @bind-Value="@ticket.Title"
                                   For="@(() => ticket.Title)"
                                   Variant="@Variant.Outlined" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@nameof(ticket.Executor)</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="@UserViewModel"
+                               Value="@ticket.Executor"
+                               ValueChanged="@(e => (ticket.Executor, ticket.ExecutorId) = (e, e.Id))"
+                               ToStringFunc="@(user => user?.FullName)">
+                        @foreach (var user in members)
+                        {
+                            <MudSelectItem T="@UserViewModel" Value="@user" />
+                        }
+                    </MudSelect>
                 </MudItem>
 
                 <MudItem xs="12" md="6" Class="d-flex align-center">
@@ -104,14 +120,20 @@ else
 
     private TicketViewModel ticket = null;
 
+    private List<UserViewModel> members = null;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await InitializeTicketAsync();
+        await InitializeMembersAsync();
     }
 
     private async Task InitializeTicketAsync() =>
         ticket = await TicketsService.GetByIdAsync(TicketId);
+
+    private async Task InitializeMembersAsync() =>
+        members = await UsersService.GetByTeamIdAsync(ticket.Project.Team.Id) as List<UserViewModel>;
 
     private async Task UpdateTicketAsync()
     {

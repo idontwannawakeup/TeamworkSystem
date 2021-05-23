@@ -27,8 +27,9 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         public override async Task<Ticket> GetCompleteEntityAsync(int id)
         {
             return await table
-                .Include(ticket => ticket.Project)
                 .Include(ticket => ticket.Executor)
+                .Include(ticket => ticket.Project)
+                .ThenInclude(project => project.Team)
                 .SingleOrDefaultAsync(ticket => ticket.Id == id)
                     ?? throw new EntityNotFoundException(
                         GetEntityNotFoundErrorMessage(id));
