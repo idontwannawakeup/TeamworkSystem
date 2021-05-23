@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
@@ -67,6 +68,12 @@ namespace TeamworkSystem.WebAPI.Controllers
             {
                 await ratingsService.InsertAsync(request);
                 return Ok();
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new { Message = "Rating from you to this user already exists." });
             }
             catch (Exception e)
             {

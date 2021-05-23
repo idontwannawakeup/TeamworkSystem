@@ -152,9 +152,12 @@
 
         if (confirmed)
         {
-            await TicketsService.DeleteAsync(TicketId);
-            Snackbar.Add("Ticket deleted", Severity.Success);
-            NavigationManager.NavigateTo("/home");
+            await RequestErrorsHandler.HandleRequestAsync(async () =>
+            {
+                await TicketsService.DeleteAsync(TicketId);
+                Snackbar.Add("Ticket deleted", Severity.Success);
+                NavigationManager.NavigateTo("/home");
+            });
         }
     }
 
@@ -163,7 +166,7 @@
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
             ticket = await TicketsService.GetByIdAsync(TicketId);
-        });        
+        });
     }
 
 }

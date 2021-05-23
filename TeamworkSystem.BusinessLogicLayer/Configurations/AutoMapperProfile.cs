@@ -37,7 +37,9 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         private void CreateRatingsMaps()
         {
             CreateMap<RatingRequest, Rating>();
-            CreateMap<Rating, RatingResponse>();
+            CreateMap<Rating, RatingResponse>().ForMember(
+                response => response.Average,
+                options => options.MapFrom(rating => (rating.Skills + rating.Social) / 2));
         }
 
         public AutoMapperProfile()

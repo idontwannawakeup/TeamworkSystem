@@ -1,4 +1,5 @@
 ﻿@page "/friends"
+@inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject IUsersService UsersService
@@ -12,7 +13,9 @@
               Items="@friends"
               Hover="@true"
               Elevation="0"
-              Dense="@true">
+              Dense="@true"
+              OnRowClick="@OpenFriendProfile"
+              RowClass="cursor-pointer">
         <HeaderContent>
             <MudTh>Name</MudTh>
             <MudTh>Profession</MudTh>
@@ -73,13 +76,19 @@ else
 
     private async Task OnDeleteClickAsync(string friendId)
     {
-        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
+            "Are you sure you want to delete this friend?") ?? false;
+
+        if (confirmed)
         {
-            var viewModel = new FriendsViewModel() { FirstId = userId, SecondId = friendId };
-            await UsersService.DeleteFriendsAsync(viewModel);
-            friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
-            Snackbar.Add("Friend deleted.", Severity.Success);
-        });
+            await RequestErrorsHandler.HandleRequestAsync(async () =>
+            {
+                var viewModel = new FriendsViewModel() { FirstId = userId, SecondId = friendId };
+                await UsersService.DeleteFriendsAsync(viewModel);
+                friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
+                Snackbar.Add("Friend deleted.", Severity.Success);
+            });
+        }
     }
 
     private void ShowFriendsCreationDialog()
@@ -90,5 +99,8 @@ else
             StateHasChanged();
         });
     }
+
+    private void OpenFriendProfile(TableRowClickEventArgs<UserViewModel> args) =>
+        NavigationManager.NavigateTo($"/users/{args.Item.Id}/profile");
 
 }

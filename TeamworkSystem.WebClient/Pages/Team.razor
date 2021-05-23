@@ -55,7 +55,7 @@
                 <MudList Clickable="@true">
                     @foreach (var member in members)
                     {
-                        <MudListItem>
+                        <MudListItem OnClick="@(e => OpenMemberProfile(member))">
                             <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
 
                                 <MudAvatar Color="@Color.Secondary">A</MudAvatar>
@@ -72,7 +72,7 @@
                                              Dense="@true"
                                              OffsetX="true"
                                              Direction="@Direction.Left">
-                                        <MudMenuItem OnClick="@(async e => await OnMemberDeleteClickAsync(member))">
+                                        <MudMenuItem OnClick="@(async e => await DeleteMemberAsync(member))">
                                             Remove
                                         </MudMenuItem>
                                     </MudMenu>
@@ -106,7 +106,8 @@
                       Items="@projects"
                       Hover="@true"
                       Elevation="4"
-                      OnRowClick="@OnRowClick">
+                      OnRowClick="@OnRowClick"
+                      RowClass="cursor-pointer">
                 <ToolBarContent>
                     <MudText Typo="@Typo.h4">Projects</MudText>
                     <MudToolBarSpacer />
@@ -180,14 +181,20 @@
     private async Task InitializeMembersAsync() =>
         members = await UsersService.GetByTeamIdAsync(TeamId) as List<UserViewModel>;
 
-    private async Task OnMemberDeleteClickAsync(UserViewModel user)
+    private async Task DeleteMemberAsync(UserViewModel user)
     {
-        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
+            "Are you sure you want to remove this member?") ?? false;
+
+        if (confirmed)
         {
-            await TeamsService.DeleteMemberAsync(new() { TeamId = team.Id, UserId = user.Id });
-            Snackbar.Add("Member deleted", Severity.Success);
-            await InitializeMembersAsync();
-        });
+            await RequestErrorsHandler.HandleRequestAsync(async () =>
+            {
+                await TeamsService.DeleteMemberAsync(new() { TeamId = team.Id, UserId = user.Id });
+                Snackbar.Add("Member deleted", Severity.Success);
+                await InitializeMembersAsync();
+            });
+        }
     }
 
     private void ShowMemberAddingDialog()
@@ -198,4 +205,16 @@
             StateHasChanged();
         });
     }
+
+    private void OpenMemberProfile(UserViewModel member)
+    {
+        if (userId == member.Id)
+        {
+            NavigationManager.NavigateTo($"/profile");
+            return;
+        }
+
+        NavigationManager.NavigateTo($"/users/{member.Id}/profile");
+    }
+
 }

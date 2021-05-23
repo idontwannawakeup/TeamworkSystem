@@ -1,147 +1,244 @@
-﻿@page "/users/profile"
+﻿@page "/users/{UserId}/profile"
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject IUsersService UsersService
+@inject IRatingsService RatingsService
+@inject ITeamsService TeamsService 
+@inject RequestErrorsHandler RequestErrorsHandler
 
-<MudPaper Elevation="@elevation" Class="mt-10">
-    <MudGrid>
-        <MudItem xs="6" md="4" Class="mx-auto mx-md-0 pa-6">
-            <img class="img-responsive" src="assets/home/projects.png" alt="Profile picture" />
+@if (user is not null)
+{
+    <MudPaper Elevation="@elevation" Class="mt-10">
+        <MudGrid>
+            <MudItem xs="6" md="4" Class="mx-auto mx-md-0 pa-6">
+                <img class="img-responsive" src="assets/home/projects.png" alt="Profile picture" />
+            </MudItem>
+            <MudItem xs="12" md="8">
+                <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
+                    <MudElement HtmlTag="div" Class="user-profile__title">
+                        <MudText Typo="@Typo.h5" Color="@Color.Dark">@user.FullName</MudText>
+                        <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
+                    </MudElement>
+                    <MudElement HtmlTag="div" Class="user-profile__ratings mt-4">
+                        <MudText Typo="@Typo.h6" Style="@colorGrey">Rankings</MudText>
+                        <MudRating ReadOnly="@true" SelectedValue="3" />
+                    </MudElement>
+                    <MudElement HtmlTag="div" Class="user-profile__add-to-friends mt-4">
+                        <MudButton Variant="@Variant.Outlined"
+                                   Color="@Color.Success"
+                                   EndIcon="@Icons.Material.Filled.Add">
+                            Add to friends
+                        </MudButton>
+                    </MudElement>
+                </MudElement>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <MudGrid Spacing="4">
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
+                <MudText Typo="@Typo.h6" Style="@colorGrey">Profession</MudText>
+                @if (user.Profession is not null)
+                {
+                    <MudText Typo="@Typo.subtitle2">@user.Profession</MudText>
+                }
+                else
+                {
+                    <NoneChip />
+                }
+                <MudDivider Class="mt-2 mb-4" />
+                <MudText Typo="@Typo.h6" Style="@colorGrey">Specialization</MudText>
+                @if (user.Specialization is not null)
+                {
+                    <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
+                }
+                else
+                {
+                    <NoneChip />
+                }
+                <MudDivider Class="mt-2 mb-4" />
+                <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
+                @if (user.Email is not null)
+                {
+                    <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
+                }
+                else
+                {
+                    <NoneChip />
+                }
+                <MudDivider Class="mt-2 mb-4" />
+            </MudPaper>
         </MudItem>
         <MudItem xs="12" md="8">
-            <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
-                <MudElement HtmlTag="div" Class="user-profile__title">
-                    <MudText Typo="@Typo.h5" Color="@Color.Dark">UserName</MudText>
-                    <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">Profession</MudText>
-                </MudElement>
-                <MudElement HtmlTag="div" Class="user-profile__ratings mt-4">
-                    <MudText Typo="@Typo.h6" Style="@colorGrey">Rankings</MudText>
-                    <MudRating ReadOnly="@true" SelectedValue="3" />
-                </MudElement>
-                <MudElement HtmlTag="div" Class="user-profile__add-to-friends mt-4">
-                    <MudButton Variant="@Variant.Outlined"
-                               Color="@Color.Success"
-                               EndIcon="@Icons.Material.Filled.Add">
-                        Add to friends
-                    </MudButton>
-                </MudElement>
-            </MudElement>
-        </MudItem>
-    </MudGrid>
-</MudPaper>
+            <MudTabs Elevation="@elevation"
+                     ApplyEffectsToContainer="@true"
+                     Rounded="@true"
+                     Class="mt-10">
 
-<MudGrid Spacing="4">
-    <MudItem xs="12" md="4">
-        <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
-            <MudText Typo="@Typo.h6" Style="@colorGrey">Profession</MudText>
-            <MudText Typo="@Typo.subtitle2">UserProfession</MudText>
-            <MudDivider Class="mt-2 mb-4" />
-            <MudText Typo="@Typo.h6" Style="@colorGrey">Specialization</MudText>
-            <MudText Typo="@Typo.subtitle2">UserSpecialization</MudText>
-            <MudDivider Class="mt-2 mb-4" />
-            <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
-            <MudText Typo="@Typo.subtitle2">UserEmail</MudText>
-            <MudDivider Class="mt-2 mb-4" />
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" md="8">
-        <MudTabs Elevation="@elevation"
-                 ApplyEffectsToContainer="@true"
-                 Rounded="@true"
-                 Class="mt-10">
-
-            <MudTabPanel Text="Teams">
-                <MudElement HtmlTag="div" Class="pa-6">
-                    <MudList Clickable="@true">
-                        @foreach (var number in Enumerable.Range(0, 4))
-                        {
-                            <MudListItem>
-                                <MudElement HtmlTag="div" Class="d-flex justify-space-between align-center">
-                                    <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
-                                        <MudAvatar Color="@Color.Secondary">A</MudAvatar>
-                                        <MudElement HtmlTag="div" Class="d-flex flex-column">
-                                            <MudText Typo="@Typo.subtitle2">TeamName</MudText>
-                                            <MudText Typo="@Typo.caption" Style="@colorGrey">Specializarion</MudText>
+                <MudTabPanel Text="Teams">
+                    <MudElement HtmlTag="div" Class="pa-6">
+                        <MudList Clickable="@true">
+                            @foreach (var team in teams)
+                            {
+                                <MudListItem OnClick="@(e => OnTeamClick(team))">
+                                    <MudElement HtmlTag="div" Class="d-flex justify-space-between align-center">
+                                        <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                                            <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                                            <MudElement HtmlTag="div" Class="d-flex flex-column">
+                                                <MudText Typo="@Typo.subtitle2">@team.Name</MudText>
+                                                <MudText Typo="@Typo.caption" Style="@colorGrey">@team.Specialization</MudText>
+                                            </MudElement>
+                                        </MudElement>
+                                        <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+                                            <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                                            <span>@team.Leader.FullName</span>
                                         </MudElement>
                                     </MudElement>
-                                    <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
-                                        <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-                                        <span>LeaderName</span>
-                                    </MudElement>
-                                </MudElement>
-                            </MudListItem>
-                            <MudDivider Class="mb-4" />
-                        }
-                    </MudList>
-                </MudElement>
-            </MudTabPanel>
+                                </MudListItem>
+                                <MudDivider Class="mb-4" />
+                            }
+                        </MudList>
+                    </MudElement>
+                </MudTabPanel>
 
-            <MudTabPanel Text="Ratings">
-                <MudElement HtmlTag="div" Class="pa-6">
-                    <MudList Clickable="@true">
-                        @foreach (var number in Enumerable.Range(0, 7))
-                        {
-                            <MudListItem>
-                                <MudElement HtmlTag="div"
-                                            Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
+                <MudTabPanel Text="Ratings">
+                    <MudElement HtmlTag="div" Class="pa-6">
+                        <MudList Clickable="@true">
+                            @foreach (var rating in ratings)
+                            {
+                                <MudListItem OnClick="@(e => OnRatingClick(rating))">
                                     <MudElement HtmlTag="div"
-                                                Class="rating-item__author d-flex align-center gap-4">
-                                        <MudAvatar Color="@Color.Secondary">A</MudAvatar>
-                                        <MudText Typo="@Typo.subtitle1">AuthorName</MudText>
+                                                Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
+                                        <MudElement HtmlTag="div"
+                                                    Class="rating-item__author d-flex align-center gap-4">
+                                            <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                                            <MudText Typo="@Typo.subtitle1">@rating.From.FullName</MudText>
+                                        </MudElement>
+                                        <MudElement HtmlTag="div"
+                                                    Class="rating-item__average d-flex flex-column align-center gap-1">
+                                            <MudText Typo="@Typo.subtitle2">Average: @rating.Average</MudText>
+                                            <MudRating SelectedValue="@((int) rating.Average)" ReadOnly="@true" />
+                                        </MudElement>
                                     </MudElement>
-                                    <MudElement HtmlTag="div"
-                                                Class="rating-item__average d-flex flex-column align-center gap-1">
-                                        <MudText Typo="@Typo.subtitle2">Average: 15.5</MudText>
-                                        <MudRating SelectedValue="1" ReadOnly="@true" />
-                                    </MudElement>
-                                </MudElement>
-                            </MudListItem>
-                            <MudDivider Class="mb-4" />
-                        }
-                    </MudList>
-                </MudElement>
-            </MudTabPanel>
+                                </MudListItem>
+                                <MudDivider Class="mb-4" />
+                            }
+                        </MudList>
+                    </MudElement>
+                </MudTabPanel>
 
-            <MudTabPanel Text="Leave rate">
-                <MudElement HtmlTag="div" Class="pa-6">
-                    <MudText Typo="@Typo.h5">Rate this user!</MudText>
-                    <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@colorGrey">Social</MudText>
-                        <MudRating SelectedValue="3" />
-                        <MudDivider Class="mt-2 mb-4" />
-                    </MudElement>
-                    <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@colorGrey">Skills</MudText>
-                        <MudRating />
-                        <MudDivider Class="mt-2 mb-4" />
-                    </MudElement>
-                    <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@colorGrey">Responsibility</MudText>
-                        <MudRating />
-                        <MudDivider Class="mt-2 mb-4" />
-                    </MudElement>
-                    <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                        <MudText Typo="@Typo.h6" Style="@colorGrey">Punctuality</MudText>
-                        <MudRating />
-                        <MudDivider Class="mt-2 mb-4" />
-                    </MudElement>
-                    <MudTextField T="@string"
-                                  Label="Comment"
-                                  HelperText="Write your thoughts on this person!"
-                                  Lines="4" />
-                    <MudButton FullWidth="@true"
-                               EndIcon="@Icons.Material.Filled.Send"
-                               Class="mt-4">
-                        Save
-                    </MudButton>
-                </MudElement>
-            </MudTabPanel>
+                <MudTabPanel Text="Leave rate">
+                    <EditForm Model="@ratingFromVisitedUser" OnValidSubmit="@LeaveRatingAsync">
+                        <MudElement HtmlTag="div" Class="pa-6">
+                            <MudText Typo="@Typo.h5">Rate this user!</MudText>
+                            <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
+                                <MudText Typo="@Typo.h6" Style="@colorGrey">
+                                    @nameof(ratingFromVisitedUser.Social)
+                                </MudText>
+                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Social" />
+                                <MudDivider Class="mt-2 mb-4" />
+                            </MudElement>
+                            <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
+                                <MudText Typo="@Typo.h6" Style="@colorGrey">
+                                    @nameof(ratingFromVisitedUser.Skills)
+                                </MudText>
+                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Skills" />
+                                <MudDivider Class="mt-2 mb-4" />
+                            </MudElement>
+                            <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
+                                <MudText Typo="@Typo.h6" Style="@colorGrey">
+                                    @nameof(ratingFromVisitedUser.Responsibility)
+                                </MudText>
+                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Responsibility" />
+                                <MudDivider Class="mt-2 mb-4" />
+                            </MudElement>
+                            <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
+                                <MudText Typo="@Typo.h6" Style="@colorGrey">
+                                    @nameof(ratingFromVisitedUser.Punctuality)
+                                </MudText>
+                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Punctuality" />
+                                <MudDivider Class="mt-2 mb-4" />
+                            </MudElement>
+                            <MudTextField T="@string"
+                                          Label="@nameof(ratingFromVisitedUser.Comment)"
+                                          @bind-Value="@ratingFromVisitedUser.Comment"
+                                          HelperText="Write your thoughts on this person!"
+                                          Lines="4" />
+                            <MudButton FullWidth="@true"
+                                       EndIcon="@Icons.Material.Filled.Send"
+                                       Class="mt-4"
+                                       ButtonType="@ButtonType.Submit"
+                                       Disabled="@addRatingButtonDisabled">
+                                Save
+                            </MudButton>
+                        </MudElement>
+                    </EditForm>
+                </MudTabPanel>
 
-        </MudTabs>
-    </MudItem>
-</MudGrid>
+            </MudTabs>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <Loader />
+}
 
 @code {
+
+    [Parameter] public string UserId { get; set; }
+
+    [CascadingParameter] public Task<AuthenticationState> State { get; set; }
+
+    private UserViewModel user = null;
+
+    private RatingViewModel ratingFromVisitedUser = null;
+
+    private List<RatingViewModel> ratings = null;
+
+    private List<TeamViewModel> teams = null;
 
     private readonly string colorGrey = $"color: {Colors.Grey.Default};";
 
     private readonly int elevation = 4;
+
+    private bool addRatingButtonDisabled = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var visitedUserId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        await InitializeUserAsync();
+        ratingFromVisitedUser = new() { FromId = visitedUserId, ToId = user.Id };
+        await InitializeRatingsAsync();
+        await InitializeTeamsAsync();
+    }
+
+    private async Task InitializeUserAsync() =>
+        user = await UsersService.GetByIdAsync(UserId);
+
+    private async Task InitializeRatingsAsync() =>
+        ratings = await RatingsService.GetByRatedUserId(UserId) as List<RatingViewModel>;
+
+    private async Task InitializeTeamsAsync() =>
+        teams = await TeamsService.GetTeamsForUserAsync(UserId) as List<TeamViewModel>;
+
+    private void OnTeamClick(TeamViewModel team) =>
+        NavigationManager.NavigateTo($"/team/{team.Id}");
+
+    private void OnRatingClick(RatingViewModel rating) => throw new();
+
+    private async Task LeaveRatingAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await RatingsService.CreateAsync(ratingFromVisitedUser);
+            Snackbar.Add("Rating added", Severity.Success);
+            addRatingButtonDisabled = true;
+            await InitializeRatingsAsync();
+        });
+    }
 
 }

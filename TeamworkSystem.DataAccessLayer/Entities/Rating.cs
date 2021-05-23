@@ -12,9 +12,9 @@
 
         public int Skills { get; set; }
 
-        public int? Responsibility { get; set; }
+        public int Responsibility { get; set; }
 
-        public int? Punctuality { get; set; }
+        public int Punctuality { get; set; }
 
         public string Comment { get; set; }
 

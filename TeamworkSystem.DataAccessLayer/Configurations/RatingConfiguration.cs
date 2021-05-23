@@ -14,6 +14,12 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
             builder.Property(rating => rating.Skills)
                    .IsRequired();
 
+            builder.Property(rating => rating.Responsibility)
+                   .IsRequired();
+
+            builder.Property(rating => rating.Punctuality)
+                   .IsRequired();
+
             builder.Property(rating => rating.Comment)
                    .HasColumnType("ntext");
 

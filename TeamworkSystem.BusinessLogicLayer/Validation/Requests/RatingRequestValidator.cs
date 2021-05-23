@@ -20,32 +20,32 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
                 .WithMessage(rating => $"{nameof(rating.Social)} can't be empty.")
                 .GreaterThan(0)
                 .WithMessage(rating => $"{nameof(rating.Social)} should be greater than 0.")
-                .LessThanOrEqualTo(100)
-                .WithMessage(rating => $"{nameof(rating.Social)} should be less than or equal to 100.");
+                .LessThanOrEqualTo(5)
+                .WithMessage(rating => $"{nameof(rating.Social)} should be less than or equal to 5.");
 
             RuleFor(rating => rating.Skills)
                 .NotEmpty()
                 .WithMessage(rating => $"{nameof(rating.Skills)} can't be empty.")
                 .GreaterThan(0)
                 .WithMessage(rating => $"{nameof(rating.Skills)} should be greater than 0.")
-                .LessThanOrEqualTo(100)
-                .WithMessage(rating => $"{nameof(rating.Skills)} should be less than or equal to 100.");
+                .LessThanOrEqualTo(5)
+                .WithMessage(rating => $"{nameof(rating.Skills)} should be less than or equal to 5.");
 
             RuleFor(rating => rating.Responsibility)
+                .NotEmpty()
+                .WithMessage(rating => $"{nameof(rating.Responsibility)} can't be empty.")
                 .GreaterThan(0)
-                .When(rating => rating.Responsibility is not null)
                 .WithMessage(rating => $"{nameof(rating.Responsibility)} should be greater than 0.")
-                .LessThanOrEqualTo(100)
-                .When(rating => rating.Responsibility is not null)
-                .WithMessage(rating => $"{nameof(rating.Responsibility)} should be less than or equal to 100.");
+                .LessThanOrEqualTo(5)
+                .WithMessage(rating => $"{nameof(rating.Responsibility)} should be less than or equal to 5.");
 
             RuleFor(rating => rating.Punctuality)
+                .NotEmpty()
+                .WithMessage(rating => $"{nameof(rating.Punctuality)} can't be empty.")
                 .GreaterThan(0)
-                .When(rating => rating.Punctuality is not null)
                 .WithMessage(rating => $"{nameof(rating.Punctuality)} should be greater than 0.")
-                .LessThanOrEqualTo(100)
-                .When(rating => rating.Punctuality is not null)
-                .WithMessage(rating => $"{nameof(rating.Punctuality)} should be less than or equal to 100.");
+                .LessThanOrEqualTo(5)
+                .WithMessage(rating => $"{nameof(rating.Punctuality)} should be less than or equal to 5.");
         }
     }
 }
