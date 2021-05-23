@@ -18,7 +18,10 @@
                 <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
                     <MudElement HtmlTag="div" Class="user-profile__title">
                         <MudText Typo="@Typo.h5" Color="@Color.Dark">@user.FullName</MudText>
-                        <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
+                        @if (!string.IsNullOrWhiteSpace(user.Profession))
+                        {
+                            <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
+                        }
                     </MudElement>
                     <MudElement HtmlTag="div" Class="user-profile__ratings mt-4">
                         <MudText Typo="@Typo.h6" Style="@colorGrey">Rankings</MudText>
@@ -40,7 +43,7 @@
         <MudItem xs="12" md="4">
             <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Profession</MudText>
-                @if (user.Profession is not null)
+                @if (!string.IsNullOrWhiteSpace(user.Profession))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Profession</MudText>
                 }
@@ -50,7 +53,7 @@
                 }
                 <MudDivider Class="mt-2 mb-4" />
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Specialization</MudText>
-                @if (user.Specialization is not null)
+                @if (!string.IsNullOrWhiteSpace(user.Specialization))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
                 }
@@ -60,7 +63,7 @@
                 }
                 <MudDivider Class="mt-2 mb-4" />
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
-                @if (user.Email is not null)
+                @if (!string.IsNullOrWhiteSpace(user.Email))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
                 }
@@ -82,13 +85,16 @@
                         <MudList Clickable="@true">
                             @foreach (var team in teams)
                             {
-                                <MudListItem OnClick="@(e => OnTeamClick(team))">
+                                <MudListItem OnClick="@(e => OpenTeamPage(team))">
                                     <MudElement HtmlTag="div" Class="d-flex justify-space-between align-center">
                                         <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
                                             <MudAvatar Color="@Color.Secondary">A</MudAvatar>
                                             <MudElement HtmlTag="div" Class="d-flex flex-column">
                                                 <MudText Typo="@Typo.subtitle2">@team.Name</MudText>
-                                                <MudText Typo="@Typo.caption" Style="@colorGrey">@team.Specialization</MudText>
+                                                @if (!string.IsNullOrWhiteSpace(team.Specialization))
+                                                {
+                                                    <MudText Typo="@Typo.caption" Style="@colorGrey">@team.Specialization</MudText>
+                                                }
                                             </MudElement>
                                         </MudElement>
                                         <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
@@ -225,7 +231,7 @@ else
     private async Task InitializeTeamsAsync() =>
         teams = await TeamsService.GetTeamsForUserAsync(UserId) as List<TeamViewModel>;
 
-    private void OnTeamClick(TeamViewModel team) =>
+    private void OpenTeamPage(TeamViewModel team) =>
         NavigationManager.NavigateTo($"/team/{team.Id}");
 
     private void OpenFullRating(RatingViewModel rating) =>

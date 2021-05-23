@@ -53,7 +53,14 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         public async Task UpdateAsync(UserRequest request)
         {
-            var user = mapper.Map<UserRequest, User>(request);
+            var user = await userManager.GetByIdAsync(request.Id);
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Email = request.Email;
+            user.Profession = request.Profession;
+            user.Specialization = request.Specialization;
+
             await userManager.UpdateAsync(user);
             await unitOfWork.SaveChangesAsync();
         }

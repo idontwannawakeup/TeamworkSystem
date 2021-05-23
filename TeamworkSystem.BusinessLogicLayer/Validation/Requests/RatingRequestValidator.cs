@@ -7,6 +7,9 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
     {
         public RatingRequestValidator()
         {
+            const int leftBound = 1;
+            const int rightBound = 5;
+
             RuleFor(rating => rating.FromId)
                 .NotEmpty()
                 .WithMessage(rating => $"{nameof(rating.FromId)} can't be empty.");
@@ -18,34 +21,34 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
             RuleFor(rating => rating.Social)
                 .NotEmpty()
                 .WithMessage(rating => $"{nameof(rating.Social)} can't be empty.")
-                .GreaterThan(0)
-                .WithMessage(rating => $"{nameof(rating.Social)} should be greater than 0.")
-                .LessThanOrEqualTo(5)
-                .WithMessage(rating => $"{nameof(rating.Social)} should be less than or equal to 5.");
+                .GreaterThanOrEqualTo(leftBound)
+                .WithMessage(rating => $"{nameof(rating.Social)} should be greater than or equal to {leftBound}.")
+                .LessThanOrEqualTo(rightBound)
+                .WithMessage(rating => $"{nameof(rating.Social)} should be less than or equal to {rightBound}.");
 
             RuleFor(rating => rating.Skills)
                 .NotEmpty()
                 .WithMessage(rating => $"{nameof(rating.Skills)} can't be empty.")
-                .GreaterThan(0)
-                .WithMessage(rating => $"{nameof(rating.Skills)} should be greater than 0.")
-                .LessThanOrEqualTo(5)
-                .WithMessage(rating => $"{nameof(rating.Skills)} should be less than or equal to 5.");
+                .GreaterThanOrEqualTo(leftBound)
+                .WithMessage(rating => $"{nameof(rating.Skills)} should be greater than or equal to {leftBound}.")
+                .LessThanOrEqualTo(rightBound)
+                .WithMessage(rating => $"{nameof(rating.Skills)} should be less than or equal to {rightBound}.");
 
             RuleFor(rating => rating.Responsibility)
                 .NotEmpty()
                 .WithMessage(rating => $"{nameof(rating.Responsibility)} can't be empty.")
-                .GreaterThan(0)
-                .WithMessage(rating => $"{nameof(rating.Responsibility)} should be greater than 0.")
-                .LessThanOrEqualTo(5)
-                .WithMessage(rating => $"{nameof(rating.Responsibility)} should be less than or equal to 5.");
+                .GreaterThanOrEqualTo(leftBound)
+                .WithMessage(rating => $"{nameof(rating.Responsibility)} should be greater than or equal to {leftBound}.")
+                .LessThanOrEqualTo(rightBound)
+                .WithMessage(rating => $"{nameof(rating.Responsibility)} should be less than or equal to {rightBound}.");
 
             RuleFor(rating => rating.Punctuality)
                 .NotEmpty()
                 .WithMessage(rating => $"{nameof(rating.Punctuality)} can't be empty.")
-                .GreaterThan(0)
-                .WithMessage(rating => $"{nameof(rating.Punctuality)} should be greater than 0.")
-                .LessThanOrEqualTo(5)
-                .WithMessage(rating => $"{nameof(rating.Punctuality)} should be less than or equal to 5.");
+                .GreaterThanOrEqualTo(leftBound)
+                .WithMessage(rating => $"{nameof(rating.Punctuality)} should be greater than or equal to {leftBound}.")
+                .LessThanOrEqualTo(rightBound)
+                .WithMessage(rating => $"{nameof(rating.Punctuality)} should be less than or equal to {rightBound}.");
         }
     }
 }

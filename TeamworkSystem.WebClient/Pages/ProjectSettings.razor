@@ -6,11 +6,11 @@
 @inject IProjectsService ProjectsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-@if (projectModel is not null)
+@if (project is not null)
 {
     <ProjectLayout ProjectId="@ProjectId">
 
-        <EditForm Model="@projectModel" OnValidSubmit="OnValidSubmitAsync">
+        <EditForm Model="@project" OnValidSubmit="@UpdateProjectAsync">
             <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
                 <MudGrid Spacing="2" Class="mt-8">
                     <MudItem xs="12" md="6" Class="d-flex align-center">
@@ -18,7 +18,7 @@
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      @bind-Value="@projectModel.Title"
+                                      @bind-Value="@project.Title"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
                     <MudItem xs="12" md="6" Class="d-flex align-center">
@@ -26,7 +26,7 @@
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      @bind-Value="@projectModel.Type"
+                                      @bind-Value="@project.Type"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
                     <MudItem xs="12" md="6" Class="d-flex align-center">
@@ -34,7 +34,7 @@
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      @bind-Value="@projectModel.Url"
+                                      @bind-Value="@project.Url"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
                     <MudItem xs="12" Class="d-flex align-center">
@@ -42,24 +42,24 @@
                     </MudItem>
                     <MudItem xs="12">
                         <MudTextField T="@string"
-                                      @bind-Value="@projectModel.Description"
+                                      @bind-Value="@project.Description"
                                       Variant="@Variant.Outlined"
                                       Lines="15" />
                     </MudItem>
                 </MudGrid>
-                @if (userId == projectModel.Team.LeaderId)
+                @if (userId == project.Team.LeaderId)
                 {
-                    <div class="d-flex justify-center align-center">
+                    <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
                         <MudButton Variant="@Variant.Filled"
                                    Color="@Color.Error"
                                    EndIcon="@Icons.Material.Filled.Delete"
                                    Class="mt-4"
-                                   OnClick="@OnDeleteClickAsync">
+                                   OnClick="@DeleteProjectAsync">
                             Delete project
                         </MudButton>
-                    </div>
+                    </MudElement>
                 }
-                <div class="d-flex justify-center align-center">
+                <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
                     <MudButton Variant="@Variant.Filled"
                                Color="@Color.Primary"
                                EndIcon="@Icons.Material.Filled.Save"
@@ -67,7 +67,7 @@
                                ButtonType="@ButtonType.Submit">
                         Save changes
                     </MudButton>
-                </div>
+                </MudElement>
             </MudContainer>
         </EditForm>
 
@@ -84,7 +84,7 @@ else
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private ProjectViewModel projectModel = null;
+    private ProjectViewModel project = null;
 
     private string userId = null;
 
@@ -92,10 +92,13 @@ else
     {
         await base.OnInitializedAsync();
         userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
-        projectModel = await ProjectsService.GetByIdAsync(ProjectId);
+        await InitializeProjectAsync();
     }
 
-    private async Task OnDeleteClickAsync()
+    private async Task InitializeProjectAsync() =>
+        project = await ProjectsService.GetByIdAsync(ProjectId);
+
+    private async Task DeleteProjectAsync()
     {
         var confirmed = await DialogService.ShowDeleteConfirmingDialog(
             "Are you sure you want to delete this project?") ?? false;
@@ -111,11 +114,11 @@ else
         }
     }
 
-    private async Task OnValidSubmitAsync()
+    private async Task UpdateProjectAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await ProjectsService.UpdateAsync(projectModel);
+            await ProjectsService.UpdateAsync(project);
             Snackbar.Add("Project updated", Severity.Success);
         });
     }

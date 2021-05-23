@@ -14,7 +14,10 @@
                 <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
                     <MudElement HtmlTag="div" Class="user-profile__title">
                         <MudText Typo="@Typo.h5" Color="@Color.Dark">@user.FullName</MudText>
-                        <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
+                        @if (!string.IsNullOrWhiteSpace(user.Profession))
+                        {
+                            <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
+                        }
                     </MudElement>
                     <MudElement HtmlTag="div" Class="user-profile__ratings mt-4">
                         <MudText Typo="@Typo.h6" Style="@colorGrey">Rankings</MudText>
@@ -29,7 +32,7 @@
         <MudItem xs="12" md="4">
             <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Profession</MudText>
-                @if (user.Profession is not null)
+                @if (!string.IsNullOrWhiteSpace(user.Profession))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Profession</MudText>
                 }
@@ -39,7 +42,7 @@
                 }
                 <MudDivider Class="mt-2 mb-4" />
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Specialization</MudText>
-                @if (user.Specialization is not null)
+                @if (!string.IsNullOrWhiteSpace(user.Specialization))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
                 }
@@ -49,7 +52,7 @@
                 }
                 <MudDivider Class="mt-2 mb-4" />
                 <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
-                @if (user.Email is not null)
+                @if (!string.IsNullOrWhiteSpace(user.Email))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
                 }
@@ -61,7 +64,8 @@
                 <MudButton FullWidth="@true"
                            Variant="@Variant.Outlined"
                            Color="@Color.Info"
-                           EndIcon="@Icons.Material.Filled.Edit">
+                           EndIcon="@Icons.Material.Filled.Edit"
+                           Link="/profile/settings">
                     Edit
                 </MudButton>
             </MudPaper>

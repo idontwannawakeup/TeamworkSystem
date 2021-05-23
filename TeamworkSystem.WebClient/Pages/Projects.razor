@@ -15,18 +15,22 @@
               RowClass="cursor-pointer"
               Dense="@true">
         <HeaderContent>
-            <MudTh>Name</MudTh>
+            <MudTh>Title</MudTh>
             <MudTh>Type</MudTh>
             <MudTh>Team</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Name">
-                <MudElement HtmlTag="div" Class="d-flex align-center">
-                    <MudAvatar Color="@Color.Secondary">A</MudAvatar>
-                    <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Title</MudText>
-                </MudElement>
+            <MudTd DataLabel="Title">@context.Title</MudTd>
+            <MudTd DataLabel="Profession">
+                @if (context.Type is not null)
+                {
+                    @context.Type
+                }
+                else
+                {
+                    <NoneChip />
+                }
             </MudTd>
-            <MudTd DataLabel="Profession">@context.Type</MudTd>
             <MudTd DataLabel="Team">
                 <MudElement HtmlTag="div" Class="d-flex align-center">
                     <MudAvatar Color="@Color.Secondary">A</MudAvatar>

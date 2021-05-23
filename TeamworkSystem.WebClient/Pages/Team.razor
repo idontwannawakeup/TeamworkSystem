@@ -118,14 +118,32 @@
                                   Label="Search" />*@
                 </ToolBarContent>
                 <HeaderContent>
-                    <MudTh>Name</MudTh>
+                    <MudTh>Title</MudTh>
                     <MudTh>Type</MudTh>
                     <MudTh>Url</MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd DataLabel="Name">@context.Title</MudTd>
-                    <MudTd DataLabel="Type">@context.Type</MudTd>
-                    <MudTd DataLabel="Url">@context.Url</MudTd>
+                    <MudTd DataLabel="Title">@context.Title</MudTd>
+                    <MudTd DataLabel="Type">
+                        @if (context.Type is not null)
+                        {
+                            @context.Type
+                        }
+                        else
+                        {
+                            <NoneChip />
+                        }
+                    </MudTd>
+                    <MudTd DataLabel="Url">
+                        @if (!string.IsNullOrWhiteSpace(context.Url))
+                        {
+                            @context.Url
+                        }
+                        else
+                        {
+                            <NoneChip />
+                        }
+                    </MudTd>
                 </RowTemplate>
             </MudTable>
         }

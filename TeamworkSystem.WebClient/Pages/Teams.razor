@@ -22,8 +22,22 @@
             <MudTh>Leader</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd Class="ml-3" DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Specialization">@context.Specialization</MudTd>
+            <MudTd Class="ml-3" DataLabel="Name">
+                <MudElement HtmlTag="div" Class="d-flex align-center">
+                    <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                    <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Name</MudText>
+                </MudElement>
+            </MudTd>
+            <MudTd DataLabel="Specialization">
+                @if (context.Specialization is not null)
+                {
+                    @context.Specialization
+                }
+                else
+                {
+                    <NoneChip />
+                }
+            </MudTd>
             <MudTd DataLabel="Leader">
                 <MudElement HtmlTag="div" Class="d-flex align-center">
                     <MudAvatar Color="@Color.Secondary">A</MudAvatar>

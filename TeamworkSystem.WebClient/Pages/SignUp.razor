@@ -3,9 +3,10 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 @inject IIdentityService IdentityService
+@inject RequestErrorsHandler RequestErrorsHandler
 
-<MudContainer Class="pb-8" MaxWidth="@MaxWidth.Medium">
-    <EditForm Model="userModel" OnValidSubmit="@OnValidSubmit">
+<EditForm Model="userModel" OnValidSubmit="@SignUpAsync">
+    <MudContainer Class="pb-8" MaxWidth="@MaxWidth.Medium">
         <MudCard Elevation="4" Class="px-sm-4 px-md-12 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
             <MudCardContent>
                 <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">Please sign up!</MudText>
@@ -69,40 +70,29 @@
             </MudCardContent>
             <MudCardActions>
                 <MudButton Class="mx-auto mt-8 py-2 px-12"
-                           Size="@Size.Large"
-                           Color="@Color.Primary"
-                           Variant="@Variant.Filled"
-                           ButtonType="@ButtonType.Submit">
+                            Size="@Size.Large"
+                            Color="@Color.Primary"
+                            Variant="@Variant.Filled"
+                            ButtonType="@ButtonType.Submit">
                     Sign Up
                 </MudButton>
             </MudCardActions>
         </MudCard>
-    </EditForm>
-</MudContainer>
+    </MudContainer>
+</EditForm>
 
 @code {
 
     private UserSignUpViewModel userModel = new();
 
-    private async Task OnValidSubmit()
+    private async Task SignUpAsync()
     {
-        try
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
             var token = await IdentityService.SignUpAsync(userModel);
             NavigationManager.NavigateTo("/home");
-            Snackbar.Add("You logged in succesfull!", Severity.Success);
-        }
-        catch (ValidationException e)
-        {
-            foreach (var (key, errors) in e.Errors)
-            {
-                Snackbar.Add($"{key} - {string.Join(", ", errors)}", Severity.Error);
-            }
-        }
-        catch (Exception e)
-        {
-            Snackbar.Add(e.Message, Severity.Error);
-        }
+            Snackbar.Add("You signed up succesfull!", Severity.Success);
+        });
     }
 
 }

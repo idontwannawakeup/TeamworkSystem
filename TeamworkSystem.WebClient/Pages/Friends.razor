@@ -28,11 +28,20 @@
                     <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.FullName</MudText>
                 </MudElement>
             </MudTd>
-            <MudTd DataLabel="Profession">@context.Profession</MudTd>
+            <MudTd DataLabel="Profession">
+                @if (!string.IsNullOrWhiteSpace(context.Profession))
+                {
+                    @context.Profession
+                }
+                else
+                {
+                    <NoneChip />
+                }
+            </MudTd>
             <MudTd>
                 <MudElement HtmlTag="div" Class="d-flex">
                     <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
-                        <MudMenuItem OnClick="@(async e => await OnDeleteClickAsync(context.Id))">
+                        <MudMenuItem OnClick="@(async e => await DeleteFriendAsync(context.Id))">
                             Delete
                         </MudMenuItem>
                     </MudMenu>
@@ -74,7 +83,7 @@ else
         friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
     }
 
-    private async Task OnDeleteClickAsync(string friendId)
+    private async Task DeleteFriendAsync(string friendId)
     {
         var confirmed = await DialogService.ShowDeleteConfirmingDialog(
             "Are you sure you want to delete this friend?") ?? false;
