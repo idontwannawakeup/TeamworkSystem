@@ -14,6 +14,16 @@ namespace TeamworkSystem.WebClient.Extensions
             MaxWidth = MaxWidth.Small
         };
 
+        public static void ShowRatingDialog(
+            this IDialogService dialogService,
+            int ratingId)
+        {
+            dialogService.Show<RatingDialog>(
+                "Rating",
+                new DialogParameters() { ["RatingId"] = ratingId },
+                DialogOptions);
+        }
+
         public static void ShowTeamCreationDialog(
             this IDialogService dialogService,
             string userId,

@@ -14,6 +14,9 @@ namespace TeamworkSystem.WebClient.Services
         public async Task<IEnumerable<RatingViewModel>> GetByRatedUserId(string userId) =>
             await httpClient.GetAsync<List<RatingViewModel>>($"?RatedUserId={userId}");
 
+        public async Task<RatingViewModel> GetByIdAsync(int id) =>
+            await httpClient.GetAsync<RatingViewModel>($"{id}");
+
         public async Task CreateAsync(RatingViewModel viewModel) =>
             await httpClient.PostAsync(string.Empty, viewModel);
 

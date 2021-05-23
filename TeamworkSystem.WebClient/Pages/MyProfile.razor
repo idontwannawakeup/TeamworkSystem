@@ -1,6 +1,7 @@
 ﻿@page "/profile"
+@inject IDialogService DialogService
 @inject IUsersService UsersService
-@inject IRatingsService RatingsService 
+@inject IRatingsService RatingsService
 
 @if (user is not null)
 {
@@ -78,7 +79,7 @@
                             {
                                 @foreach (var rating in ratings)
                                 {
-                                    <MudListItem>
+                                    <MudListItem OnClick="@(e => OpenFullRating(rating))">
                                         <MudElement HtmlTag="div"
                                                     Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
                                             <MudElement HtmlTag="div"
@@ -88,8 +89,8 @@
                                             </MudElement>
                                             <MudElement HtmlTag="div"
                                                         Class="rating-item__average d-flex flex-column align-center gap-1">
-                                                <MudText Typo="@Typo.subtitle2">Average: 50</MudText>
-                                                <MudRating SelectedValue="3" ReadOnly="@true" />
+                                                <MudText Typo="@Typo.subtitle2">Average: @rating.Average</MudText>
+                                                <MudRating SelectedValue="@((int) rating.Average)" ReadOnly="@true" />
                                             </MudElement>
                                         </MudElement>
                                     </MudListItem>
@@ -107,7 +108,9 @@
 
 @code {
 
-    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private string userId = null;
 
     private UserViewModel user = null;
 
@@ -120,10 +123,18 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var state = await StateAsync;
-        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
-        user = await UsersService.GetByIdAsync(userId);
-        ratings = await RatingsService.GetByRatedUserId(userId) as List<RatingViewModel>;
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        await InitializeUserAsync();
+        await InitializeRatingsAsync();
     }
+
+    private async Task InitializeUserAsync() =>
+        user = await UsersService.GetByIdAsync(userId);
+
+    private async Task InitializeRatingsAsync() =>
+        ratings = await RatingsService.GetByRatedUserId(userId) as List<RatingViewModel>;
+
+    private void OpenFullRating(RatingViewModel rating) =>
+        DialogService.ShowRatingDialog(rating.Id);
 
 }

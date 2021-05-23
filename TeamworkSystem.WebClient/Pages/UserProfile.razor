@@ -108,7 +108,7 @@
                         <MudList Clickable="@true">
                             @foreach (var rating in ratings)
                             {
-                                <MudListItem OnClick="@(e => OnRatingClick(rating))">
+                                <MudListItem OnClick="@(e => OpenFullRating(rating))">
                                     <MudElement HtmlTag="div"
                                                 Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
                                         <MudElement HtmlTag="div"
@@ -228,7 +228,8 @@ else
     private void OnTeamClick(TeamViewModel team) =>
         NavigationManager.NavigateTo($"/team/{team.Id}");
 
-    private void OnRatingClick(RatingViewModel rating) => throw new();
+    private void OpenFullRating(RatingViewModel rating) =>
+        DialogService.ShowRatingDialog(rating.Id);
 
     private async Task LeaveRatingAsync()
     {

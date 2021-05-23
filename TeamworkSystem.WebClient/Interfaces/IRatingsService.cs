@@ -8,6 +8,8 @@ namespace TeamworkSystem.WebClient.Interfaces
     {
         Task<IEnumerable<RatingViewModel>> GetByRatedUserId(string userId);
 
+        Task<RatingViewModel> GetByIdAsync(int id);
+
         Task CreateAsync(RatingViewModel viewModel);
 
         Task UpdateAsync(RatingViewModel viewModel);
