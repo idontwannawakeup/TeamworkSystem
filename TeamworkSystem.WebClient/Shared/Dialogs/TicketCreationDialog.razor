@@ -3,35 +3,41 @@
 @inject RequestErrorsHandler RequestErrorsHandler
 
 <EditForm Model="@ticket" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator />
     <MudDialog>
         <DialogContent>
 
             <MudTextField T="@string"
                           Label="@nameof(ticket.Title)"
-                          @bind-Value="@ticket.Title" />
+                          @bind-Value="@ticket.Title"
+                          For="@(() => ticket.Title)" />
 
             <MudTextField T="@string"
                           Label="@nameof(ticket.Type)"
-                          @bind-Value="@ticket.Type" />
+                          @bind-Value="@ticket.Type"
+                          For="@(() => ticket.Type)" />
 
             <MudTextField T="@string"
                           Label="@nameof(ticket.Status)"
-                          @bind-Value="@ticket.Status" />
+                          @bind-Value="@ticket.Status"
+                          For="@(() => ticket.Status)" />
 
             <MudTextField T="@string"
                           Label="@nameof(ticket.Priority)"
-                          @bind-Value="@ticket.Priority" />
+                          @bind-Value="@ticket.Priority"
+                          For="@(() => ticket.Priority)" />
 
             <MudDatePicker Label="@nameof(ticket.Deadline)"
-                           @bind-Date="ticket.Deadline" />
+                           @bind-Date="ticket.Deadline"
+                           For="@(() => ticket.Deadline)" />
 
             <MudTextField T="@string"
                           Label="@nameof(ticket.Description)"
                           @bind-Value="@ticket.Description"
+                          For="@(() => ticket.Description)"
                           Lines="10" />
 
         </DialogContent>
-
         <DialogActions>
             <MudButton Color="@Color.Primary"
                        ButtonType="@ButtonType.Submit">
@@ -39,7 +45,6 @@
             </MudButton>
             <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
         </DialogActions>
-
     </MudDialog>
 </EditForm>
 

@@ -24,12 +24,19 @@
                 <RowTemplate>
                     <MudTd DataLabel="Title">@context.Title</MudTd>
                     <MudTd DataLabel="Type">
-                        <MudChip Color="@Color.Primary"
-                                 Size="@Size.Small"
-                                 Label="@true"
-                                 Class="mx-0 my-3">
-                            @context.Type
-                        </MudChip>
+                        @if (!string.IsNullOrWhiteSpace(context.Type))
+                        {
+                            <MudChip Color="@Color.Primary"
+                                     Size="@Size.Small"
+                                     Label="@true"
+                                     Class="mx-0 my-3">
+                                @context.Type
+                            </MudChip>
+                        }
+                        else
+                        {
+                            <NoneChip />
+                        }
                     </MudTd>
                     <MudTd>
                         <MudElement HtmlTag="div" Class="d-flex">

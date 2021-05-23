@@ -1,12 +1,12 @@
 ﻿using System;
 using FluentValidation;
-using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
+using TeamworkSystem.WebClient.ViewModels;
 
-namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
+namespace TeamworkSystem.WebClient.Validation
 {
-    public class TicketRequestValidtor : AbstractValidator<TicketRequest>
+    public class TicketViewModelValidator : AbstractValidator<TicketViewModel>
     {
-        public TicketRequestValidtor()
+        public TicketViewModelValidator()
         {
             RuleFor(ticket => ticket.ProjectId)
                 .NotEmpty()

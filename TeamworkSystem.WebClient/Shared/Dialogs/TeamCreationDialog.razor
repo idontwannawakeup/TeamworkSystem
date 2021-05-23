@@ -3,12 +3,25 @@
 @inject RequestErrorsHandler RequestErrorsHandler
 
 <EditForm Model="@team" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator />
     <MudDialog>
         <DialogContent>
 
-            <MudTextField T="@string" Label="Name" @bind-Value="@team.Name" />
-            <MudTextField T="@string" Label="Specialization" @bind-Value="@team.Specialization" />
-            <MudTextField T="@string" Label="About" @bind-Value="@team.About" Lines="10" />
+            <MudTextField T="@string"
+                          Label="Name"
+                          @bind-Value="@team.Name"
+                          For="@(() => team.Name)" />
+
+            <MudTextField T="@string"
+                          Label="Specialization"
+                          @bind-Value="@team.Specialization"
+                          For="@(() => team.Specialization)" />
+
+            <MudTextField T="@string"
+                          Label="About"
+                          @bind-Value="@team.About"
+                          For="@(() => team.About)"
+                          Lines="10" />
 
         </DialogContent>
 

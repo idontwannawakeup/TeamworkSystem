@@ -4,50 +4,54 @@
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-@if (teamModel is not null)
+@if (team is not null)
 {
-    <EditForm Model="@teamModel" OnValidSubmit="OnValidSubmitAsync">
+    <EditForm Model="@team" OnValidSubmit="UpdateTeamAsync">
+        <FluentValidationValidator />
         <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
             <MudGrid Spacing="2" Class="mt-8">
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(teamModel.Name)</MudText>
+                    <MudText Typo="@Typo.h6">@nameof(team.Name)</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
-                                  @bind-Value="@teamModel.Name"
+                                  @bind-Value="@team.Name"
+                                  For="@(() => team.Name)"
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(teamModel.Specialization)</MudText>
+                    <MudText Typo="@Typo.h6">@nameof(team.Specialization)</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
-                                  @bind-Value="@teamModel.Specialization"
+                                  @bind-Value="@team.Specialization"
+                                  For="@(() => team.Specialization)"
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(teamModel.About)</MudText>
+                    <MudText Typo="@Typo.h6">@nameof(team.About)</MudText>
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField T="@string"
-                                  @bind-Value="@teamModel.About"
+                                  @bind-Value="@team.About"
+                                  For="@(() => team.About)"
                                   Variant="@Variant.Outlined"
                                   Lines="15" />
                 </MudItem>
             </MudGrid>
-            @if (userId == teamModel.LeaderId)
+            @if (userId == team.LeaderId)
             {
-                <div class="d-flex justify-center align-center">
+                <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
                     <MudButton Variant="@Variant.Filled"
                                Color="@Color.Error"
                                EndIcon="@Icons.Material.Filled.Delete"
                                Class="mt-4"
-                               OnClick="@OnDeleteClickAsync">
+                               OnClick="@DeleteTeamAsync">
                         Delete team
                     </MudButton>
-                </div>
+                </MudElement>
             }
-            <div class="d-flex justify-center align-center">
+            <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
                 <MudButton Variant="@Variant.Filled"
                            Color="@Color.Primary"
                            EndIcon="@Icons.Material.Filled.Save"
@@ -55,7 +59,7 @@
                            ButtonType="@ButtonType.Submit">
                     Save changes
                 </MudButton>
-            </div>
+            </MudElement>
         </MudContainer>
     </EditForm>
 }
@@ -70,7 +74,7 @@ else
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private TeamViewModel teamModel = null;
+    private TeamViewModel team = null;
 
     private string userId = null;
 
@@ -85,9 +89,9 @@ else
         userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
 
     private async Task InitializeTeamAsync() =>
-        teamModel = await TeamsService.GetByIdAsync(TeamId);
+        team = await TeamsService.GetByIdAsync(TeamId);
 
-    private async Task OnDeleteClickAsync()
+    private async Task DeleteTeamAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
@@ -97,11 +101,11 @@ else
         });
     }
 
-    private async Task OnValidSubmitAsync()
+    private async Task UpdateTeamAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await TeamsService.UpdateAsync(teamModel);
+            await TeamsService.UpdateAsync(team);
             Snackbar.Add("Team updated", Severity.Success);
         });
     }

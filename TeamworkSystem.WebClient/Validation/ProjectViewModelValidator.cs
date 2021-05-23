@@ -1,16 +1,20 @@
 ﻿using System;
 using FluentValidation;
-using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
+using TeamworkSystem.WebClient.ViewModels;
 
-namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
+namespace TeamworkSystem.WebClient.Validation
 {
-    public class ProjectRequestValidator : AbstractValidator<ProjectRequest>
+    public class ProjectViewModelValidator : AbstractValidator<ProjectViewModel>
     {
-        public ProjectRequestValidator()
+        public ProjectViewModelValidator()
         {
             RuleFor(project => project.TeamId)
                 .NotEmpty()
                 .WithMessage(project => $"{nameof(project.TeamId)} can't be empty.");
+
+            RuleFor(project => project.Team)
+                .NotEmpty()
+                .WithMessage(project => $"{nameof(project.Team)} can't be empty.");
 
             RuleFor(project => project.Title)
                 .NotEmpty()

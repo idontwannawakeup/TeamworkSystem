@@ -3,13 +3,14 @@
 @inject RequestErrorsHandler RequestErrorsHandler
 
 <EditForm Model="@friends" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator />
     <MudDialog>
-
         <DialogContent>
             <MudSelect T="@UserViewModel"
                        Label="Friend"
                        Value="@friends.Second"
                        ValueChanged="@(e => (friends.Second, friends.SecondId) = (e, e.Id))"
+                       For="@(() => friends.Second)"
                        ToStringFunc="@(user => user?.FullName)">
                 @if (users is not null)
                 {
@@ -20,12 +21,10 @@
                 }
             </MudSelect>
         </DialogContent>
-
         <DialogActions>
             <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">Add</MudButton>
             <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
         </DialogActions>
-
     </MudDialog>
 </EditForm>
 

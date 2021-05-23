@@ -3,16 +3,22 @@
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@projectModel" OnValidSubmit="@OnValidSubmitAsync">
+<EditForm Model="@project" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator />
     <MudDialog>
-
         <DialogContent>
-            <MudTextField T="@string" Label="Title" @bind-Value="@projectModel.Title" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(project.Title)"
+                          @bind-Value="@project.Title"
+                          For="@(() => project.Title)" />
+
             <MudSelect T="@TeamViewModel"
-                       Label="Team"
-                       Value="@projectModel.Team"
-                       ValueChanged="@(e => (projectModel.Team, projectModel.TeamId) = (e, e.Id))"
-                       ToStringFunc="@(team => team?.Name)">
+                       Label="@nameof(project.Team)"
+                       Value="@project.Team"
+                       ValueChanged="@(e => (project.Team, project.TeamId) = (e, e.Id))"
+                       ToStringFunc="@(team => team?.Name)"
+                       For="@(() => project.Team)">
                 @if (teams is not null)
                 {
                     @foreach (var team in teams)
@@ -21,17 +27,28 @@
                     }
                 }
             </MudSelect>
-            <MudTextField T="@string" Label="Type" @bind-Value="@projectModel.Type" />
-            <MudTextField T="@string" Label="Url" @bind-Value="@projectModel.Url" />
-            <MudTextField T="@string" Label="Description" @bind-Value="@projectModel.Description" Lines="10" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(project.Type)"
+                          @bind-Value="@project.Type"
+                          For="@(() => project.Type)" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(project.Url)"
+                          @bind-Value="@project.Url"
+                          For="@(() => project.Url)" />
+
+            <MudTextField T="@string"
+                          Label="@nameof(project.Description)"
+                          @bind-Value="@project.Description"
+                          For="@(() => project.Description)"
+                          Lines="10" />
 
         </DialogContent>
-
         <DialogActions>
             <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">Create</MudButton>
             <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
         </DialogActions>
-
     </MudDialog>
 </EditForm>
 
@@ -43,7 +60,7 @@
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private ProjectViewModel projectModel = new();
+    private ProjectViewModel project = new();
 
     private List<TeamViewModel> teams = null;
 
@@ -62,7 +79,7 @@
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await ProjectsService.CreateAsync(projectModel);
+            await ProjectsService.CreateAsync(project);
             DialogInstance.Close();
             Snackbar.Add("Project created", Severity.Success);
             await OnCreated?.Invoke();

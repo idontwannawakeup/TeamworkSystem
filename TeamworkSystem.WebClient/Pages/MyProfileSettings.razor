@@ -6,6 +6,7 @@
 @if (user is not null)
 {
     <EditForm Model="@user" OnValidSubmit="@UpdateUserAsync">
+        <FluentValidationValidator />
         <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
             <MudGrid Spacing="2" Class="mt-8">
                 <MudItem xs="12" md="6" Class="d-flex align-center">
@@ -14,6 +15,7 @@
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
                                   @bind-Value="@user.FirstName"
+                                  For="@(() => user.FirstName)"
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" md="6" Class="d-flex align-center">
@@ -22,6 +24,7 @@
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
                                   @bind-Value="@user.LastName"
+                                  For="@(() => user.LastName)"
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" md="6" Class="d-flex align-center">
@@ -30,7 +33,8 @@
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
                                   @bind-Value="@user.Email"
-                                  Variant="@Variant.Outlined" />
+                                  Variant="@Variant.Outlined"
+                                  For="@(() => user.Email)"/>
                 </MudItem>
                 <MudItem xs="12" md="6" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(user.Profession)</MudText>
@@ -38,7 +42,8 @@
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
                                   @bind-Value="@user.Profession"
-                                  Variant="@Variant.Outlined" />
+                                  Variant="@Variant.Outlined"
+                                  For="@(() => user.Profession)" />
                 </MudItem>
                 <MudItem xs="12" md="6" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(user.Specialization)</MudText>
@@ -46,7 +51,8 @@
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
                                   @bind-Value="@user.Specialization"
-                                  Variant="@Variant.Outlined" />
+                                  Variant="@Variant.Outlined"
+                                  For="@(() => user.Specialization)" />
                 </MudItem>
             </MudGrid>
             <MudElement HtmlTag="div" Class="d-flex justify-center align-center">

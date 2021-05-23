@@ -137,6 +137,7 @@
 
                 <MudTabPanel Text="Leave rate">
                     <EditForm Model="@ratingFromVisitedUser" OnValidSubmit="@LeaveRatingAsync">
+                        <FluentValidationValidator />
                         <MudElement HtmlTag="div" Class="pa-6">
                             <MudText Typo="@Typo.h5">Rate this user!</MudText>
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
@@ -170,8 +171,12 @@
                             <MudTextField T="@string"
                                           Label="@nameof(ratingFromVisitedUser.Comment)"
                                           @bind-Value="@ratingFromVisitedUser.Comment"
+                                          For="@(() => ratingFromVisitedUser.Comment)"
                                           HelperText="Write your thoughts on this person!"
                                           Lines="4" />
+                            <MudText Color="@Color.Error">
+                                <ValidationSummary />
+                            </MudText>
                             <MudButton FullWidth="@true"
                                        EndIcon="@Icons.Material.Filled.Send"
                                        Class="mt-4"

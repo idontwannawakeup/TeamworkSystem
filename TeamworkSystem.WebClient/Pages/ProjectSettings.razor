@@ -11,41 +11,51 @@
     <ProjectLayout ProjectId="@ProjectId">
 
         <EditForm Model="@project" OnValidSubmit="@UpdateProjectAsync">
+            <FluentValidationValidator />
             <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
                 <MudGrid Spacing="2" Class="mt-8">
+
                     <MudItem xs="12" md="6" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">Title</MudText>
+                        <MudText Typo="@Typo.h6">@nameof(project.Title)</MudText>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
                                       @bind-Value="@project.Title"
+                                      For="@(() => project.Title)"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
+
                     <MudItem xs="12" md="6" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">Type</MudText>
+                        <MudText Typo="@Typo.h6">@nameof(project.Type)</MudText>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
                                       @bind-Value="@project.Type"
+                                      For="@(() => project.Type)"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
+
                     <MudItem xs="12" md="6" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">Url</MudText>
+                        <MudText Typo="@Typo.h6">@nameof(project.Url)</MudText>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
                                       @bind-Value="@project.Url"
+                                      For="@(() => project.Url)"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
+
                     <MudItem xs="12" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">Description</MudText>
+                        <MudText Typo="@Typo.h6">@nameof(project.Description)</MudText>
                     </MudItem>
                     <MudItem xs="12">
                         <MudTextField T="@string"
                                       @bind-Value="@project.Description"
+                                      For="@(() => project.Description)"
                                       Variant="@Variant.Outlined"
                                       Lines="15" />
                     </MudItem>
+
                 </MudGrid>
                 @if (userId == project.Team.LeaderId)
                 {
