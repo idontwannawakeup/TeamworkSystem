@@ -29,6 +29,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         {
             IQueryable<Team> source = table.Include(team => team.Leader);
             SearchByMemberId(ref source, parameters.UserId);
+            SearchByName(ref source, parameters.Name);
             SearchBySpecialization(ref source, parameters.Specialization);
             return await PagedList<Team>.ToPagedListAsync(
                 source,
@@ -85,6 +86,16 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             }
 
             source = source.Where(team => team.Members.Any(user => user.Id == userId));
+        }
+
+        private static void SearchByName(ref IQueryable<Team> source, string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return;
+            }
+
+            source = source.Where(team => team.Name.Contains(name));
         }
 
         private static void SearchBySpecialization(

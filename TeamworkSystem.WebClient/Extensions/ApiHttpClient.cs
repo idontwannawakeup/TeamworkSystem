@@ -1,7 +1,9 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Extensions
 {
@@ -20,6 +22,19 @@ namespace TeamworkSystem.WebClient.Extensions
             var responseBody = await response.Content.ReadAsStringAsync();
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
             return responseBody.Deserialize<T>();
+        }
+
+        public async Task<(T, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync<T>(
+            string requestUri)
+        {
+            var response = await httpClient.GetAsync(requestUri);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var pagination = response.Headers.GetValues("X-Pagination")
+                                             .FirstOrDefault()
+                                             .Deserialize<PaginationHeaderViewModel>();
+
+            StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
+            return (responseBody.Deserialize<T>(), pagination);
         }
 
         public async Task PostAsync<T>(string requestUri, T viewModel)

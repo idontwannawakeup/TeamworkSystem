@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
+using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Services
@@ -10,6 +11,17 @@ namespace TeamworkSystem.WebClient.Services
     public class RatingsService : IRatingsService
     {
         private readonly ApiHttpClient httpClient;
+
+        public async Task<IEnumerable<RatingViewModel>> GetAsync(RatingsParameters parameters) =>
+            await httpClient.GetAsync<List<RatingViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
+
+        public async Task<(IEnumerable<RatingViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
+            RatingsParameters parameters)
+        {
+            return await httpClient.GetWithPaginationHeaderAsync<List<RatingViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
+        }
 
         public async Task<IEnumerable<RatingViewModel>> GetByRatedUserId(string userId) =>
             await httpClient.GetAsync<List<RatingViewModel>>($"?RatedUserId={userId}");

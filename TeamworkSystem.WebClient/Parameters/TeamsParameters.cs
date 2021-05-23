@@ -1,4 +1,4 @@
-﻿namespace TeamworkSystem.DataAccessLayer.Parameters
+﻿namespace TeamworkSystem.WebClient.Parameters
 {
     public class TeamsParameters : QueryStringParameters
     {

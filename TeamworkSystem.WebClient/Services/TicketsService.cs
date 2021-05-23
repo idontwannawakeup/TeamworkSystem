@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
+using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Services
@@ -10,6 +11,17 @@ namespace TeamworkSystem.WebClient.Services
     public class TicketsService : ITicketsService
     {
         private readonly ApiHttpClient httpClient;
+
+        public async Task<IEnumerable<TicketViewModel>> GetAsync(TicketsParameters parameters) =>
+            await httpClient.GetAsync<List<TicketViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
+
+        public async Task<(IEnumerable<TicketViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
+            TicketsParameters parameters)
+        {
+            return await httpClient.GetWithPaginationHeaderAsync<List<TicketViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
+        }
 
         public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId) =>
             await httpClient.GetAsync<List<TicketViewModel>>($"?ExecutorId={userId}");

@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Interfaces
 {
     public interface ITeamsService
     {
+        Task<IEnumerable<TeamViewModel>> GetAsync(TeamsParameters parameters);
+
+        Task<(IEnumerable<TeamViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
+            TeamsParameters parameters);
+
         Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(string userId);
 
         Task<TeamViewModel> GetByIdAsync(int id);
