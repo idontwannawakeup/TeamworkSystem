@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentValidation;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 
@@ -8,6 +9,28 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
     {
         public TicketRequestValidtor()
         {
+            var types = new List<string>()
+            {
+                "Epic",
+                "Task",
+                "Bug"
+            };
+
+            var statuses = new List<string>()
+            {
+                "Backlog",
+                "Chosen For Development",
+                "In Progress",
+                "Done"
+            };
+
+            var priorities = new List<string>()
+            {
+                "Low",
+                "Medium",
+                "High"
+            };
+
             RuleFor(ticket => ticket.ProjectId)
                 .NotEmpty()
                 .WithMessage(ticket => $"{nameof(ticket.ProjectId)} can't be empty.");
@@ -19,24 +42,20 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
                 .WithMessage(ticket => $"{nameof(ticket.Title)} should be less than 50 characters.");
 
             RuleFor(ticket => ticket.Type)
-                .MaximumLength(50)
-                .WithMessage(ticket => $"{nameof(ticket.Type)} should be less than 50 characters.");
+                .Must(type => types.Contains(type))
+                .WithMessage(ticket => $"{nameof(ticket.Type)} should be one of: ${string.Join(", ", types)}");
 
             RuleFor(ticket => ticket.Description)
                 .NotEmpty()
                 .WithMessage(ticket => $"{nameof(ticket.Description)} can't be empty.");
 
             RuleFor(ticket => ticket.Status)
-                .NotEmpty()
-                .WithMessage(ticket => $"{nameof(ticket.Status)} can't be empty.")
-                .MaximumLength(50)
-                .WithMessage(ticket => $"{nameof(ticket.Status)} should be less than 50 characters.");
+                .Must(status => statuses.Contains(status))
+                .WithMessage(ticket => $"{nameof(ticket.Status)} should be one of: ${string.Join(", ", statuses)}");
 
             RuleFor(ticket => ticket.Priority)
-                .NotEmpty()
-                .WithMessage(ticket => $"{nameof(ticket.Priority)} can't be empty.")
-                .MaximumLength(50)
-                .WithMessage(ticket => $"{nameof(ticket.Priority)} should be less than 50 characters.");
+                .Must(priority => priorities.Contains(priority))
+                .WithMessage(ticket => $"{nameof(ticket.Priority)} should be one of: ${string.Join(", ", priorities)}");
 
             RuleFor(ticket => ticket.Deadline)
                 .GreaterThan(DateTime.Now)

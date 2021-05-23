@@ -41,7 +41,7 @@
                     <MudTd>
                         <MudElement HtmlTag="div" Class="d-flex">
                             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
-                                <MudMenuItem Link="@GetPropertiesLink(context.Id)">Edit</MudMenuItem>
+                                <MudMenuItem Link="@GetSettingsLink(context.Id)">Edit</MudMenuItem>
                                 <MudMenuItem OnClick="@(async () => await OnDeleteClickAsync(context.Id))">
                                     Delete
                                 </MudMenuItem>
@@ -77,8 +77,8 @@
         await InitializeTicketsAsync();
     }
 
-    private string GetPropertiesLink(int ticketId) =>
-        $"/ticket/{ticketId}/properties";
+    private string GetSettingsLink(int ticketId) =>
+        $"/ticket/{ticketId}/settings";
 
     private void OnRowClick(TableRowClickEventArgs<TicketViewModel> args) =>
         NavigationManager.NavigateTo($"/ticket/{args.Item.Id}");

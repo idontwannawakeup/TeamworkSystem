@@ -20,13 +20,13 @@
             <MudButton Variant="@Variant.Outlined"
                         Color="@Color.Info"
                         EndIcon="@Icons.Material.Filled.Edit"
-                        Link="@PropertiesLink">
+                        Link="@SettingsLink">
                 Edit
             </MudButton>
             <MudButton Variant="@Variant.Outlined"
                         Color="@Color.Error"
                         EndIcon="@Icons.Material.Filled.Delete"
-                        OnClick="@OnDeleteClickAsync">
+                        OnClick="@DeleteTicketAsync">
                 Delete
             </MudButton>
         </MudElement>
@@ -59,22 +59,6 @@
             <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
                 @if (ticket is not null)
                 {
-                    @*<MudChipSet Filter="@true" Mandatory="@true">
-                        <MudChip Color="@Color.Default" Text="backlog" Default="@true">Backlog</MudChip>
-                        <MudChip Color="@Color.Secondary" Text="selected">Selected for development</MudChip>
-                        <MudChip Color="@Color.Primary" Text="progress">In progress</MudChip>
-                        <MudChip Color="@Color.Success" Text="done">Done</MudChip>
-                    </MudChipSet>
-                    @foreach (var number in Enumerable.Range(0, 4))
-                    {
-                        <MudElement Class="d-flex align-center justify-space-between">
-                            <MudText Typo="@Typo.subtitle1">Executor</MudText>
-                            <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-                                <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
-                                <MudText Typo="@Typo.subtitle2">ExecutorName</MudText>
-                            </MudElement>
-                        </MudElement>
-                    }*@
                     <MudElement Class="d-flex align-center justify-space-between">
                         <MudText Typo="@Typo.subtitle1">Executor</MudText>
                         @if (ticket.Executor is not null)
@@ -133,7 +117,7 @@
 
     private TicketViewModel ticket = null;
 
-    private string PropertiesLink => $"/ticket/{TicketId}/properties";
+    private string SettingsLink => $"/ticket/{TicketId}/settings";
 
     private readonly string colorGrey = $"color: {Colors.Grey.Default};";
 
@@ -145,7 +129,7 @@
         await InitializeTicketAsync();
     }
 
-    private async Task OnDeleteClickAsync()
+    private async Task DeleteTicketAsync()
     {
         var confirmed = await DialogService.ShowDeleteConfirmingDialog(
             "Are you sure you want to delete this ticket?") ?? false;

@@ -1,14 +1,15 @@
-﻿@page "/ticket/{TicketId:int}/properties"
+﻿@page "/ticket/{TicketId:int}/settings"
 @inject ISnackbar Snackbar
 @inject ITicketsService TicketsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
 @if (ticket is not null)
 {
-    <EditForm Model="@ticket" OnValidSubmit="@OnValidSubmitAsync">
+    <EditForm Model="@ticket" OnValidSubmit="@UpdateTicketAsync">
         <FluentValidationValidator />
         <MudContainer MaxWidth="@MaxWidth.Small">
             <MudGrid Spacing="2" Class="mt-8">
+
                 <MudItem xs="12" md="6" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(ticket.Title)</MudText>
                 </MudItem>
@@ -18,39 +19,56 @@
                                   For="@(() => ticket.Title)"
                                   Variant="@Variant.Outlined" />
                 </MudItem>
+
                 <MudItem xs="12" md="6" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(ticket.Type)</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField T="@string"
-                                  @bind-Value="@ticket.Type"
-                                  For="@(() => ticket.Type)"
-                                  Variant="@Variant.Outlined" />
+                    <MudSelect T="@string"
+                               @bind-Value="@ticket.Type"
+                               For="@(() => ticket.Type)">
+                        @foreach (var type in TicketPropertiesValues.Types)
+                        {
+                            <MudSelectItem Value="@type">@type</MudSelectItem>
+                        }
+                    </MudSelect>
                 </MudItem>
+
                 <MudItem xs="12" md="6" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(ticket.Status)</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField T="@string"
-                                  @bind-Value="@ticket.Status"
-                                  For="@(() => ticket.Status)"
-                                  Variant="@Variant.Outlined" />
+                    <MudSelect T="@string"
+                               @bind-Value="@ticket.Status"
+                               For="@(() => ticket.Status)">
+                        @foreach (var status in TicketPropertiesValues.Statuses)
+                        {
+                            <MudSelectItem Value="@status">@status</MudSelectItem>
+                        }
+                    </MudSelect>
                 </MudItem>
+
                 <MudItem xs="12" md="6" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(ticket.Priority)</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField T="@string"
-                                  @bind-Value="@ticket.Priority"
-                                  For="@(() => ticket.Priority)"
-                                  Variant="@Variant.Outlined" />
+                    <MudSelect T="@string"
+                               @bind-Value="@ticket.Priority"
+                               For="@(() => ticket.Priority)">
+                        @foreach (var priority in TicketPropertiesValues.Priorities)
+                        {
+                            <MudSelectItem Value="@priority">@priority</MudSelectItem>
+                        }
+                    </MudSelect>
                 </MudItem>
+
                 <MudItem xs="12" md="6" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(ticket.Deadline)</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudDatePicker @bind-Date="@ticket.Deadline" For="@(() => ticket.Deadline)" />
                 </MudItem>
+
                 <MudItem xs="12" Class="d-flex align-center">
                     <MudText Typo="@Typo.h6">@nameof(ticket.Description)</MudText>
                 </MudItem>
@@ -61,6 +79,7 @@
                                   Variant="@Variant.Outlined"
                                   Lines="15" />
                 </MudItem>
+
             </MudGrid>
             <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
                 <MudButton Variant="@Variant.Filled"
@@ -94,7 +113,7 @@ else
     private async Task InitializeTicketAsync() =>
         ticket = await TicketsService.GetByIdAsync(TicketId);
 
-    private async Task OnValidSubmitAsync()
+    private async Task UpdateTicketAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {

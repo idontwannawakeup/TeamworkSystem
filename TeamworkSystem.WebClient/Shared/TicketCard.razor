@@ -32,8 +32,8 @@
                            Link="@TicketLink" />
 
             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="@Size.Small" Dense="@true">
-                <MudMenuItem Link="@PropertiesLink">Edit</MudMenuItem>
-                <MudMenuItem OnClick="@OnDeleteClickAsync">Delete</MudMenuItem>
+                <MudMenuItem Link="@SettingsLink">Edit</MudMenuItem>
+                <MudMenuItem OnClick="@DeleteTicketAsync">Delete</MudMenuItem>
             </MudMenu>
         </MudElement>
     </MudCardContent>
@@ -47,9 +47,9 @@
 
     private string TicketLink => $"/ticket/{Ticket.Id}";
 
-    private string PropertiesLink => $"/ticket/{Ticket.Id}/properties";
+    private string SettingsLink => $"/ticket/{Ticket.Id}/settings";
 
-    private async Task OnDeleteClickAsync()
+    private async Task DeleteTicketAsync()
     {
         var confirmed = await DialogService.ShowDeleteConfirmingDialog(
             "Are you sure you want to delete this ticket?") ?? false;
