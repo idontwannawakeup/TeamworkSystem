@@ -14,7 +14,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
             CreateMap<User, UserResponse>()
                 .ForMember(
                     response => response.FullName,
-                    options => options.MapFrom(user => $"{user.FirstName} {user.LastName}"));
+                    options => options.MapFrom(user => $"{user.FirstName} {user.LastName}"))
+                .ForMember(
+                    response => response.Avatar,
+                    options => options.MapFrom(
+                        user => !string.IsNullOrEmpty(user.Avatar) ? $"Public\\Photos\\{user.Avatar}" : null));
         }
 
         private void CreateTicketsMaps()

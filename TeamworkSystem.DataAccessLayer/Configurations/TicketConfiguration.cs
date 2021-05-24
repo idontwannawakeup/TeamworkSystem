@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Seeding;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations
 {
@@ -53,6 +54,8 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
                    .HasForeignKey(ticket => ticket.ExecutorId)
                    .OnDelete(DeleteBehavior.SetNull)
                    .HasConstraintName("FK_Tickets_ExecutorId");
+
+            new TicketSeeder().Seed(builder);
         }
     }
 }
