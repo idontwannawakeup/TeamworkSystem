@@ -120,6 +120,27 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
         }
 
+        [HttpPost("avatar")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> SetAvatarForUserAsync([FromForm] UserAvatarRequest request)
+        {
+            try
+            {
+                await usersService.SetAvatarForUserAsync(request);
+                return Ok();
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
+            }
+        }
+
         [HttpPost("friends")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

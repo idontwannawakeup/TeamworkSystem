@@ -1,4 +1,5 @@
 ﻿@page "/profile"
+@inject IConfiguration Configuration
 @inject IDialogService DialogService
 @inject IUsersService UsersService
 @inject IRatingsService RatingsService
@@ -7,9 +8,13 @@
 {
     <MudPaper Elevation="@elevation" Class="mt-10">
         <MudGrid>
-            <MudItem xs="6" md="4" Class="mx-auto mx-md-0 pa-6">
-                <img class="img-responsive" src="assets/home/projects.png" alt="Profile picture" />
-            </MudItem>
+            @if (true)
+            {
+                <MudItem xs="6" md="4" Class="mx-auto mx-md-0 pa-6">
+                    <MudElement HtmlTag="div"
+                                Style="@($"background: url({Configuration["ApiUrl"]}/photos/wow.jpg) no-repeat center; background-size: cover; width: 350px; height: 250px;")" />
+                </MudItem>
+            }
             <MudItem xs="12" md="8">
                 <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
                     <MudElement HtmlTag="div" Class="user-profile__title">

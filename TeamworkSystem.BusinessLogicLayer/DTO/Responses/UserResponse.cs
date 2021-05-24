@@ -15,5 +15,7 @@
         public string Profession { get; set; }
 
         public string Specialization { get; set; }
+
+        public string Avatar { get; set; }
     }
 }

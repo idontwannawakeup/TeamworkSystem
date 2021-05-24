@@ -19,6 +19,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task UpdateAsync(UserRequest request);
 
+        Task SetAvatarForUserAsync(UserAvatarRequest request);
+
         Task DeleteAsync(string id);
 
         Task AddFriendAsync(FriendsRequest friendsRequest);
