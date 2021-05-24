@@ -4,7 +4,7 @@
 <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Your active tickets</MudText>
 
 <MudGrid Spacing="3">
-    @if (Loaded && tickets.Count != 0)
+    @if (tickets is not null && tickets.Count != 0)
     {
         @foreach (var ticket in tickets)
         {
@@ -13,7 +13,7 @@
             </MudItem>
         }
     }
-    else if (Loaded)
+    else if (tickets is not null)
     {
         <MudItem xs="12">
             <MudText Typo="@Typo.h5" Align="@Align.Center">You don't have any active tickets.</MudText>
@@ -33,8 +33,6 @@
 
     private List<TicketViewModel> tickets = null;
 
-    private bool Loaded => tickets is not null;
-
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -44,7 +42,12 @@
     private async Task InitializeTicketsAsync()
     {
         var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
-        tickets = await TicketsService.GetTicketsForUserAsync(userId) as List<TicketViewModel>;
+        tickets = await TicketsService.GetAsync(
+            new TicketsParameters()
+            {
+                ExecutorId = userId,
+                PageSize = 50
+            }) as List<TicketViewModel>;
     }
 
 }

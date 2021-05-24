@@ -6,55 +6,63 @@
 
 <ProjectLayout ProjectId="@ProjectId">
     <MudContainer MaxWidth="@MaxWidth.Large">
-        <MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Tickets</MudText>
-
-        @if (tickets is not null)
-        {
-            <MudTable T="@TicketViewModel"
-                      Items="@tickets"
-                      Hover="@true"
-                      Elevation="0"
-                      Dense="@true"
-                      OnRowClick="@OnRowClick">
-                <HeaderContent>
-                    <MudTh>Title</MudTh>
-                    <MudTh>Type</MudTh>
-                    <MudTh></MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Title">@context.Title</MudTd>
-                    <MudTd DataLabel="Type">
-                        @if (!string.IsNullOrWhiteSpace(context.Type))
-                        {
-                            <MudChip Color="@Color.Primary"
-                                     Size="@Size.Small"
-                                     Label="@true"
-                                     Class="mx-0 my-3">
-                                @context.Type
-                            </MudChip>
-                        }
-                        else
-                        {
-                            <NoneChip />
-                        }
-                    </MudTd>
-                    <MudTd>
-                        <MudElement HtmlTag="div" Class="d-flex">
-                            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
-                                <MudMenuItem Link="@GetSettingsLink(context.Id)">Edit</MudMenuItem>
-                                <MudMenuItem OnClick="@(async () => await OnDeleteClickAsync(context.Id))">
-                                    Delete
-                                </MudMenuItem>
-                            </MudMenu>
-                        </MudElement>
-                    </MudTd>
-                </RowTemplate>
-            </MudTable>
-        }
-        else
-        {
-            <Loader />
-        }
+        <MudTable Class="mt-md-12 mb-12"
+                  T="@TicketViewModel"
+                  ServerData="@InitializeTicketsAsync"
+                  @ref="@table"
+                  Hover="@true"
+                  Breakpoint="@Breakpoint.Sm"
+                  Elevation="0"
+                  Dense="@true"
+                  OnRowClick="@OpenTicketPage">
+            <ToolBarContent>
+                <MudText Typo="@Typo.h3">Tickets</MudText>
+                <MudToolBarSpacer />
+                <MudTextField T="@string"
+                              ValueChanged="@(async title => await OnSearchAsync(title))"
+                              Placeholder="Search by title"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium"
+                              Class="mt-0" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Title</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Title">@context.Title</MudTd>
+                <MudTd DataLabel="Type">
+                    @if (!string.IsNullOrWhiteSpace(context.Type))
+                    {
+                        <MudChip Color="@Color.Primary"
+                                 Size="@Size.Small"
+                                 Label="@true"
+                                 Class="mx-0 my-3">
+                            @context.Type
+                        </MudChip>
+                    }
+                    else
+                    {
+                        <NoneChip />
+                    }
+                </MudTd>
+                <MudTd>
+                    <MudElement HtmlTag="div" Class="d-flex">
+                        <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
+                            <MudMenuItem Link="@GetSettingsLink(context.Id)">Edit</MudMenuItem>
+                            <MudMenuItem OnClick="@(async () => await DeleteTicketAsync(context.Id))">
+                                Delete
+                            </MudMenuItem>
+                        </MudMenu>
+                    </MudElement>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
 
         <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
                 Color="Color.Primary"
@@ -69,24 +77,22 @@
 
     [Parameter] public int ProjectId { get; set; }
 
-    private List<TicketViewModel> tickets = null;
+    private MudTable<TicketViewModel> table;
+
+    private string searchTitle = null;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await InitializeTicketsAsync();
     }
 
     private string GetSettingsLink(int ticketId) =>
         $"/ticket/{ticketId}/settings";
 
-    private void OnRowClick(TableRowClickEventArgs<TicketViewModel> args) =>
+    private void OpenTicketPage(TableRowClickEventArgs<TicketViewModel> args) =>
         NavigationManager.NavigateTo($"/ticket/{args.Item.Id}");
 
-    private async Task InitializeTicketsAsync() =>
-        tickets = await TicketsService.GetByProjectIdAsync(ProjectId) as List<TicketViewModel>;
-
-    private async Task OnDeleteClickAsync(int id)
+    private async Task DeleteTicketAsync(int id)
     {
         var confirmed = await DialogService.ShowDeleteConfirmingDialog(
             "Are you sure you want to delete this ticket?") ?? false;
@@ -94,7 +100,7 @@
         if (confirmed)
         {
             await TicketsService.DeleteAsync(id);
-            await InitializeTicketsAsync();
+            await table.ReloadServerData();
         }
     }
 
@@ -102,9 +108,29 @@
     {
         DialogService.ShowTicketCreationDialog(ProjectId, async () =>
         {
-            await InitializeTicketsAsync();
+            await table.ReloadServerData();
             StateHasChanged();
         });
+    }
+
+    private async Task<TableData<TicketViewModel>> InitializeTicketsAsync(TableState state)
+    {
+        var (tickets, pagination) = await TicketsService.GetWithPaginationHeaderAsync(
+            new TicketsParameters()
+            {
+                PageNumber = state.Page + 1,
+                PageSize = state.PageSize,
+                ProjectId = ProjectId,
+                Title = searchTitle
+            });
+
+        return new() { Items = tickets, TotalItems = pagination.TotalEntitiesCount };
+    }
+
+    private async Task OnSearchAsync(string title)
+    {
+        searchTitle = title;
+        await table.ReloadServerData();
     }
 
 }

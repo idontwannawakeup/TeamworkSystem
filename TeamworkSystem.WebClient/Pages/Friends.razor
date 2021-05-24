@@ -5,55 +5,63 @@
 @inject IUsersService UsersService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Friends</MudText>
-
-@if (Loaded)
-{
-    <MudTable T="@UserViewModel"
-              Items="@friends"
-              Hover="@true"
-              Elevation="0"
-              Dense="@true"
-              OnRowClick="@OpenFriendProfile"
-              RowClass="cursor-pointer">
-        <HeaderContent>
-            <MudTh>Name</MudTh>
-            <MudTh>Profession</MudTh>
-            <MudTh></MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Name">
-                <MudElement HtmlTag="div" Class="d-flex align-center">
-                    <MudAvatar Color="@Color.Secondary">A</MudAvatar>
-                    <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.FullName</MudText>
-                </MudElement>
-            </MudTd>
-            <MudTd DataLabel="Profession">
-                @if (!string.IsNullOrWhiteSpace(context.Profession))
-                {
-                    @context.Profession
-                }
-                else
-                {
-                    <NoneChip />
-                }
-            </MudTd>
-            <MudTd>
-                <MudElement HtmlTag="div" Class="d-flex">
-                    <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
-                        <MudMenuItem OnClick="@(async e => await DeleteFriendAsync(context.Id))">
-                            Delete
-                        </MudMenuItem>
-                    </MudMenu>
-                </MudElement>
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
-else
-{
-    <Loader />
-}
+<MudTable Class="mt-md-12 mb-12"
+          T="@UserViewModel"
+          ServerData="@InitializeFriendsAsync"
+          @ref="@table"
+          Hover="@true"
+          Breakpoint="@Breakpoint.Sm"
+          Elevation="0"
+          Dense="@true"
+          OnRowClick="@OpenFriendProfile"
+          RowClass="cursor-pointer">
+    <ToolBarContent>
+        <MudText Typo="@Typo.h3">Friends</MudText>
+        <MudToolBarSpacer />
+        <MudTextField T="@string"
+                      ValueChanged="@(async name => await OnSearchAsync(name))"
+                      Placeholder="Search by name"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Profession</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">
+            <MudElement HtmlTag="div" Class="d-flex align-center">
+                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.FullName</MudText>
+            </MudElement>
+        </MudTd>
+        <MudTd DataLabel="Profession">
+            @if (!string.IsNullOrWhiteSpace(context.Profession))
+            {
+                @context.Profession
+            }
+            else
+            {
+                <NoneChip />
+            }
+        </MudTd>
+        <MudTd>
+            <MudElement HtmlTag="div" Class="d-flex">
+                <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
+                    <MudMenuItem OnClick="@(async e => await DeleteFriendAsync(context.Id))">
+                        Delete
+                    </MudMenuItem>
+                </MudMenu>
+            </MudElement>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
 
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
@@ -65,23 +73,20 @@ else
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private List<UserViewModel> friends = null;
+    private MudTable<UserViewModel> table;
 
     private string userId = null;
 
-    private bool Loaded => friends is not null;
+    private string searchName = null;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
-        await InitializeFriendsAsync();
     }
 
-    private async Task InitializeFriendsAsync()
-    {
-        friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
-    }
+    private void OpenFriendProfile(TableRowClickEventArgs<UserViewModel> args) =>
+        NavigationManager.NavigateTo($"/users/{args.Item.Id}/profile");
 
     private async Task DeleteFriendAsync(string friendId)
     {
@@ -94,7 +99,7 @@ else
             {
                 var viewModel = new FriendsViewModel() { FirstId = userId, SecondId = friendId };
                 await UsersService.DeleteFriendsAsync(viewModel);
-                friends = await UsersService.GetFriendsAsync(userId) as List<UserViewModel>;
+                await table.ReloadServerData();
                 Snackbar.Add("Friend deleted.", Severity.Success);
             });
         }
@@ -104,12 +109,30 @@ else
     {
         DialogService.ShowFriendsCreationDialog(userId, async () =>
         {
-            await InitializeFriendsAsync();
+            await table.ReloadServerData();
             StateHasChanged();
         });
     }
 
-    private void OpenFriendProfile(TableRowClickEventArgs<UserViewModel> args) =>
-        NavigationManager.NavigateTo($"/users/{args.Item.Id}/profile");
+    private async Task<TableData<UserViewModel>> InitializeFriendsAsync(TableState state)
+    {
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        var (friends, pagination) = await UsersService.GetFriendsWithPaginationHeaderAsync(
+            userId,
+            new UsersParameters()
+            {
+                PageNumber = state.Page + 1,
+                PageSize = state.PageSize,
+                Name = searchName
+            });
+
+        return new() { Items = friends, TotalItems = pagination.TotalEntitiesCount };
+    }
+
+    private async Task OnSearchAsync(string name)
+    {
+        searchName = name;
+        await table.ReloadServerData();
+    }
 
 }

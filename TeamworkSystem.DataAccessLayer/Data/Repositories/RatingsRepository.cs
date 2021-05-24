@@ -10,17 +10,15 @@ using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
-    public class RatingsRepository
-        : GenericRepository<Rating>, IRatingsRepository
+    public class RatingsRepository : GenericRepository<Rating>, IRatingsRepository
     {
         public override async Task<Rating> GetCompleteEntityAsync(int id)
         {
-            return await table
-                .Include(rating => rating.From)
-                .Include(rating => rating.To)
-                .SingleOrDefaultAsync(rating => rating.Id == id)
-                    ?? throw new EntityNotFoundException(
-                        GetEntityNotFoundErrorMessage(id));
+            var rating = await table.Include(rating => rating.From)
+                                    .Include(rating => rating.To)
+                                    .SingleOrDefaultAsync(rating => rating.Id == id);
+
+            return rating ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
         public async Task<PagedList<Rating>> GetAsync(
@@ -48,9 +46,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                               .ToListAsync();
         }
 
-        private static void SearchByRatedUserId(
-            ref IQueryable<Rating> source,
-            string ratedUserId)
+        private static void SearchByRatedUserId(ref IQueryable<Rating> source, string ratedUserId)
         {
             if (string.IsNullOrWhiteSpace(ratedUserId))
             {

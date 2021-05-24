@@ -20,6 +20,10 @@ namespace TeamworkSystem.WebClient.Interfaces
 
         Task<IEnumerable<UserViewModel>> GetFriendsAsync(string id);
 
+        Task<(IEnumerable<UserViewModel>, PaginationHeaderViewModel)> GetFriendsWithPaginationHeaderAsync(
+            string id,
+            UsersParameters parameters);
+
         Task UpdateAsync(UserViewModel viewModel);
 
         Task DeleteAsync(string userId);

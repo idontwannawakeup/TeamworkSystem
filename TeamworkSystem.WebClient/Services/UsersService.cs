@@ -35,6 +35,17 @@ namespace TeamworkSystem.WebClient.Services
         public async Task<IEnumerable<UserViewModel>> GetFriendsAsync(string id) =>
             await httpClient.GetAsync<List<UserViewModel>>($"friends/{id}");
 
+        public async Task<(IEnumerable<UserViewModel>, PaginationHeaderViewModel)> GetFriendsWithPaginationHeaderAsync(
+            string id,
+            UsersParameters parameters)
+        {
+            return await httpClient.GetWithPaginationHeaderAsync<List<UserViewModel>>(
+                $"friends/{id}"
+                + $"?{nameof(parameters.PageNumber)}={parameters.PageNumber}"
+                + $"&{nameof(parameters.PageSize)}={parameters.PageSize}"
+                + $"&{nameof(parameters.Name)}={parameters.Name}");
+        }
+
         public async Task UpdateAsync(UserViewModel viewModel) =>
             await httpClient.PutAsync(string.Empty, viewModel);
 

@@ -6,15 +6,13 @@ using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
-    public abstract class GenericRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class
+    public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly TeamworkSystemContext databaseContext;
 
         protected readonly DbSet<TEntity> table;
 
-        public virtual async Task<IEnumerable<TEntity>> GetAsync() =>
-            await table.ToListAsync();
+        public virtual async Task<IEnumerable<TEntity>> GetAsync() => await table.ToListAsync();
 
         public virtual async Task<TEntity> GetByIdAsync(int id)
         {
@@ -25,8 +23,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public abstract Task<TEntity> GetCompleteEntityAsync(int id);
 
-        public virtual async Task InsertAsync(TEntity entity) =>
-            await table.AddAsync(entity);
+        public virtual async Task InsertAsync(TEntity entity) => await table.AddAsync(entity);
 
         public virtual async Task UpdateAsync(TEntity entity) =>
             await Task.Run(() => table.Update(entity));

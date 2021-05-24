@@ -5,18 +5,18 @@
 
 <MudTable Class="mt-md-12 mb-12"
           T="@TeamViewModel"
-          ServerData="@ServerReload"
+          ServerData="@InitializeTeamsAsync"
           @ref="@table"
           Hover="@true"
           Breakpoint="@Breakpoint.Sm"
           Elevation="0"
-          OnRowClick="@OnRowClick"
+          OnRowClick="@ShowTeamPage"
           RowClass="cursor-pointer"
           Dense="@true">
     <ToolBarContent>
         <MudText Typo="@Typo.h3">Teams</MudText>
         <MudToolBarSpacer />
-        <MudTextField T="string"
+        <MudTextField T="@string"
                       ValueChanged="@(async name => await OnSearchAsync(name))"
                       Placeholder="Search by name"
                       Adornment="Adornment.Start"
@@ -74,14 +74,14 @@
 
     private string searchName = null;
 
-    private void OnRowClick(TableRowClickEventArgs<TeamViewModel> args) =>
-        NavigationManager.NavigateTo($"/team/{args.Item.Id}");
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
     }
+
+    private void ShowTeamPage(TableRowClickEventArgs<TeamViewModel> args) =>
+        NavigationManager.NavigateTo($"/team/{args.Item.Id}");
 
     private void ShowTeamCreationDialog()
     {
@@ -92,7 +92,7 @@
         });
     }
 
-    private async Task<TableData<TeamViewModel>> ServerReload(TableState state)
+    private async Task<TableData<TeamViewModel>> InitializeTeamsAsync(TableState state)
     {
         var (teams, pagination) = await TeamsService.GetWithPaginationHeaderAsync(
             new TeamsParameters()
