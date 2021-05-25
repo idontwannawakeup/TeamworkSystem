@@ -33,7 +33,8 @@
     <RowTemplate>
         <MudTd Class="ml-3" DataLabel="Name">
             <MudElement HtmlTag="div" Class="d-flex align-center">
-                <MudAvatar Color="@Color.Success">
+                <MudAvatar Image="@(context.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Avatar}" : null)"
+                           Color="@Color.Success">
                     A
                 </MudAvatar>
                 <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Name</MudText>

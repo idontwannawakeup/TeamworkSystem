@@ -12,6 +12,8 @@
 
         public string About { get; set; }
 
+        public string Avatar { get; set; }
+
         public UserResponse Leader { get; set; }
     }
 }

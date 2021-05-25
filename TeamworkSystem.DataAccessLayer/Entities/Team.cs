@@ -14,6 +14,8 @@ namespace TeamworkSystem.DataAccessLayer.Entities
 
         public string About { get; set; }
 
+        public string Avatar { get; set; }
+
         public User Leader { get; set; }
 
         public List<Project> Projects { get; set; }

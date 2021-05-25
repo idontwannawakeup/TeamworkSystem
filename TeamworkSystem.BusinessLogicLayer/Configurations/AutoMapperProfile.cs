@@ -18,7 +18,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
                 .ForMember(
                     response => response.Avatar,
                     options => options.MapFrom(
-                        user => !string.IsNullOrEmpty(user.Avatar) ? $"Public/Photos/{user.Avatar}" : null));
+                        user => !string.IsNullOrWhiteSpace(user.Avatar) ? $"Public/Photos/{user.Avatar}" : null));
         }
 
         private void CreateTicketsMaps()
@@ -30,7 +30,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         private void CreateTeamsMaps()
         {
             CreateMap<TeamRequest, Team>();
-            CreateMap<Team, TeamResponse>();
+            CreateMap<Team, TeamResponse>()
+                .ForMember(
+                    response => response.Avatar,
+                    options => options.MapFrom(
+                        team => !string.IsNullOrWhiteSpace(team.Avatar) ? $"Public/Photos/{team.Avatar}" : null));
         }
 
         private void CreateProjectsMaps()

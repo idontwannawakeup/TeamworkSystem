@@ -25,6 +25,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly UserManager<User> userManager;
 
+        private readonly IPhotosService photosService;
+
         public async Task<IEnumerable<TeamResponse>> GetAsync()
         {
             var teams = await teamsRepository.GetAsync();
@@ -67,6 +69,14 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task SetAvatarForTeamAsync(TeamAvatarRequest request)
+        {
+            var team = await teamsRepository.GetByIdAsync(request.TeamId);
+            team.Avatar = await photosService.SavePhotoAsync(request.Avatar);
+            await teamsRepository.UpdateAsync(team);
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(int id)
         {
             await teamsRepository.DeleteAsync(id);
@@ -87,10 +97,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public TeamsService(IUnitOfWork unitOfWork, IMapper mapper)
+        public TeamsService(IUnitOfWork unitOfWork, IMapper mapper, IPhotosService photosService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.photosService = photosService;
             teamsRepository = this.unitOfWork.TeamsRepository;
             userManager = this.unitOfWork.UserManager;
         }
