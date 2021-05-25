@@ -18,7 +18,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             var source = userManager.Users;
 
             SearchByTeamId(ref source, parameters.TeamId);
-            SearchByName(ref source, parameters.Name);
+            SearchByLastName(ref source, parameters.LastName);
 
             return await PagedList<User>.ToPagedListAsync(
                 source,
@@ -35,7 +35,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             var source = userManager.Users.Where(
                 secondUser => secondUser.Friends.Contains(user));
 
-            SearchByName(ref source, parameters.Name);
+            SearchByLastName(ref source, parameters.LastName);
 
             return await PagedList<User>.ToPagedListAsync(
                 source,
@@ -77,14 +77,14 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             source = source.Where(user => user.Teams.Any(team => team.Id == teamId));
         }
 
-        private static void SearchByName(ref IQueryable<User> source, string name)
+        private static void SearchByLastName(ref IQueryable<User> source, string lastName)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(lastName))
             {
                 return;
             }
 
-            source = source.Where(user => user.FirstName.Contains(name));
+            source = source.Where(user => user.LastName.Contains(lastName));
         }
 
         private static string GetUserNotFoundErrorMessage(string id) =>

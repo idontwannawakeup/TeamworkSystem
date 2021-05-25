@@ -71,7 +71,7 @@
                                         <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
                                     </MudElement>
 
-                                    @if (userId == team.LeaderId)
+                                    @if (userId == team?.LeaderId)
                                     {
                                         <MudMenu Class="ml-auto"
                                                  Icon="@Icons.Material.Filled.MoreHoriz"

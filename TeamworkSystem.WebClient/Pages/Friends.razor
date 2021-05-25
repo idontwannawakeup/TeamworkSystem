@@ -20,8 +20,8 @@
         <MudText Typo="@Typo.h3">Friends</MudText>
         <MudToolBarSpacer />
         <MudTextField T="@string"
-                      ValueChanged="@(async name => await OnSearchAsync(name))"
-                      Placeholder="Search by name"
+                      ValueChanged="@(async lastName => await OnSearchAsync(lastName))"
+                      Placeholder="Search by last name"
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"
@@ -81,7 +81,7 @@
 
     private string userId = null;
 
-    private string searchName = null;
+    private string searchLastName = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -127,7 +127,7 @@
             {
                 PageNumber = state.Page + 1,
                 PageSize = state.PageSize,
-                Name = searchName
+                LastName = searchLastName
             });
 
         return new() { Items = friends, TotalItems = pagination.TotalEntitiesCount };
@@ -135,7 +135,7 @@
 
     private async Task OnSearchAsync(string name)
     {
-        searchName = name;
+        searchLastName = name;
         await table.ReloadServerData();
     }
 

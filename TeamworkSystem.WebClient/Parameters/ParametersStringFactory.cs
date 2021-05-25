@@ -21,12 +21,13 @@
             $"{GetPaginationParameters(parameters)}"
             + $"&{nameof(parameters.ProjectId)}={parameters.ProjectId}"
             + $"&{nameof(parameters.ExecutorId)}={parameters.ExecutorId}"
-            + $"&{nameof(parameters.Title)}={parameters.Title}";
+            + $"&{nameof(parameters.Title)}={parameters.Title}"
+            + $"&{nameof(parameters.Status)}={parameters.Status}";
 
         public static string GenerateParametersString(UsersParameters parameters) =>
             $"{GetPaginationParameters(parameters)}"
             + $"&{nameof(parameters.TeamId)}={parameters.TeamId}"
-            + $"&{nameof(parameters.Name)}={parameters.Name}";
+            + $"&{nameof(parameters.LastName)}={parameters.LastName}";
 
         private static string GetPaginationParameters(QueryStringParameters parameters) =>
             $"?PageNumber={parameters.PageNumber}&PageSize={parameters.PageSize}";

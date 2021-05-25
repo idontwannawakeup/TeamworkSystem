@@ -50,12 +50,15 @@
                 </MudTd>
                 <MudTd>
                     <MudElement HtmlTag="div" Class="d-flex">
-                        <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
-                            <MudMenuItem Link="@GetSettingsLink(context.Id)">Edit</MudMenuItem>
-                            <MudMenuItem OnClick="@(async () => await DeleteTicketAsync(context.Id))">
-                                Delete
-                            </MudMenuItem>
-                        </MudMenu>
+                        @if (userId == context.Project.Team.LeaderId)
+                        {
+                            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto" Dense="@true">
+                                <MudMenuItem Link="@GetSettingsLink(context.Id)">Edit</MudMenuItem>
+                                <MudMenuItem OnClick="@(async () => await DeleteTicketAsync(context.Id))">
+                                    Delete
+                                </MudMenuItem>
+                            </MudMenu>
+                        }
                     </MudElement>
                 </MudTd>
             </RowTemplate>
@@ -77,13 +80,18 @@
 
     [Parameter] public int ProjectId { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
     private MudTable<TicketViewModel> table;
 
     private string searchTitle = null;
 
+    private string userId = null;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
     }
 
     private string GetSettingsLink(int ticketId) =>

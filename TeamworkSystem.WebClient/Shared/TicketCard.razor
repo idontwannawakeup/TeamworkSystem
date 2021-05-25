@@ -30,11 +30,13 @@
                            Color="@Color.Primary"
                            Class="ml-auto"
                            Link="@TicketLink" />
-
-            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="@Size.Small" Dense="@true">
-                <MudMenuItem Link="@SettingsLink">Edit</MudMenuItem>
-                <MudMenuItem OnClick="@DeleteTicketAsync">Delete</MudMenuItem>
-            </MudMenu>
+            @if (userId == Ticket.Project.Team.LeaderId)
+            {
+                <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="@Size.Small" Dense="@true">
+                    <MudMenuItem Link="@SettingsLink">Edit</MudMenuItem>
+                    <MudMenuItem OnClick="@DeleteTicketAsync">Delete</MudMenuItem>
+                </MudMenu>
+            }
         </MudElement>
     </MudCardContent>
 </MudCard>
@@ -45,9 +47,19 @@
 
     [Parameter] public EventCallback DeleteCallback { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
     private string TicketLink => $"/ticket/{Ticket.Id}";
 
     private string SettingsLink => $"/ticket/{Ticket.Id}/settings";
+
+    private string userId = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+    }
 
     private async Task DeleteTicketAsync()
     {

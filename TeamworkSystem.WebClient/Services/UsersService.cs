@@ -44,7 +44,7 @@ namespace TeamworkSystem.WebClient.Services
                 $"friends/{id}"
                 + $"?{nameof(parameters.PageNumber)}={parameters.PageNumber}"
                 + $"&{nameof(parameters.PageSize)}={parameters.PageSize}"
-                + $"&{nameof(parameters.Name)}={parameters.Name}");
+                + $"&{nameof(parameters.LastName)}={parameters.LastName}");
         }
 
         public async Task UpdateAsync(UserViewModel viewModel) =>

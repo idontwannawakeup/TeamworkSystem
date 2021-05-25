@@ -6,20 +6,16 @@
     <FluentValidationValidator />
     <MudDialog>
         <DialogContent>
-            <MudSelect T="@UserViewModel"
-                       Label="Friend"
-                       Value="@friends.Second"
-                       ValueChanged="@(e => (friends.Second, friends.SecondId) = (e, e.Id))"
-                       For="@(() => friends.Second)"
-                       ToStringFunc="@(user => user?.FullName)">
-                @if (users is not null)
-                {
-                    @foreach (var user in users)
-                    {
-                        <MudSelectItem T="@UserViewModel" Value="@user" />
-                    }
-                }
-            </MudSelect>
+            <MudAutocomplete T="@UserViewModel"
+                             Label="User"
+                             HelperText="Find your friend by his lastname!"
+                             Value="@friends.Second"
+                             ValueChanged="@(e => (friends.Second, friends.SecondId) = (e, e.Id))"
+                             SearchFunc="@InitializeUsersAsync"
+                             For="@(() => friends.Second)"
+                             ToStringFunc="@(user => user?.FullName)"
+                             Immediate="@true"
+                             CoerceText="@true" />
         </DialogContent>
         <DialogActions>
             <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">Add</MudButton>
@@ -38,18 +34,22 @@
 
     private FriendsViewModel friends = new();
 
-    private List<UserViewModel> users = null;
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await InitializeUsersAsync();
         friends.FirstId = UserId;
     }
 
-    private async Task InitializeUsersAsync()
+    private async Task<IEnumerable<UserViewModel>> InitializeUsersAsync(string lastName)
     {
-        users = await UsersService.GetAsync() as List<UserViewModel>;
+        var users = await UsersService.GetAsync(
+            new UsersParameters()
+            {
+                LastName = lastName,
+                PageSize = 50
+            });
+
+        return users;
     }
 
     private async Task OnValidSubmitAsync()

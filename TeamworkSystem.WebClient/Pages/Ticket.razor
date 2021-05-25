@@ -17,20 +17,25 @@
         {
             <MudSkeleton Width="25%" Height="45px" Class="mt-3 mt-md-8 mb-4" />
         }
-        <MudElement HtmlTag="div" Class="d-flex align-center gap-4">
-            <MudButton Variant="@Variant.Outlined"
-                        Color="@Color.Info"
-                        EndIcon="@Icons.Material.Filled.Edit"
-                        Link="@SettingsLink">
-                Edit
-            </MudButton>
-            <MudButton Variant="@Variant.Outlined"
-                        Color="@Color.Error"
-                        EndIcon="@Icons.Material.Filled.Delete"
-                        OnClick="@DeleteTicketAsync">
-                Delete
-            </MudButton>
-        </MudElement>
+
+        @if (userId == ticket?.Project?.Team?.LeaderId)
+        {
+            <MudElement HtmlTag="div" Class="d-flex align-center gap-4">
+                <MudButton Variant="@Variant.Outlined"
+                           Color="@Color.Info"
+                           EndIcon="@Icons.Material.Filled.Edit"
+                           Link="@SettingsLink">
+                    Edit
+                </MudButton>
+                <MudButton Variant="@Variant.Outlined"
+                           Color="@Color.Error"
+                           EndIcon="@Icons.Material.Filled.Delete"
+                           OnClick="@DeleteTicketAsync">
+                    Delete
+                </MudButton>
+            </MudElement>
+        }
+
     </MudElement>
         
     <MudGrid Spacing="2">
@@ -133,7 +138,11 @@
 
     [Parameter] public int TicketId { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
     private TicketViewModel ticket = null;
+
+    private string userId = null;
 
     private string SettingsLink => $"/ticket/{TicketId}/settings";
 
@@ -144,6 +153,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeTicketAsync();
     }
 

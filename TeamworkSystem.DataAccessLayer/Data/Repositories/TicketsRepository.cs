@@ -23,11 +23,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<PagedList<Ticket>> GetAsync(TicketsParameters parameters)
         {
-            IQueryable<Ticket> source = table.Include(ticket => ticket.Executor);
+            IQueryable<Ticket> source = table.Include(ticket => ticket.Executor)
+                                             .Include(ticket => ticket.Project)
+                                             .ThenInclude(project => project.Team);
 
             SearchByProjectId(ref source, parameters.ProjectId);
             SearchByExecutorId(ref source, parameters.ExecutorId);
             SearchByTitle(ref source, parameters.Title);
+            SearchByStatus(ref source, parameters.Status);
 
             return await PagedList<Ticket>.ToPagedListAsync(
                 source,
@@ -63,6 +66,16 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             }
 
             source = source.Where(ticket => ticket.Title.Contains(title));
+        }
+
+        private static void SearchByStatus(ref IQueryable<Ticket> source, string status)
+        {
+            if (string.IsNullOrWhiteSpace(status))
+            {
+                return;
+            }
+
+            source = source.Where(ticket => ticket.Status == status);
         }
 
         public TicketsRepository(TeamworkSystemContext databaseContext)

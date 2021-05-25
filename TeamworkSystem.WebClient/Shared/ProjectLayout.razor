@@ -5,7 +5,7 @@
            ClipMode="DrawerClipMode.Always"
            Anchor="Anchor.Right">
     <MudDrawerHeader>
-        <MudText Typo="@Typo.h6">@(projectModel?.Title)</MudText>
+        <MudText Typo="@Typo.h6">@(project?.Title)</MudText>
     </MudDrawerHeader>
     <MudNavMenu>
         <MudNavLink Match="NavLinkMatch.All"
@@ -23,11 +23,14 @@
                     Href="@TicketsLink">
             <span>Tickets</span>
         </MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All"
-                    Icon="@Icons.Material.Filled.Settings"
-                    Href="@SettingsLink">
-            <span>Settings</span>
-        </MudNavLink>
+        @if (userId == project?.Team?.LeaderId)
+        {
+            <MudNavLink Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Settings"
+                        Href="@SettingsLink">
+                <span>Settings</span>
+            </MudNavLink>
+        }
     </MudNavMenu>
 </MudDrawer>
 
@@ -49,7 +52,11 @@
 
     [Parameter] public RenderFragment ChildContent { get; set; }
 
-    private ProjectViewModel projectModel = null;
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private ProjectViewModel project = null;
+
+    private string userId = null;
 
     private string OverviewLink => $"/project/{ProjectId}/overview";
 
@@ -73,10 +80,11 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeProjectAsync();
     }
 
     private async Task InitializeProjectAsync() =>
-        projectModel = await ProjectsService.GetByIdAsync(ProjectId);
+        project = await ProjectsService.GetByIdAsync(ProjectId);
 
 }

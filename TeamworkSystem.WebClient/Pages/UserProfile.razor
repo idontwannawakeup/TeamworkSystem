@@ -23,6 +23,7 @@
                 <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
                     <MudElement HtmlTag="div" Class="user-profile__title">
                         <MudText Typo="@Typo.h5" Color="@Color.Dark">@user.FullName</MudText>
+                        <MudText Typo="@Typo.subtitle1" Color="@Color.Surface">@user.UserName</MudText>
                         @if (!string.IsNullOrWhiteSpace(user.Profession))
                         {
                             <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
