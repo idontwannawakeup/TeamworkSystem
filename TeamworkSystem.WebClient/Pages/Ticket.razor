@@ -1,6 +1,7 @@
 ﻿@page "/ticket/{TicketId:int}"
 @layout ContainerlessLayout
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject ITicketsService TicketsService
@@ -64,30 +65,41 @@
                         @if (ticket.Executor is not null)
                         {
                             <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-                                <MudAvatar Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+                                <MudAvatar Image="@(ticket.Executor.Avatar is not null ? $"{Configuration["ApiUrl"]}/{ticket.Executor.Avatar}" : null)"
+                                           Color="@Color.Secondary"
+                                           Size="@Size.Small">
+                                    A
+                                </MudAvatar>
                                 <MudText Typo="@Typo.subtitle2">@ticket.Executor.FullName</MudText>
                             </MudElement>
                         }
                         else
                         {
-                            <MudChip Color="@Color.Default"
-                                        Size="@Size.Small"
-                                        Label="@true">
-                                None
-                            </MudChip>
+                            <NoneChip />
+                        }
+                    </MudElement>
+                    <MudElement Class="d-flex align-center justify-space-between">
+                        <MudText Typo="@Typo.subtitle1">Project</MudText>
+                        @if (ticket.Project is not null)
+                        {
+                            <MudText Typo="@Typo.subtitle2">@ticket.Project.Title</MudText>
+                        }
+                        else
+                        {
+                            <NoneChip />
                         }
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
                         <MudText Typo="@Typo.subtitle1">Type</MudText>
                         <MudChip Color="@Color.Primary"
-                                    Size="@Size.Small"
-                                    Label="@true">
+                                 Size="@Size.Small"
+                                 Label="@true">
                             @ticket.Type
                         </MudChip>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
                         <MudText Typo="@Typo.subtitle1">Status</MudText>
-                        <MudChip Color="@Color.Default" Text="@ticket.Status" Class="ma-0">Backlog</MudChip>
+                        <MudChip Color="@Color.Default" Text="@ticket.Status" Class="ma-0">@ticket.Status</MudChip>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
                         <MudText Typo="@Typo.subtitle1">Priority</MudText>

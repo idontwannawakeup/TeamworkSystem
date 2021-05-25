@@ -8,11 +8,11 @@
 {
     <MudPaper Elevation="@elevation" Class="mt-10">
         <MudGrid>
-            @if (true)
+            @if (!string.IsNullOrWhiteSpace(user.Avatar))
             {
                 <MudItem xs="6" md="4" Class="mx-auto mx-md-0 pa-6">
                     <MudElement HtmlTag="div"
-                                Style="@($"background: url({Configuration["ApiUrl"]}/photos/wow.jpg) no-repeat center; background-size: cover; width: 350px; height: 250px;")" />
+                                Style="@($"background: url({Configuration["ApiUrl"]}/{user.Avatar}) no-repeat center; background-size: cover; width: 350px; height: 250px;")" />
                 </MudItem>
             }
             <MudItem xs="12" md="8">

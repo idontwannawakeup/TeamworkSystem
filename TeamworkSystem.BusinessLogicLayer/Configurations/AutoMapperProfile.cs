@@ -18,7 +18,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
                 .ForMember(
                     response => response.Avatar,
                     options => options.MapFrom(
-                        user => !string.IsNullOrEmpty(user.Avatar) ? $"Public\\Photos\\{user.Avatar}" : null));
+                        user => !string.IsNullOrEmpty(user.Avatar) ? $"Public/Photos/{user.Avatar}" : null));
         }
 
         private void CreateTicketsMaps()

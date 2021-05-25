@@ -1,6 +1,7 @@
 ﻿@page "/teams"
-@inject IDialogService DialogService 
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+@inject IDialogService DialogService 
 @inject ITeamsService TeamsService
 
 <MudTable Class="mt-md-12 mb-12"
@@ -32,7 +33,9 @@
     <RowTemplate>
         <MudTd Class="ml-3" DataLabel="Name">
             <MudElement HtmlTag="div" Class="d-flex align-center">
-                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                <MudAvatar Color="@Color.Success">
+                    A
+                </MudAvatar>
                 <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Name</MudText>
             </MudElement>
         </MudTd>
@@ -48,7 +51,10 @@
         </MudTd>
         <MudTd DataLabel="Leader">
             <MudElement HtmlTag="div" Class="d-flex align-center">
-                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                <MudAvatar Image="@(context.Leader?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Leader.Avatar}" : null)"
+                           Color="@Color.Secondary">
+                    A
+                </MudAvatar>
                 <span class="ml-2">@context.Leader.FullName</span>
             </MudElement>
         </MudTd>

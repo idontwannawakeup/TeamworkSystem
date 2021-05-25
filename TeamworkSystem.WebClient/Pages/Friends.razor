@@ -1,5 +1,6 @@
 ﻿@page "/friends"
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject IUsersService UsersService
@@ -34,7 +35,10 @@
     <RowTemplate>
         <MudTd DataLabel="Name">
             <MudElement HtmlTag="div" Class="d-flex align-center">
-                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                <MudAvatar Image="@(context.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Avatar}" : null)"
+                           Color="@Color.Info">
+                    A
+                </MudAvatar>
                 <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.FullName</MudText>
             </MudElement>
         </MudTd>

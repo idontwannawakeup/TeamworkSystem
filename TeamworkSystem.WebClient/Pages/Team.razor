@@ -1,5 +1,6 @@
 ﻿@page "/team/{TeamId:int}"
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
 @inject ISnackbar Snackbar 
 @inject IDialogService DialogService  
 @inject ITeamsService TeamsService
@@ -58,7 +59,10 @@
                         <MudListItem OnClick="@(e => OpenMemberProfile(member))">
                             <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
 
-                                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                                <MudAvatar Image="@(member.Avatar is not null ? $"{Configuration["ApiUrl"]}/{member.Avatar}" : null)"
+                                           Color="@Color.Secondary">
+                                    A
+                                </MudAvatar>
 
                                 <MudElement HtmlTag="div" Class="d-flex flex-column">
                                     <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
