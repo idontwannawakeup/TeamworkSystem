@@ -3,7 +3,7 @@
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@project" OnValidSubmit="@OnValidSubmitAsync">
+<EditForm Model="@project" OnValidSubmit="@CreateProjectAsync">
     <FluentValidationValidator />
     <MudDialog>
         <DialogContent>
@@ -13,20 +13,16 @@
                           @bind-Value="@project.Title"
                           For="@(() => project.Title)" />
 
-            <MudSelect T="@TeamViewModel"
-                       Label="@nameof(project.Team)"
-                       Value="@project.Team"
-                       ValueChanged="@(e => (project.Team, project.TeamId) = (e, e.Id))"
-                       ToStringFunc="@(team => team?.Name)"
-                       For="@(() => project.Team)">
-                @if (teams is not null)
-                {
-                    @foreach (var team in teams)
-                    {
-                        <MudSelectItem T="@TeamViewModel" Value="@team" />
-                    }
-                }
-            </MudSelect>
+            <MudAutocomplete T="@TeamViewModel"
+                             Label="@nameof(project.Team)"
+                             HelperText="Find team by name!"
+                             SearchFunc="@InitializeTeamsAsync"
+                             Value="@project.Team"
+                             ValueChanged="@(e => (project.Team, project.TeamId) = (e, e.Id))"
+                             ToStringFunc="@(team => team?.Name)"
+                             For="@(() => project.Team)"
+                             Immediate="@true"
+                             CoerceText="@true" />
 
             <MudTextField T="@string"
                           Label="@nameof(project.Type)"
@@ -62,20 +58,24 @@
 
     private ProjectViewModel project = new();
 
-    private List<TeamViewModel> teams = null;
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await InitializeTeamsAsync();
     }
 
-    private async Task InitializeTeamsAsync()
+    private async Task<IEnumerable<TeamViewModel>> InitializeTeamsAsync(string name)
     {
-        teams = await TeamsService.GetTeamsForUserAsync(UserId) as List<TeamViewModel>;
+        var teams = await TeamsService.GetAsync(new TeamsParameters()
+        {
+            UserId = UserId,
+            Name = name,
+            PageSize = 50
+        });
+
+        return teams;
     }
 
-    private async Task OnValidSubmitAsync()
+    private async Task CreateProjectAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {

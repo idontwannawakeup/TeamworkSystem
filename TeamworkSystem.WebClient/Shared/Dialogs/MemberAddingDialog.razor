@@ -7,19 +7,15 @@
     <MudDialog>
 
         <DialogContent>
-            <MudSelect T="@UserViewModel"
-                       Label="Member"
-                       Value="@teamMember.User"
-                       ValueChanged="@(e => (teamMember.User, teamMember.UserId) = (e, e.Id))"
-                       ToStringFunc="@(user => user?.FullName)">
-                @if (users is not null)
-                {
-                    @foreach (var user in users)
-                    {
-                        <MudSelectItem T="@UserViewModel" Value="@user" />
-                    }
-                }
-            </MudSelect>
+            <MudAutocomplete T="@UserViewModel"
+                             Label="Member"
+                             HelperText="Find user by his lastname!"
+                             Value="@teamMember.User"
+                             ValueChanged="@(e => (teamMember.User, teamMember.UserId) = (e, e.Id))"
+                             SearchFunc="@InitializeUsersAsync"
+                             ToStringFunc="@(user => user?.FullName)"
+                             Immediate="@true"
+                             CoerceText="@true" />
         </DialogContent>
 
         <DialogActions>
@@ -40,18 +36,21 @@
 
     private TeamMemberViewModel teamMember = new();
 
-    private List<UserViewModel> users = null;
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await InitializeUsersAsync();
         teamMember.TeamId = TeamId;
     }
 
-    private async Task InitializeUsersAsync()
+    private async Task<IEnumerable<UserViewModel>> InitializeUsersAsync(string lastName)
     {
-        users = await UsersService.GetAsync() as List<UserViewModel>;
+        var users = await UsersService.GetAsync(new UsersParameters()
+        {
+            LastName = lastName,
+            PageSize = 50
+        });
+
+        return users;
     }
 
     private async Task OnValidSubmitAsync()

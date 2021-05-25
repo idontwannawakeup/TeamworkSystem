@@ -50,10 +50,10 @@
                 <MudText Typo="@Typo.subtitle1"
                          Style="@colorGrey"
                          Class="pb-1">
-                    Total count: @members.Count
+                    Total count: @membersPagination.TotalEntitiesCount
                 </MudText>
                 <MudDivider Class="my-2" />
-                @if (members.Count != 0)
+                @if (members.Count() != 0)
                 {
                     <MudList Clickable="@true">
                         @foreach (var member in members)
@@ -172,7 +172,9 @@
 
     private TeamViewModel team = null;
 
-    private List<UserViewModel> members = null;
+    private IEnumerable<UserViewModel> members = null;
+
+    private PaginationHeaderViewModel membersPagination = null;
 
     private string userId = null;
 
@@ -193,7 +195,11 @@
         team = await TeamsService.GetByIdAsync(TeamId);
 
     private async Task InitializeMembersAsync() =>
-        members = await UsersService.GetByTeamIdAsync(TeamId) as List<UserViewModel>;
+        (members, membersPagination) = await UsersService.GetWithPaginationHeaderAsync(new()
+        {
+            TeamId = TeamId,
+            PageSize = 30
+        });
 
     private async Task DeleteMemberAsync(UserViewModel user)
     {

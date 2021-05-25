@@ -42,12 +42,11 @@
 
     private async Task<IEnumerable<UserViewModel>> InitializeUsersAsync(string lastName)
     {
-        var users = await UsersService.GetAsync(
-            new UsersParameters()
-            {
-                LastName = lastName,
-                PageSize = 50
-            });
+        var users = await UsersService.GetAsync(new UsersParameters()
+        {
+            LastName = lastName,
+            PageSize = 50
+        });
 
         return users;
     }

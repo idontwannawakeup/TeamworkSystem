@@ -37,7 +37,11 @@
                                 Icon="@Icons.Filled.AccountCircle">
                         <span>Profile</span>
                     </MudNavLink>
-                    @*<MudNavLink Match="@NavLinkMatch.All" Href="/settings" Icon="@Icons.Filled.Settings"><span>Settings</span></MudNavLink>*@
+                    <MudNavLink Match="@NavLinkMatch.All"
+                                Href="/profile/settings"
+                                Icon="@Icons.Filled.Settings">
+                        <span>Settings</span>
+                    </MudNavLink>
                     <MudDivider Class="my-2" />
                     <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
 
