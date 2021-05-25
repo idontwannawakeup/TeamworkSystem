@@ -9,6 +9,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
     {
         private readonly IConfiguration configuration;
 
+        public string Issuer => configuration["JwtIssuer"];
+
+        public string Audience => configuration["JwtAudience"];
+
         public static DateTime ExpirationDate => DateTime.UtcNow.AddYears(1);
 
         public SymmetricSecurityKey Key =>

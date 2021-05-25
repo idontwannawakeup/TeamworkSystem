@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Parameters;
@@ -44,7 +45,8 @@ namespace TeamworkSystem.WebClient.Services
         public async Task DeleteMemberAsync(TeamMemberViewModel viewModel) =>
             await httpClient.DeleteAsync($"members/{viewModel.TeamId}/{viewModel.UserId}");
 
-        public TeamsService(HttpClient httpClient) =>
-            this.httpClient = new(httpClient);
+        public TeamsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
+            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state)
+                                                                  .Build();
     }
 }

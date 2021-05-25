@@ -17,6 +17,8 @@
             {
                 <MudText Typo="@Typo.h6">@team.Name</MudText>
                 <MudText Typo="@Typo.subtitle1">@team.Specialization</MudText>
+                @if (userId == team.LeaderId)
+                {
                     <MudButton Variant="@Variant.Outlined"
                                Color="@Color.Tertiary"
                                EndIcon="@Icons.Material.Filled.Add"
@@ -24,16 +26,14 @@
                                OnClick="@ShowMemberAddingDialog">
                         Add member
                     </MudButton>
-                    @if (userId == team.LeaderId)
-                    {
-                        <MudButton Variant="@Variant.Outlined"
-                                   Color="@Color.Info"
-                                   EndIcon="@Icons.Material.Filled.Edit"
-                                   IconColor="@Color.Inherit"
-                                   Link="@EditLink">
-                            Edit
-                        </MudButton>
-                    }
+                    <MudButton Variant="@Variant.Outlined"
+                               Color="@Color.Info"
+                               EndIcon="@Icons.Material.Filled.Edit"
+                               IconColor="@Color.Inherit"
+                               Link="@EditLink">
+                        Edit
+                    </MudButton>
+                }
             }
             else
             {
@@ -53,46 +53,45 @@
                     Total count: @members.Count
                 </MudText>
                 <MudDivider Class="my-2" />
-                <MudList Clickable="@true">
-                    @foreach (var member in members)
-                    {
-                        <MudListItem OnClick="@(e => OpenMemberProfile(member))">
-                            <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
-
-                                <MudAvatar Image="@(member.Avatar is not null ? $"{Configuration["ApiUrl"]}/{member.Avatar}" : null)"
-                                           Color="@Color.Secondary">
-                                    A
-                                </MudAvatar>
-
-                                <MudElement HtmlTag="div" Class="d-flex flex-column">
-                                    <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
-                                    <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
-                                </MudElement>
-
-                                @if (userId == team.LeaderId)
-                                {
-                                    <MudMenu Class="ml-auto"
-                                             Icon="@Icons.Material.Filled.MoreHoriz"
-                                             Dense="@true"
-                                             OffsetX="true"
-                                             Direction="@Direction.Left">
-                                        <MudMenuItem OnClick="@(async e => await DeleteMemberAsync(member))">
-                                            Remove
-                                        </MudMenuItem>
-                                    </MudMenu>
-                                }
-
-                            </MudElement>
-                        </MudListItem>
-                    }
-                </MudList>
-                @if (ShowMore)
+                @if (members.Count != 0)
                 {
-                    <MudButton Variant="@Variant.Outlined"
-                               Color="@Color.Tertiary"
-                               FullWidth="@true">
-                        Show more
-                    </MudButton>
+                    <MudList Clickable="@true">
+                        @foreach (var member in members)
+                        {
+                            <MudListItem OnClick="@(e => OpenMemberProfile(member))">
+                                <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+
+                                    <MudAvatar Image="@(member.Avatar is not null ? $"{Configuration["ApiUrl"]}/{member.Avatar}" : null)"
+                                               Color="@Color.Secondary">
+                                        A
+                                    </MudAvatar>
+
+                                    <MudElement HtmlTag="div" Class="d-flex flex-column">
+                                        <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
+                                        <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
+                                    </MudElement>
+
+                                    @if (userId == team.LeaderId)
+                                    {
+                                        <MudMenu Class="ml-auto"
+                                                 Icon="@Icons.Material.Filled.MoreHoriz"
+                                                 Dense="@true"
+                                                 OffsetX="true"
+                                                 Direction="@Direction.Left">
+                                            <MudMenuItem OnClick="@(async e => await DeleteMemberAsync(member))">
+                                                Remove
+                                            </MudMenuItem>
+                                        </MudMenu>
+                                    }
+
+                                </MudElement>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+                else
+                {
+                    <MudText Typo="@Typo.subtitle1">This team has no members.</MudText>
                 }
             }
             else
@@ -104,57 +103,57 @@
     </MudItem>
 
     <MudItem xs="12" md="9">
-        @if (projects is not null)
-        {
-            <MudTable T="@ProjectViewModel"
-                      Items="@projects"
-                      Hover="@true"
-                      Elevation="4"
-                      OnRowClick="@OnRowClick"
-                      RowClass="cursor-pointer">
-                <ToolBarContent>
-                    <MudText Typo="@Typo.h4">Projects</MudText>
-                    <MudToolBarSpacer />
-                    @*<MudTextField T="@string"
-                                  Adornment="@Adornment.End"
-                                  AdornmentIcon="@Icons.Material.Filled.Search"
-                                  Variant="@Variant.Text"
-                                  Label="Search" />*@
-                </ToolBarContent>
-                <HeaderContent>
-                    <MudTh>Title</MudTh>
-                    <MudTh>Type</MudTh>
-                    <MudTh>Url</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Title">@context.Title</MudTd>
-                    <MudTd DataLabel="Type">
-                        @if (context.Type is not null)
-                        {
-                            @context.Type
-                        }
-                        else
-                        {
-                            <NoneChip />
-                        }
-                    </MudTd>
-                    <MudTd DataLabel="Url">
-                        @if (!string.IsNullOrWhiteSpace(context.Url))
-                        {
-                            @context.Url
-                        }
-                        else
-                        {
-                            <NoneChip />
-                        }
-                    </MudTd>
-                </RowTemplate>
-            </MudTable>
-        }
-        else
-        {
-            <Loader />
-        }
+        <MudTable T="@ProjectViewModel"
+                  ServerData="@InitializeProjectsAsync"
+                  @ref="@projectsTable"
+                  Hover="@true"
+                  Breakpoint="@Breakpoint.Sm"
+                  Elevation="4"
+                  OnRowClick="@OpenProjectPage"
+                  RowClass="cursor-pointer">
+            <ToolBarContent>
+                <MudText Typo="@Typo.h4">Projects</MudText>
+                <MudToolBarSpacer />
+                <MudTextField T="@string"
+                              ValueChanged="@(async title => await OnSearchAsync(title))"
+                              Placeholder="Search by title"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium"
+                              Class="mt-0" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Title</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Url</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Title">@context.Title</MudTd>
+                <MudTd DataLabel="Type">
+                    @if (context.Type is not null)
+                    {
+                        @context.Type
+                    }
+                    else
+                    {
+                        <NoneChip />
+                    }
+                </MudTd>
+                <MudTd DataLabel="Url">
+                    @if (!string.IsNullOrWhiteSpace(context.Url))
+                    {
+                        @context.Url
+                    }
+                    else
+                    {
+                        <NoneChip />
+                    }
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
     </MudItem>
 
 </MudGrid>
@@ -167,11 +166,11 @@
 
     private string EditLink => $"/team/{TeamId}/settings";
 
-    private bool ShowMore => members.Count > 10;
+    private MudTable<ProjectViewModel> projectsTable;
+
+    private string searchTitle;
 
     private TeamViewModel team = null;
-
-    private List<ProjectViewModel> projects = null;
 
     private List<UserViewModel> members = null;
 
@@ -182,23 +181,16 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await InitializeUserIdAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeTeamAsync();
-        await InitializeProjectsAsync();
         await InitializeMembersAsync();
     }
 
-    private void OnRowClick(TableRowClickEventArgs<ProjectViewModel> args) =>
+    private void OpenProjectPage(TableRowClickEventArgs<ProjectViewModel> args) =>
         NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
-
-    private async Task InitializeUserIdAsync() =>
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
 
     private async Task InitializeTeamAsync() =>
         team = await TeamsService.GetByIdAsync(TeamId);
-
-    private async Task InitializeProjectsAsync() =>
-        projects = await ProjectsService.GetByTeamIdAsync(TeamId) as List<ProjectViewModel>;
 
     private async Task InitializeMembersAsync() =>
         members = await UsersService.GetByTeamIdAsync(TeamId) as List<UserViewModel>;
@@ -237,6 +229,26 @@
         }
 
         NavigationManager.NavigateTo($"/users/{member.Id}/profile");
+    }
+
+    private async Task<TableData<ProjectViewModel>> InitializeProjectsAsync(TableState state)
+    {
+        var (projects, pagination) = await ProjectsService.GetWithPaginationHeaderAsync(
+            new ProjectsParameters()
+            {
+                PageNumber = state.Page + 1,
+                PageSize = state.PageSize,
+                TeamId = TeamId,
+                Title = searchTitle
+            });
+
+        return new() { Items = projects, TotalItems = pagination.TotalEntitiesCount };
+    }
+
+    private async Task OnSearchAsync(string title)
+    {
+        searchTitle = title;
+        await projectsTable.ReloadServerData();
     }
 
 }

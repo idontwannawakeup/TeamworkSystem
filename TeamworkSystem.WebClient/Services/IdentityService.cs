@@ -21,7 +21,10 @@ namespace TeamworkSystem.WebClient.Services
 
         private async Task<JwtViewModel> ExecuteRequestAsync<T>(string requestUri, T model)
         {
-            var jwtModel = await httpClient.PostAsync<T, JwtViewModel>(requestUri, model);
+            var jwtModel = await httpClient.PostWithoutAuthorizationAsync<T, JwtViewModel>(
+                requestUri,
+                model);
+
             await stateProvider.MarkUserAsAuthenticatedAsync(jwtModel.Token);
             return jwtModel;
         }
@@ -30,7 +33,9 @@ namespace TeamworkSystem.WebClient.Services
             HttpClient httpClient,
             ApiAuthenticationStateProvider stateProvider)
         {
-            this.httpClient = new(httpClient);
+            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(stateProvider)
+                                                                  .Build();
+
             this.stateProvider = stateProvider;
         }
     }

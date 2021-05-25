@@ -14,8 +14,8 @@ namespace TeamworkSystem.WebClient.Authentication
         private static AuthenticationState AnonymousState =>
             new(new ClaimsPrincipal(new ClaimsIdentity()));
 
-        public string JwtToken =>
-            Task.Run(() => localStorage.GetItemAsync<string>("securityToken").AsTask()).Result;
+        public async Task<string> GetJwtTokenAsync() =>
+            await localStorage.GetItemAsync<string>("securityToken");
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {

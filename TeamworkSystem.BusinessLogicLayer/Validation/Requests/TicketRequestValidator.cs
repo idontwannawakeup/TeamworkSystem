@@ -43,7 +43,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
 
             RuleFor(ticket => ticket.Type)
                 .Must(type => types.Contains(type))
-                .WithMessage(ticket => $"{nameof(ticket.Type)} should be one of: ${string.Join(", ", types)}");
+                .WithMessage(ticket => $"{nameof(ticket.Type)} should be one of: {string.Join(", ", types)}");
 
             RuleFor(ticket => ticket.Description)
                 .NotEmpty()
@@ -51,11 +51,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
 
             RuleFor(ticket => ticket.Status)
                 .Must(status => statuses.Contains(status))
-                .WithMessage(ticket => $"{nameof(ticket.Status)} should be one of: ${string.Join(", ", statuses)}");
+                .WithMessage(ticket => $"{nameof(ticket.Status)} should be one of: {string.Join(", ", statuses)}");
 
             RuleFor(ticket => ticket.Priority)
                 .Must(priority => priorities.Contains(priority))
-                .WithMessage(ticket => $"{nameof(ticket.Priority)} should be one of: ${string.Join(", ", priorities)}");
+                .WithMessage(ticket => $"{nameof(ticket.Priority)} should be one of: {string.Join(", ", priorities)}");
 
             RuleFor(ticket => ticket.Deadline)
                 .GreaterThan(DateTime.Now)

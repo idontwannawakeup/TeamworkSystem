@@ -48,7 +48,6 @@
                 <MudSkeleton Width="100%" />
                 <MudSkeleton Width="100%" />
             }
-
         </MudItem>
         @* Attributes *@
         <MudItem xs="12" md="5" Class="pb-md-4">
@@ -111,7 +110,14 @@
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
                         <MudText Typo="@Typo.subtitle1">Deadline</MudText>
-                        <MudText Typo="@Typo.subtitle2">@ticket.Deadline</MudText>
+                        @if (ticket.Deadline is not null)
+                        {
+                            <MudText Typo="@Typo.subtitle2">@ticket.Deadline</MudText>
+                        }
+                        else
+                        {
+                            <NoneChip />
+                        }
                     </MudElement>
                 }
                 else

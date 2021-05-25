@@ -148,7 +148,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
         {
             foreach (var (user, password) in users)
             {
-                new PasswordHasher<User>().HashPassword(user, password);
+                user.PasswordHash = new PasswordHasher<User>().HashPassword(user, password);
                 builder.HasData(user);
             }
         }

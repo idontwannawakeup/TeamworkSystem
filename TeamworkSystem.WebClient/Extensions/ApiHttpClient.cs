@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Extensions
@@ -16,8 +18,11 @@ namespace TeamworkSystem.WebClient.Extensions
 
         private readonly HttpClient httpClient;
 
+        private readonly ApiAuthenticationStateProvider stateProvider;
+
         public async Task<T> GetAsync<T>(string requestUri)
         {
+            httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
             var response = await httpClient.GetAsync(requestUri);
             var responseBody = await response.Content.ReadAsStringAsync();
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
@@ -27,6 +32,7 @@ namespace TeamworkSystem.WebClient.Extensions
         public async Task<(T, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync<T>(
             string requestUri)
         {
+            httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
             var response = await httpClient.GetAsync(requestUri);
             var responseBody = await response.Content.ReadAsStringAsync();
             var pagination = response.Headers.GetValues("X-Pagination")
@@ -39,6 +45,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public async Task PostAsync<T>(string requestUri, T viewModel)
         {
+            httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
             var response = await httpClient.PostAsJsonAsync(requestUri, viewModel, options);
             var responseBody = await response.Content.ReadAsStringAsync();
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
@@ -46,6 +53,16 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public async Task<TOut> PostAsync<T, TOut>(string requestUri, T viewModel)
         {
+            httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
+            var response = await httpClient.PostAsJsonAsync(requestUri, viewModel, options);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
+            return responseBody.Deserialize<TOut>();
+        }
+
+        public async Task<TOut> PostWithoutAuthorizationAsync<T, TOut>(string requestUri, T viewModel)
+        {
+            httpClient.DefaultRequestHeaders.Authorization = null;
             var response = await httpClient.PostAsJsonAsync(requestUri, viewModel, options);
             var responseBody = await response.Content.ReadAsStringAsync();
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
@@ -54,6 +71,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public async Task PutAsync<T>(string requestUri, T viewModel)
         {
+            httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
             var response = await httpClient.PutAsJsonAsync(requestUri, viewModel, options);
             var responseBody = await response.Content.ReadAsStringAsync();
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
@@ -66,7 +84,13 @@ namespace TeamworkSystem.WebClient.Extensions
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
         }
 
-        public ApiHttpClient(HttpClient httpClient) =>
+        private async Task<AuthenticationHeaderValue> GenerateAuthorizationHeaderAsync() =>
+            new("bearer", await stateProvider.GetJwtTokenAsync());
+
+        public ApiHttpClient(HttpClient httpClient, ApiAuthenticationStateProvider stateProvider)
+        {
             this.httpClient = httpClient;
+            this.stateProvider = stateProvider;
+        }
     }
 }

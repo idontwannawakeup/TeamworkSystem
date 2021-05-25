@@ -1,6 +1,7 @@
 ﻿@page "/team/{TeamId:int}/settings"
 @inject NavigationManager NavigationManager
-@inject ISnackbar Snackbar  
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
@@ -81,24 +82,27 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await InitializeUserIdAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeTeamAsync();
     }
-
-    private async Task InitializeUserIdAsync() =>
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
 
     private async Task InitializeTeamAsync() =>
         team = await TeamsService.GetByIdAsync(TeamId);
 
     private async Task DeleteTeamAsync()
     {
-        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
+            "Are you sure you want to delete this team?") ?? false;
+
+        if (confirmed)
         {
-            await TeamsService.DeleteAsync(TeamId);
-            Snackbar.Add("Team deleted", Severity.Success);
-            NavigationManager.NavigateTo("/home");
-        });
+            await RequestErrorsHandler.HandleRequestAsync(async () =>
+            {
+                await TeamsService.DeleteAsync(TeamId);
+                Snackbar.Add("Team deleted", Severity.Success);
+                NavigationManager.NavigateTo("/home");
+            });
+        }
     }
 
     private async Task UpdateTeamAsync()

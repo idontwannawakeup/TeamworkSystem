@@ -24,10 +24,6 @@
                             <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
                         }
                     </MudElement>
-                    <MudElement HtmlTag="div" Class="user-profile__ratings mt-4">
-                        <MudText Typo="@Typo.h6" Style="@colorGrey">Rankings</MudText>
-                        <MudRating ReadOnly="@true" SelectedValue="3" />
-                    </MudElement>
                 </MudElement>
             </MudItem>
         </MudGrid>
@@ -83,9 +79,9 @@
 
                 <MudTabPanel Text="Ratings">
                     <MudElement HtmlTag="div" Class="pa-6">
-                        <MudList Clickable="@true">
-                            @if (ratings is not null)
-                            {
+                        @if (ratings is not null && ratings.Count != 0)
+                        {
+                            <MudList Clickable="@true">
                                 @foreach (var rating in ratings)
                                 {
                                     <MudListItem OnClick="@(e => OpenFullRating(rating))">
@@ -93,7 +89,10 @@
                                                     Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
                                             <MudElement HtmlTag="div"
                                                         Class="rating-item__author d-flex align-center gap-4">
-                                                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                                                <MudAvatar Image="@(rating.From?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{rating.From.Avatar}" : null)"
+                                                           Color="@Color.Secondary">
+                                                    A
+                                                </MudAvatar>
                                                 <MudText Typo="@Typo.subtitle1">@rating.From.FullName</MudText>
                                             </MudElement>
                                             <MudElement HtmlTag="div"
@@ -105,8 +104,12 @@
                                     </MudListItem>
                                     <MudDivider Class="mb-4" />
                                 }
-                            }
-                        </MudList>
+                            </MudList>
+                        }
+                        else
+                        {
+                            <MudText Typo="@Typo.h6">You don't have any ratings.</MudText>
+                        }
                     </MudElement>
                 </MudTabPanel>
 

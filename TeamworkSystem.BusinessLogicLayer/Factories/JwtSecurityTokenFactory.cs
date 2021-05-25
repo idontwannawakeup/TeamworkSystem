@@ -12,8 +12,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Factories
         private readonly JwtTokenConfiguration jwtTokenConfiguration;
 
         public JwtSecurityToken BuildToken(User user) => new(
-            issuer: null,
-            audience: null,
+            issuer: jwtTokenConfiguration.Issuer,
+            audience: jwtTokenConfiguration.Audience,
             claims: GetClaims(user),
             expires: JwtTokenConfiguration.ExpirationDate,
             signingCredentials: jwtTokenConfiguration.Credentials);

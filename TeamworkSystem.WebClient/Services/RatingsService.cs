@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Parameters;
@@ -38,7 +39,8 @@ namespace TeamworkSystem.WebClient.Services
         public async Task DeleteAsync(int id) =>
             await httpClient.DeleteAsync($"{id}");
 
-        public RatingsService(HttpClient httpClient) =>
-            this.httpClient = new(httpClient);
+        public RatingsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
+            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state)
+                                                                  .Build();
     }
 }
