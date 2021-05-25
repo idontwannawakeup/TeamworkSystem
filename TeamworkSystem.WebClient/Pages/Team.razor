@@ -10,38 +10,54 @@
 
 <MudGrid Spacing="3" Class="mt-8">
 
-    <MudItem xs="12" md="3" Class="d-flex flex-column gap-4">
+    <MudItem xs="12" lg="4" Class="d-flex flex-column gap-4">
 
-        <MudPaper Elevation="4" Class="d-flex flex-column align-start gap-2 pa-4">
-            @if (team is not null)
+        <MudCard Elevation="4">
+            @if (!string.IsNullOrWhiteSpace(team?.Avatar))
             {
-                <MudText Typo="@Typo.h6">@team.Name</MudText>
-                <MudText Typo="@Typo.subtitle1">@team.Specialization</MudText>
-                @if (userId == team.LeaderId)
+                <MudCardMedia Image="@($"{Configuration["ApiUrl"]}/{team.Avatar}")" Height="250" />
+            }
+            <MudCardContent>
+                @if (team is not null)
                 {
-                    <MudButton Variant="@Variant.Outlined"
-                               Color="@Color.Tertiary"
-                               EndIcon="@Icons.Material.Filled.Add"
-                               IconColor="@Color.Inherit"
-                               OnClick="@ShowMemberAddingDialog">
-                        Add member
-                    </MudButton>
-                    <MudButton Variant="@Variant.Outlined"
-                               Color="@Color.Info"
-                               EndIcon="@Icons.Material.Filled.Edit"
-                               IconColor="@Color.Inherit"
-                               Link="@EditLink">
-                        Edit
-                    </MudButton>
+                    <MudElement HtmlTag="div" Class="d-flex flex-column align-start gap-2 pa-4">
+                        <MudText Typo="@Typo.h6">@team.Name</MudText>
+                        <MudText Typo="@Typo.subtitle1">@team.Specialization</MudText>
+                        @if (userId == team.LeaderId)
+                        {
+                            <InputFile id="fileInput" OnChange="@UpdateAvatarAsync" hidden accept=".jpg, .jpeg, .png" />
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Outlined"
+                                       Color="Color.Primary"
+                                       StartIcon="@Icons.Filled.CloudUpload"
+                                       for="fileInput">
+                                Update avatar
+                            </MudButton>
+                            <MudButton Variant="@Variant.Outlined"
+                                       Color="@Color.Tertiary"
+                                       EndIcon="@Icons.Material.Filled.Add"
+                                       IconColor="@Color.Inherit"
+                                       OnClick="@ShowMemberAddingDialog">
+                                Add member
+                            </MudButton>
+                            <MudButton Variant="@Variant.Outlined"
+                                       Color="@Color.Info"
+                                       EndIcon="@Icons.Material.Filled.Edit"
+                                       IconColor="@Color.Inherit"
+                                       Link="@EditLink">
+                                Edit
+                            </MudButton>
+                        }
+                    </MudElement>
                 }
-            }
-            else
-            {
-                <MudSkeleton />
-                <MudSkeleton />
-                <MudSkeleton />
-            }
-        </MudPaper>
+                else
+                {
+                    <MudSkeleton />
+                    <MudSkeleton />
+                    <MudSkeleton />
+                }
+            </MudCardContent>
+        </MudCard>
 
         <MudPaper Elevation="4" Class="pa-4">
             @if (members is not null)
@@ -102,7 +118,7 @@
 
     </MudItem>
 
-    <MudItem xs="12" md="9">
+    <MudItem xs="12" lg="8">
         <MudTable T="@ProjectViewModel"
                   ServerData="@InitializeProjectsAsync"
                   @ref="@projectsTable"
@@ -255,6 +271,13 @@
     {
         searchTitle = title;
         await projectsTable.ReloadServerData();
+    }
+
+    private async Task UpdateAvatarAsync(InputFileChangeEventArgs e)
+    {
+        await TeamsService.SetAvatarForTeamAsync(TeamId, e.File);
+        await InitializeTeamAsync();
+        StateHasChanged();
     }
 
 }

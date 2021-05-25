@@ -25,6 +25,15 @@
                             <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
                         }
                     </MudElement>
+                    <InputFile id="fileInput" OnChange="@UpdateAvatarAsync" hidden accept=".jpg, .jpeg, .png" />
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Outlined"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Filled.CloudUpload"
+                               Class="my-2"
+                               for="fileInput">
+                        Update avatar
+                    </MudButton>
                 </MudElement>
             </MudItem>
         </MudGrid>
@@ -149,5 +158,11 @@
 
     private void OpenFullRating(RatingViewModel rating) =>
         DialogService.ShowRatingDialog(rating.Id);
+
+    private async Task UpdateAvatarAsync(InputFileChangeEventArgs e)
+    {
+        await UsersService.SetAvatarForUserAsync(userId, e.File);
+        await InitializeUserAsync();
+    }
 
 }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
 using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
@@ -25,6 +27,8 @@ namespace TeamworkSystem.WebClient.Interfaces
             UsersParameters parameters);
 
         Task UpdateAsync(UserViewModel viewModel);
+
+        Task SetAvatarForUserAsync(string id, IBrowserFile file);
 
         Task DeleteAsync(string userId);
 

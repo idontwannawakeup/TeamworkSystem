@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
 using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
@@ -19,6 +20,8 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task CreateAsync(TeamViewModel viewModel);
 
         Task UpdateAsync(TeamViewModel viewModel);
+
+        Task SetAvatarForTeamAsync(int id, IBrowserFile file);
 
         Task DeleteAsync(int id);
 

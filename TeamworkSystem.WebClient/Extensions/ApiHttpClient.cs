@@ -51,6 +51,14 @@ namespace TeamworkSystem.WebClient.Extensions
             StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
         }
 
+        public async Task PostFormDataAsync(string requestUri, MultipartFormDataContent content)
+        {
+            httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
+            var response = await httpClient.PostAsync(requestUri, content);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
+        }
+
         public async Task<TOut> PostAsync<T, TOut>(string requestUri, T viewModel)
         {
             httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
 using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
@@ -35,6 +37,24 @@ namespace TeamworkSystem.WebClient.Services
 
         public async Task UpdateAsync(TeamViewModel viewModel) =>
             await httpClient.PutAsync(string.Empty, viewModel);
+
+        public async Task SetAvatarForTeamAsync(int id, IBrowserFile file)
+        {
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);
+            var imageContent = new ByteArrayContent(buffer);
+            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+
+            var userIdContent = new StringContent(id.ToString());
+
+            var requestContent = new MultipartFormDataContent
+            {
+                { userIdContent, "TeamId" },
+                { imageContent, "Avatar", file.Name }
+            };
+
+            await httpClient.PostFormDataAsync("avatar", requestContent);
+        }
 
         public async Task DeleteAsync(int id) =>
             await httpClient.DeleteAsync($"{id}");
