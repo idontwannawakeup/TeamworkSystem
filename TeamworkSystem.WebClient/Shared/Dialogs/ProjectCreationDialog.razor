@@ -1,4 +1,5 @@
-﻿@inject ISnackbar Snackbar
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
 @inject IProjectsService ProjectsService
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
@@ -9,13 +10,13 @@
         <DialogContent>
 
             <MudTextField T="@string"
-                          Label="@nameof(project.Title)"
+                          Label="@SL["Title"]"
                           @bind-Value="@project.Title"
                           For="@(() => project.Title)" />
 
             <MudAutocomplete T="@TeamViewModel"
-                             Label="@nameof(project.Team)"
-                             HelperText="Find team by name!"
+                             Label="@SL["Team"]"
+                             HelperText="@SL["FindTeamByName"]"
                              SearchFunc="@InitializeTeamsAsync"
                              Value="@project.Team"
                              ValueChanged="@(e => (project.Team, project.TeamId) = (e, e.Id))"
@@ -25,25 +26,25 @@
                              CoerceText="@true" />
 
             <MudTextField T="@string"
-                          Label="@nameof(project.Type)"
+                          Label="@SL["Type"]"
                           @bind-Value="@project.Type"
                           For="@(() => project.Type)" />
 
             <MudTextField T="@string"
-                          Label="@nameof(project.Url)"
+                          Label="@SL["Url"]"
                           @bind-Value="@project.Url"
                           For="@(() => project.Url)" />
 
             <MudTextField T="@string"
-                          Label="@nameof(project.Description)"
+                          Label="@SL["Description"]"
                           @bind-Value="@project.Description"
                           For="@(() => project.Description)"
                           Lines="10" />
 
         </DialogContent>
         <DialogActions>
-            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">Create</MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Create"]</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>

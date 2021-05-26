@@ -1,7 +1,8 @@
 ﻿@page "/tickets"
+@inject IStringLocalizer<UserTickets> L 
 @inject ITicketsService TicketsService
 
-<MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Your active tickets</MudText>
+<MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">@L["UserTickets"]</MudText>
 
 <MudGrid Spacing="3">
     @if (tickets is not null && tickets.Count != 0)
@@ -16,7 +17,7 @@
     else if (tickets is not null)
     {
         <MudItem xs="12">
-            <MudText Typo="@Typo.h5" Align="@Align.Center">You don't have any active tickets.</MudText>
+            <MudText Typo="@Typo.h5" Align="@Align.Center">@L["NoUserTickets"]</MudText>
         </MudItem>
     }
     else

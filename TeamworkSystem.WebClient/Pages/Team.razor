@@ -1,4 +1,6 @@
 ﻿@page "/team/{TeamId:int}"
+@inject IStringLocalizer<Team> L
+@inject IStringLocalizer<SharedLocalization> SL
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject ISnackbar Snackbar 
@@ -31,21 +33,21 @@
                                        Color="Color.Primary"
                                        StartIcon="@Icons.Filled.CloudUpload"
                                        for="fileInput">
-                                Update avatar
+                                @SL["UpdateAvatar"]
                             </MudButton>
                             <MudButton Variant="@Variant.Outlined"
                                        Color="@Color.Tertiary"
                                        EndIcon="@Icons.Material.Filled.Add"
                                        IconColor="@Color.Inherit"
                                        OnClick="@ShowMemberAddingDialog">
-                                Add member
+                                @L["AddMember"]
                             </MudButton>
                             <MudButton Variant="@Variant.Outlined"
                                        Color="@Color.Info"
                                        EndIcon="@Icons.Material.Filled.Edit"
                                        IconColor="@Color.Inherit"
                                        Link="@EditLink">
-                                Edit
+                                @SL["Edit"]
                             </MudButton>
                         }
                     </MudElement>
@@ -62,11 +64,11 @@
         <MudPaper Elevation="4" Class="pa-4">
             @if (members is not null)
             {
-                <MudText Typo="@Typo.h6" Class="py-1">Members</MudText>
+                <MudText Typo="@Typo.h6" Class="py-1">@SL["Members"]</MudText>
                 <MudText Typo="@Typo.subtitle1"
                          Style="@colorGrey"
                          Class="pb-1">
-                    Total count: @membersPagination.TotalEntitiesCount
+                    @L["TotalCount"]: @membersPagination.TotalEntitiesCount
                 </MudText>
                 <MudDivider Class="my-2" />
                 @if (members.Count() != 0)
@@ -95,7 +97,7 @@
                                                  OffsetX="true"
                                                  Direction="@Direction.Left">
                                             <MudMenuItem OnClick="@(async e => await DeleteMemberAsync(member))">
-                                                Remove
+                                                @SL["Remove"]
                                             </MudMenuItem>
                                         </MudMenu>
                                     }
@@ -107,7 +109,7 @@
                 }
                 else
                 {
-                    <MudText Typo="@Typo.subtitle1">This team has no members.</MudText>
+                    <MudText Typo="@Typo.subtitle1">@L["NoMembers"]</MudText>
                 }
             }
             else
@@ -128,24 +130,24 @@
                   OnRowClick="@OpenProjectPage"
                   RowClass="cursor-pointer">
             <ToolBarContent>
-                <MudText Typo="@Typo.h4">Projects</MudText>
+                <MudText Typo="@Typo.h4">@SL["Projects"]</MudText>
                 <MudToolBarSpacer />
                 <MudTextField T="@string"
                               ValueChanged="@(async title => await OnSearchAsync(title))"
-                              Placeholder="Search by title"
+                              Placeholder="@SL["SearchByTitle"]"
                               Adornment="Adornment.Start"
                               AdornmentIcon="@Icons.Material.Filled.Search"
                               IconSize="Size.Medium"
                               Class="mt-0" />
             </ToolBarContent>
             <HeaderContent>
-                <MudTh>Title</MudTh>
-                <MudTh>Type</MudTh>
-                <MudTh>Url</MudTh>
+                <MudTh>@SL["Title"]</MudTh>
+                <MudTh>@SL["Type"]</MudTh>
+                <MudTh>@SL["Url"]</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Title">@context.Title</MudTd>
-                <MudTd DataLabel="Type">
+                <MudTd DataLabel="@SL["Title"]">@context.Title</MudTd>
+                <MudTd DataLabel="@SL["Type"]">
                     @if (context.Type is not null)
                     {
                         @context.Type
@@ -155,7 +157,7 @@
                         <NoneChip />
                     }
                 </MudTd>
-                <MudTd DataLabel="Url">
+                <MudTd DataLabel="@SL["Url"]">
                     @if (!string.IsNullOrWhiteSpace(context.Url))
                     {
                         @context.Url
@@ -219,8 +221,8 @@
 
     private async Task DeleteMemberAsync(UserViewModel user)
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
-            "Are you sure you want to remove this member?") ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
+            SL["ConfirmMemberDeleting"]) ?? false;
 
         if (confirmed)
         {
@@ -239,7 +241,7 @@
         {
             await InitializeMembersAsync();
             StateHasChanged();
-        });
+        }, SL);
     }
 
     private void OpenMemberProfile(UserViewModel member)

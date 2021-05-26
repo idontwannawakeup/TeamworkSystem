@@ -1,4 +1,5 @@
-﻿@inject NavigationManager NavigationManager
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IUsersService UsersService
 @inject ApiAuthenticationStateProvider StateProvider
@@ -35,20 +36,20 @@
                     <MudNavLink Match="@NavLinkMatch.All"
                                 Href="/profile"
                                 Icon="@Icons.Filled.AccountCircle">
-                        <span>Profile</span>
+                        <span>@SL["Profile"]</span>
                     </MudNavLink>
                     <MudNavLink Match="@NavLinkMatch.All"
                                 Href="/profile/settings"
                                 Icon="@Icons.Filled.Settings">
-                        <span>Settings</span>
+                        <span>@SL["Settings"]</span>
                     </MudNavLink>
                     <MudDivider Class="my-2" />
-                    <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
+                    <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">@SL["Exit"]</MudNavLink>
 
                 </MudNavMenu>
             </MudPopover>
 
-            @* Overlay for MudPopover for automatic close on click *@          
+            @* Overlay for MudPopover for automatic close on click *@
             <MudOverlay @bind-Visible="@avatarMenuOpen"
                         DarkBackground="@false"
                         AutoClose="@true"
@@ -66,27 +67,27 @@
             <MudNavLink Href="/home"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Home">
-                <span>Home</span>
+                <span>@SL["Home"]</span>
             </MudNavLink>
             <MudNavLink Href="/teams"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Groups">
-                <span>Teams</span>
+                <span>@SL["Teams"]</span>
             </MudNavLink>
             <MudNavLink Href="/projects"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Folder">
-                <span>Projects</span>
+                <span>@SL["Projects"]</span>
             </MudNavLink>
             <MudNavLink Href="/tickets"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Assignment">
-                <span>Tickets</span>
+                <span>@SL["Tickets"]</span>
             </MudNavLink>
             <MudNavLink Href="/friends"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Group">
-                <span>Friends</span>
+                <span>@SL["Friends"]</span>
             </MudNavLink>
         </MudNavMenu>
     </MudDrawer>

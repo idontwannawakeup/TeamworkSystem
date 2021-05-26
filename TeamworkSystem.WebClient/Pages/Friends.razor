@@ -1,4 +1,5 @@
 ﻿@page "/friends"
+@inject IStringLocalizer<SharedLocalization> SL
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IDialogService DialogService
@@ -17,23 +18,23 @@
           OnRowClick="@OpenFriendProfile"
           RowClass="cursor-pointer">
     <ToolBarContent>
-        <MudText Typo="@Typo.h3">Friends</MudText>
+        <MudText Typo="@Typo.h3">@SL["Friends"]</MudText>
         <MudToolBarSpacer />
         <MudTextField T="@string"
                       ValueChanged="@(async lastName => await OnSearchAsync(lastName))"
-                      Placeholder="Search by last name"
+                      Placeholder="@SL["SearchByLastName"]"
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"
                       Class="mt-0" />
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Name</MudTh>
-        <MudTh>Profession</MudTh>
+        <MudTh>@SL["Name"]</MudTh>
+        <MudTh>@SL["Profession"]</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Name">
+        <MudTd DataLabel="@SL["Name"]">
             <MudElement HtmlTag="div" Class="d-flex align-center">
                 <MudAvatar Image="@(context.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Avatar}" : null)"
                            Color="@Color.Info">
@@ -42,7 +43,7 @@
                 <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.FullName</MudText>
             </MudElement>
         </MudTd>
-        <MudTd DataLabel="Profession">
+        <MudTd DataLabel="@SL["Profession"]">
             @if (!string.IsNullOrWhiteSpace(context.Profession))
             {
                 @context.Profession
@@ -54,9 +55,11 @@
         </MudTd>
         <MudTd>
             <MudElement HtmlTag="div" Class="d-flex">
-                <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Class="ml-auto">
+                <MudMenu Icon="@Icons.Material.Filled.MoreHoriz"
+                         Class="ml-auto" OffsetX="@true"
+                         Direction="@Direction.Left">
                     <MudMenuItem OnClick="@(async e => await DeleteFriendAsync(context.Id))">
-                        Delete
+                        @SL["Delete"]
                     </MudMenuItem>
                 </MudMenu>
             </MudElement>
@@ -70,7 +73,7 @@
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="Friend"
+        Label="@SL["Friend"]"
         OnClick="@ShowFriendsCreationDialog" />
 
 @code {
@@ -94,8 +97,8 @@
 
     private async Task DeleteFriendAsync(string friendId)
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
-            "Are you sure you want to delete this friend?") ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
+            SL["ConfirmFriendDeleting"]) ?? false;
 
         if (confirmed)
         {
@@ -115,7 +118,7 @@
         {
             await table.ReloadServerData();
             StateHasChanged();
-        });
+        }, SL);
     }
 
     private async Task<TableData<UserViewModel>> InitializeFriendsAsync(TableState state)

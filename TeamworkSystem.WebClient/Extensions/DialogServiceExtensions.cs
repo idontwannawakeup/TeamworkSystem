@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 using TeamworkSystem.WebClient.Shared.Dialogs;
 
@@ -16,10 +17,11 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static void ShowRatingDialog(
             this IDialogService dialogService,
-            int ratingId)
+            int ratingId,
+            IStringLocalizer<SharedLocalization> SL)
         {
             dialogService.Show<RatingDialog>(
-                "Rating",
+                SL["Rating"],
                 new DialogParameters() { ["RatingId"] = ratingId },
                 DialogOptions);
         }
@@ -27,10 +29,11 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowTeamCreationDialog(
             this IDialogService dialogService,
             string userId,
-            Func<Task> onCreated)
+            Func<Task> onCreated,
+            IStringLocalizer<SharedLocalization> SL)
         {
             dialogService.Show<TeamCreationDialog>(
-                "Create team",
+                SL["CreateTeam"],
                 new DialogParameters()
                 {
                     ["UserId"] = userId,
@@ -42,10 +45,11 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowProjectCreationDialog(
             this IDialogService dialogService,
             string userId,
-            Func<Task> onCreated)
+            Func<Task> onCreated,
+            IStringLocalizer<SharedLocalization> SL)
         {
             dialogService.Show<ProjectCreationDialog>(
-                "Create project",
+                SL["CreateProject"],
                 new DialogParameters()
                 {
                     ["UserId"] = userId,
@@ -57,10 +61,11 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowTicketCreationDialog(
             this IDialogService dialogService,
             int projectId,
-            Func<Task> onCreated)
+            Func<Task> onCreated,
+            IStringLocalizer<SharedLocalization> SL)
         {
             dialogService.Show<TicketCreationDialog>(
-                "Create ticket",
+                SL["CreateTicket"],
                 new DialogParameters()
                 {
                     ["ProjectId"] = projectId,
@@ -72,10 +77,11 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowFriendsCreationDialog(
             this IDialogService dialogService,
             string userId,
-            Func<Task> onCreated)
+            Func<Task> onCreated,
+            IStringLocalizer<SharedLocalization> SL)
         {
             dialogService.Show<FriendsCreationDialog>(
-                "Add friend",
+                SL["AddFriend"],
                 new DialogParameters()
                 {
                     ["UserId"] = userId,
@@ -87,10 +93,11 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowMemberAddingDialog(
             this IDialogService dialogService,
             int teamId,
-            Func<Task> onCreated)
+            Func<Task> onCreated,
+            IStringLocalizer<SharedLocalization> SL)
         {
             dialogService.Show<MemberAddingDialog>(
-                "Add member",
+                SL["AddMember"],
                 new DialogParameters()
                 {
                     ["TeamId"] = teamId,
@@ -101,12 +108,13 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static async Task<bool?> ShowDeleteConfirmingDialog(
             this IDialogService dialogService,
+            IStringLocalizer<SharedLocalization> SL,
             string message = "Are you sure you want to delete this item?")
         {
             return await dialogService.ShowMessageBox(
-                title: "Confirm deleting",
+                title: SL["ConfirmDeleting"],
                 message: message,
-                cancelText: "Cancel",
+                cancelText: SL["Cancel"],
                 options: DialogOptions);
         }
     }

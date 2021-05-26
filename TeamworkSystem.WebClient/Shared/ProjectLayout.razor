@@ -1,4 +1,5 @@
-﻿@inject IProjectsService ProjectsService 
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject IProjectsService ProjectsService
 
 <MudDrawer @bind-Open="@open"
            Elevation="1"
@@ -11,24 +12,24 @@
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.Visibility"
                     Href="@OverviewLink">
-            <span>Overview</span>
+            <span>@SL["Overview"]</span>
         </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.DeveloperBoard"
                     Href="@BoardLink">
-            <span>Kanban Board</span>
+            <span>@SL["KanbanBoard"]</span>
         </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.Assignment"
                     Href="@TicketsLink">
-            <span>Tickets</span>
+            <span>@SL["Tickets"]</span>
         </MudNavLink>
         @if (userId == project?.Team?.LeaderId)
         {
             <MudNavLink Match="NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Settings"
                         Href="@SettingsLink">
-                <span>Settings</span>
+                <span>@SL["Settings"]</span>
             </MudNavLink>
         }
     </MudNavMenu>

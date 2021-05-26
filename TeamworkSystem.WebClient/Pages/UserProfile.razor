@@ -1,5 +1,7 @@
 ﻿@page "/users/{UserId}/profile"
 @inject NavigationManager NavigationManager
+@inject IStringLocalizer<UserProfile> L
+@inject IStringLocalizer<SharedLocalization> SL
 @inject IConfiguration Configuration
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -37,7 +39,7 @@
     <MudGrid Spacing="4">
         <MudItem xs="12" md="4">
             <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
-                <MudText Typo="@Typo.h6" Style="@colorGrey">Profession</MudText>
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Profession"]</MudText>
                 @if (!string.IsNullOrWhiteSpace(user.Profession))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Profession</MudText>
@@ -47,7 +49,7 @@
                     <NoneChip />
                 }
                 <MudDivider Class="mt-2 mb-4" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">Specialization</MudText>
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Specialization"]</MudText>
                 @if (!string.IsNullOrWhiteSpace(user.Specialization))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
@@ -57,7 +59,7 @@
                     <NoneChip />
                 }
                 <MudDivider Class="mt-2 mb-4" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Email"]</MudText>
                 @if (!string.IsNullOrWhiteSpace(user.Email))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
@@ -75,7 +77,7 @@
                      Rounded="@true"
                      Class="mt-10">
 
-                <MudTabPanel Text="Teams">
+                <MudTabPanel Text="@SL["Teams"]">
                     <MudElement HtmlTag="div" Class="pa-6">
                         @if (teams is not null && teams.Count != 0)
                         {
@@ -113,12 +115,12 @@
                         }
                         else
                         {
-                            <MudText Typo="@Typo.h6">This user doesn't have any teams</MudText>
+                            <MudText Typo="@Typo.h6">@L["NoTeams"]</MudText>
                         }
                     </MudElement>
                 </MudTabPanel>
 
-                <MudTabPanel Text="Ratings">
+                <MudTabPanel Text="@SL["Ratings"]">
                     <MudElement HtmlTag="div" Class="pa-6">
                         @if (ratings is not null && ratings.Count != 0)
                         {
@@ -149,60 +151,68 @@
                         }
                         else
                         {
-                            <MudText Typo="@Typo.h6">This user doesn't have any ratings.</MudText>
+                            <MudText Typo="@Typo.h6">@L["NoRatings"]</MudText>
                         }
                     </MudElement>
                 </MudTabPanel>
 
-                <MudTabPanel Text="Leave rate">
+                <MudTabPanel Text="@SL["LeaveRate"]">
                     <EditForm Model="@ratingFromVisitedUser" OnValidSubmit="@LeaveRatingAsync">
                         <FluentValidationValidator />
                         <MudElement HtmlTag="div" Class="pa-6">
-                            <MudText Typo="@Typo.h5">Rate this user!</MudText>
+                            <MudText Typo="@Typo.h5">@L["RateThisUser"]</MudText>
+
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
                                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @nameof(ratingFromVisitedUser.Social)
+                                    @SL["Social"]
                                 </MudText>
                                 <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Social" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
+
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
                                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @nameof(ratingFromVisitedUser.Skills)
+                                    @SL["Skills"]
                                 </MudText>
                                 <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Skills" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
+
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
                                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @nameof(ratingFromVisitedUser.Responsibility)
+                                    @SL["Responsibility"]
                                 </MudText>
                                 <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Responsibility" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
+
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
                                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @nameof(ratingFromVisitedUser.Punctuality)
+                                    @SL["Punctuality"]
                                 </MudText>
                                 <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Punctuality" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
+
                             <MudTextField T="@string"
-                                          Label="@nameof(ratingFromVisitedUser.Comment)"
+                                          Label="@SL["Comment"]"
                                           @bind-Value="@ratingFromVisitedUser.Comment"
                                           For="@(() => ratingFromVisitedUser.Comment)"
                                           HelperText="Write your thoughts on this person!"
                                           Lines="4" />
+
                             <MudText Color="@Color.Error">
                                 <ValidationSummary />
                             </MudText>
+
                             <MudButton FullWidth="@true"
                                        EndIcon="@Icons.Material.Filled.Send"
                                        Class="mt-4"
                                        ButtonType="@ButtonType.Submit"
                                        Disabled="@addRatingButtonDisabled">
-                                Save
+                                @SL["Save"]
                             </MudButton>
+
                         </MudElement>
                     </EditForm>
                 </MudTabPanel>
@@ -259,7 +269,7 @@ else
         NavigationManager.NavigateTo($"/team/{team.Id}");
 
     private void OpenFullRating(RatingViewModel rating) =>
-        DialogService.ShowRatingDialog(rating.Id);
+        DialogService.ShowRatingDialog(rating.Id, SL);
 
     private async Task LeaveRatingAsync()
     {

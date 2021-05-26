@@ -1,4 +1,6 @@
 ﻿@page "/profile"
+@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<MyProfile> L
 @inject IConfiguration Configuration
 @inject IDialogService DialogService
 @inject IUsersService UsersService
@@ -32,7 +34,7 @@
                                StartIcon="@Icons.Filled.CloudUpload"
                                Class="my-2"
                                for="fileInput">
-                        Update avatar
+                        @SL["UpdateAvatar"]
                     </MudButton>
                 </MudElement>
             </MudItem>
@@ -42,7 +44,7 @@
     <MudGrid Spacing="4">
         <MudItem xs="12" md="4">
             <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
-                <MudText Typo="@Typo.h6" Style="@colorGrey">Profession</MudText>
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Profession"]</MudText>
                 @if (!string.IsNullOrWhiteSpace(user.Profession))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Profession</MudText>
@@ -52,7 +54,7 @@
                     <NoneChip />
                 }
                 <MudDivider Class="mt-2 mb-4" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">Specialization</MudText>
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Specialization"]</MudText>
                 @if (!string.IsNullOrWhiteSpace(user.Specialization))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
@@ -62,7 +64,7 @@
                     <NoneChip />
                 }
                 <MudDivider Class="mt-2 mb-4" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">Email</MudText>
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Email"]</MudText>
                 @if (!string.IsNullOrWhiteSpace(user.Email))
                 {
                     <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
@@ -77,7 +79,7 @@
                            Color="@Color.Info"
                            EndIcon="@Icons.Material.Filled.Edit"
                            Link="/profile/settings">
-                    Edit
+                    @SL["Edit"]
                 </MudButton>
             </MudPaper>
         </MudItem>
@@ -87,7 +89,7 @@
                      Rounded="@true"
                      Class="mt-10">
 
-                <MudTabPanel Text="Ratings">
+                <MudTabPanel Text="@SL["Ratings"]">
                     <MudElement HtmlTag="div" Class="pa-6">
                         @if (ratings is not null && ratings.Count != 0)
                         {
@@ -107,7 +109,7 @@
                                             </MudElement>
                                             <MudElement HtmlTag="div"
                                                         Class="rating-item__average d-flex flex-column align-center gap-1">
-                                                <MudText Typo="@Typo.subtitle2">Average: @rating.Average</MudText>
+                                                <MudText Typo="@Typo.subtitle2">@SL["Average"]: @rating.Average</MudText>
                                                 <MudRating SelectedValue="@((int) rating.Average)" ReadOnly="@true" />
                                             </MudElement>
                                         </MudElement>
@@ -118,7 +120,7 @@
                         }
                         else
                         {
-                            <MudText Typo="@Typo.h6">You don't have any ratings.</MudText>
+                            <MudText Typo="@Typo.h6">@L["NoRatings"]</MudText>
                         }
                     </MudElement>
                 </MudTabPanel>
@@ -157,7 +159,7 @@
         ratings = await RatingsService.GetByRatedUserId(userId) as List<RatingViewModel>;
 
     private void OpenFullRating(RatingViewModel rating) =>
-        DialogService.ShowRatingDialog(rating.Id);
+        DialogService.ShowRatingDialog(rating.Id, SL);
 
     private async Task UpdateAvatarAsync(InputFileChangeEventArgs e)
     {

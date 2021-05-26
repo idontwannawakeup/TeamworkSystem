@@ -1,4 +1,5 @@
-﻿@inject ISnackbar Snackbar
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
@@ -8,17 +9,17 @@
         <DialogContent>
 
             <MudTextField T="@string"
-                          Label="Name"
+                          Label="@SL["NameAsTitle"]"
                           @bind-Value="@team.Name"
                           For="@(() => team.Name)" />
 
             <MudTextField T="@string"
-                          Label="Specialization"
+                          Label="@SL["Specialization"]"
                           @bind-Value="@team.Specialization"
                           For="@(() => team.Specialization)" />
 
             <MudTextField T="@string"
-                          Label="About"
+                          Label="@SL["About"]"
                           @bind-Value="@team.About"
                           For="@(() => team.About)"
                           Lines="10" />
@@ -28,9 +29,9 @@
         <DialogActions>
             <MudButton Color="@Color.Primary"
                        ButtonType="@ButtonType.Submit">
-                Create
+                @SL["Create"]
             </MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
         </DialogActions>
 
     </MudDialog>

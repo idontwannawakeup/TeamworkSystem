@@ -1,4 +1,6 @@
 ﻿@page "/projects"
+@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<Projects> L 
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IDialogService DialogService 
@@ -15,24 +17,24 @@
           RowClass="cursor-pointer"
           Dense="@true">
     <ToolBarContent>
-        <MudText Typo="@Typo.h3">Projects</MudText>
+        <MudText Typo="@Typo.h3">@SL["Projects"]</MudText>
         <MudToolBarSpacer />
         <MudTextField T="@string"
                       ValueChanged="@(async title => await OnSearchAsync(title))"
-                      Placeholder="Search by title"
+                      Placeholder="@SL["SearchByTitle"]"
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"
                       Class="mt-0" />
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Title</MudTh>
-        <MudTh>Type</MudTh>
-        <MudTh>Team</MudTh>
+        <MudTh>@SL["Title"]</MudTh>
+        <MudTh>@SL["Type"]</MudTh>
+        <MudTh>@SL["Team"]</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Title">@context.Title</MudTd>
-        <MudTd DataLabel="Profession">
+        <MudTd DataLabel="@SL["Title"]">@context.Title</MudTd>
+        <MudTd DataLabel="@SL["Type"]">
             @if (context.Type is not null)
             {
                 @context.Type
@@ -42,7 +44,7 @@
                 <NoneChip />
             }
         </MudTd>
-        <MudTd DataLabel="Team">
+        <MudTd DataLabel="@SL["Team"]">
             <MudElement HtmlTag="div" Class="d-flex align-center">
                 <MudAvatar Image="@(context.Team?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Team.Avatar}" : null)"
                            Color="@Color.Success">
@@ -60,7 +62,7 @@
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="Project"
+        Label="@SL["Project"]"
         OnClick="@ShowProjectCreationDialog" />
 
 @code {
@@ -88,7 +90,7 @@
         {
             await table.ReloadServerData();
             StateHasChanged();
-        });
+        }, SL);
     }
 
     private async Task<TableData<ProjectViewModel>> InitializeProjectsAsync(TableState state)

@@ -1,4 +1,5 @@
 ﻿@page "/ticket/{TicketId:int}/settings"
+@inject IStringLocalizer<SharedLocalization> SL
 @inject ISnackbar Snackbar
 @inject ITicketsService TicketsService
 @inject IUsersService UsersService
@@ -12,7 +13,7 @@
             <MudGrid Spacing="2" Class="mt-8">
 
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(ticket.Title)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Title"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
@@ -22,11 +23,11 @@
                 </MudItem>
 
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(ticket.Executor)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Executor"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudAutocomplete T="@UserViewModel"
-                                     HelperText="Find executor by his lastname!"
+                                     HelperText="@SL["FindExecutortByLastName"]"
                                      Value="@ticket.Executor"
                                      ValueChanged="@(e => (ticket.Executor, ticket.ExecutorId) = (e, e.Id))"
                                      SearchFunc="@InitializeMembersAsync"
@@ -36,7 +37,7 @@
                 </MudItem>
 
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(ticket.Type)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Type"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudSelect T="@string"
@@ -50,7 +51,7 @@
                 </MudItem>
 
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(ticket.Status)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Status"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudSelect T="@string"
@@ -64,7 +65,7 @@
                 </MudItem>
 
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(ticket.Priority)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Priority"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudSelect T="@string"
@@ -78,14 +79,14 @@
                 </MudItem>
 
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(ticket.Deadline)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Deadline"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudDatePicker @bind-Date="@ticket.Deadline" For="@(() => ticket.Deadline)" />
                 </MudItem>
 
                 <MudItem xs="12" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(ticket.Description)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Description"]</MudText>
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField T="@string"
@@ -102,7 +103,7 @@
                            EndIcon="@Icons.Material.Filled.Save"
                            Class="mt-4"
                            ButtonType="@ButtonType.Submit">
-                    Save changes
+                    @SL["SaveChanges"]
                 </MudButton>
             </MudElement>
         </MudContainer>

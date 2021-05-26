@@ -1,4 +1,5 @@
-﻿@inject IRatingsService RatingsService
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject IRatingsService RatingsService
 
 <MudDialog>
     <DialogContent>
@@ -6,45 +7,50 @@
         {
             <MudElement HtmlTag="div" Class="user-profile__rating">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @nameof(rating.Social)
+                    @SL["Social"]
                 </MudText>
                 <MudRating SelectedValue="@rating.Social" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
+
             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @nameof(rating.Skills)
+                    @SL["Skills"]
                 </MudText>
                 <MudRating SelectedValue="@rating.Skills" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
+
             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @nameof(rating.Responsibility)
+                    @SL["Responsibility"]
                 </MudText>
                 <MudRating SelectedValue="@rating.Responsibility" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
+
             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
                 <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @nameof(rating.Punctuality)
+                    @SL["Punctuality"]
                 </MudText>
                 <MudRating SelectedValue="@rating.Punctuality" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
+
             @if (rating.Comment is not null)
             {
                 <MudTextField T="@string"
-                              Label="@nameof(rating.Comment)"
+                              Label="@SL["Comment"]"
                               Value="@rating.Comment"
                               ReadOnly="@true"
                               Disabled="@true"
                               Lines="4" />
             }
+
         }
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="@(e => DialogInstance.Close())">Close</MudButton>
+        <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Close"]</MudButton>
     </DialogActions>
 </MudDialog>
 

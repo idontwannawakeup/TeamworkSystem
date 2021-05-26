@@ -1,31 +1,36 @@
 ﻿@page "/signIn"
 @layout EmptyLayout
+@inject IStringLocalizer<SignIn> L
+@inject IStringLocalizer<SharedLocalization> SL
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 @inject IIdentityService IdentityService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@userModel" OnValidSubmit="@SignInAsync">
+<EditForm Model="@user" OnValidSubmit="@SignInAsync">
     <FluentValidationValidator />
     <MudContainer Class="pb-8" MaxWidth="@MaxWidth.Small">
         <MudCard Elevation="4" Class="px-sm-4 px-md-12 px-lg-16 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
             <MudCardContent>
-                <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">Please sign in</MudText>
+                <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">@L["PleaseSignIn"]</MudText>
                 <MudElement HtmlTag="div" Class="d-flex flex-column gap-2">
+
                     <MudTextField T="@string"
-                                  Label="@nameof(userModel.UserName)"
+                                  Label="@SL["UserName"]"
                                   Variant="Variant.Outlined"
-                                  @bind-Value="@userModel.UserName"
-                                  For="@(() => userModel.UserName)" />
+                                  @bind-Value="@user.UserName"
+                                  For="@(() => user.UserName)" />
+
                     <MudTextField T="@string"
-                                  Label="@nameof(userModel.Password)"
+                                  Label="@SL["Password"]"
                                   Variant="@Variant.Outlined"
-                                  @bind-Value="@userModel.Password"
-                                  For="@(() => userModel.Password)"
+                                  @bind-Value="@user.Password"
+                                  For="@(() => user.Password)"
                                   InputType="@passwordType"
                                   Adornment="@Adornment.End"
                                   AdornmentIcon="@passwordIcon"
                                   OnAdornmentClick="@(e => ChangePasswordIcon())" />
+
                 </MudElement>
             </MudCardContent>
             <MudCardActions>
@@ -34,7 +39,7 @@
                            Color="@Color.Primary"
                            Variant="@Variant.Filled"
                            ButtonType="@ButtonType.Submit">
-                    Sign In
+                    @SL["SignIn"]
                 </MudButton>
             </MudCardActions>
         </MudCard>
@@ -62,13 +67,13 @@
         passwordShow = !passwordShow;
     }
 
-    private UserSignInViewModel userModel = new();
+    private UserSignInViewModel user = new();
 
     private async Task SignInAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            var token = await IdentityService.SignInAsync(userModel);
+            var token = await IdentityService.SignInAsync(user);
             NavigationManager.NavigateTo($"/home");
             Snackbar.Add("You logged in succesfull!", Severity.Success);
         });

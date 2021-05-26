@@ -1,4 +1,6 @@
 ﻿@page "/team/{TeamId:int}/settings"
+@inject IStringLocalizer<TeamSettings> L
+@inject IStringLocalizer<SharedLocalization> SL
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
@@ -12,7 +14,7 @@
         <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
             <MudGrid Spacing="2" Class="mt-8">
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(team.Name)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["NameAsTitle"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
@@ -21,7 +23,7 @@
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(team.Specialization)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["Specialization"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
@@ -30,7 +32,7 @@
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@nameof(team.About)</MudText>
+                    <MudText Typo="@Typo.h6">@SL["About"]</MudText>
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField T="@string"
@@ -48,7 +50,7 @@
                                EndIcon="@Icons.Material.Filled.Delete"
                                Class="mt-4"
                                OnClick="@DeleteTeamAsync">
-                        Delete team
+                        @L["DeleteTeam"]
                     </MudButton>
                 </MudElement>
             }
@@ -58,7 +60,7 @@
                            EndIcon="@Icons.Material.Filled.Save"
                            Class="mt-4"
                            ButtonType="@ButtonType.Submit">
-                    Save changes
+                    @SL["SaveChanges"]
                 </MudButton>
             </MudElement>
         </MudContainer>
@@ -91,8 +93,8 @@ else
 
     private async Task DeleteTeamAsync()
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
-            "Are you sure you want to delete this team?") ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
+            SL["ConfirmTeamDeleting"]) ?? false;
 
         if (confirmed)
         {

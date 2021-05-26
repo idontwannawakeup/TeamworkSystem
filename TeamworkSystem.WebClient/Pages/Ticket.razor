@@ -1,5 +1,6 @@
 ﻿@page "/ticket/{TicketId:int}"
 @layout ContainerlessLayout
+@inject IStringLocalizer<SharedLocalization> SL 
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject ISnackbar Snackbar
@@ -25,13 +26,13 @@
                            Color="@Color.Info"
                            EndIcon="@Icons.Material.Filled.Edit"
                            Link="@SettingsLink">
-                    Edit
+                    @SL["Edit"]
                 </MudButton>
                 <MudButton Variant="@Variant.Outlined"
                            Color="@Color.Error"
                            EndIcon="@Icons.Material.Filled.Delete"
                            OnClick="@DeleteTicketAsync">
-                    Delete
+                    @SL["Delete"]
                 </MudButton>
             </MudElement>
         }
@@ -40,7 +41,7 @@
         
     <MudGrid Spacing="2">
         <MudItem xs="12" md="7" Class="pb-md-4">
-            <MudText Typo="@Typo.h6" Style="@colorGrey">Description</MudText>
+            <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Description"]</MudText>
             @if (ticket is not null)
             {
                 <MudText Typo="@Typo.body1">@ticket.Description</MudText>
@@ -58,14 +59,14 @@
         <MudItem xs="12" md="5" Class="pb-md-4">
             <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
                 <MudIcon Icon="@Icons.Material.Filled.ViewList" Style="@fillGrey" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">Attributes</MudText>
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Attributes"]</MudText>
             </MudElement>
             <MudDivider Class="mt-2 mb-4" />
             <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
                 @if (ticket is not null)
                 {
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Executor</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SL["Executor"]</MudText>
                         @if (ticket.Executor is not null)
                         {
                             <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
@@ -83,7 +84,7 @@
                         }
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Project</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SL["Project"]</MudText>
                         @if (ticket.Project is not null)
                         {
                             <MudText Typo="@Typo.subtitle2">@ticket.Project.Title</MudText>
@@ -94,7 +95,7 @@
                         }
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Type</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SL["Type"]</MudText>
                         <MudChip Color="@Color.Primary"
                                  Size="@Size.Small"
                                  Label="@true">
@@ -102,19 +103,19 @@
                         </MudChip>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Status</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SL["Status"]</MudText>
                         <MudChip Color="@Color.Default" Text="@ticket.Status" Class="ma-0">@ticket.Status</MudChip>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Priority</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SL["Priority"]</MudText>
                         <MudText Typo="@Typo.subtitle2">@ticket.Priority</MudText>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Created At</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SL["CreationTime"]</MudText>
                         <MudText Typo="@Typo.subtitle2">@ticket.CreationTime</MudText>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">Deadline</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SL["Deadline"]</MudText>
                         @if (ticket.Deadline is not null)
                         {
                             <MudText Typo="@Typo.subtitle2">@ticket.Deadline</MudText>
@@ -159,8 +160,8 @@
 
     private async Task DeleteTicketAsync()
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(
-            "Are you sure you want to delete this ticket?") ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
+            SL["ConfirmTicketDeleting"]) ?? false;
 
         if (confirmed)
         {

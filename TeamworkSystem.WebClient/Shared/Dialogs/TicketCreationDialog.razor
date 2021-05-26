@@ -1,4 +1,5 @@
-﻿@inject ISnackbar Snackbar
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
 @inject ITicketsService TicketsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
@@ -8,12 +9,12 @@
         <DialogContent>
 
             <MudTextField T="@string"
-                          Label="@nameof(ticket.Title)"
+                          Label="@SL["Title"]"
                           @bind-Value="@ticket.Title"
                           For="@(() => ticket.Title)" />
 
             <MudSelect T="@string"
-                       Label="@nameof(ticket.Type)"
+                       Label="@SL["Type"]"
                        @bind-Value="@ticket.Type"
                        For="@(() => ticket.Type)">
                 @foreach (var type in TicketPropertiesValues.Types)
@@ -23,7 +24,7 @@
             </MudSelect>
 
             <MudSelect T="@string"
-                       Label="@nameof(ticket.Status)"
+                       Label="@SL["Status"]"
                        @bind-Value="@ticket.Status"
                        For="@(() => ticket.Status)">
                 @foreach (var status in TicketPropertiesValues.Statuses)
@@ -33,7 +34,7 @@
             </MudSelect>
 
             <MudSelect T="@string"
-                       Label="@nameof(ticket.Priority)"
+                       Label="@SL["Priority"]"
                        @bind-Value="@ticket.Priority"
                        For="@(() => ticket.Priority)">
                 @foreach (var priority in TicketPropertiesValues.Priorities)
@@ -42,12 +43,12 @@
                 }
             </MudSelect>
 
-            <MudDatePicker Label="@nameof(ticket.Deadline)"
+            <MudDatePicker Label="@SL["Deadline"]"
                            @bind-Date="ticket.Deadline"
                            For="@(() => ticket.Deadline)" />
 
             <MudTextField T="@string"
-                          Label="@nameof(ticket.Description)"
+                          Label="@SL["Description"]"
                           @bind-Value="@ticket.Description"
                           For="@(() => ticket.Description)"
                           Lines="10" />
@@ -56,9 +57,9 @@
         <DialogActions>
             <MudButton Color="@Color.Primary"
                        ButtonType="@ButtonType.Submit">
-                Create
+                @SL["Create"]
             </MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>

@@ -1,4 +1,5 @@
-﻿@inject ISnackbar Snackbar  
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
 @inject IUsersService UsersService
 @inject RequestErrorsHandler RequestErrorsHandler
 
@@ -7,8 +8,8 @@
     <MudDialog>
         <DialogContent>
             <MudAutocomplete T="@UserViewModel"
-                             Label="User"
-                             HelperText="Find your friend by his lastname!"
+                             Label="@SL["User"]"
+                             HelperText="@SL["FindFriendByLastName"]"
                              Value="@friends.Second"
                              ValueChanged="@(e => (friends.Second, friends.SecondId) = (e, e.Id))"
                              SearchFunc="@InitializeUsersAsync"
@@ -18,8 +19,8 @@
                              CoerceText="@true" />
         </DialogContent>
         <DialogActions>
-            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">Add</MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">Cancel</MudButton>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Add"]</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>
