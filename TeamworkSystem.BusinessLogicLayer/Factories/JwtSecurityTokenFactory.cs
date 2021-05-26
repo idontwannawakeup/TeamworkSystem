@@ -18,12 +18,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Factories
             expires: JwtTokenConfiguration.ExpirationDate,
             signingCredentials: jwtTokenConfiguration.Credentials);
 
-        // TODO change UserName back to Email
         private static List<Claim> GetClaims(User user) => new()
         {
             new(JwtRegisteredClaimNames.UniqueName, user.UserName),
             new(ClaimTypes.Name, user.UserName),
-            //new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.Authentication, user.Id),
         };
 
