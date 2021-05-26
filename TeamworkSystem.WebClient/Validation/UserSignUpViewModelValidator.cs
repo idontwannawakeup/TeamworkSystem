@@ -26,6 +26,10 @@ namespace TeamworkSystem.WebClient.Validation
                 .Must(password => password is not null && password.Any(char.IsDigit))
                 .WithMessage(request => $"{nameof(request.Password)} must contain a digit.");
 
+            RuleFor(request => request.ConfirmPassword)
+                .Equal(request => request.Password)
+                .WithMessage($"Passwords are different.");
+
             RuleFor(request => request.FirstName)
                 .NotEmpty()
                 .WithMessage(request => $"{nameof(request.FirstName)} can't be empty.")
