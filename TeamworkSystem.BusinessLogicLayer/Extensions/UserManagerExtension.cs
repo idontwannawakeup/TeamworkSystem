@@ -16,7 +16,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             UsersParameters parameters)
         {
             var source = userManager.Users;
+
             SearchByTeamId(ref source, parameters.TeamId);
+            SearchByLastName(ref source, parameters.LastName);
+
             return await PagedList<User>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -32,6 +35,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             var source = userManager.Users.Where(
                 secondUser => secondUser.Friends.Contains(user));
 
+            SearchByLastName(ref source, parameters.LastName);
+
             return await PagedList<User>.ToPagedListAsync(
                 source,
                 parameters.PageNumber,
@@ -42,34 +47,27 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             this UserManager<User> userManager,
             string id)
         {
-            var user = await userManager.FindByIdAsync(id)
-                ?? throw new EntityNotFoundException(
-                    GetUserNotFoundErrorMessage(id));
-
-            return user;
+            var user = await userManager.FindByIdAsync(id);
+            return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
         }
 
         public static async Task<User> GetCompleteEntityAsync(
             this UserManager<User> userManager,
             string id)
         {
-            var user = await userManager.Users
-                .Include(user => user.Teams)
-                .Include(user => user.Tickets)
-                .Include(user => user.MyRatings)
-                .Include(user => user.RatingsFromMe)
-                .Include(user => user.Friends)
-                .Include(user => user.FriendForUsers)
-                .SingleOrDefaultAsync(user => user.Id == id)
-                    ?? throw new EntityNotFoundException(
-                        GetUserNotFoundErrorMessage(id));
+            var user = await userManager.Users.Include(user => user.Teams)
+                                              .Include(user => user.Tickets)
+                                              .Include(user => user.MyRatings)
+                                              .Include(user => user.RatingsFromMe)
+                                              .Include(user => user.Friends)
+                                              .Include(user => user.FriendForUsers)
+                                              .SingleOrDefaultAsync(user => user.Id == id);
+                    
 
-            return user;
+            return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
         }
 
-        private static void SearchByTeamId(
-            ref IQueryable<User> source,
-            int? teamId)
+        private static void SearchByTeamId(ref IQueryable<User> source, int? teamId)
         {
             if (teamId is null || teamId == 0)
             {
@@ -77,6 +75,16 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             }
 
             source = source.Where(user => user.Teams.Any(team => team.Id == teamId));
+        }
+
+        private static void SearchByLastName(ref IQueryable<User> source, string lastName)
+        {
+            if (string.IsNullOrWhiteSpace(lastName))
+            {
+                return;
+            }
+
+            source = source.Where(user => user.LastName.Contains(lastName));
         }
 
         private static string GetUserNotFoundErrorMessage(string id) =>

@@ -1,61 +1,123 @@
 ﻿@page "/teams"
+@inject IStringLocalizer<SharedLocalization> SL
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+@inject IDialogService DialogService 
 @inject ITeamsService TeamsService
 
-<MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">Teams</MudText>
-
-@if (Loaded)
-{
-    <MudTable Class="mb-12"
-              T="@TeamViewModel"
-              Items="@teams"
-              Hover="@true"
-              Breakpoint="@Breakpoint.Sm"
-              Elevation="0"
-              OnRowClick="@OnRowClick"
-              RowClass="cursor-pointer">
-        <HeaderContent>
-            <MudTh Class="ml-3">Name</MudTh>
-            <MudTh>Specialization</MudTh>
-            <MudTh>Leader</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd Class="ml-3" DataLabel="Name">@context.Name</MudTd>
-            <MudTd DataLabel="Specialization">@context.Specialization</MudTd>
-            <MudTd DataLabel="Leader">
-                <MudAvatar Class="ml-auto" Color="@Color.Secondary" Size="@Size.Small">A</MudAvatar>
+<MudTable Class="mt-md-12 mb-12"
+          T="@TeamViewModel"
+          ServerData="@InitializeTeamsAsync"
+          @ref="@table"
+          Hover="@true"
+          Breakpoint="@Breakpoint.Sm"
+          Elevation="0"
+          OnRowClick="@ShowTeamPage"
+          RowClass="cursor-pointer"
+          Dense="@true">
+    <ToolBarContent>
+        <MudText Typo="@Typo.h3">@SL["Teams"]</MudText>
+        <MudToolBarSpacer />
+        <MudTextField T="@string"
+                      ValueChanged="@(async name => await OnSearchAsync(name))"
+                      Placeholder="@SL["SearchByNameAsTitle"]"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh Class="ml-3">@SL["Name"]</MudTh>
+        <MudTh>@SL["Specialization"]</MudTh>
+        <MudTh>@SL["Leader"]</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd Class="ml-3" DataLabel="@SL["Name"]">
+            <MudElement HtmlTag="div" Class="d-flex align-center">
+                <MudAvatar Image="@(context.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Avatar}" : null)"
+                           Color="@Color.Success">
+                    A
+                </MudAvatar>
+                <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Name</MudText>
+            </MudElement>
+        </MudTd>
+        <MudTd DataLabel="@SL["Specialization"]">
+            @if (context.Specialization is not null)
+            {
+                @context.Specialization
+            }
+            else
+            {
+                <NoneChip />
+            }
+        </MudTd>
+        <MudTd DataLabel="@SL["Leader"]">
+            <MudElement HtmlTag="div" Class="d-flex align-center">
+                <MudAvatar Image="@(context.Leader?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Leader.Avatar}" : null)"
+                           Color="@Color.Secondary">
+                    A
+                </MudAvatar>
                 <span class="ml-2">@context.Leader.FullName</span>
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
-else
-{
-    <Loader />
-}
+            </MudElement>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
 
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="Team" />
+        Label="@SL["Team"]"
+        OnClick="@ShowTeamCreationDialog" />
 
 @code {
 
-    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private List<TeamViewModel> teams = null;
+    private MudTable<TeamViewModel> table;
 
-    private bool Loaded => teams is not null;
+    private string userId = null;
 
-    private void OnRowClick(TableRowClickEventArgs<TeamViewModel> args) =>
-        NavigationManager.NavigateTo($"/team/{args.Item.Id}");
+    private string searchName = null;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var state = await StateAsync;
-        var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
-        teams = await TeamsService.GetTeamsForUserAsync(userId) as List<TeamViewModel>;
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+    }
+
+    private void ShowTeamPage(TableRowClickEventArgs<TeamViewModel> args) =>
+        NavigationManager.NavigateTo($"/team/{args.Item.Id}");
+
+    private void ShowTeamCreationDialog()
+    {
+        DialogService.ShowTeamCreationDialog(userId, async () =>
+        {
+            await table.ReloadServerData();
+            StateHasChanged();
+        }, SL);
+    }
+
+    private async Task<TableData<TeamViewModel>> InitializeTeamsAsync(TableState state)
+    {
+        var (teams, pagination) = await TeamsService.GetWithPaginationHeaderAsync(
+            new TeamsParameters()
+            {
+                PageNumber = state.Page + 1,
+                PageSize = state.PageSize,
+                UserId = userId,
+                Name = searchName
+            });
+
+        return new() { Items = teams, TotalItems = pagination.TotalEntitiesCount };
+    }
+
+    private async Task OnSearchAsync(string name)
+    {
+        searchName = name;
+        await table.ReloadServerData();
     }
 
 }

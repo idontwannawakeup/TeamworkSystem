@@ -1,31 +1,37 @@
-﻿<MudDrawer @bind-Open="@open"
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject IProjectsService ProjectsService
+
+<MudDrawer @bind-Open="@open"
            Elevation="1"
            ClipMode="DrawerClipMode.Always"
            Anchor="Anchor.Right">
     <MudDrawerHeader>
-        <MudText Typo="@Typo.h6">ProjectName</MudText>
+        <MudText Typo="@Typo.h6">@(project?.Title)</MudText>
     </MudDrawerHeader>
     <MudNavMenu>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.Visibility"
                     Href="@OverviewLink">
-            <span>Overview</span>
+            <span>@SL["Overview"]</span>
         </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.DeveloperBoard"
                     Href="@BoardLink">
-            <span>Kanban Board</span>
+            <span>@SL["KanbanBoard"]</span>
         </MudNavLink>
         <MudNavLink Match="NavLinkMatch.All"
                     Icon="@Icons.Material.Filled.Assignment"
                     Href="@TicketsLink">
-            <span>Tickets</span>
+            <span>@SL["Tickets"]</span>
         </MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All"
-                    Icon="@Icons.Material.Filled.Settings"
-                    Href="@SettingsLink">
-            <span>Settings</span>
-        </MudNavLink>
+        @if (userId == project?.Team?.LeaderId)
+        {
+            <MudNavLink Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Settings"
+                        Href="@SettingsLink">
+                <span>@SL["Settings"]</span>
+            </MudNavLink>
+        }
     </MudNavMenu>
 </MudDrawer>
 
@@ -47,6 +53,12 @@
 
     [Parameter] public RenderFragment ChildContent { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private ProjectViewModel project = null;
+
+    private string userId = null;
+
     private string OverviewLink => $"/project/{ProjectId}/overview";
 
     private string BoardLink => $"/project/{ProjectId}/board";
@@ -61,9 +73,19 @@
 
     private string drawerIcon = Icons.Material.Filled.KeyboardArrowLeft;
 
-    bool open = false;
+    private bool open = false;
 
-    void ToggleDrawer() =>
+    private void ToggleDrawer() =>
         (open, drawerIcon) = open ? (false, showIcon) : (true, hideIcon);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        await InitializeProjectAsync();
+    }
+
+    private async Task InitializeProjectAsync() =>
+        project = await ProjectsService.GetByIdAsync(ProjectId);
 
 }

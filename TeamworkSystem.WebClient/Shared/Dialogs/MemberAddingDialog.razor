@@ -1,0 +1,68 @@
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
+@inject IUsersService UsersService
+@inject ITeamsService TeamsService 
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@teamMember" OnValidSubmit="@OnValidSubmitAsync">
+    <MudDialog>
+
+        <DialogContent>
+            <MudAutocomplete T="@UserViewModel"
+                             Label="@SL["Member"]"
+                             HelperText="@SL["FindUserByLastName"]"
+                             Value="@teamMember.User"
+                             ValueChanged="@(e => (teamMember.User, teamMember.UserId) = (e, e.Id))"
+                             SearchFunc="@InitializeUsersAsync"
+                             ToStringFunc="@(user => user?.FullName)"
+                             Immediate="@true"
+                             CoerceText="@true" />
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Add"]</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+        </DialogActions>
+
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public int TeamId { get; set; }
+
+    [Parameter] public Func<Task> OnCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private TeamMemberViewModel teamMember = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        teamMember.TeamId = TeamId;
+    }
+
+    private async Task<IEnumerable<UserViewModel>> InitializeUsersAsync(string lastName)
+    {
+        var users = await UsersService.GetAsync(new UsersParameters()
+        {
+            LastName = lastName,
+            PageSize = 50
+        });
+
+        return users;
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TeamsService.AddMemberAsync(teamMember);
+            DialogInstance.Close();
+            Snackbar.Add("Member added", Severity.Success);
+            OnCreated?.Invoke();
+        });
+    }
+
+}

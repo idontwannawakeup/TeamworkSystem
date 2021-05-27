@@ -11,9 +11,14 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         {
             CreateMap<UserSignUpRequest, User>();
             CreateMap<UserRequest, User>();
-            CreateMap<User, UserResponse>().ForMember(
-                response => response.FullName,
-                options => options.MapFrom(team => $"{team.FirstName} {team.LastName}"));
+            CreateMap<User, UserResponse>()
+                .ForMember(
+                    response => response.FullName,
+                    options => options.MapFrom(user => $"{user.FirstName} {user.LastName}"))
+                .ForMember(
+                    response => response.Avatar,
+                    options => options.MapFrom(
+                        user => !string.IsNullOrWhiteSpace(user.Avatar) ? $"Public/Photos/{user.Avatar}" : null));
         }
 
         private void CreateTicketsMaps()
@@ -25,7 +30,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         private void CreateTeamsMaps()
         {
             CreateMap<TeamRequest, Team>();
-            CreateMap<Team, TeamResponse>();
+            CreateMap<Team, TeamResponse>()
+                .ForMember(
+                    response => response.Avatar,
+                    options => options.MapFrom(
+                        team => !string.IsNullOrWhiteSpace(team.Avatar) ? $"Public/Photos/{team.Avatar}" : null));
         }
 
         private void CreateProjectsMaps()
@@ -37,7 +46,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
         private void CreateRatingsMaps()
         {
             CreateMap<RatingRequest, Rating>();
-            CreateMap<Rating, RatingResponse>();
+            CreateMap<Rating, RatingResponse>().ForMember(
+                response => response.Average,
+                options => options.MapFrom(
+                    rating => (rating.Skills
+                               + rating.Social
+                               + rating.Punctuality
+                               + rating.Responsibility) / 4));
         }
 
         public AutoMapperProfile()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Seeding;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations
 {
@@ -12,6 +13,12 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
                    .IsRequired();
 
             builder.Property(rating => rating.Skills)
+                   .IsRequired();
+
+            builder.Property(rating => rating.Responsibility)
+                   .IsRequired();
+
+            builder.Property(rating => rating.Punctuality)
                    .IsRequired();
 
             builder.Property(rating => rating.Comment)
@@ -31,6 +38,8 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
                    .HasForeignKey(rating => rating.ToId)
                    .OnDelete(DeleteBehavior.NoAction)
                    .HasConstraintName("FK_Ratings_ToId");
+
+            new RatingSeeder().Seed(builder);
         }
     }
 }

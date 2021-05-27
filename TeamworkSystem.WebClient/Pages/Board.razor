@@ -1,77 +1,131 @@
 ﻿@page "/project/{ProjectId:int}/board"
-@layout ContainerlessLayout 
+@layout ContainerlessLayout
+@inject IStringLocalizer<Board> L
+@inject ITicketsService TicketsService  
 
 <ProjectLayout ProjectId="@ProjectId">
     <MudContainer MaxWidth="@MaxWidth.ExtraLarge">
-        <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">Kanban board</MudText>
-        <MudGrid Spacing="3">
+        <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">@L["KanbanBoard"]</MudText>
+        @if (tickets is not null)
+        {
+            <MudGrid Spacing="3">
 
-            <MudItem xs="12" md="6" lg="3">
-                <MudPaper Elevation="3" Class="pa-5">
-                    <MudText Typo="@Typo.h5" Class="py-1">Backlog</MudText>
-                    <MudDivider Class="mb-4" />
+                <MudItem xs="12" md="6" lg="3">
+                    <MudPaper Elevation="3" Class="pa-5">
+                        <MudText Typo="@Typo.h5" Class="py-1">@L["Backlog"]</MudText>
+                        <MudDivider Class="mb-4" />
 
-                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                        @foreach (var number in Enumerable.Range(0, 5))
-                        {
-                            <TicketCardSkeleton />
-                        }
-                    </MudElement>
+                        <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                            @foreach (var ticket in tickets["Backlog"])
+                            {
+                                <TicketCard Ticket="@ticket" />
+                            }
+                        </MudElement>
 
-                </MudPaper>
-            </MudItem>
+                    </MudPaper>
+                </MudItem>
 
-            <MudItem xs="12" md="6" lg="3">
-                <MudPaper Elevation="3" Class="pa-5">
-                    <MudText Typo="@Typo.h5" Class="py-1">Chosen For Development</MudText>
-                    <MudDivider Class="mb-4" />
+                <MudItem xs="12" md="6" lg="3">
+                    <MudPaper Elevation="3" Class="pa-5">
+                        <MudText Typo="@Typo.h5" Class="py-1">@L["ChosenForDevelopment"]</MudText>
+                        <MudDivider Class="mb-4" />
 
-                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                        @foreach (var number in Enumerable.Range(0, 5))
-                        {
-                            <TicketCardSkeleton />
-                        }
-                    </MudElement>
+                        <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                            @foreach (var ticket in tickets["Chosen For Development"])
+                            {
+                                <TicketCard Ticket="@ticket" />
+                            }
+                        </MudElement>
 
-                </MudPaper>
-            </MudItem>
+                    </MudPaper>
+                </MudItem>
 
-            <MudItem xs="12" md="6" lg="3">
-                <MudPaper Elevation="3" Class="pa-5">
-                    <MudText Typo="@Typo.h5" Class="py-1">In Progress</MudText>
-                    <MudDivider Class="mb-4" />
+                <MudItem xs="12" md="6" lg="3">
+                    <MudPaper Elevation="3" Class="pa-5">
+                        <MudText Typo="@Typo.h5" Class="py-1">@L["InProgress"]</MudText>
+                        <MudDivider Class="mb-4" />
 
-                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                        @foreach (var number in Enumerable.Range(0, 5))
-                        {
-                            <TicketCardSkeleton />
-                        }
-                    </MudElement>
+                        <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                            @foreach (var ticket in tickets["In Progress"])
+                            {
+                                <TicketCard Ticket="@ticket" />
+                            }
+                        </MudElement>
 
-                </MudPaper>
-            </MudItem>
+                    </MudPaper>
+                </MudItem>
 
-            <MudItem xs="12" md="6" lg="3">
-                <MudPaper Elevation="3" Class="pa-5">
-                    <MudText Typo="@Typo.h5" Class="py-1">Done</MudText>
-                    <MudDivider Class="mb-4" />
+                <MudItem xs="12" md="6" lg="3">
+                    <MudPaper Elevation="3" Class="pa-5">
+                        <MudText Typo="@Typo.h5" Class="py-1">@L["Done"]</MudText>
+                        <MudDivider Class="mb-4" />
 
-                    <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                        @foreach (var number in Enumerable.Range(0, 5))
-                        {
-                            <TicketCardSkeleton />
-                        }
-                    </MudElement>
+                        <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
+                            @foreach (var ticket in tickets["Done"])
+                            {
+                                <TicketCard Ticket="@ticket" />
+                            }
+                        </MudElement>
 
-                </MudPaper>
-            </MudItem>
+                    </MudPaper>
+                </MudItem>
 
-        </MudGrid>
+            </MudGrid>
+        }
     </MudContainer>
 </ProjectLayout>
 
 @code {
 
     [Parameter] public int ProjectId { get; set; }
+
+    private Dictionary<string, IEnumerable<TicketViewModel>> tickets = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeTicketsAsync();
+    }
+
+    private async Task InitializeTicketsAsync() =>
+        tickets = new()
+        {
+            {
+                "Backlog",
+                await TicketsService.GetAsync(new()
+                {
+                    ProjectId = ProjectId,
+                    Status = "Backlog",
+                    PageSize = 50
+                })
+            },
+            {
+                "Chosen For Development",
+                await TicketsService.GetAsync(new()
+                {
+                    ProjectId = ProjectId,
+                    Status = "Chosen For Development",
+                    PageSize = 50
+                })
+            },
+            {
+                "In Progress",
+                await TicketsService.GetAsync(new()
+                {
+                    ProjectId = ProjectId,
+                    Status = "In Progress",
+                    PageSize = 50
+                })
+            },
+            {
+                "Done",
+                await TicketsService.GetAsync(new()
+                {
+                    ProjectId = ProjectId,
+                    Status = "Done",
+                    PageSize = 50
+                })
+            }
+        };
 
 }

@@ -19,11 +19,11 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
             RuleFor(request => request.Password)
                 .NotEmpty()
                 .WithMessage(request => $"{nameof(request.Password)} can't be empty.")
-                .Must(password => password.Any(char.IsUpper))
+                .Must(password => password is not null && password.Any(char.IsUpper))
                 .WithMessage(request => $"{nameof(request.Password)} must contain an uppercase character.")
-                .Must(password => password.Any(char.IsLower))
+                .Must(password => password is not null && password.Any(char.IsLower))
                 .WithMessage(request => $"{nameof(request.Password)} must contain a lowercase character.")
-                .Must(password => password.Any(char.IsDigit))
+                .Must(password => password is not null && password.Any(char.IsDigit))
                 .WithMessage(request => $"{nameof(request.Password)} must contain a digit.");
 
             RuleFor(request => request.FirstName)

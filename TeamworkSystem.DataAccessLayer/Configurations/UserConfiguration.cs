@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Seeding;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations
 {
@@ -32,6 +33,8 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
                        entity.Property("FriendsId").HasColumnName("FirstId");
                        entity.Property("FriendForUsersId").HasColumnName("SecondId");
                    });
+
+            new UserSeeder().Seed(builder);
         }
     }
 }

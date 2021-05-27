@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
@@ -19,8 +20,9 @@ namespace TeamworkSystem.WebAPI.Controllers
         private readonly IUsersService usersService;
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PagedList<UserResponse>>> GetAsync(
             [FromQuery] UsersParameters parameters)
         {
@@ -32,14 +34,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserResponse>> GetByIdAsync([FromRoute] string id)
         {
             try
@@ -52,14 +55,16 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateAsync([FromBody] UserRequest request)
         {
             try
@@ -69,14 +74,16 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteAsync([FromRoute] string id)
         {
             try
@@ -90,14 +97,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpGet("friends/{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PagedList<UserResponse>>> GetFriendsAsync(
             [FromRoute] string id,
             [FromQuery] UsersParameters parameters)
@@ -114,14 +122,38 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
+            }
+        }
+
+        [HttpPost("avatar")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> SetAvatarForUserAsync([FromForm] UserAvatarRequest request)
+        {
+            try
+            {
+                await usersService.SetAvatarForUserAsync(request);
+                return Ok();
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpPost("friends")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> AddFriendAsync([FromBody] FriendsRequest request)
         {
             try
@@ -135,18 +167,28 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
-        [HttpDelete("friends")]
+        [HttpDelete("friends/{firstId}/{secondId}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> DeleteFriendAsync([FromBody] FriendsRequest request)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteFriendAsync(
+            [FromRoute] string firstId,
+            [FromRoute] string secondId)
         {
             try
             {
+                var request = new FriendsRequest()
+                {
+                    FirstId = firstId,
+                    SecondId = secondId
+                };
+
                 await usersService.DeleteFriendAsync(request);
                 return Ok();
             }
@@ -156,7 +198,7 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 

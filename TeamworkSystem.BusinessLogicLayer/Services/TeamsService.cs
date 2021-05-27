@@ -25,6 +25,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
         private readonly UserManager<User> userManager;
 
+        private readonly IPhotosService photosService;
+
         public async Task<IEnumerable<TeamResponse>> GetAsync()
         {
             var teams = await teamsRepository.GetAsync();
@@ -54,6 +56,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task InsertAsync(TeamRequest request)
         {
             var team = mapper.Map<TeamRequest, Team>(request);
+            var leader = await userManager.GetByIdAsync(team.LeaderId);
+            team.Members = new() { leader };
             await teamsRepository.InsertAsync(team);
             await unitOfWork.SaveChangesAsync();
         }
@@ -65,16 +69,39 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task SetAvatarForTeamAsync(TeamAvatarRequest request)
+        {
+            var team = await teamsRepository.GetByIdAsync(request.TeamId);
+            team.Avatar = await photosService.SavePhotoAsync(request.Avatar);
+            await teamsRepository.UpdateAsync(team);
+            await unitOfWork.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(int id)
         {
             await teamsRepository.DeleteAsync(id);
             await unitOfWork.SaveChangesAsync();
         }
 
-        public TeamsService(IUnitOfWork unitOfWork, IMapper mapper)
+        public async Task AddMemberAsync(TeamMemberRequest request)
+        {
+            var member = await userManager.GetByIdAsync(request.UserId);
+            await teamsRepository.AddMemberAsync(request.TeamId, member);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DeleteMemberAsync(TeamMemberRequest request)
+        {
+            var member = await userManager.GetByIdAsync(request.UserId);
+            await teamsRepository.DeleteMemberAsync(request.TeamId, member);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public TeamsService(IUnitOfWork unitOfWork, IMapper mapper, IPhotosService photosService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.photosService = photosService;
             teamsRepository = this.unitOfWork.TeamsRepository;
             userManager = this.unitOfWork.UserManager;
         }

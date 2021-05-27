@@ -13,6 +13,8 @@ namespace TeamworkSystem.DataAccessLayer.Entities
 
         public string Specialization { get; set; }
 
+        public string Avatar { get; set; }
+
         public List<Team> Teams { get; set; }
 
         public List<Ticket> Tickets { get; set; }

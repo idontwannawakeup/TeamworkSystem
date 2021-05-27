@@ -1,5 +1,8 @@
-﻿@inject NavigationManager NavigationManager
-@inject ApiAuthenticationStateProvider StateProvider 
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+@inject IUsersService UsersService
+@inject ApiAuthenticationStateProvider StateProvider
 
 <MudLayout>
 
@@ -14,7 +17,10 @@
 
         <MudElement Class="avatar-menu d-flex" HtmlTag="div" Style="position: relative;">
             <MudIconButton OnClick="@(e => ToggleAvatarMenu())">
-                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
+                <MudAvatar Image="@(user?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{user.Avatar}" : null)"
+                           Color="@Color.Secondary">
+                    A
+                </MudAvatar>
             </MudIconButton>
             <MudPopover Class="py-3"
                         Square="@true"
@@ -24,18 +30,26 @@
                         Style="width: 250px; top: 12px;">
                 <MudNavMenu>
 
-                    <MudText Typo="Typo.h6" Class="px-4">UserName</MudText>
-                    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Email</MudText>
+                    <MudText Typo="Typo.h6" Class="px-4">@(user?.FullName ?? "Loading...")</MudText>
+                    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@(user?.Email)</MudText>
                     <MudDivider Class="my-2" />
-                    <MudNavLink Href="/profile" Icon="@Icons.Filled.AccountCircle">Profile</MudNavLink>
-                    @*<MudNavLink Href="/settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>*@
+                    <MudNavLink Match="@NavLinkMatch.All"
+                                Href="/profile"
+                                Icon="@Icons.Filled.AccountCircle">
+                        <span>@SL["Profile"]</span>
+                    </MudNavLink>
+                    <MudNavLink Match="@NavLinkMatch.All"
+                                Href="/profile/settings"
+                                Icon="@Icons.Filled.Settings">
+                        <span>@SL["Settings"]</span>
+                    </MudNavLink>
                     <MudDivider Class="my-2" />
-                    <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">Exit</MudNavLink>
+                    <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">@SL["Exit"]</MudNavLink>
 
                 </MudNavMenu>
             </MudPopover>
 
-            @* Overlay for MudPopover for automatic close on click *@          
+            @* Overlay for MudPopover for automatic close on click *@
             <MudOverlay @bind-Visible="@avatarMenuOpen"
                         DarkBackground="@false"
                         AutoClose="@true"
@@ -53,27 +67,27 @@
             <MudNavLink Href="/home"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Home">
-                <span>Home</span>
+                <span>@SL["Home"]</span>
             </MudNavLink>
             <MudNavLink Href="/teams"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Groups">
-                <span>Teams</span>
+                <span>@SL["Teams"]</span>
             </MudNavLink>
             <MudNavLink Href="/projects"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Folder">
-                <span>Projects</span>
+                <span>@SL["Projects"]</span>
             </MudNavLink>
             <MudNavLink Href="/tickets"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Assignment">
-                <span>Tickets</span>
+                <span>@SL["Tickets"]</span>
             </MudNavLink>
             <MudNavLink Href="/friends"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Group">
-                <span>Friends</span>
+                <span>@SL["Friends"]</span>
             </MudNavLink>
         </MudNavMenu>
     </MudDrawer>
@@ -88,9 +102,20 @@
 
     [Parameter] public RenderFragment Body { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private UserViewModel user;
+
     private bool navigationMenuOpen = false;
 
     private bool avatarMenuOpen = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        user = await UsersService.GetByIdAsync(userId);
+    }
 
     private void ToggleNavigationMenu() =>
         navigationMenuOpen = !navigationMenuOpen;

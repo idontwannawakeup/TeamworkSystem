@@ -21,6 +21,12 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
 
         Task UpdateAsync(TeamRequest request);
 
+        Task SetAvatarForTeamAsync(TeamAvatarRequest request);
+
         Task DeleteAsync(int id);
+
+        Task AddMemberAsync(TeamMemberRequest request);
+
+        Task DeleteMemberAsync(TeamMemberRequest request);
     }
 }

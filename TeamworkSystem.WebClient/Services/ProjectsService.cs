@@ -1,39 +1,49 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
+using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Services
 {
     public class ProjectsService : IProjectsService
     {
-        private readonly HttpClient httpClient;
+        private readonly ApiHttpClient httpClient;
 
-        public async Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId)
+        public async Task<IEnumerable<ProjectViewModel>> GetAsync(ProjectsParameters parameters) =>
+            await httpClient.GetAsync<List<ProjectViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
+
+        public async Task<(IEnumerable<ProjectViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
+            ProjectsParameters parameters)
         {
-            var response = await httpClient.GetAsync($"?TeamId={teamId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<ProjectViewModel>>();
+            return await httpClient.GetWithPaginationHeaderAsync<List<ProjectViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
         }
 
-        public async Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(
-            string teamMemberId)
-        {
-            var response = await httpClient.GetAsync($"?TeamMemberId={teamMemberId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<ProjectViewModel>>();
-        }
+        public async Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId) =>
+            await httpClient.GetAsync<List<ProjectViewModel>>($"?TeamId={teamId}");
 
-        public async Task<ProjectViewModel> GetByIdAsync(int id)
-        {
-            var response = await httpClient.GetAsync($"{id}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<ProjectViewModel>();
-        }
+        public async Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(string teamMemberId) =>
+            await httpClient.GetAsync<List<ProjectViewModel>>($"?TeamMemberId={teamMemberId}");
 
-        public ProjectsService(HttpClient httpClient) =>
-            this.httpClient = httpClient;
+        public async Task<ProjectViewModel> GetByIdAsync(int id) =>
+            await httpClient.GetAsync<ProjectViewModel>($"{id}");
+
+        public async Task CreateAsync(ProjectViewModel viewModel) =>
+            await httpClient.PostAsync(string.Empty, viewModel);
+
+        public async Task UpdateAsync(ProjectViewModel viewModel) =>
+            await httpClient.PutAsync(string.Empty, viewModel);
+
+        public async Task DeleteAsync(int id) =>
+            await httpClient.DeleteAsync($"{id}");
+
+        public ProjectsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
+            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state)
+                                                                  .Build();
     }
 }

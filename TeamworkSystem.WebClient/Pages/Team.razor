@@ -1,64 +1,116 @@
 ﻿@page "/team/{TeamId:int}"
+@inject IStringLocalizer<Team> L
+@inject IStringLocalizer<SharedLocalization> SL
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+@inject ISnackbar Snackbar 
+@inject IDialogService DialogService  
 @inject ITeamsService TeamsService
 @inject IProjectsService ProjectsService
-@inject IUsersService UsersService  
+@inject IUsersService UsersService
+@inject RequestErrorsHandler RequestErrorsHandler
 
 <MudGrid Spacing="3" Class="mt-8">
 
-    <MudItem xs="12" md="3" Class="d-flex flex-column gap-4">
+    <MudItem xs="12" lg="4" Class="d-flex flex-column gap-4">
 
-        <MudPaper Elevation="4" Class="pa-4">
-            @if (Loaded)
+        <MudCard Elevation="4">
+            @if (!string.IsNullOrWhiteSpace(team?.Avatar))
             {
-                <MudText Typo="@Typo.h6" Class="py-1">@team.Name</MudText>
-                <MudText Typo="@Typo.subtitle1" Class="py-1">@team.Specialization</MudText>
-                <MudButton Variant="@Variant.Outlined"
-                           Color="@Color.Tertiary"
-                           EndIcon="@Icons.Material.Filled.Add"
-                           IconColor="@Color.Inherit"
-                           Class="my-1">
-                    Add member
-                </MudButton>
+                <MudCardMedia Image="@($"{Configuration["ApiUrl"]}/{team.Avatar}")" Height="250" />
             }
-            else
-            {
-                <MudSkeleton />
-                <MudSkeleton />
-                <MudSkeleton />
-            }
-        </MudPaper>
+            <MudCardContent>
+                @if (team is not null)
+                {
+                    <MudElement HtmlTag="div" Class="d-flex flex-column align-start gap-2 pa-4">
+                        <MudText Typo="@Typo.h6">@team.Name</MudText>
+                        <MudText Typo="@Typo.subtitle1">@team.Specialization</MudText>
+                        @if (userId == team.LeaderId)
+                        {
+                            <InputFile id="fileInput" OnChange="@UpdateAvatarAsync" hidden accept=".jpg, .jpeg, .png" />
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Outlined"
+                                       Color="Color.Primary"
+                                       StartIcon="@Icons.Filled.CloudUpload"
+                                       for="fileInput">
+                                @SL["UpdateAvatar"]
+                            </MudButton>
+                            <MudButton Variant="@Variant.Outlined"
+                                       Color="@Color.Tertiary"
+                                       EndIcon="@Icons.Material.Filled.Add"
+                                       IconColor="@Color.Inherit"
+                                       OnClick="@ShowMemberAddingDialog">
+                                @L["AddMember"]
+                            </MudButton>
+                            <MudButton Variant="@Variant.Outlined"
+                                       Color="@Color.Info"
+                                       EndIcon="@Icons.Material.Filled.Edit"
+                                       IconColor="@Color.Inherit"
+                                       Link="@EditLink">
+                                @SL["Edit"]
+                            </MudButton>
+                        }
+                    </MudElement>
+                }
+                else
+                {
+                    <MudSkeleton />
+                    <MudSkeleton />
+                    <MudSkeleton />
+                }
+            </MudCardContent>
+        </MudCard>
 
         <MudPaper Elevation="4" Class="pa-4">
             @if (members is not null)
             {
-                <MudText Typo="@Typo.h6" Class="py-1">Members</MudText>
+                <MudText Typo="@Typo.h6" Class="py-1">@SL["Members"]</MudText>
                 <MudText Typo="@Typo.subtitle1"
                          Style="@colorGrey"
                          Class="pb-1">
-                    Total count: @members.Count
+                    @L["TotalCount"]: @membersPagination.TotalEntitiesCount
                 </MudText>
                 <MudDivider Class="my-2" />
-                <MudList Clickable="@true">
-                    @foreach (var member in members)
-                    {
-                        <MudListItem>
-                            <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
-                                <MudAvatar Color="@Color.Secondary">A</MudAvatar>
-                                <MudElement HtmlTag="div" Class="d-flex flex-column">
-                                    <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
-                                    <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
+                @if (members.Count() != 0)
+                {
+                    <MudList Clickable="@true">
+                        @foreach (var member in members)
+                        {
+                            <MudListItem OnClick="@(e => OpenMemberProfile(member))">
+                                <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
+
+                                    <MudAvatar Image="@(member.Avatar is not null ? $"{Configuration["ApiUrl"]}/{member.Avatar}" : null)"
+                                               Color="@Color.Secondary">
+                                        A
+                                    </MudAvatar>
+
+                                    <MudElement HtmlTag="div" Class="d-flex flex-column">
+                                        <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
+                                        <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
+                                    </MudElement>
+
+                                    @if (userId == team?.LeaderId)
+                                    {
+                                        <MudMenu Class="ml-auto"
+                                                 Icon="@Icons.Material.Filled.MoreHoriz"
+                                                 Dense="@true"
+                                                 OffsetX="true"
+                                                 Direction="@Direction.Left">
+                                            <MudMenuItem OnClick="@(async e => await DeleteMemberAsync(member))">
+                                                @SL["Remove"]
+                                            </MudMenuItem>
+                                        </MudMenu>
+                                    }
+
                                 </MudElement>
-                            </MudElement>
-                        </MudListItem>
-                    }
-                </MudList>
-                <MudButton Class="@(ShowLess ? "d-none" : null)"
-                           Variant="@Variant.Outlined"
-                           Color="@Color.Tertiary"
-                           FullWidth="@true">
-                    Show more
-                </MudButton>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+                else
+                {
+                    <MudText Typo="@Typo.subtitle1">@L["NoMembers"]</MudText>
+                }
             }
             else
             {
@@ -68,39 +120,58 @@
 
     </MudItem>
 
-    <MudItem xs="12" md="9">
-        @if (projects is not null)
-        {
-            <MudTable T="@ProjectViewModel"
-                      Items="@projects"
-                      Hover="@true"
-                      Elevation="4"
-                      OnRowClick="@OnRowClick">
-                <ToolBarContent>
-                    <MudText Typo="@Typo.h4">Projects</MudText>
-                    <MudToolBarSpacer />
-                    @*<MudTextField T="@string"
-                                  Adornment="@Adornment.End"
-                                  AdornmentIcon="@Icons.Material.Filled.Search"
-                                  Variant="@Variant.Text"
-                                  Label="Search" />*@
-                </ToolBarContent>
-                <HeaderContent>
-                    <MudTh>Name</MudTh>
-                    <MudTh>Type</MudTh>
-                    <MudTh>Url</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Name">@context.Title</MudTd>
-                    <MudTd DataLabel="Type">@context.Type</MudTd>
-                    <MudTd DataLabel="Url">@context.Url</MudTd>
-                </RowTemplate>
-            </MudTable>
-        }
-        else
-        {
-            <Loader />
-        }
+    <MudItem xs="12" lg="8">
+        <MudTable T="@ProjectViewModel"
+                  ServerData="@InitializeProjectsAsync"
+                  @ref="@projectsTable"
+                  Hover="@true"
+                  Breakpoint="@Breakpoint.Sm"
+                  Elevation="4"
+                  OnRowClick="@OpenProjectPage"
+                  RowClass="cursor-pointer">
+            <ToolBarContent>
+                <MudText Typo="@Typo.h4">@SL["Projects"]</MudText>
+                <MudToolBarSpacer />
+                <MudTextField T="@string"
+                              ValueChanged="@(async title => await OnSearchAsync(title))"
+                              Placeholder="@SL["SearchByTitle"]"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium"
+                              Class="mt-0" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>@SL["Title"]</MudTh>
+                <MudTh>@SL["Type"]</MudTh>
+                <MudTh>@SL["Url"]</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="@SL["Title"]">@context.Title</MudTd>
+                <MudTd DataLabel="@SL["Type"]">
+                    @if (context.Type is not null)
+                    {
+                        @context.Type
+                    }
+                    else
+                    {
+                        <NoneChip />
+                    }
+                </MudTd>
+                <MudTd DataLabel="@SL["Url"]">
+                    @if (!string.IsNullOrWhiteSpace(context.Url))
+                    {
+                        @context.Url
+                    }
+                    else
+                    {
+                        <NoneChip />
+                    }
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
     </MudItem>
 
 </MudGrid>
@@ -109,27 +180,106 @@
 
     [Parameter] public int TeamId { get; set; }
 
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private string EditLink => $"/team/{TeamId}/settings";
+
+    private MudTable<ProjectViewModel> projectsTable;
+
+    private string searchTitle;
+
     private TeamViewModel team = null;
 
-    private List<ProjectViewModel> projects = null;
+    private IEnumerable<UserViewModel> members = null;
 
-    private List<UserViewModel> members = null;
+    private PaginationHeaderViewModel membersPagination = null;
 
-    private bool Loaded => team is not null;
-
-    private bool ShowLess => members.Count < 10;
+    private string userId = null;
 
     private string colorGrey = $"color: {Colors.Grey.Default};";
-
-    private void OnRowClick(TableRowClickEventArgs<ProjectViewModel> args) =>
-        NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        await InitializeTeamAsync();
+        await InitializeMembersAsync();
+    }
+
+    private void OpenProjectPage(TableRowClickEventArgs<ProjectViewModel> args) =>
+        NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
+
+    private async Task InitializeTeamAsync() =>
         team = await TeamsService.GetByIdAsync(TeamId);
-        projects = await ProjectsService.GetByTeamIdAsync(TeamId) as List<ProjectViewModel>;
-        members = await UsersService.GetByTeamIdAsync(TeamId) as List<UserViewModel>;
+
+    private async Task InitializeMembersAsync() =>
+        (members, membersPagination) = await UsersService.GetWithPaginationHeaderAsync(new()
+        {
+            TeamId = TeamId,
+            PageSize = 30
+        });
+
+    private async Task DeleteMemberAsync(UserViewModel user)
+    {
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
+            SL["ConfirmMemberDeleting"]) ?? false;
+
+        if (confirmed)
+        {
+            await RequestErrorsHandler.HandleRequestAsync(async () =>
+            {
+                await TeamsService.DeleteMemberAsync(new() { TeamId = team.Id, UserId = user.Id });
+                Snackbar.Add("Member deleted", Severity.Success);
+                await InitializeMembersAsync();
+            });
+        }
+    }
+
+    private void ShowMemberAddingDialog()
+    {
+        DialogService.ShowMemberAddingDialog(TeamId, async () =>
+        {
+            await InitializeMembersAsync();
+            StateHasChanged();
+        }, SL);
+    }
+
+    private void OpenMemberProfile(UserViewModel member)
+    {
+        if (userId == member.Id)
+        {
+            NavigationManager.NavigateTo($"/profile");
+            return;
+        }
+
+        NavigationManager.NavigateTo($"/users/{member.Id}/profile");
+    }
+
+    private async Task<TableData<ProjectViewModel>> InitializeProjectsAsync(TableState state)
+    {
+        var (projects, pagination) = await ProjectsService.GetWithPaginationHeaderAsync(
+            new ProjectsParameters()
+            {
+                PageNumber = state.Page + 1,
+                PageSize = state.PageSize,
+                TeamId = TeamId,
+                Title = searchTitle
+            });
+
+        return new() { Items = projects, TotalItems = pagination.TotalEntitiesCount };
+    }
+
+    private async Task OnSearchAsync(string title)
+    {
+        searchTitle = title;
+        await projectsTable.ReloadServerData();
+    }
+
+    private async Task UpdateAvatarAsync(InputFileChangeEventArgs e)
+    {
+        await TeamsService.SetAvatarForTeamAsync(TeamId, e.File);
+        await InitializeTeamAsync();
+        StateHasChanged();
     }
 
 }

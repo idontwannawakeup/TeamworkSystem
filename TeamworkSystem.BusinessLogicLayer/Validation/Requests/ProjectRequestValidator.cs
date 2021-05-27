@@ -8,6 +8,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
     {
         public ProjectRequestValidator()
         {
+            RuleFor(project => project.TeamId)
+                .NotEmpty()
+                .WithMessage(project => $"{nameof(project.TeamId)} can't be empty.");
+
             RuleFor(project => project.Title)
                 .NotEmpty()
                 .WithMessage(project => $"{nameof(project.Title)} can't be empty.")
@@ -23,7 +27,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
                 .WithMessage(project => $"{nameof(project.Url)} should be less than 50 characters.")
                 .Must(url => Uri.TryCreate(url, UriKind.Absolute, out _))
                 .When(project => !string.IsNullOrWhiteSpace(project.Url))
-                .WithMessage(project => $"{project.Url} has wrong format.");
+                .WithMessage(project => $"{nameof(project.Url)} has wrong format.");
         }
     }
 }

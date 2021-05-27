@@ -19,6 +19,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<JwtResponse>> SignInAsync(
             [FromBody] UserSignInRequest request)
         {
@@ -33,13 +34,14 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpPost("signUp")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<JwtResponse>> SignUpAsync(
             [FromBody] UserSignUpRequest request)
         {
@@ -50,7 +52,7 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 

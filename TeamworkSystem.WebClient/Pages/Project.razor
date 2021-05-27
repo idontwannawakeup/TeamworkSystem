@@ -1,4 +1,5 @@
 ﻿@page "/project/{ProjectId:int}/overview"
+@inject IStringLocalizer<SharedLocalization> SL 
 @layout ContainerlessLayout
 @inject IProjectsService ProjectsService  
 
@@ -17,7 +18,7 @@
         else
         {
             <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@textColorStyle">
-                Loading...
+                @SL["Loading"]...
             </MudText>
         }
     </MudPaper>

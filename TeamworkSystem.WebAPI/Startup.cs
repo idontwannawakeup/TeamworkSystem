@@ -51,12 +51,13 @@ namespace TeamworkSystem.WebAPI
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IPhotosService, PhotosService>();
             services.AddTransient<IProjectsService, ProjectsService>();
             services.AddTransient<IRatingsService, RatingsService>();
             services.AddTransient<ITeamsService, TeamsService>();
             services.AddTransient<ITicketsService, TicketsService>();
             services.AddTransient<IUsersService, UsersService>();
-            services.AddTransient<IIdentityService, IdentityService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -152,6 +153,8 @@ namespace TeamworkSystem.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

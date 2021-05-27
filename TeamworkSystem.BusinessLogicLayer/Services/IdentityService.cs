@@ -32,7 +32,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 
             if (!await userManager.CheckPasswordAsync(user, request.Password))
             {
-                throw new EntityNotFoundException("Incorrect password.");
+                throw new EntityNotFoundException("Incorrect username or password.");
             }
 
             var jwtToken = tokenFactory.BuildToken(user);

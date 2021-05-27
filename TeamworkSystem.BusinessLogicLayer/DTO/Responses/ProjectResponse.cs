@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
 
+        public int TeamId { get; set; }
+
         public string Title { get; set; }
 
         public string Type { get; set; }

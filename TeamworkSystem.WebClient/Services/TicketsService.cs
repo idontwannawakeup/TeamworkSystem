@@ -1,38 +1,49 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
+using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Services
 {
     public class TicketsService : ITicketsService
     {
-        private readonly HttpClient httpClient;
+        private readonly ApiHttpClient httpClient;
 
-        public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId)
+        public async Task<IEnumerable<TicketViewModel>> GetAsync(TicketsParameters parameters) =>
+            await httpClient.GetAsync<List<TicketViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
+
+        public async Task<(IEnumerable<TicketViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
+            TicketsParameters parameters)
         {
-            var response = await httpClient.GetAsync($"?ExecutorId={userId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<TicketViewModel>>();
+            return await httpClient.GetWithPaginationHeaderAsync<List<TicketViewModel>>(
+                ParametersStringFactory.GenerateParametersString(parameters));
         }
 
-        public async Task<TicketViewModel> GetByIdAsync(int id)
-        {
-            var response = await httpClient.GetAsync($"{id}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<TicketViewModel>();
-        }
+        public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId) =>
+            await httpClient.GetAsync<List<TicketViewModel>>($"?ExecutorId={userId}");
 
-        public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId)
-        {
-            var response = await httpClient.GetAsync($"?ProjectId={projectId}");
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody.Deserialize<List<TicketViewModel>>();
-        }
+        public async Task<TicketViewModel> GetByIdAsync(int id) =>
+            await httpClient.GetAsync<TicketViewModel>($"{id}");
 
-        public TicketsService(HttpClient httpClient) =>
-            this.httpClient = httpClient;
+        public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId) =>
+            await httpClient.GetAsync<List<TicketViewModel>>($"?ProjectId={projectId}");
+
+        public async Task CreateAsync(TicketViewModel viewModel) =>
+            await httpClient.PostAsync(string.Empty, viewModel);
+
+        public async Task UpdateAsync(TicketViewModel viewModel) =>
+            await httpClient.PutAsync(string.Empty, viewModel);
+
+        public async Task DeleteAsync(int id) =>
+            await httpClient.DeleteAsync($"{id}");
+
+        public TicketsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
+            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state)
+                                                                  .Build();
     }
 }

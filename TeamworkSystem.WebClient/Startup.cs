@@ -1,12 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Blazored.LocalStorage;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 using TeamworkSystem.WebClient.Authentication;
+using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Services;
 
@@ -30,6 +36,17 @@ namespace TeamworkSystem.WebClient
             services.AddMudServices();
             services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
+
+            services.AddControllers();
+
+            services.AddMvc()
+                    .AddFluentValidation(configuration =>
+                    {
+                        configuration.RegisterValidatorsFromAssemblies(
+                            AppDomain.CurrentDomain.GetAssemblies());
+                    });
+
+            services.AddTransient<RequestErrorsHandler>();
 
             services.AddScoped<AuthenticationStateProvider>(
                 provider => provider.GetRequiredService<ApiAuthenticationStateProvider>());
@@ -67,6 +84,20 @@ namespace TeamworkSystem.WebClient
             {
                 httpClient.BaseAddress = new($"{apiUrl}/api/Users/");
             });
+
+            services.AddLocalization(options => options.ResourcesPath = "Localization");
+            var supportedCultures = new List<CultureInfo>()
+            {
+                new CultureInfo("en-US"),
+                new CultureInfo("uk-UA")
+            };
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("en-US");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
         }
 
         // This method gets called by the runtime.
@@ -87,12 +118,17 @@ namespace TeamworkSystem.WebClient
             }
 
             app.UseHttpsRedirection();
+            app.UseRequestLocalization();
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

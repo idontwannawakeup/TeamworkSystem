@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
@@ -20,8 +22,9 @@ namespace TeamworkSystem.WebAPI.Controllers
         private readonly IRatingsService ratingsService;
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PagedList<RatingResponse>>> GetAsync(
             [FromQuery] RatingsParameters parameters)
         {
@@ -33,14 +36,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync([FromRoute] int id)
         {
             try
@@ -53,13 +57,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> InsertAsync([FromBody] RatingRequest request)
         {
             try
@@ -67,15 +73,23 @@ namespace TeamworkSystem.WebAPI.Controllers
                 await ratingsService.InsertAsync(request);
                 return Ok();
             }
+            catch (DbUpdateException)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new { Message = "Rating from you to this user already exists." });
+            }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateAsync([FromBody] RatingRequest request)
         {
             try
@@ -85,14 +99,15 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteAsync([FromRoute] int id)
         {
             try
@@ -106,7 +121,7 @@ namespace TeamworkSystem.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
 

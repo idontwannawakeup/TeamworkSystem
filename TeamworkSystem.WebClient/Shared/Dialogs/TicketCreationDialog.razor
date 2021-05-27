@@ -1,0 +1,94 @@
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
+@inject ITicketsService TicketsService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@ticket" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator />
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField T="@string"
+                          Label="@SL["Title"]"
+                          @bind-Value="@ticket.Title"
+                          For="@(() => ticket.Title)" />
+
+            <MudSelect T="@string"
+                       Label="@SL["Type"]"
+                       @bind-Value="@ticket.Type"
+                       For="@(() => ticket.Type)">
+                @foreach (var type in TicketPropertiesValues.Types)
+                {
+                    <MudSelectItem Value="@type">@type</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect T="@string"
+                       Label="@SL["Status"]"
+                       @bind-Value="@ticket.Status"
+                       For="@(() => ticket.Status)">
+                @foreach (var status in TicketPropertiesValues.Statuses)
+                {
+                    <MudSelectItem Value="@status">@status</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect T="@string"
+                       Label="@SL["Priority"]"
+                       @bind-Value="@ticket.Priority"
+                       For="@(() => ticket.Priority)">
+                @foreach (var priority in TicketPropertiesValues.Priorities)
+                {
+                    <MudSelectItem Value="@priority">@priority</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudDatePicker Label="@SL["Deadline"]"
+                           @bind-Date="ticket.Deadline"
+                           For="@(() => ticket.Deadline)" />
+
+            <MudTextField T="@string"
+                          Label="@SL["Description"]"
+                          @bind-Value="@ticket.Description"
+                          For="@(() => ticket.Description)"
+                          Lines="10" />
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton Color="@Color.Primary"
+                       ButtonType="@ButtonType.Submit">
+                @SL["Create"]
+            </MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public int ProjectId { get; set; }
+
+    [Parameter] public Func<Task> OnCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private TicketViewModel ticket;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        ticket = new() { ProjectId = ProjectId };
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TicketsService.CreateAsync(ticket);
+            DialogInstance.Close();
+            Snackbar.Add("Ticket created", Severity.Success);
+            await OnCreated?.Invoke();
+        });
+    }
+
+}

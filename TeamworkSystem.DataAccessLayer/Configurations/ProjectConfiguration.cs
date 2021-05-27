@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Seeding;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations
 {
@@ -30,6 +31,8 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
                    .HasForeignKey(project => project.TeamId)
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasConstraintName("FK_Projects_TeamId");
+
+            new ProjectSeeder().Seed(builder);
         }
     }
 }
