@@ -58,9 +58,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             var user = await userManager.Users.Include(user => user.Teams)
                                               .Include(user => user.Tickets)
                                               .Include(user => user.MyRatings)
-                                              .Include(user => user.RatingsFromMe)
                                               .Include(user => user.Friends)
-                                              .Include(user => user.FriendForUsers)
                                               .SingleOrDefaultAsync(user => user.Id == id);
                     
 
