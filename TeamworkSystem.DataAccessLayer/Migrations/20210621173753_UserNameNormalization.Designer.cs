@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamworkSystem.DataAccessLayer;
 
 namespace TeamworkSystem.DataAccessLayer.Migrations
 {
     [DbContext(typeof(TeamworkSystemContext))]
-    partial class TeamworkSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20210621173753_UserNameNormalization")]
+    partial class UserNameNormalization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
