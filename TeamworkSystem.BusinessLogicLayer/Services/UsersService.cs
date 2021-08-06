@@ -18,68 +18,70 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 {
     public class UsersService : IUsersService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IPhotosService _photosService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-        private readonly IMapper mapper;
-
-        private readonly UserManager<User> userManager;
-
-        private readonly IPhotosService photosService;
+        public UsersService(IUnitOfWork unitOfWork, IMapper mapper, IPhotosService photosService)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _photosService = photosService;
+            _userManager = _unitOfWork.UserManager;
+        }
 
         public async Task<IEnumerable<UserResponse>> GetAsync()
         {
-            var users = await userManager.Users.ToListAsync();
-            return users?.Select(mapper.Map<User, UserResponse>);
+            var users = await _userManager.Users.ToListAsync();
+            return users.Select(_mapper.Map<User, UserResponse>);
         }
 
-        public async Task<PagedList<UserResponse>> GetAsync(
-            UsersParameters parameters)
+        public async Task<PagedList<UserResponse>> GetAsync(UsersParameters parameters)
         {
-            var users = await userManager.GetAsync(parameters);
-            return users?.Map(mapper.Map<User, UserResponse>);
+            var users = await _userManager.GetAsync(parameters);
+            return users.Map(_mapper.Map<User, UserResponse>);
         }
 
         public async Task<UserResponse> GetByIdAsync(string id)
         {
-            var user = await userManager.GetCompleteEntityAsync(id);
-            return mapper.Map<User, UserResponse>(user);
+            var user = await _userManager.GetCompleteEntityAsync(id);
+            return _mapper.Map<User, UserResponse>(user);
         }
 
         public async Task<PagedList<UserResponse>> GetFriendsAsync(
             string id,
             UsersParameters parameters)
         {
-            var friends = await userManager.GetFriendsAsync(id, parameters);
-            return friends?.Map(mapper.Map<User, UserResponse>);
+            var friends = await _userManager.GetFriendsAsync(id, parameters);
+            return friends.Map(_mapper.Map<User, UserResponse>);
         }
 
         public async Task UpdateAsync(UserRequest request)
         {
-            var user = await userManager.GetByIdAsync(request.Id);
-
+            var user = await _userManager.GetByIdAsync(request.Id);
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Email = request.Email;
             user.Profession = request.Profession;
             user.Specialization = request.Specialization;
-
-            await userManager.UpdateAsync(user);
-            await unitOfWork.SaveChangesAsync();
+            await _userManager.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task SetAvatarForUserAsync(UserAvatarRequest request)
         {
-            var user = await userManager.GetByIdAsync(request.UserId);
-            user.Avatar = await photosService.SavePhotoAsync(request.Avatar);
-            await userManager.UpdateAsync(user);
-            await unitOfWork.SaveChangesAsync();
+            var user = await _userManager.GetByIdAsync(request.UserId);
+            user.Avatar = await _photosService.SavePhotoAsync(request.Avatar);
+            await _userManager.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(string id)
         {
-            var user = await userManager.GetByIdAsync(id);
-            await unitOfWork.UserManager.DeleteAsync(user);
-            await unitOfWork.SaveChangesAsync();
+            var user = await _userManager.GetByIdAsync(id);
+            await _unitOfWork.UserManager.DeleteAsync(user);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task AddFriendAsync(FriendsRequest friendsRequest) =>
@@ -96,26 +98,17 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
                 secondUser.Friends.Remove(firstUser);
             });
 
-        private async Task MakeActionWithFriends(
-            FriendsRequest friendsRequest,
-            Action<User, User> action)
+        private async Task MakeActionWithFriends(FriendsRequest friendsRequest,
+                                                 Action<User, User> action)
         {
-            var firstUser = await userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
-            var secondUser = await userManager.GetCompleteEntityAsync(friendsRequest.SecondId);
+            var firstUser = await _userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
+            var secondUser = await _userManager.GetCompleteEntityAsync(friendsRequest.SecondId);
 
             action?.Invoke(firstUser, secondUser);
-            await userManager.UpdateAsync(firstUser);
-            await userManager.UpdateAsync(secondUser);
+            await _userManager.UpdateAsync(firstUser);
+            await _userManager.UpdateAsync(secondUser);
 
-            await unitOfWork.SaveChangesAsync();
-        }
-
-        public UsersService(IUnitOfWork unitOfWork, IMapper mapper, IPhotosService photosService)
-        {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-            this.photosService = photosService;
-            userManager = this.unitOfWork.UserManager;
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

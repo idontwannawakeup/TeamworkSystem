@@ -9,26 +9,26 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
     {
         public TicketRequestValidtor()
         {
-            var types = new List<string>()
+            var types = new List<string>
             {
                 "Epic",
                 "Task",
-                "Bug"
+                "Bug",
             };
 
-            var statuses = new List<string>()
+            var statuses = new List<string>
             {
                 "Backlog",
                 "Chosen For Development",
                 "In Progress",
-                "Done"
+                "Done",
             };
 
-            var priorities = new List<string>()
+            var priorities = new List<string>
             {
                 "Low",
                 "Medium",
-                "High"
+                "High",
             };
 
             RuleFor(ticket => ticket.ProjectId)
@@ -39,11 +39,14 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
                 .NotEmpty()
                 .WithMessage(ticket => $"{nameof(ticket.Title)} can't be empty.")
                 .MaximumLength(50)
-                .WithMessage(ticket => $"{nameof(ticket.Title)} should be less than 50 characters.");
+                .WithMessage(
+                    ticket => $"{nameof(ticket.Title)} should be less than 50 characters.");
 
             RuleFor(ticket => ticket.Type)
                 .Must(type => types.Contains(type))
-                .WithMessage(ticket => $"{nameof(ticket.Type)} should be one of: {string.Join(", ", types)}");
+                .WithMessage(
+                    ticket =>
+                        $"{nameof(ticket.Type)} should be one of: {string.Join(", ", types)}");
 
             RuleFor(ticket => ticket.Description)
                 .NotEmpty()
@@ -51,11 +54,15 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
 
             RuleFor(ticket => ticket.Status)
                 .Must(status => statuses.Contains(status))
-                .WithMessage(ticket => $"{nameof(ticket.Status)} should be one of: {string.Join(", ", statuses)}");
+                .WithMessage(
+                    ticket =>
+                        $"{nameof(ticket.Status)} should be one of: {string.Join(", ", statuses)}");
 
             RuleFor(ticket => ticket.Priority)
                 .Must(priority => priorities.Contains(priority))
-                .WithMessage(ticket => $"{nameof(ticket.Priority)} should be one of: {string.Join(", ", priorities)}");
+                .WithMessage(
+                    ticket =>
+                        $"{nameof(ticket.Priority)} should be one of: {string.Join(", ", priorities)}");
 
             RuleFor(ticket => ticket.Deadline)
                 .GreaterThan(DateTime.Now)

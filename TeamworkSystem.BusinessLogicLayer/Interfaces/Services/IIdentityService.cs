@@ -7,7 +7,6 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
     public interface IIdentityService
     {
         Task<JwtResponse> SignInAsync(UserSignInRequest request);
-
         Task<JwtResponse> SignUpAsync(UserSignUpRequest request);
     }
 }

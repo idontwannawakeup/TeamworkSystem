@@ -16,41 +16,45 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 {
     public class TicketsService : ITicketsService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly ITicketsRepository _ticketsRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper mapper;
-
-        private readonly ITicketsRepository ticketsRepository;
+        public TicketsService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _ticketsRepository = _unitOfWork.TicketsRepository;
+        }
 
         public async Task<IEnumerable<TicketResponse>> GetAsync()
         {
-            var tickets = await ticketsRepository.GetAsync();
-            return tickets?.Select(mapper.Map<Ticket, TicketResponse>);
+            var tickets = await _ticketsRepository.GetAsync();
+            return tickets.Select(_mapper.Map<Ticket, TicketResponse>);
         }
 
-        public async Task<PagedList<TicketResponse>> GetAsync(
-            TicketsParameters parameters)
+        public async Task<PagedList<TicketResponse>> GetAsync(TicketsParameters parameters)
         {
-            var tickets = await ticketsRepository.GetAsync(parameters);
-            return tickets?.Map(mapper.Map<Ticket, TicketResponse>);
+            var tickets = await _ticketsRepository.GetAsync(parameters);
+            return tickets.Map(_mapper.Map<Ticket, TicketResponse>);
         }
 
         public async Task<TicketResponse> GetByIdAsync(int id)
         {
-            var ticket = await ticketsRepository.GetCompleteEntityAsync(id);
-            return mapper.Map<Ticket, TicketResponse>(ticket);
+            var ticket = await _ticketsRepository.GetCompleteEntityAsync(id);
+            return _mapper.Map<Ticket, TicketResponse>(ticket);
         }
 
         public async Task InsertAsync(TicketRequest request)
         {
-            var ticket = mapper.Map<TicketRequest, Ticket>(request);
-            await ticketsRepository.InsertAsync(ticket);
-            await unitOfWork.SaveChangesAsync();
+            var ticket = _mapper.Map<TicketRequest, Ticket>(request);
+            await _ticketsRepository.InsertAsync(ticket);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(TicketRequest request)
         {
-            var ticket = await ticketsRepository.GetByIdAsync(request.Id);
+            var ticket = await _ticketsRepository.GetByIdAsync(request.Id);
             ticket.ProjectId = request.ProjectId;
             ticket.ExecutorId = request.ExecutorId;
             ticket.Title = request.Title;
@@ -59,37 +63,29 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             ticket.Status = request.Status;
             ticket.Priority = request.Priority;
             ticket.Deadline = request.Deadline;
-            await ticketsRepository.UpdateAsync(ticket);
-            await unitOfWork.SaveChangesAsync();
+            await _ticketsRepository.UpdateAsync(ticket);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task ExtendDeadlineAsync(
             TicketWithExtendedDeadlineRequest request)
         {
-            var ticket = await ticketsRepository.GetByIdAsync(request.Id);
+            var ticket = await _ticketsRepository.GetByIdAsync(request.Id);
 
             if (ticket.Deadline > request.Deadline)
             {
-                throw new Exception(
-                    "New date of deadline is sooner than current.");
+                throw new Exception("New date of deadline is sooner than current.");
             }
 
             ticket.Deadline = request.Deadline;
-            await ticketsRepository.UpdateAsync(ticket);
-            await unitOfWork.SaveChangesAsync();
+            await _ticketsRepository.UpdateAsync(ticket);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            await ticketsRepository.DeleteAsync(id);
-            await unitOfWork.SaveChangesAsync();
-        }
-
-        public TicketsService(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-            ticketsRepository = this.unitOfWork.TicketsRepository;
+            await _ticketsRepository.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

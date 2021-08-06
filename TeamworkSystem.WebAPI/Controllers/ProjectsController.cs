@@ -17,7 +17,10 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ProjectsController : ControllerBase
     {
-        private readonly IProjectsService projectsService;
+        private readonly IProjectsService _projectsService;
+
+        public ProjectsController(IProjectsService projectsService) =>
+            _projectsService = projectsService;
 
         [HttpGet]
         [Authorize]
@@ -28,7 +31,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var projects = await projectsService.GetAsync(parameters);
+                var projects = await _projectsService.GetAsync(parameters);
                 Response.Headers.Add("X-Pagination", projects.SerializeMetadata());
                 return Ok(projects);
             }
@@ -47,7 +50,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return Ok(await projectsService.GetByIdAsync(id));
+                return Ok(await _projectsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
@@ -68,7 +71,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await projectsService.InsertAsync(request);
+                await _projectsService.InsertAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -86,7 +89,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await projectsService.UpdateAsync(request);
+                await _projectsService.UpdateAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -104,7 +107,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await projectsService.DeleteAsync(id);
+                await _projectsService.DeleteAsync(id);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -115,11 +118,6 @@ namespace TeamworkSystem.WebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
-        }
-
-        public ProjectsController(IProjectsService projectsService)
-        {
-            this.projectsService = projectsService;
         }
     }
 }

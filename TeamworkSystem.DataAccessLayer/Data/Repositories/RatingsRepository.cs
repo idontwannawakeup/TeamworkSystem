@@ -12,37 +12,40 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
     public class RatingsRepository : GenericRepository<Rating>, IRatingsRepository
     {
+        public RatingsRepository(TeamworkSystemContext databaseContext)
+            : base(databaseContext)
+        {
+        }
+
         public override async Task<Rating> GetCompleteEntityAsync(int id)
         {
-            var rating = await table.Include(rating => rating.From)
+            var rating = await Table.Include(rating => rating.From)
                                     .Include(rating => rating.To)
                                     .SingleOrDefaultAsync(rating => rating.Id == id);
 
             return rating ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<PagedList<Rating>> GetAsync(
-            RatingsParameters parameters)
+        public async Task<PagedList<Rating>> GetAsync(RatingsParameters parameters)
         {
-            IQueryable<Rating> source = table.Include(rating => rating.From)
+            IQueryable<Rating> source = Table.Include(rating => rating.From)
                                              .Include(rating => rating.To);
 
             SearchByRatedUserId(ref source, parameters.RatedUserId);
-            return await PagedList<Rating>.ToPagedListAsync(
-                source,
-                parameters.PageNumber,
-                parameters.PageSize);
+            return await PagedList<Rating>.ToPagedListAsync(source,
+                                                            parameters.PageNumber,
+                                                            parameters.PageSize);
         }
 
         public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId)
         {
-            return await table.Where(rating => rating.FromId == userId)
+            return await Table.Where(rating => rating.FromId == userId)
                               .ToListAsync();
         }
 
         public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId)
         {
-            return await table.Where(rating => rating.ToId == userId)
+            return await Table.Where(rating => rating.ToId == userId)
                               .ToListAsync();
         }
 
@@ -54,11 +57,6 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             }
 
             source = source.Where(rating => rating.ToId == ratedUserId);
-        }
-
-        public RatingsRepository(TeamworkSystemContext databaseContext)
-            : base(databaseContext)
-        {
         }
     }
 }

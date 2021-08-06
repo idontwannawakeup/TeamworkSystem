@@ -7,7 +7,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
 {
     public class ProjectSeeder : ISeeder<Project>
     {
-        private static readonly List<Project> projects = new()
+        private static readonly List<Project> Projects = new()
         {
             new Project
             {
@@ -15,10 +15,10 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                 TeamId = 9,
                 Title = "Blog",
                 Type = "Website",
-                Description = "Just a simple blog from small team"
-            }
+                Description = "Just a simple blog from small team",
+            },
         };
 
-        public void Seed(EntityTypeBuilder<Project> builder) => builder.HasData(projects);
+        public void Seed(EntityTypeBuilder<Project> builder) => builder.HasData(Projects);
     }
 }

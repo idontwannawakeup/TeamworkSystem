@@ -13,7 +13,10 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class IdentityController : ControllerBase
     {
-        private readonly IIdentityService identityService;
+        private readonly IIdentityService _identityService;
+
+        public IdentityController(IIdentityService identityService) =>
+            _identityService = identityService;
 
         [HttpPost("signIn")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -25,7 +28,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var response = await identityService.SignInAsync(request);
+                var response = await _identityService.SignInAsync(request);
                 return Ok(response);
             }
             catch (EntityNotFoundException e)
@@ -47,7 +50,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var response = await identityService.SignUpAsync(request);
+                var response = await _identityService.SignUpAsync(request);
                 return Ok(response);
             }
             catch (Exception e)
@@ -55,8 +58,5 @@ namespace TeamworkSystem.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
-
-        public IdentityController(IIdentityService identityService) =>
-            this.identityService = identityService;
     }
 }

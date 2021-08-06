@@ -8,7 +8,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
 {
     public class UserSeeder : ISeeder<User>
     {
-        private static readonly List<(User, string)> users = new()
+        private static readonly List<(User, string)> Users = new()
         {
             (
                 new User
@@ -18,7 +18,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Esmaralda",
                     LastName = "Voigt",
                     Profession = "Developer",
-                    Specialization = "Frontend"
+                    Specialization = "Frontend",
                 },
                 "User%password1"
             ),
@@ -30,7 +30,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Ostap",
                     LastName = "Bleier",
                     Profession = "Tester",
-                    Specialization = "Backend"
+                    Specialization = "Backend",
                 },
                 "User%password2"
             ),
@@ -42,7 +42,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Sophia",
                     LastName = "Beringer",
                     Profession = null,
-                    Specialization = "Fullstack"
+                    Specialization = "Fullstack",
                 },
                 "User%password3"
             ),
@@ -54,7 +54,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Marlyn",
                     LastName = "Hendry",
                     Profession = "Artist",
-                    Specialization = null
+                    Specialization = null,
                 },
                 "User%password4"
             ),
@@ -66,7 +66,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Vlasi",
                     LastName = "Arterberry",
                     Profession = "Designer",
-                    Specialization = "Interier"
+                    Specialization = "Interier",
                 },
                 "User%password5"
             ),
@@ -78,7 +78,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Chasity",
                     LastName = "Ilbert",
                     Profession = null,
-                    Specialization = null
+                    Specialization = null,
                 },
                 "User%password6"
             ),
@@ -90,7 +90,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Seraphina",
                     LastName = "Salmon",
                     Profession = "Developer",
-                    Specialization = "Backend"
+                    Specialization = "Backend",
                 },
                 "User%password7"
             ),
@@ -102,7 +102,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Chas",
                     LastName = "Hope",
                     Profession = "Designer",
-                    Specialization = null
+                    Specialization = null,
                 },
                 "User%password8"
             ),
@@ -114,7 +114,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Nadezhda",
                     LastName = "Haynes",
                     Profession = null,
-                    Specialization = null
+                    Specialization = null,
                 },
                 "User%password9"
             ),
@@ -126,7 +126,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Sonny",
                     LastName = "Gibb",
                     Profession = "Tester",
-                    Specialization = null
+                    Specialization = null,
                 },
                 "User%password10"
             ),
@@ -138,15 +138,15 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                     FirstName = "Eric",
                     LastName = "Lincoln",
                     Profession = "Designer",
-                    Specialization = null
+                    Specialization = null,
                 },
                 "User%password11"
-            )
+            ),
         };
 
         public void Seed(EntityTypeBuilder<User> builder)
         {
-            foreach (var (user, password) in users)
+            foreach (var (user, password) in Users)
             {
                 user.PasswordHash = new PasswordHasher<User>().HashPassword(user, password);
                 user.NormalizedUserName = user.UserName.ToUpper();

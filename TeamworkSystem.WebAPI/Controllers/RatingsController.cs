@@ -19,7 +19,10 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class RatingsController : ControllerBase
     {
-        private readonly IRatingsService ratingsService;
+        private readonly IRatingsService _ratingsService;
+
+        public RatingsController(IRatingsService ratingsService) =>
+            _ratingsService = ratingsService;
 
         [HttpGet]
         [Authorize]
@@ -30,7 +33,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var ratings = await ratingsService.GetAsync(parameters);
+                var ratings = await _ratingsService.GetAsync(parameters);
                 Response.Headers.Add("X-Pagination", ratings.SerializeMetadata());
                 return Ok(ratings);
             }
@@ -45,11 +48,12 @@ namespace TeamworkSystem.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync(
+            [FromRoute] int id)
         {
             try
             {
-                return Ok(await ratingsService.GetByIdAsync(id));
+                return Ok(await _ratingsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
@@ -70,14 +74,13 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await ratingsService.InsertAsync(request);
+                await _ratingsService.InsertAsync(request);
                 return Ok();
             }
             catch (DbUpdateException)
             {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new { Message = "Rating from you to this user already exists." });
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                  new { Message = "Rating from you to this user already exists." });
             }
             catch (Exception e)
             {
@@ -94,7 +97,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await ratingsService.UpdateAsync(request);
+                await _ratingsService.UpdateAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -112,7 +115,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await ratingsService.DeleteAsync(id);
+                await _ratingsService.DeleteAsync(id);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -123,11 +126,6 @@ namespace TeamworkSystem.WebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
-        }
-
-        public RatingsController(IRatingsService ratingsService)
-        {
-            this.ratingsService = ratingsService;
         }
     }
 }

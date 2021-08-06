@@ -8,39 +8,35 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
     public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly TeamworkSystemContext databaseContext;
+        protected readonly TeamworkSystemContext DatabaseContext;
+        protected readonly DbSet<TEntity> Table;
 
-        protected readonly DbSet<TEntity> table;
-
-        public virtual async Task<IEnumerable<TEntity>> GetAsync() => await table.ToListAsync();
-
-        public virtual async Task<TEntity> GetByIdAsync(int id)
+        public GenericRepository(TeamworkSystemContext databaseContext)
         {
-            return await table.FindAsync(id)
-                ?? throw new EntityNotFoundException(
-                    GetEntityNotFoundErrorMessage(id));
+            DatabaseContext = databaseContext;
+            Table = DatabaseContext.Set<TEntity>();
         }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAsync() => await Table.ToListAsync();
+
+        public virtual async Task<TEntity> GetByIdAsync(int id) =>
+            await Table.FindAsync(id) ??
+            throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
 
         public abstract Task<TEntity> GetCompleteEntityAsync(int id);
 
-        public virtual async Task InsertAsync(TEntity entity) => await table.AddAsync(entity);
+        public virtual async Task InsertAsync(TEntity entity) => await Table.AddAsync(entity);
 
         public virtual async Task UpdateAsync(TEntity entity) =>
-            await Task.Run(() => table.Update(entity));
+            await Task.Run(() => Table.Update(entity));
 
         public virtual async Task DeleteAsync(int id)
         {
             var entity = await GetByIdAsync(id);
-            await Task.Run(() => table.Remove(entity));
+            Table.Remove(entity);
         }
 
         protected static string GetEntityNotFoundErrorMessage(int id) =>
             $"{typeof(TEntity).Name} with id {id} not found.";
-
-        public GenericRepository(TeamworkSystemContext databaseContext)
-        {
-            this.databaseContext = databaseContext;
-            table = this.databaseContext.Set<TEntity>();
-        }
     }
 }

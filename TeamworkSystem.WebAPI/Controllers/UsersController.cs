@@ -17,7 +17,9 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUsersService usersService;
+        private readonly IUsersService _usersService;
+
+        public UsersController(IUsersService usersService) => _usersService = usersService;
 
         [HttpGet]
         [Authorize]
@@ -28,7 +30,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var users = await usersService.GetAsync(parameters);
+                var users = await _usersService.GetAsync(parameters);
                 Response.Headers.Add("X-Pagination", users.SerializeMetadata());
                 return Ok(users);
             }
@@ -47,7 +49,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return Ok(await usersService.GetByIdAsync(id));
+                return Ok(await _usersService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
@@ -69,7 +71,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await usersService.UpdateAsync(request);
+                await _usersService.UpdateAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -88,7 +90,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await usersService.DeleteAsync(id);
+                await _usersService.DeleteAsync(id);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -112,7 +114,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var friends = await usersService.GetFriendsAsync(id, parameters);
+                var friends = await _usersService.GetFriendsAsync(id, parameters);
                 Response.Headers.Add("X-Pagination", friends.SerializeMetadata());
                 return Ok(friends);
             }
@@ -135,7 +137,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await usersService.SetAvatarForUserAsync(request);
+                await _usersService.SetAvatarForUserAsync(request);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -158,7 +160,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await usersService.AddFriendAsync(request);
+                await _usersService.AddFriendAsync(request);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -183,13 +185,13 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var request = new FriendsRequest()
+                var request = new FriendsRequest
                 {
                     FirstId = firstId,
-                    SecondId = secondId
+                    SecondId = secondId,
                 };
 
-                await usersService.DeleteFriendAsync(request);
+                await _usersService.DeleteFriendAsync(request);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -200,11 +202,6 @@ namespace TeamworkSystem.WebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
-        }
-
-        public UsersController(IUsersService usersService)
-        {
-            this.usersService = usersService;
         }
     }
 }

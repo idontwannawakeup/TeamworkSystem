@@ -10,7 +10,6 @@ namespace TeamworkSystem.DataAccessLayer.Exceptions
         }
 
         public EntityNotFoundException()
-            : base()
         {
         }
     }

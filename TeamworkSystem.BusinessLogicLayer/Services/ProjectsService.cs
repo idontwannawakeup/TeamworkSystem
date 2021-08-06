@@ -15,66 +15,62 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 {
     public class ProjectsService : IProjectsService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IProjectsRepository _projectsRepository;
+        private readonly ITeamsRepository _teamsRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper mapper;
-
-        private readonly IProjectsRepository projectsRepository;
-
-        private readonly ITeamsRepository teamsRepository;
+        public ProjectsService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _projectsRepository = _unitOfWork.ProjectsRepository;
+            _teamsRepository = _unitOfWork.TeamsRepository;
+        }
 
         public async Task<IEnumerable<ProjectResponse>> GetAsync()
         {
-            var projects = await projectsRepository.GetAsync();
-            return projects?.Select(mapper.Map<Project, ProjectResponse>);
+            var projects = await _projectsRepository.GetAsync();
+            return projects.Select(_mapper.Map<Project, ProjectResponse>);
         }
 
-        public async Task<PagedList<ProjectResponse>> GetAsync(
-            ProjectsParameters parameters)
+        public async Task<PagedList<ProjectResponse>> GetAsync(ProjectsParameters parameters)
         {
-            var projects = await projectsRepository.GetAsync(parameters);
-            return projects?.Map(mapper.Map<Project, ProjectResponse>);
+            var projects = await _projectsRepository.GetAsync(parameters);
+            return projects.Map(_mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId)
         {
-            var team = await teamsRepository.GetCompleteEntityAsync(teamId);
-            var projects = team?.Projects;
-            return projects?.Select(mapper.Map<Project, ProjectResponse>);
+            var team = await _teamsRepository.GetCompleteEntityAsync(teamId);
+            var projects = team.Projects;
+            return projects?.Select(_mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<ProjectResponse> GetByIdAsync(int id)
         {
-            var project = await projectsRepository.GetCompleteEntityAsync(id);
-            return mapper.Map<Project, ProjectResponse>(project);
+            var project = await _projectsRepository.GetCompleteEntityAsync(id);
+            return _mapper.Map<Project, ProjectResponse>(project);
         }
 
         public async Task InsertAsync(ProjectRequest request)
         {
-            var project = mapper.Map<ProjectRequest, Project>(request);
-            await projectsRepository.InsertAsync(project);
-            await unitOfWork.SaveChangesAsync();
+            var project = _mapper.Map<ProjectRequest, Project>(request);
+            await _projectsRepository.InsertAsync(project);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(ProjectRequest request)
         {
-            var project = mapper.Map<ProjectRequest, Project>(request);
-            await projectsRepository.UpdateAsync(project);
-            await unitOfWork.SaveChangesAsync();
+            var project = _mapper.Map<ProjectRequest, Project>(request);
+            await _projectsRepository.UpdateAsync(project);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            await projectsRepository.DeleteAsync(id);
-            await unitOfWork.SaveChangesAsync();
-        }
-
-        public ProjectsService(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-            projectsRepository = this.unitOfWork.ProjectsRepository;
-            teamsRepository = this.unitOfWork.TeamsRepository;
+            await _projectsRepository.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

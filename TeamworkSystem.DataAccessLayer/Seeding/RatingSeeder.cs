@@ -7,7 +7,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
 {
     public class RatingSeeder : ISeeder<Rating>
     {
-        private static readonly List<Rating> ratings = new()
+        private static readonly List<Rating> Ratings = new()
         {
             new Rating
             {
@@ -18,10 +18,10 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                 Skills = 5,
                 Punctuality = 4,
                 Responsibility = 5,
-                Comment = "Just a great person"
-            }
+                Comment = "Just a great person",
+            },
         };
 
-        public void Seed(EntityTypeBuilder<Rating> builder) => builder.HasData(ratings);
+        public void Seed(EntityTypeBuilder<Rating> builder) => builder.HasData(Ratings);
     }
 }

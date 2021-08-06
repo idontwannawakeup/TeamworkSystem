@@ -17,7 +17,10 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class TicketsController : ControllerBase
     {
-        private readonly ITicketsService ticketsService;
+        private readonly ITicketsService _ticketsService;
+
+        public TicketsController(ITicketsService ticketsService) =>
+            _ticketsService = ticketsService;
 
         [HttpGet]
         [Authorize]
@@ -28,7 +31,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var tickets = await ticketsService.GetAsync(parameters);
+                var tickets = await _ticketsService.GetAsync(parameters);
                 Response.Headers.Add("X-Pagination", tickets.SerializeMetadata());
                 return Ok(tickets);
             }
@@ -47,7 +50,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return Ok(await ticketsService.GetByIdAsync(id));
+                return Ok(await _ticketsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
@@ -68,7 +71,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await ticketsService.InsertAsync(request);
+                await _ticketsService.InsertAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -86,7 +89,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await ticketsService.UpdateAsync(request);
+                await _ticketsService.UpdateAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -106,7 +109,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await ticketsService.ExtendDeadlineAsync(request);
+                await _ticketsService.ExtendDeadlineAsync(request);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -128,7 +131,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await ticketsService.DeleteAsync(id);
+                await _ticketsService.DeleteAsync(id);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -139,11 +142,6 @@ namespace TeamworkSystem.WebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
-        }
-
-        public TicketsController(ITicketsService ticketsService)
-        {
-            this.ticketsService = ticketsService;
         }
     }
 }

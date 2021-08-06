@@ -11,9 +11,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
     public class TicketsRepository : GenericRepository<Ticket>, ITicketsRepository
     {
+        public TicketsRepository(TeamworkSystemContext databaseContext)
+            : base(databaseContext)
+        {
+        }
+
         public override async Task<Ticket> GetCompleteEntityAsync(int id)
         {
-            var ticket = await table.Include(ticket => ticket.Executor)
+            var ticket = await Table.Include(ticket => ticket.Executor)
                                     .Include(ticket => ticket.Project)
                                     .ThenInclude(project => project.Team)
                                     .SingleOrDefaultAsync(ticket => ticket.Id == id);
@@ -23,7 +28,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 
         public async Task<PagedList<Ticket>> GetAsync(TicketsParameters parameters)
         {
-            IQueryable<Ticket> source = table.Include(ticket => ticket.Executor)
+            IQueryable<Ticket> source = Table.Include(ticket => ticket.Executor)
                                              .Include(ticket => ticket.Project)
                                              .ThenInclude(project => project.Team);
 
@@ -32,15 +37,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             SearchByTitle(ref source, parameters.Title);
             SearchByStatus(ref source, parameters.Status);
 
-            return await PagedList<Ticket>.ToPagedListAsync(
-                source,
-                parameters.PageNumber,
-                parameters.PageSize);
+            return await PagedList<Ticket>.ToPagedListAsync(source,
+                                                            parameters.PageNumber,
+                                                            parameters.PageSize);
         }
 
         private static void SearchByProjectId(ref IQueryable<Ticket> source, int? projectId)
         {
-            if (projectId is null || projectId == 0)
+            if (projectId is null or 0)
             {
                 return;
             }
@@ -76,11 +80,6 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             }
 
             source = source.Where(ticket => ticket.Status == status);
-        }
-
-        public TicketsRepository(TeamworkSystemContext databaseContext)
-            : base(databaseContext)
-        {
         }
     }
 }

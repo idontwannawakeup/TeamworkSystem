@@ -8,16 +8,24 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
 {
     public class PagedList<T> : List<T>
     {
-        public int CurrentPage { get; private set; }
+        public PagedList(IEnumerable<T> items,
+                         int totalEntitiesCount,
+                         int pageNumber,
+                         int pageSize)
+        {
+            CurrentPage = pageNumber;
+            PageSize = pageSize;
+            TotalEntitiesCount = totalEntitiesCount;
+            TotalPages = (int) Math.Ceiling(totalEntitiesCount / (double) pageSize);
 
-        public int TotalPages { get; private set; }
+            AddRange(items);
+        }
 
-        public int PageSize { get; private set; }
-
-        public int TotalEntitiesCount { get; private set; }
-
+        public int CurrentPage { get; }
+        public int TotalPages { get; }
+        public int PageSize { get; }
+        public int TotalEntitiesCount { get; }
         public bool HasPrevious => CurrentPage > 1;
-
         public bool HasNext => CurrentPage < TotalPages;
 
         public object Metadata => new
@@ -27,47 +35,28 @@ namespace TeamworkSystem.DataAccessLayer.Pagination
             PageSize,
             TotalEntitiesCount,
             HasPrevious,
-            HasNext
+            HasNext,
         };
 
         public PagedList<TOut> Map<TOut>(Func<T, TOut> selectExpression)
         {
             var mappedItems = this.Select(selectExpression);
-            return new(
-                mappedItems,
-                TotalEntitiesCount,
-                CurrentPage,
-                PageSize);
+            return new PagedList<TOut>(mappedItems,
+                                       TotalEntitiesCount,
+                                       CurrentPage,
+                                       PageSize);
         }
 
-        public static async Task<PagedList<T>> ToPagedListAsync(
-            IQueryable<T> source,
-            int pageNumber,
-            int pageSize)
+        public static async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> source,
+                                                                int pageNumber,
+                                                                int pageSize)
         {
-            int totalEntitiesCount = source.Count();
+            var totalEntitiesCount = source.Count();
+            IEnumerable<T> items = await source.Skip((pageNumber - 1) * pageSize)
+                                               .Take(pageSize)
+                                               .ToListAsync();
 
-            IEnumerable<T> items = await source
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            return new(items, totalEntitiesCount, pageNumber, pageSize);
-        }
-
-        public PagedList(
-            IEnumerable<T> items,
-            int totalEntitiesCount,
-            int pageNumber,
-            int pageSize)
-        {
-            CurrentPage = pageNumber;
-            PageSize = pageSize;
-            TotalEntitiesCount = totalEntitiesCount;
-            TotalPages = (int) Math.Ceiling(
-                totalEntitiesCount / (double) pageSize);
-
-            AddRange(items);
+            return new PagedList<T>(items, totalEntitiesCount, pageNumber, pageSize);
         }
     }
 }

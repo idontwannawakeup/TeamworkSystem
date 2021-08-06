@@ -9,23 +9,23 @@ namespace TeamworkSystem.BusinessLogicLayer.Factories
 {
     public class JwtSecurityTokenFactory : IJwtSecurityTokenFactory
     {
-        private readonly JwtTokenConfiguration jwtTokenConfiguration;
+        private readonly JwtTokenConfiguration _jwtTokenConfiguration;
+
+        public JwtSecurityTokenFactory(JwtTokenConfiguration jwtTokenConfiguration) =>
+            _jwtTokenConfiguration = jwtTokenConfiguration;
 
         public JwtSecurityToken BuildToken(User user) => new(
-            issuer: jwtTokenConfiguration.Issuer,
-            audience: jwtTokenConfiguration.Audience,
-            claims: GetClaims(user),
+            _jwtTokenConfiguration.Issuer,
+            _jwtTokenConfiguration.Audience,
+            GetClaims(user),
             expires: JwtTokenConfiguration.ExpirationDate,
-            signingCredentials: jwtTokenConfiguration.Credentials);
+            signingCredentials: _jwtTokenConfiguration.Credentials);
 
-        private static List<Claim> GetClaims(User user) => new()
+        private static IEnumerable<Claim> GetClaims(User user) => new List<Claim>
         {
             new(JwtRegisteredClaimNames.UniqueName, user.UserName),
             new(ClaimTypes.Name, user.UserName),
             new(ClaimTypes.Authentication, user.Id),
         };
-
-        public JwtSecurityTokenFactory(JwtTokenConfiguration jwtTokenConfiguration) =>
-            this.jwtTokenConfiguration = jwtTokenConfiguration;
     }
 }

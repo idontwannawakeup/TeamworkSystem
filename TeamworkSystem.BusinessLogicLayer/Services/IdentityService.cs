@@ -16,60 +16,56 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 {
     public class IdentityService : IIdentityService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IJwtSecurityTokenFactory _tokenFactory;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-        private readonly IMapper mapper;
-
-        private readonly IJwtSecurityTokenFactory tokenFactory;
-
-        private readonly UserManager<User> userManager;
+        public IdentityService(IUnitOfWork unitOfWork,
+                               IMapper mapper,
+                               IJwtSecurityTokenFactory tokenFactory)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _tokenFactory = tokenFactory;
+            _userManager = _unitOfWork.UserManager;
+        }
 
         public async Task<JwtResponse> SignInAsync(UserSignInRequest request)
         {
-            var user = await userManager.FindByNameAsync(request.UserName)
-                ?? throw new EntityNotFoundException(
-                    $"{nameof(User)} with user name {request.UserName} not found.");
+            var user = await _userManager.FindByNameAsync(request.UserName)
+                       ?? throw new EntityNotFoundException(
+                           $"{nameof(User)} with user name {request.UserName} not found.");
 
-            if (!await userManager.CheckPasswordAsync(user, request.Password))
+            if (!await _userManager.CheckPasswordAsync(user, request.Password))
             {
                 throw new EntityNotFoundException("Incorrect username or password.");
             }
 
-            var jwtToken = tokenFactory.BuildToken(user);
-            return new() { Token = SerializeToken(jwtToken), UserId = user.Id };
+            var jwtToken = _tokenFactory.BuildToken(user);
+            return new JwtResponse { Token = SerializeToken(jwtToken), UserId = user.Id };
         }
 
         public async Task<JwtResponse> SignUpAsync(UserSignUpRequest request)
         {
-            var user = mapper.Map<UserSignUpRequest, User>(request);
-            var signUpResult = await userManager.CreateAsync(user, request.Password);
+            var user = _mapper.Map<UserSignUpRequest, User>(request);
+            var signUpResult = await _userManager.CreateAsync(user, request.Password);
 
             if (!signUpResult.Succeeded)
             {
-                string errors = string.Join("\n",
-                    signUpResult.Errors.Select(error => error.Description));
+                var errors = string.Join("\n",
+                                         signUpResult.Errors.Select(error => error.Description));
 
                 throw new ArgumentException(errors);
             }
 
-            await unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
-            var jwtToken = tokenFactory.BuildToken(user);
-            return new() { Token = SerializeToken(jwtToken) };
+            var jwtToken = _tokenFactory.BuildToken(user);
+            return new JwtResponse { Token = SerializeToken(jwtToken) };
         }
 
         private static string SerializeToken(JwtSecurityToken jwtToken) =>
             new JwtSecurityTokenHandler().WriteToken(jwtToken);
-
-        public IdentityService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
-            IJwtSecurityTokenFactory tokenFactory)
-        {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-            this.tokenFactory = tokenFactory;
-            userManager = this.unitOfWork.UserManager;
-        }
     }
 }

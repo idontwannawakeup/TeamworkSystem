@@ -8,7 +8,7 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
 {
     public class TicketSeeder : ISeeder<Ticket>
     {
-        private static readonly List<Ticket> tickets = new()
+        private static readonly List<Ticket> Tickets = new()
         {
             new Ticket
             {
@@ -20,10 +20,10 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                 Type = "Epic",
                 Status = "Backlog",
                 Priority = "Medium",
-                CreationTime = DateTime.Now
-            }
+                CreationTime = DateTime.Now,
+            },
         };
 
-        public void Seed(EntityTypeBuilder<Ticket> builder) => builder.HasData(tickets);
+        public void Seed(EntityTypeBuilder<Ticket> builder) => builder.HasData(Tickets);
     }
 }

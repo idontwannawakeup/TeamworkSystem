@@ -17,7 +17,9 @@ namespace TeamworkSystem.WebAPI.Controllers
     [Route("api/[controller]")]
     public class TeamsController : ControllerBase
     {
-        private readonly ITeamsService teamsService;
+        private readonly ITeamsService _teamsService;
+
+        public TeamsController(ITeamsService teamsService) => _teamsService = teamsService;
 
         [HttpGet]
         [Authorize]
@@ -28,7 +30,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                var teams = await teamsService.GetAsync(parameters);
+                var teams = await _teamsService.GetAsync(parameters);
                 Response.Headers.Add("X-Pagination", teams.SerializeMetadata());
                 return Ok(teams);
             }
@@ -47,7 +49,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                return Ok(await teamsService.GetByIdAsync(id));
+                return Ok(await _teamsService.GetByIdAsync(id));
             }
             catch (EntityNotFoundException e)
             {
@@ -68,7 +70,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await teamsService.InsertAsync(request);
+                await _teamsService.InsertAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -86,7 +88,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await teamsService.UpdateAsync(request);
+                await _teamsService.UpdateAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -104,7 +106,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await teamsService.SetAvatarForTeamAsync(request);
+                await _teamsService.SetAvatarForTeamAsync(request);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -126,7 +128,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await teamsService.DeleteAsync(id);
+                await _teamsService.DeleteAsync(id);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -148,7 +150,7 @@ namespace TeamworkSystem.WebAPI.Controllers
         {
             try
             {
-                await teamsService.AddMemberAsync(request);
+                await _teamsService.AddMemberAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -162,14 +164,13 @@ namespace TeamworkSystem.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteMemberAsync(
-            [FromRoute] int teamId,
-            [FromRoute] string memberId)
+        public async Task<ActionResult> DeleteMemberAsync([FromRoute] int teamId,
+                                                          [FromRoute] string memberId)
         {
             try
             {
-                var request = new TeamMemberRequest() { TeamId = teamId, UserId = memberId };
-                await teamsService.DeleteMemberAsync(request);
+                var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
+                await _teamsService.DeleteMemberAsync(request);
                 return Ok();
             }
             catch (EntityNotFoundException e)
@@ -180,11 +181,6 @@ namespace TeamworkSystem.WebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
-        }
-
-        public TeamsController(ITeamsService teamsService)
-        {
-            this.teamsService = teamsService;
         }
     }
 }

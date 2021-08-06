@@ -19,7 +19,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
 
             RuleFor(team => team.Specialization)
                 .MaximumLength(50)
-                .WithMessage(team => $"{nameof(team.Specialization)} should be less than 50 characters.");
+                .WithMessage(
+                    team => $"{nameof(team.Specialization)} should be less than 50 characters.");
         }
     }
 }

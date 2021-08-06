@@ -16,11 +16,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
                 .NotEmpty()
                 .WithMessage(project => $"{nameof(project.Title)} can't be empty.")
                 .MaximumLength(50)
-                .WithMessage(project => $"{nameof(project.Title)} should be less than 50 characters.");
+                .WithMessage(project =>
+                                 $"{nameof(project.Title)} should be less than 50 characters.");
 
             RuleFor(project => project.Type)
                 .MaximumLength(50)
-                .WithMessage(project => $"{nameof(project.Type)} should be less than 50 characters.");
+                .WithMessage(
+                    project => $"{nameof(project.Type)} should be less than 50 characters.");
 
             RuleFor(project => project.Url)
                 .MaximumLength(50)

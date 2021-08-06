@@ -9,28 +9,28 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 {
     public class PhotosService : IPhotosService
     {
-        private readonly IWebHostEnvironment environment;
+        private readonly IWebHostEnvironment _environment;
+
+        public PhotosService(IWebHostEnvironment environment) => _environment = environment;
 
         public async Task<string> SavePhotoAsync(IFormFile photo)
         {
             const string photosFolderPath = "Public\\Photos";
 
-            if (!Directory.Exists($"{environment.WebRootPath}\\{photosFolderPath}\\"))
+            if (!Directory.Exists($"{_environment.WebRootPath}\\{photosFolderPath}\\"))
             {
-                Directory.CreateDirectory($"{environment.WebRootPath}\\{photosFolderPath}\\");
+                Directory.CreateDirectory($"{_environment.WebRootPath}\\{photosFolderPath}\\");
             }
 
-            string fileExtension = Path.GetExtension(photo.FileName);
-            string fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}{fileExtension}";
+            var fileExtension = Path.GetExtension(photo.FileName);
+            var fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}{fileExtension}";
             await using var fileStream = File.Create(
-                $"{environment.WebRootPath}\\{photosFolderPath}\\{fileName}");
+                $"{_environment.WebRootPath}\\{photosFolderPath}\\{fileName}");
 
-            photo.CopyTo(fileStream);
+            await photo.CopyToAsync(fileStream);
             await fileStream.FlushAsync();
 
             return fileName;
         }
-
-        public PhotosService(IWebHostEnvironment environment) => this.environment = environment;
     }
 }

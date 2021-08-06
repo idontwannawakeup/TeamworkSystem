@@ -15,68 +15,65 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
 {
     public class RatingsService : IRatingsService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IRatingsRepository _ratingsRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper mapper;
-
-        private readonly IRatingsRepository ratingsRepository;
+        public RatingsService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _ratingsRepository = _unitOfWork.RatingsRepository;
+        }
 
         public async Task<IEnumerable<RatingResponse>> GetAsync()
         {
-            var ratings = await ratingsRepository.GetAsync();
-            return ratings?.Select(mapper.Map<Rating, RatingResponse>);
+            var ratings = await _ratingsRepository.GetAsync();
+            return ratings?.Select(_mapper.Map<Rating, RatingResponse>);
         }
 
-        public async Task<PagedList<RatingResponse>> GetAsync(
-            RatingsParameters parameters)
+        public async Task<PagedList<RatingResponse>> GetAsync(RatingsParameters parameters)
         {
-            var ratings = await ratingsRepository.GetAsync(parameters);
-            return ratings?.Map(mapper.Map<Rating, RatingResponse>);
-        }
-
-        public async Task<IEnumerable<RatingResponse>> GetRatingProfilesFromUserAsync(string userId)
-        {
-            var ratings = await ratingsRepository.GetRatingsFromUserAsync(userId);
-            return ratings?.Select(mapper.Map<Rating, RatingResponse>);
-        }
-
-        public async Task<IEnumerable<RatingResponse>> GetRatingProfilesForUserAsync(string userId)
-        {
-            var ratings = await ratingsRepository.GetRatingsForUserAsync(userId);
-            return ratings?.Select(mapper.Map<Rating, RatingResponse>);
+            var ratings = await _ratingsRepository.GetAsync(parameters);
+            return ratings.Map(_mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<RatingResponse> GetByIdAsync(int id)
         {
-            var rating = await ratingsRepository.GetByIdAsync(id);
-            return mapper.Map<Rating, RatingResponse>(rating);
+            var rating = await _ratingsRepository.GetByIdAsync(id);
+            return _mapper.Map<Rating, RatingResponse>(rating);
         }
 
         public async Task InsertAsync(RatingRequest request)
         {
-            var rating = mapper.Map<RatingRequest, Rating>(request);
-            await ratingsRepository.InsertAsync(rating);
-            await unitOfWork.SaveChangesAsync();
+            var rating = _mapper.Map<RatingRequest, Rating>(request);
+            await _ratingsRepository.InsertAsync(rating);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(RatingRequest request)
         {
-            var rating = mapper.Map<RatingRequest, Rating>(request);
-            await ratingsRepository.UpdateAsync(rating);
-            await unitOfWork.SaveChangesAsync();
+            var rating = _mapper.Map<RatingRequest, Rating>(request);
+            await _ratingsRepository.UpdateAsync(rating);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            await ratingsRepository.DeleteAsync(id);
-            await unitOfWork.SaveChangesAsync();
+            await _ratingsRepository.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public RatingsService(IUnitOfWork unitOfWork, IMapper mapper)
+        public async Task<IEnumerable<RatingResponse>> GetRatingProfilesFromUserAsync(string userId)
         {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-            ratingsRepository = this.unitOfWork.RatingsRepository;
+            var ratings = await _ratingsRepository.GetRatingsFromUserAsync(userId);
+            return ratings.Select(_mapper.Map<Rating, RatingResponse>);
+        }
+
+        public async Task<IEnumerable<RatingResponse>> GetRatingProfilesForUserAsync(string userId)
+        {
+            var ratings = await _ratingsRepository.GetRatingsForUserAsync(userId);
+            return ratings.Select(_mapper.Map<Rating, RatingResponse>);
         }
     }
 }

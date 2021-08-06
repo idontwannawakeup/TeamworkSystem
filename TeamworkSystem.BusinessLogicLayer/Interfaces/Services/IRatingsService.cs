@@ -10,15 +10,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
     public interface IRatingsService
     {
         Task<IEnumerable<RatingResponse>> GetAsync();
-
         Task<PagedList<RatingResponse>> GetAsync(RatingsParameters parameters);
-
         Task<RatingResponse> GetByIdAsync(int id);
-
         Task InsertAsync(RatingRequest request);
-
         Task UpdateAsync(RatingRequest request);
-
         Task DeleteAsync(int id);
     }
 }

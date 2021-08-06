@@ -40,7 +40,7 @@ namespace TeamworkSystem.WebAPI
         {
             services.AddDbContext<TeamworkSystemContext>(options =>
             {
-                string connectionString = Configuration.GetConnectionString("DefaultConnection");
+                var connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
 
@@ -65,10 +65,7 @@ namespace TeamworkSystem.WebAPI
             services.AddTransient<IJwtSecurityTokenFactory, JwtSecurityTokenFactory>();
 
             services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
-            services.AddMvc(options =>
-                    {
-                        options.EnableEndpointRouting = false;
-                    })
+            services.AddMvc(options => { options.EnableEndpointRouting = false; })
                     .AddFluentValidation(configuration =>
                     {
                         configuration.RegisterValidatorsFromAssemblies(
@@ -84,7 +81,7 @@ namespace TeamworkSystem.WebAPI
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
-                        options.TokenValidationParameters = new()
+                        options.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = false,
                             ValidateAudience = false,
@@ -102,7 +99,7 @@ namespace TeamworkSystem.WebAPI
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "TeamworkSystem.WebAPI",
-                    Version = "v1"
+                    Version = "v1",
                 });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -113,7 +110,7 @@ namespace TeamworkSystem.WebAPI
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                    Scheme = "Bearer",
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -124,15 +121,14 @@ namespace TeamworkSystem.WebAPI
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
+                                Id = "Bearer",
                             },
                             Scheme = "oauth2",
                             Name = "Bearer",
                             In = ParameterLocation.Header,
-
                         },
                         new List<string>()
-                    }
+                    },
                 });
             });
         }
@@ -145,9 +141,8 @@ namespace TeamworkSystem.WebAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint(
-                    "/swagger/v1/swagger.json",
-                    "TeamworkSystem.WebAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                                                        "TeamworkSystem.WebAPI v1"));
             }
 
             app.UseHttpsRedirection();
@@ -160,10 +155,7 @@ namespace TeamworkSystem.WebAPI
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
