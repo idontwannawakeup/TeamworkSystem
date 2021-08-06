@@ -12,7 +12,7 @@
           Hover="@true"
           Breakpoint="@Breakpoint.Sm"
           Elevation="0"
-          OnRowClick="@ShowTeamPage"
+          OnRowClick="@(args => ShowTeamPage(args))"
           RowClass="cursor-pointer"
           Dense="@true">
     <ToolBarContent>

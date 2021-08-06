@@ -15,7 +15,7 @@
                   Breakpoint="@Breakpoint.Sm"
                   Elevation="0"
                   Dense="@true"
-                  OnRowClick="@OpenTicketPage">
+                  OnRowClick="@(args => OpenTicketPage(args))">
             <ToolBarContent>
                 <MudText Typo="@Typo.h3">@SL["Tickets"]</MudText>
                 <MudToolBarSpacer />

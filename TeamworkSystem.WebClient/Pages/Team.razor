@@ -127,7 +127,7 @@
                   Hover="@true"
                   Breakpoint="@Breakpoint.Sm"
                   Elevation="4"
-                  OnRowClick="@OpenProjectPage"
+                  OnRowClick="@(args => OpenProjectPage(args))"
                   RowClass="cursor-pointer">
             <ToolBarContent>
                 <MudText Typo="@Typo.h4">@SL["Projects"]</MudText>
