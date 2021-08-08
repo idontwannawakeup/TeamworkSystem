@@ -24,13 +24,13 @@ using TeamworkSystem.DataAccessLayer.Data.Repositories;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
+using TeamworkSystem.WebAPI.Middlewares;
 
 namespace TeamworkSystem.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) =>
-            Configuration = configuration;
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -144,6 +144,8 @@ namespace TeamworkSystem.WebAPI
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json",
                                                         "TeamworkSystem.WebAPI v1"));
             }
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
 

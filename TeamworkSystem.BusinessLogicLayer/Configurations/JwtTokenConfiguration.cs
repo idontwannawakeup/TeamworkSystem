@@ -7,16 +7,17 @@ namespace TeamworkSystem.BusinessLogicLayer.Configurations
 {
     public class JwtTokenConfiguration
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
         public JwtTokenConfiguration(IConfiguration configuration) =>
-            this.configuration = configuration;
+            _configuration = configuration;
 
-        public string Issuer => configuration["JwtIssuer"];
-        public string Audience => configuration["JwtAudience"];
+        public string Issuer => _configuration["JwtIssuer"];
+        public string Audience => _configuration["JwtAudience"];
         public static DateTime ExpirationDate => DateTime.UtcNow.AddYears(1);
+
         public SymmetricSecurityKey Key =>
-            new(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
+            new(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
 
         public SigningCredentials Credentials =>
             new(Key, SecurityAlgorithms.HmacSha256);

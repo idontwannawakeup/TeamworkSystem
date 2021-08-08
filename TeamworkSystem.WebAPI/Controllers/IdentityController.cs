@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
-using TeamworkSystem.DataAccessLayer.Exceptions;
 
 namespace TeamworkSystem.WebAPI.Controllers
 {
@@ -26,19 +24,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         public async Task<ActionResult<JwtResponse>> SignInAsync(
             [FromBody] UserSignInRequest request)
         {
-            try
-            {
-                var response = await _identityService.SignInAsync(request);
-                return Ok(response);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
-            }
+            var response = await _identityService.SignInAsync(request);
+            return Ok(response);
         }
 
         [HttpPost("signUp")]
@@ -48,15 +35,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         public async Task<ActionResult<JwtResponse>> SignUpAsync(
             [FromBody] UserSignUpRequest request)
         {
-            try
-            {
-                var response = await _identityService.SignUpAsync(request);
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
-            }
+            var response = await _identityService.SignUpAsync(request);
+            return Ok(response);
         }
     }
 }

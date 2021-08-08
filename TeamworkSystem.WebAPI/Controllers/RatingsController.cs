@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
-using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 using TeamworkSystem.WebAPI.Extensions;
@@ -31,16 +29,9 @@ namespace TeamworkSystem.WebAPI.Controllers
         public async Task<ActionResult<PagedList<RatingResponse>>> GetAsync(
             [FromQuery] RatingsParameters parameters)
         {
-            try
-            {
-                var ratings = await _ratingsService.GetAsync(parameters);
-                Response.Headers.Add("X-Pagination", ratings.SerializeMetadata());
-                return Ok(ratings);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
-            }
+            var ratings = await _ratingsService.GetAsync(parameters);
+            Response.Headers.Add("X-Pagination", ratings.SerializeMetadata());
+            return Ok(ratings);
         }
 
         [HttpGet("{id}")]
@@ -49,21 +40,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync(
-            [FromRoute] int id)
-        {
-            try
-            {
-                return Ok(await _ratingsService.GetByIdAsync(id));
-            }
-            catch (EntityNotFoundException e)
-            {
-                return NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
-            }
-        }
+            [FromRoute] int id) =>
+            Ok(await _ratingsService.GetByIdAsync(id));
 
         [HttpPost]
         [Authorize]
@@ -82,10 +60,6 @@ namespace TeamworkSystem.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                                   new { Message = "Rating from you to this user already exists." });
             }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
-            }
         }
 
         [HttpPut]
@@ -95,15 +69,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateAsync([FromBody] RatingRequest request)
         {
-            try
-            {
-                await _ratingsService.UpdateAsync(request);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
-            }
+            await _ratingsService.UpdateAsync(request);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -113,19 +80,8 @@ namespace TeamworkSystem.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteAsync([FromRoute] int id)
         {
-            try
-            {
-                await _ratingsService.DeleteAsync(id);
-                return Ok();
-            }
-            catch (EntityNotFoundException e)
-            {
-                return NotFound(new { e.Message });
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
-            }
+            await _ratingsService.DeleteAsync(id);
+            return Ok();
         }
     }
 }
