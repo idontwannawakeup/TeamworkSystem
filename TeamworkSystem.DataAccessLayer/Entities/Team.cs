@@ -10,11 +10,11 @@ namespace TeamworkSystem.DataAccessLayer.Entities
 
         public string LeaderId { get; set; }
 
-        public string Specialization { get; set; }
+        public string? Specialization { get; set; }
 
-        public string About { get; set; }
+        public string? About { get; set; }
 
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         public User Leader { get; set; }
 

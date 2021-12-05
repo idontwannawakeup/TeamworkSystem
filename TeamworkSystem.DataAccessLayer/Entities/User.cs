@@ -9,11 +9,11 @@ namespace TeamworkSystem.DataAccessLayer.Entities
 
         public string LastName { get; set; }
 
-        public string Profession { get; set; }
+        public string? Profession { get; set; }
 
-        public string Specialization { get; set; }
+        public string? Specialization { get; set; }
 
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         public List<Team> Teams { get; set; }
 
