@@ -33,7 +33,7 @@ namespace TeamworkSystem.WebClient.Extensions
             string requestUri)
         {
             httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
-            var response = await httpClient.GetAsync(requestUri);
+            var response = await httpClient.GetAsync(requestUri)!;
             var responseBody = await response.Content.ReadAsStringAsync();
             var pagination = response.Headers.GetValues("X-Pagination")
                                              .FirstOrDefault()
