@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TeamworkSystem.WebClient.ViewModels
+﻿namespace TeamworkSystem.WebClient.ViewModels
 {
     public class ValidationErrorViewModel
     {

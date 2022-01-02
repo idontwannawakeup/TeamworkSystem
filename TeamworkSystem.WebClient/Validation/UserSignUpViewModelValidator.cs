@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FluentValidation;
+﻿using FluentValidation;
 using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Validation

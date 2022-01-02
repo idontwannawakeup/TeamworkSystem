@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TeamworkSystem.WebClient.ViewModels;
+﻿using TeamworkSystem.WebClient.ViewModels;
 
 namespace TeamworkSystem.WebClient.Interfaces
 {

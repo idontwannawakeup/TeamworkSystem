@@ -1,40 +1,35 @@
-﻿using System;
-using System.Threading.Tasks;
-using MudBlazor;
+﻿using MudBlazor;
 using TeamworkSystem.WebClient.Exceptions;
 
 namespace TeamworkSystem.WebClient.Extensions
 {
     public class RequestErrorsHandler
     {
-        private readonly ISnackbar snackbar;
+        private readonly ISnackbar _snackbar;
 
         public async Task HandleRequestAsync(Func<Task> func)
         {
             try
             {
-                await func?.Invoke();
+                await func?.Invoke()!;
             }
             catch (ValidationException e)
             {
-                foreach (var (property, errors) in e.Errors)
+                foreach (var error in e.Errors.Values.SelectMany(errors => errors))
                 {
-                    foreach (var error in errors)
-                    {
-                        snackbar.Add(error, Severity.Error);
-                    }
+                    _snackbar.Add(error, Severity.Error);
                 }
             }
             catch (EntityNotFoundException e)
             {
-                snackbar.Add(e.Error, Severity.Error);
+                _snackbar.Add(e.Error, Severity.Error);
             }
             catch (ServerResponseException e)
             {
-                snackbar.Add(e.Error, Severity.Error);
+                _snackbar.Add(e.Error, Severity.Error);
             }
         }
 
-        public RequestErrorsHandler(ISnackbar snackbar) => this.snackbar = snackbar;
+        public RequestErrorsHandler(ISnackbar snackbar) => _snackbar = snackbar;
     }
 }

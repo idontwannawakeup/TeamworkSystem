@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using TeamworkSystem.WebClient.Authentication;
+﻿using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Parameters;
@@ -11,39 +8,39 @@ namespace TeamworkSystem.WebClient.Services
 {
     public class ProjectsService : IProjectsService
     {
-        private readonly ApiHttpClient httpClient;
+        private readonly ApiHttpClient _httpClient;
 
         public async Task<IEnumerable<ProjectViewModel>> GetAsync(ProjectsParameters parameters) =>
-            await httpClient.GetAsync<List<ProjectViewModel>>(
+            await _httpClient.GetAsync<List<ProjectViewModel>>(
                 ParametersStringFactory.GenerateParametersString(parameters));
 
         public async Task<(IEnumerable<ProjectViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
             ProjectsParameters parameters)
         {
-            return await httpClient.GetWithPaginationHeaderAsync<List<ProjectViewModel>>(
+            return await _httpClient.GetWithPaginationHeaderAsync<List<ProjectViewModel>>(
                 ParametersStringFactory.GenerateParametersString(parameters));
         }
 
         public async Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId) =>
-            await httpClient.GetAsync<List<ProjectViewModel>>($"?TeamId={teamId}");
+            await _httpClient.GetAsync<List<ProjectViewModel>>($"?TeamId={teamId}");
 
-        public async Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(string teamMemberId) =>
-            await httpClient.GetAsync<List<ProjectViewModel>>($"?TeamMemberId={teamMemberId}");
+        public async Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(
+            string teamMemberId) =>
+            await _httpClient.GetAsync<List<ProjectViewModel>>($"?TeamMemberId={teamMemberId}");
 
         public async Task<ProjectViewModel> GetByIdAsync(int id) =>
-            await httpClient.GetAsync<ProjectViewModel>($"{id}");
+            await _httpClient.GetAsync<ProjectViewModel>($"{id}");
 
         public async Task CreateAsync(ProjectViewModel viewModel) =>
-            await httpClient.PostAsync(string.Empty, viewModel);
+            await _httpClient.PostAsync(string.Empty, viewModel);
 
         public async Task UpdateAsync(ProjectViewModel viewModel) =>
-            await httpClient.PutAsync(string.Empty, viewModel);
+            await _httpClient.PutAsync(string.Empty, viewModel);
 
         public async Task DeleteAsync(int id) =>
-            await httpClient.DeleteAsync($"{id}");
+            await _httpClient.DeleteAsync($"{id}");
 
         public ProjectsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
-            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state)
-                                                                  .Build();
+            _httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state).Build();
     }
 }

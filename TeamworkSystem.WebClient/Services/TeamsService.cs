@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Components.Forms;
 using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
@@ -13,30 +10,30 @@ namespace TeamworkSystem.WebClient.Services
 {
     public class TeamsService : ITeamsService
     {
-        private readonly ApiHttpClient httpClient;
+        private readonly ApiHttpClient _httpClient;
 
         public async Task<IEnumerable<TeamViewModel>> GetAsync(TeamsParameters parameters) =>
-            await httpClient.GetAsync<List<TeamViewModel>>(
+            await _httpClient.GetAsync<List<TeamViewModel>>(
                 ParametersStringFactory.GenerateParametersString(parameters));
 
         public async Task<(IEnumerable<TeamViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
             TeamsParameters parameters)
         {
-            return await httpClient.GetWithPaginationHeaderAsync<List<TeamViewModel>>(
+            return await _httpClient.GetWithPaginationHeaderAsync<List<TeamViewModel>>(
                 ParametersStringFactory.GenerateParametersString(parameters));
         }
 
         public async Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(string userId) =>
-            await httpClient.GetAsync<List<TeamViewModel>>($"?UserId={userId}");
+            await _httpClient.GetAsync<List<TeamViewModel>>($"?UserId={userId}");
 
         public async Task<TeamViewModel> GetByIdAsync(int id) =>
-            await httpClient.GetAsync<TeamViewModel>($"{id}");
+            await _httpClient.GetAsync<TeamViewModel>($"{id}");
 
         public async Task CreateAsync(TeamViewModel viewModel) =>
-            await httpClient.PostAsync(string.Empty, viewModel);
+            await _httpClient.PostAsync(string.Empty, viewModel);
 
         public async Task UpdateAsync(TeamViewModel viewModel) =>
-            await httpClient.PutAsync(string.Empty, viewModel);
+            await _httpClient.PutAsync(string.Empty, viewModel);
 
         public async Task SetAvatarForTeamAsync(int id, IBrowserFile file)
         {
@@ -53,20 +50,18 @@ namespace TeamworkSystem.WebClient.Services
                 { imageContent, "Avatar", file.Name }
             };
 
-            await httpClient.PostFormDataAsync("avatar", requestContent);
+            await _httpClient.PostFormDataAsync("avatar", requestContent);
         }
 
-        public async Task DeleteAsync(int id) =>
-            await httpClient.DeleteAsync($"{id}");
+        public async Task DeleteAsync(int id) => await _httpClient.DeleteAsync($"{id}");
 
         public async Task AddMemberAsync(TeamMemberViewModel viewModel) =>
-            await httpClient.PostAsync($"members", viewModel);
+            await _httpClient.PostAsync("members", viewModel);
 
         public async Task DeleteMemberAsync(TeamMemberViewModel viewModel) =>
-            await httpClient.DeleteAsync($"members/{viewModel.TeamId}/{viewModel.UserId}");
+            await _httpClient.DeleteAsync($"members/{viewModel.TeamId}/{viewModel.UserId}");
 
         public TeamsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
-            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state)
-                                                                  .Build();
+            _httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state).Build();
     }
 }
