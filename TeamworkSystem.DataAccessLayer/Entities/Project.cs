@@ -16,5 +16,5 @@ public class Project
 
     public Team Team { get; set; } = default!;
 
-    public List<Ticket>? Tickets { get; set; }
+    public List<Ticket> Tickets { get; set; } = default!;
 }

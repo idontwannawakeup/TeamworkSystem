@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public string FromId { get; set; }
+        public string FromId { get; set; } = default!;
 
-        public string ToId { get; set; }
+        public string ToId { get; set; } = default!;
 
         public int Social { get; set; }
 
@@ -18,10 +18,10 @@
 
         public double Average { get; set; }
 
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
-        public UserResponse From { get; set; }
+        public UserResponse From { get; set; } = default!;
 
-        public UserResponse To { get; set; }
+        public UserResponse To { get; set; } = default!;
     }
 }

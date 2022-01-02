@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
@@ -19,9 +17,10 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             SearchByTeamId(ref source, parameters.TeamId);
             SearchByLastName(ref source, parameters.LastName);
 
-            return await PagedList<User>.ToPagedListAsync(source,
-                                                          parameters.PageNumber,
-                                                          parameters.PageSize);
+            return await PagedList<User>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
         }
 
         public static async Task<PagedList<User>> GetFriendsAsync(
@@ -34,13 +33,13 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
 
             SearchByLastName(ref source, parameters.LastName);
 
-            return await PagedList<User>.ToPagedListAsync(source,
-                                                          parameters.PageNumber,
-                                                          parameters.PageSize);
+            return await PagedList<User>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
         }
 
-        public static async Task<User> GetByIdAsync(this UserManager<User> userManager,
-                                                    string id)
+        public static async Task<User> GetByIdAsync(this UserManager<User> userManager, string id)
         {
             var user = await userManager.FindByIdAsync(id);
             return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
@@ -69,7 +68,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Extensions
             source = source.Where(user => user.Teams.Any(team => team.Id == teamId));
         }
 
-        private static void SearchByLastName(ref IQueryable<User> source, string lastName)
+        private static void SearchByLastName(ref IQueryable<User> source, string? lastName)
         {
             if (string.IsNullOrWhiteSpace(lastName))
             {

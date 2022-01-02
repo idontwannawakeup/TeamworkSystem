@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
@@ -99,7 +95,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             });
 
         private async Task MakeActionWithFriends(FriendsRequest friendsRequest,
-                                                 Action<User, User> action)
+                                                 Action<User, User>? action)
         {
             var firstUser = await _userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
             var secondUser = await _userManager.GetCompleteEntityAsync(friendsRequest.SecondId);

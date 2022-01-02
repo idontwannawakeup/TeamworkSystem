@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentValidation;
+﻿using FluentValidation;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 
 namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
@@ -43,7 +41,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests
                     ticket => $"{nameof(ticket.Title)} should be less than 50 characters.");
 
             RuleFor(ticket => ticket.Type)
-                .Must(type => types.Contains(type))
+                .Must(type => types.Contains(type!))
                 .WithMessage(
                     ticket =>
                         $"{nameof(ticket.Type)} should be one of: {string.Join(", ", types)}");

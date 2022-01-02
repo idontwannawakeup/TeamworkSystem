@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
@@ -60,7 +57,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task InsertAsync(TeamRequest request)
         {
             var team = _mapper.Map<TeamRequest, Team>(request);
-            var leader = await _userManager.GetByIdAsync(team.LeaderId);
+            var leader = await _userManager.GetByIdAsync(team.LeaderId!);
             team.Members = new List<User> { leader };
             await _teamsRepository.InsertAsync(team);
             await _unitOfWork.SaveChangesAsync();

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
@@ -29,7 +26,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         public async Task<IEnumerable<RatingResponse>> GetAsync()
         {
             var ratings = await _ratingsRepository.GetAsync();
-            return ratings?.Select(_mapper.Map<Rating, RatingResponse>);
+            return ratings.Select(_mapper.Map<Rating, RatingResponse>);
         }
 
         public async Task<PagedList<RatingResponse>> GetAsync(RatingsParameters parameters)

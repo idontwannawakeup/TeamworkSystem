@@ -2,7 +2,7 @@
 {
     public class TeamMemberRequest
     {
-        public string UserId { get; set; }
+        public string UserId { get; set; } = default!;
 
         public int TeamId { get; set; }
     }

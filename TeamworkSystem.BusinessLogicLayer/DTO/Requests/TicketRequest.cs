@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
+﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
 {
     public class TicketRequest
     {
@@ -8,17 +6,17 @@ namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
 
         public int ProjectId { get; set; }
 
-        public string ExecutorId { get; set; }
+        public string? ExecutorId { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = default!;
 
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = default!;
 
-        public string Status { get; set; }
+        public string Status { get; set; } = default!;
 
-        public string Priority { get; set; }
+        public string Priority { get; set; } = default!;
 
         public DateTime? Deadline { get; set; }
     }

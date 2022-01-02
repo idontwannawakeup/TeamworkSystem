@@ -6,6 +6,6 @@ namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
     {
         public int TeamId { get; set; }
 
-        public IFormFile Avatar { get; set; }
+        public IFormFile Avatar { get; set; } = default!;
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TeamworkSystem.BusinessLogicLayer.Configurations;
 using TeamworkSystem.BusinessLogicLayer.Interfaces;

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FluentValidation;
+﻿using FluentValidation;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 
 namespace TeamworkSystem.BusinessLogicLayer.Validation.Requests

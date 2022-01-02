@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
@@ -44,7 +41,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         {
             var team = await _teamsRepository.GetCompleteEntityAsync(teamId);
             var projects = team.Projects;
-            return projects?.Select(_mapper.Map<Project, ProjectResponse>);
+            return projects.Select(_mapper.Map<Project, ProjectResponse>);
         }
 
         public async Task<ProjectResponse> GetByIdAsync(int id)
