@@ -12,10 +12,10 @@ namespace TeamworkSystem.DataAccessLayer
         {
         }
 
-        public DbSet<Team> Teams { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Team> Teams { get; set; } = default!;
+        public DbSet<Project> Projects { get; set; } = default!;
+        public DbSet<Ticket> Tickets { get; set; } = default!;
+        public DbSet<Rating> Ratings { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

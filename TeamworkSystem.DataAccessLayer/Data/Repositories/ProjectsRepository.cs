@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
@@ -11,8 +9,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
     public class ProjectsRepository : GenericRepository<Project>, IProjectsRepository
     {
-        public ProjectsRepository(TeamworkSystemContext databaseContext)
-            : base(databaseContext)
+        public ProjectsRepository(TeamworkSystemContext databaseContext) : base(databaseContext)
         {
         }
 
@@ -33,9 +30,10 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             SearchByTeamMemberId(ref source, parameters.TeamMemberId);
             SearchByTitle(ref source, parameters.Title);
 
-            return await PagedList<Project>.ToPagedListAsync(source,
-                                                             parameters.PageNumber,
-                                                             parameters.PageSize);
+            return await PagedList<Project>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
         }
 
         public async Task<Team> GetRelatedTeamAsync(int id)
@@ -59,7 +57,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         }
 
         private static void SearchByTeamMemberId(ref IQueryable<Project> source,
-                                                 string teamMemberId)
+                                                 string? teamMemberId)
         {
             if (string.IsNullOrWhiteSpace(teamMemberId))
             {
@@ -70,7 +68,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 project => project.Team.Members.Any(user => user.Id == teamMemberId));
         }
 
-        private static void SearchByTitle(ref IQueryable<Project> source, string title)
+        private static void SearchByTitle(ref IQueryable<Project> source, string? title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {

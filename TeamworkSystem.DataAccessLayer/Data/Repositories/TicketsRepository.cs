@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
@@ -11,8 +9,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
     public class TicketsRepository : GenericRepository<Ticket>, ITicketsRepository
     {
-        public TicketsRepository(TeamworkSystemContext databaseContext)
-            : base(databaseContext)
+        public TicketsRepository(TeamworkSystemContext databaseContext) : base(databaseContext)
         {
         }
 
@@ -37,9 +34,10 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             SearchByTitle(ref source, parameters.Title);
             SearchByStatus(ref source, parameters.Status);
 
-            return await PagedList<Ticket>.ToPagedListAsync(source,
-                                                            parameters.PageNumber,
-                                                            parameters.PageSize);
+            return await PagedList<Ticket>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
         }
 
         private static void SearchByProjectId(ref IQueryable<Ticket> source, int? projectId)
@@ -52,7 +50,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             source = source.Where(ticket => ticket.ProjectId == projectId);
         }
 
-        private static void SearchByExecutorId(ref IQueryable<Ticket> source, string executorId)
+        private static void SearchByExecutorId(ref IQueryable<Ticket> source, string? executorId)
         {
             if (string.IsNullOrWhiteSpace(executorId))
             {
@@ -62,7 +60,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             source = source.Where(ticket => ticket.ExecutorId == executorId);
         }
 
-        private static void SearchByTitle(ref IQueryable<Ticket> source, string title)
+        private static void SearchByTitle(ref IQueryable<Ticket> source, string? title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -72,7 +70,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             source = source.Where(ticket => ticket.Title.Contains(title));
         }
 
-        private static void SearchByStatus(ref IQueryable<Ticket> source, string status)
+        private static void SearchByStatus(ref IQueryable<Ticket> source, string? status)
         {
             if (string.IsNullOrWhiteSpace(status))
             {

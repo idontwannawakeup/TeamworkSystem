@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TeamworkSystem.DataAccessLayer.Entities;
+﻿using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 

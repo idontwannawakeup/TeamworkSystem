@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace TeamworkSystem.DataAccessLayer.Migrations
 {
     public partial class InitialMigration : Migration

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
@@ -12,8 +9,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
     public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
     {
-        public TeamsRepository(TeamworkSystemContext databaseContext)
-            : base(databaseContext)
+        public TeamsRepository(TeamworkSystemContext databaseContext) : base(databaseContext)
         {
         }
 
@@ -35,16 +31,14 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             SearchByName(ref source, parameters.Name);
             SearchBySpecialization(ref source, parameters.Specialization);
 
-            return await PagedList<Team>.ToPagedListAsync(source,
-                                                          parameters.PageNumber,
-                                                          parameters.PageSize);
+            return await PagedList<Team>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
         }
 
-        public async Task<IEnumerable<Team>> GetUserTeams(User user)
-        {
-            return await Table.Where(team => team.Members.Contains(user))
-                              .ToListAsync();
-        }
+        public async Task<IEnumerable<Team>> GetUserTeams(User user) =>
+            await Table.Where(team => team.Members.Contains(user)).ToListAsync();
 
         public async Task<IEnumerable<User>> GetMembersAsync(int id)
         {
@@ -82,10 +76,10 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                 throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
             }
 
-            team.Members?.Remove(member);
+            team.Members.Remove(member);
         }
 
-        private static void SearchByMemberId(ref IQueryable<Team> source, string userId)
+        private static void SearchByMemberId(ref IQueryable<Team> source, string? userId)
         {
             if (string.IsNullOrWhiteSpace(userId))
             {
@@ -95,7 +89,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
             source = source.Where(team => team.Members.Any(user => user.Id == userId));
         }
 
-        private static void SearchByName(ref IQueryable<Team> source, string name)
+        private static void SearchByName(ref IQueryable<Team> source, string? name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -106,7 +100,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
         }
 
         private static void SearchBySpecialization(ref IQueryable<Team> source,
-                                                   string specialization)
+                                                   string? specialization)
         {
             if (string.IsNullOrWhiteSpace(specialization))
             {

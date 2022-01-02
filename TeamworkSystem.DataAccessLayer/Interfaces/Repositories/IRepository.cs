@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace TeamworkSystem.DataAccessLayer.Interfaces.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class

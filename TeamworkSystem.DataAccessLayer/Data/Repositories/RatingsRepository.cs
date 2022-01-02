@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
@@ -12,8 +9,7 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
 {
     public class RatingsRepository : GenericRepository<Rating>, IRatingsRepository
     {
-        public RatingsRepository(TeamworkSystemContext databaseContext)
-            : base(databaseContext)
+        public RatingsRepository(TeamworkSystemContext databaseContext) : base(databaseContext)
         {
         }
 
@@ -32,24 +28,19 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories
                                              .Include(rating => rating.To);
 
             SearchByRatedUserId(ref source, parameters.RatedUserId);
-            return await PagedList<Rating>.ToPagedListAsync(source,
-                                                            parameters.PageNumber,
-                                                            parameters.PageSize);
+            return await PagedList<Rating>.ToPagedListAsync(
+                source,
+                parameters.PageNumber,
+                parameters.PageSize);
         }
 
-        public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId)
-        {
-            return await Table.Where(rating => rating.FromId == userId)
-                              .ToListAsync();
-        }
+        public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId) =>
+            await Table.Where(rating => rating.FromId == userId).ToListAsync();
 
-        public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId)
-        {
-            return await Table.Where(rating => rating.ToId == userId)
-                              .ToListAsync();
-        }
+        public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId) =>
+            await Table.Where(rating => rating.ToId == userId).ToListAsync();
 
-        private static void SearchByRatedUserId(ref IQueryable<Rating> source, string ratedUserId)
+        private static void SearchByRatedUserId(ref IQueryable<Rating> source, string? ratedUserId)
         {
             if (string.IsNullOrWhiteSpace(ratedUserId))
             {

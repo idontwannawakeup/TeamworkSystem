@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace TeamworkSystem.DataAccessLayer.Entities
+﻿namespace TeamworkSystem.DataAccessLayer.Entities
 {
     public class Team
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
-        public string LeaderId { get; set; }
+        public string? LeaderId { get; set; }
 
         public string? Specialization { get; set; }
 
@@ -16,10 +14,10 @@ namespace TeamworkSystem.DataAccessLayer.Entities
 
         public string? Avatar { get; set; }
 
-        public User Leader { get; set; }
+        public User? Leader { get; set; } = default!;
 
-        public List<Project> Projects { get; set; }
+        public List<Project> Projects { get; set; } = default!;
 
-        public List<User> Members { get; set; }
+        public List<User> Members { get; set; } = default!;
     }
 }

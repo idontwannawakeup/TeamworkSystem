@@ -6,7 +6,7 @@ public class Project
 
     public int TeamId { get; set; }
 
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
 
     public string? Type { get; set; }
 
@@ -14,7 +14,7 @@ public class Project
 
     public string? Description { get; set; }
 
-    public Team Team { get; set; }
+    public Team Team { get; set; } = default!;
 
-    public List<Ticket> Tickets { get; set; }
+    public List<Ticket>? Tickets { get; set; }
 }
