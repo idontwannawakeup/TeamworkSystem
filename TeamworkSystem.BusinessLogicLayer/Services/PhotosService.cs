@@ -12,21 +12,25 @@ public class PhotosService : IPhotosService
 
     public async Task<string> SavePhotoAsync(IFormFile photo)
     {
-        const string photosFolderPath = "Public\\Photos";
-
-        if (!Directory.Exists($"{_environment.WebRootPath}\\{photosFolderPath}\\"))
-        {
-            Directory.CreateDirectory($"{_environment.WebRootPath}\\{photosFolderPath}\\");
-        }
-
+        var photosFolderPath = TryCreatePhotosFolder();
         var fileExtension = Path.GetExtension(photo.FileName);
         var fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}{fileExtension}";
-        await using var fileStream = File.Create(
-            $"{_environment.WebRootPath}\\{photosFolderPath}\\{fileName}");
+        await using var fileStream = File.Create(Path.Combine(photosFolderPath, fileName));
 
         await photo.CopyToAsync(fileStream);
         await fileStream.FlushAsync();
 
         return fileName;
+    }
+
+    private string TryCreatePhotosFolder()
+    {
+        var photosFolderPath = Path.Combine(_environment.WebRootPath, "Public", "Photos");
+        if (!Directory.Exists(photosFolderPath))
+        {
+            Directory.CreateDirectory(photosFolderPath);
+        }
+
+        return photosFolderPath;
     }
 }
