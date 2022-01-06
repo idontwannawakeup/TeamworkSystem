@@ -60,9 +60,11 @@ services.AddTransient<IJwtSecurityTokenFactory, JwtSecurityTokenFactory>();
 
 services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
 
-services.AddIdentity<User, IdentityRole>()
-        .AddEntityFrameworkStores<TeamworkSystemContext>()
-        .AddDefaultTokenProviders();
+services.AddIdentityCore<User>()
+        .AddRoles<IdentityRole>()
+        .AddSignInManager<SignInManager<User>>()
+        .AddDefaultTokenProviders()
+        .AddEntityFrameworkStores<TeamworkSystemContext>();
 
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
