@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 
-namespace TeamworkSystem.BusinessLogicLayer.Extensions;
+namespace TeamworkSystem.DataAccessLayer.Extensions;
 
-public static class UserManagerExtension
+public static class UserManagerExtensions
 {
     public static async Task<PagedList<User>> GetAsync(this UserManager<User> userManager,
                                                        UsersParameters parameters)
@@ -23,10 +23,9 @@ public static class UserManagerExtension
             parameters.PageSize);
     }
 
-    public static async Task<PagedList<User>> GetFriendsAsync(
-        this UserManager<User> userManager,
-        string id,
-        UsersParameters parameters)
+    public static async Task<PagedList<User>> GetFriendsAsync(this UserManager<User> userManager,
+                                                              string id,
+                                                              UsersParameters parameters)
     {
         var user = await userManager.GetByIdAsync(id);
         var source = userManager.Users.Where(secondUser => secondUser.Friends.Contains(user));
@@ -53,7 +52,6 @@ public static class UserManagerExtension
                                     .Include(user => user.MyRatings)
                                     .Include(user => user.Friends)
                                     .SingleOrDefaultAsync(user => user.Id == id);
-
 
         return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
     }
