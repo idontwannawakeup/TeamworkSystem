@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
 
-namespace TeamworkSystem.DataAccessLayer.Seeding;
+namespace TeamworkSystem.DataAccessLayer.Seeders;
 
-public class ProjectSeeder : ISeeder<Project>
+public class ProjectSeeder : IProjectSeeder
 {
     private static readonly List<Project> Projects = new()
     {
@@ -15,7 +15,7 @@ public class ProjectSeeder : ISeeder<Project>
             Title = "Blog",
             Type = "Website",
             Description = "Just a simple blog from small team",
-        },
+        }
     };
 
     public void Seed(EntityTypeBuilder<Project> builder) => builder.HasData(Projects);

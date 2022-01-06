@@ -18,6 +18,8 @@ using TeamworkSystem.DataAccessLayer.Data.Repositories;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
+using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
+using TeamworkSystem.DataAccessLayer.Seeders;
 using TeamworkSystem.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +45,13 @@ services.AddTransient<IRatingsService, RatingsService>();
 services.AddTransient<ITeamsService, TeamsService>();
 services.AddTransient<ITicketsService, TicketsService>();
 services.AddTransient<IUsersService, UsersService>();
+
+services.AddTransient<IProjectSeeder, ProjectSeeder>();
+services.AddTransient<IRatingSeeder, RatingSeeder>();
+services.AddTransient<ITeamSeeder, TeamSeeder>();
+services.AddTransient<ITeamsMembersSeeder, TeamsMembersSeeder>();
+services.AddTransient<ITicketSeeder, TicketSeeder>();
+services.AddTransient<IUserSeeder, UserSeeder>();
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

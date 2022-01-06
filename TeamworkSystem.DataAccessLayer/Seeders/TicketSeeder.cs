@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
 
-namespace TeamworkSystem.DataAccessLayer.Seeding;
+namespace TeamworkSystem.DataAccessLayer.Seeders;
 
-public class TicketSeeder : ISeeder<Ticket>
+public class TicketSeeder : ITicketSeeder
 {
     private static readonly List<Ticket> Tickets = new()
     {

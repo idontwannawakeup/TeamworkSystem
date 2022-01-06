@@ -1,12 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Seeding;
+using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
+    private readonly IUserSeeder _seeder;
+
+    public UserConfiguration(IUserSeeder seeder) => _seeder = seeder;
+
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(user => user.Id);
@@ -34,6 +38,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                    entity.Property("FriendForUsersId").HasColumnName("SecondId");
                });
 
-        new UserSeeder().Seed(builder);
+        _seeder.Seed(builder);
     }
 }

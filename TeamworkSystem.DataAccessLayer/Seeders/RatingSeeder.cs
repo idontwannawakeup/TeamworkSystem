@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
 
-namespace TeamworkSystem.DataAccessLayer.Seeding;
+namespace TeamworkSystem.DataAccessLayer.Seeders;
 
-public class RatingSeeder : ISeeder<Rating>
+public class RatingSeeder : IRatingSeeder
 {
     private static readonly List<Rating> Ratings = new()
     {

@@ -1,44 +1,48 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Seeding;
+using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations;
 
 public class RatingConfiguration : IEntityTypeConfiguration<Rating>
 {
-       public void Configure(EntityTypeBuilder<Rating> builder)
-       {
-              builder.Property(rating => rating.Social)
-                     .IsRequired();
+    private readonly IRatingSeeder _seeder;
 
-              builder.Property(rating => rating.Skills)
-                     .IsRequired();
+    public RatingConfiguration(IRatingSeeder seeder) => _seeder = seeder;
 
-              builder.Property(rating => rating.Responsibility)
-                     .IsRequired();
+    public void Configure(EntityTypeBuilder<Rating> builder)
+    {
+        builder.Property(rating => rating.Social)
+               .IsRequired();
 
-              builder.Property(rating => rating.Punctuality)
-                     .IsRequired();
+        builder.Property(rating => rating.Skills)
+               .IsRequired();
 
-              builder.Property(rating => rating.Comment)
-                     .HasColumnType("ntext");
+        builder.Property(rating => rating.Responsibility)
+               .IsRequired();
 
-              builder.HasAlternateKey(rating => new { rating.FromId, rating.ToId })
-                     .HasName("AK_Ratings_FromId_ToId");
+        builder.Property(rating => rating.Punctuality)
+               .IsRequired();
 
-              builder.HasOne(rating => rating.From)
-                     .WithMany(user => user.MyRatings)
-                     .HasForeignKey(rating => rating.FromId)
-                     .OnDelete(DeleteBehavior.Cascade)
-                     .HasConstraintName("FK_Ratings_FromId");
+        builder.Property(rating => rating.Comment)
+               .HasColumnType("ntext");
 
-              builder.HasOne(rating => rating.To)
-                     .WithMany(user => user.RatingsFromMe)
-                     .HasForeignKey(rating => rating.ToId)
-                     .OnDelete(DeleteBehavior.NoAction)
-                     .HasConstraintName("FK_Ratings_ToId");
+        builder.HasAlternateKey(rating => new { rating.FromId, rating.ToId })
+               .HasName("AK_Ratings_FromId_ToId");
 
-              new RatingSeeder().Seed(builder);
-       }
+        builder.HasOne(rating => rating.From)
+               .WithMany(user => user.MyRatings)
+               .HasForeignKey(rating => rating.FromId)
+               .OnDelete(DeleteBehavior.Cascade)
+               .HasConstraintName("FK_Ratings_FromId");
+
+        builder.HasOne(rating => rating.To)
+               .WithMany(user => user.RatingsFromMe)
+               .HasForeignKey(rating => rating.ToId)
+               .OnDelete(DeleteBehavior.NoAction)
+               .HasConstraintName("FK_Ratings_ToId");
+
+        _seeder.Seed(builder);
+    }
 }
