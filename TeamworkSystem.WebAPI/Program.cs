@@ -11,6 +11,7 @@ using TeamworkSystem.BusinessLogicLayer.Factories;
 using TeamworkSystem.BusinessLogicLayer.Interfaces;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.BusinessLogicLayer.Services;
+using TeamworkSystem.BusinessLogicLayer.Validation;
 using TeamworkSystem.DataAccessLayer;
 using TeamworkSystem.DataAccessLayer.Data;
 using TeamworkSystem.DataAccessLayer.Data.Repositories;
@@ -49,18 +50,10 @@ services.AddTransient<JwtTokenConfiguration>();
 services.AddTransient<IJwtSecurityTokenFactory, JwtSecurityTokenFactory>();
 
 services.AddTransient<IValidatorFactory, ServiceProviderValidatorFactory>();
-services.AddMvc(options => { options.EnableEndpointRouting = false; })
-        .AddFluentValidation(configuration =>
-        {
-            configuration.RegisterValidatorsFromAssemblies(
-                AppDomain.CurrentDomain.GetAssemblies());
-        });
 
-services.AddIdentityCore<User>()
-        .AddRoles<IdentityRole>()
-        .AddSignInManager<SignInManager<User>>()
-        .AddDefaultTokenProviders()
-        .AddEntityFrameworkStores<TeamworkSystemContext>();
+services.AddIdentity<User, IdentityRole>()
+        .AddEntityFrameworkStores<TeamworkSystemContext>()
+        .AddDefaultTokenProviders();
 
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
@@ -77,7 +70,12 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             };
         });
 
-services.AddControllers();
+services.AddControllers()
+        .AddFluentValidation(configuration =>
+        {
+            configuration.RegisterValidatorsFromAssemblyContaining<ValidationDependencyInjection>();
+        });
+
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
 {
