@@ -1,7 +1,6 @@
-﻿namespace TeamworkSystem.DataAccessLayer.Parameters
+﻿namespace TeamworkSystem.DataAccessLayer.Parameters;
+
+public class RatingsParameters : QueryStringParameters
 {
-    public class RatingsParameters : QueryStringParameters
-    {
-        public string? RatedUserId { get; set; }
-    }
+    public string? RatedUserId { get; set; }
 }

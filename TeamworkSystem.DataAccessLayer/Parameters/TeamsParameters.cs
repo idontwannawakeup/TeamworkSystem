@@ -1,9 +1,8 @@
-﻿namespace TeamworkSystem.DataAccessLayer.Parameters
+﻿namespace TeamworkSystem.DataAccessLayer.Parameters;
+
+public class TeamsParameters : QueryStringParameters
 {
-    public class TeamsParameters : QueryStringParameters
-    {
-        public string? UserId { get; set; }
-        public string? Name { get; set; }
-        public string? Specialization { get; set; }
-    }
+    public string? UserId { get; set; }
+    public string? Name { get; set; }
+    public string? Specialization { get; set; }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace TeamworkSystem.DataAccessLayer.Interfaces
+namespace TeamworkSystem.DataAccessLayer.Interfaces;
+
+public interface ISeeder<T> where T : class
 {
-    public interface ISeeder<T> where T : class
-    {
-        void Seed(EntityTypeBuilder<T> builder);
-    }
+    void Seed(EntityTypeBuilder<T> builder);
 }

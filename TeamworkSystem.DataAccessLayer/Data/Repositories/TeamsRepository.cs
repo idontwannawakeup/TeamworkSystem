@@ -5,109 +5,108 @@ using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 
-namespace TeamworkSystem.DataAccessLayer.Data.Repositories
+namespace TeamworkSystem.DataAccessLayer.Data.Repositories;
+
+public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
 {
-    public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
+    public TeamsRepository(TeamworkSystemContext databaseContext) : base(databaseContext)
     {
-        public TeamsRepository(TeamworkSystemContext databaseContext) : base(databaseContext)
+    }
+
+    public override async Task<Team> GetCompleteEntityAsync(int id)
+    {
+        var team = await Table.Include(team => team.Leader)
+                              .Include(team => team.Projects)
+                              .Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        return team ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+    }
+
+    public async Task<PagedList<Team>> GetAsync(TeamsParameters parameters)
+    {
+        IQueryable<Team> source = Table.Include(team => team.Leader);
+
+        SearchByMemberId(ref source, parameters.UserId);
+        SearchByName(ref source, parameters.Name);
+        SearchBySpecialization(ref source, parameters.Specialization);
+
+        return await PagedList<Team>.ToPagedListAsync(
+            source,
+            parameters.PageNumber,
+            parameters.PageSize);
+    }
+
+    public async Task<IEnumerable<Team>> GetUserTeams(User user) =>
+        await Table.Where(team => team.Members.Contains(user)).ToListAsync();
+
+    public async Task<IEnumerable<User>> GetMembersAsync(int id)
+    {
+        var team = await Table.Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        if (team is null)
         {
+            throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
-        public override async Task<Team> GetCompleteEntityAsync(int id)
-        {
-            var team = await Table.Include(team => team.Leader)
-                                  .Include(team => team.Projects)
-                                  .Include(team => team.Members)
-                                  .SingleOrDefaultAsync(team => team.Id == id);
+        return team.Members;
+    }
 
-            return team ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+    public async Task AddMemberAsync(int id, User member)
+    {
+        var team = await Table.Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        if (team is null)
+        {
+            throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<PagedList<Team>> GetAsync(TeamsParameters parameters)
+        team.Members.Add(member);
+    }
+
+    public async Task DeleteMemberAsync(int id, User member)
+    {
+        var team = await Table.Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        if (team is null)
         {
-            IQueryable<Team> source = Table.Include(team => team.Leader);
-
-            SearchByMemberId(ref source, parameters.UserId);
-            SearchByName(ref source, parameters.Name);
-            SearchBySpecialization(ref source, parameters.Specialization);
-
-            return await PagedList<Team>.ToPagedListAsync(
-                source,
-                parameters.PageNumber,
-                parameters.PageSize);
+            throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
         }
 
-        public async Task<IEnumerable<Team>> GetUserTeams(User user) =>
-            await Table.Where(team => team.Members.Contains(user)).ToListAsync();
+        team.Members.Remove(member);
+    }
 
-        public async Task<IEnumerable<User>> GetMembersAsync(int id)
+    private static void SearchByMemberId(ref IQueryable<Team> source, string? userId)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
         {
-            var team = await Table.Include(team => team.Members)
-                                  .SingleOrDefaultAsync(team => team.Id == id);
-
-            if (team is null)
-            {
-                throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
-            }
-
-            return team.Members;
+            return;
         }
 
-        public async Task AddMemberAsync(int id, User member)
+        source = source.Where(team => team.Members.Any(user => user.Id == userId));
+    }
+
+    private static void SearchByName(ref IQueryable<Team> source, string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
         {
-            var team = await Table.Include(team => team.Members)
-                                  .SingleOrDefaultAsync(team => team.Id == id);
-
-            if (team is null)
-            {
-                throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
-            }
-
-            team.Members.Add(member);
+            return;
         }
 
-        public async Task DeleteMemberAsync(int id, User member)
+        source = source.Where(team => team.Name.Contains(name));
+    }
+
+    private static void SearchBySpecialization(ref IQueryable<Team> source,
+                                               string? specialization)
+    {
+        if (string.IsNullOrWhiteSpace(specialization))
         {
-            var team = await Table.Include(team => team.Members)
-                                  .SingleOrDefaultAsync(team => team.Id == id);
-
-            if (team is null)
-            {
-                throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
-            }
-
-            team.Members.Remove(member);
+            return;
         }
 
-        private static void SearchByMemberId(ref IQueryable<Team> source, string? userId)
-        {
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                return;
-            }
-
-            source = source.Where(team => team.Members.Any(user => user.Id == userId));
-        }
-
-        private static void SearchByName(ref IQueryable<Team> source, string? name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return;
-            }
-
-            source = source.Where(team => team.Name.Contains(name));
-        }
-
-        private static void SearchBySpecialization(ref IQueryable<Team> source,
-                                                   string? specialization)
-        {
-            if (string.IsNullOrWhiteSpace(specialization))
-            {
-                return;
-            }
-
-            source = source.Where(team => team.Specialization == specialization);
-        }
+        source = source.Where(team => team.Specialization == specialization);
     }
 }

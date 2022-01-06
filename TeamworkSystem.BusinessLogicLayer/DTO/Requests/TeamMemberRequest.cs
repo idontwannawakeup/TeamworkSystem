@@ -1,9 +1,8 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
-{
-    public class TeamMemberRequest
-    {
-        public string UserId { get; set; } = default!;
+﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 
-        public int TeamId { get; set; }
-    }
+public class TeamMemberRequest
+{
+    public string UserId { get; set; } = default!;
+
+    public int TeamId { get; set; }
 }

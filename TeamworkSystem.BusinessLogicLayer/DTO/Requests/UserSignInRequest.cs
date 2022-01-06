@@ -1,9 +1,8 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
-{
-    public class UserSignInRequest
-    {
-        public string UserName { get; set; } = default!;
+﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 
-        public string Password { get; set; } = default!;
-    }
+public class UserSignInRequest
+{
+    public string UserName { get; set; } = default!;
+
+    public string Password { get; set; } = default!;
 }

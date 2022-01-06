@@ -7,81 +7,80 @@ using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 using TeamworkSystem.WebAPI.Extensions;
 
-namespace TeamworkSystem.WebAPI.Controllers
+namespace TeamworkSystem.WebAPI.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TicketsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class TicketsController : ControllerBase
+    private readonly ITicketsService _ticketsService;
+
+    public TicketsController(ITicketsService ticketsService) =>
+        _ticketsService = ticketsService;
+
+    [HttpGet]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<PagedList<TicketResponse>>> GetAsync(
+        [FromQuery] TicketsParameters parameters)
     {
-        private readonly ITicketsService _ticketsService;
+        var tickets = await _ticketsService.GetAsync(parameters);
+        Response.Headers.Add("X-Pagination", tickets.SerializeMetadata());
+        return Ok(tickets);
+    }
 
-        public TicketsController(ITicketsService ticketsService) =>
-            _ticketsService = ticketsService;
+    [HttpGet("{id}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<TicketResponse>> GetByIdAsync([FromRoute] int id) =>
+        Ok(await _ticketsService.GetByIdAsync(id));
 
-        [HttpGet]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PagedList<TicketResponse>>> GetAsync(
-            [FromQuery] TicketsParameters parameters)
-        {
-            var tickets = await _ticketsService.GetAsync(parameters);
-            Response.Headers.Add("X-Pagination", tickets.SerializeMetadata());
-            return Ok(tickets);
-        }
+    [HttpPost]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> InsertAsync([FromBody] TicketRequest request)
+    {
+        await _ticketsService.InsertAsync(request);
+        return Ok();
+    }
 
-        [HttpGet("{id}")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<TicketResponse>> GetByIdAsync([FromRoute] int id) =>
-            Ok(await _ticketsService.GetByIdAsync(id));
+    [HttpPut]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> UpdateAsync([FromBody] TicketRequest request)
+    {
+        await _ticketsService.UpdateAsync(request);
+        return Ok();
+    }
 
-        [HttpPost]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> InsertAsync([FromBody] TicketRequest request)
-        {
-            await _ticketsService.InsertAsync(request);
-            return Ok();
-        }
+    [HttpPut("deadline")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> ExtendDeadlineAsync(
+        [FromBody] TicketWithExtendedDeadlineRequest request)
+    {
+        await _ticketsService.ExtendDeadlineAsync(request);
+        return Ok();
+    }
 
-        [HttpPut]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> UpdateAsync([FromBody] TicketRequest request)
-        {
-            await _ticketsService.UpdateAsync(request);
-            return Ok();
-        }
-
-        [HttpPut("deadline")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> ExtendDeadlineAsync(
-            [FromBody] TicketWithExtendedDeadlineRequest request)
-        {
-            await _ticketsService.ExtendDeadlineAsync(request);
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteAsync([FromRoute] int id)
-        {
-            await _ticketsService.DeleteAsync(id);
-            return Ok();
-        }
+    [HttpDelete("{id}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+    {
+        await _ticketsService.DeleteAsync(id);
+        return Ok();
     }
 }
