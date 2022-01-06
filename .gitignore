@@ -3,8 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-appsettings*.json
-
 /TeamworkSystem.WebAPI/wwwroot/Public/Photos/*
 wwwroot/public/photos/*
 
