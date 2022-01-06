@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
+using TeamworkSystem.DataAccessLayer.Seeders;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations;
 
 public class RatingConfiguration : IEntityTypeConfiguration<Rating>
 {
-    private readonly IRatingSeeder _seeder;
-
-    public RatingConfiguration(IRatingSeeder seeder) => _seeder = seeder;
-
     public void Configure(EntityTypeBuilder<Rating> builder)
     {
         builder.Property(rating => rating.Social)
@@ -43,6 +39,6 @@ public class RatingConfiguration : IEntityTypeConfiguration<Rating>
                .OnDelete(DeleteBehavior.NoAction)
                .HasConstraintName("FK_Ratings_ToId");
 
-        _seeder.Seed(builder);
+        new RatingSeeder().Seed(builder);
     }
 }

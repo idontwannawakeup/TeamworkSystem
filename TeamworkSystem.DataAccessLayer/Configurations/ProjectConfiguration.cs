@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
+using TeamworkSystem.DataAccessLayer.Seeders;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations;
 
 public class ProjectConfiguration : IEntityTypeConfiguration<Project>
 {
-    private readonly IProjectSeeder _seeder;
-
-    public ProjectConfiguration(IProjectSeeder seeder) => _seeder = seeder;
-
     public void Configure(EntityTypeBuilder<Project> builder)
     {
         builder.Property(project => project.Id)
@@ -36,6 +32,6 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
                .OnDelete(DeleteBehavior.Cascade)
                .HasConstraintName("FK_Projects_TeamId");
 
-        _seeder.Seed(builder);
+        new ProjectSeeder().Seed(builder);
     }
 }

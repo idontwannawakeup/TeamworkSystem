@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
+using TeamworkSystem.DataAccessLayer.Seeders;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations;
 
 public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
 {
-    private readonly ITicketSeeder _seeder;
-
-    public TicketConfiguration(ITicketSeeder seeder) => _seeder = seeder;
-
     public void Configure(EntityTypeBuilder<Ticket> builder)
     {
         builder.Property(ticket => ticket.Id)
@@ -59,6 +55,6 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
                .OnDelete(DeleteBehavior.SetNull)
                .HasConstraintName("FK_Tickets_ExecutorId");
 
-        _seeder.Seed(builder);
+        new TicketSeeder().Seed(builder);
     }
 }

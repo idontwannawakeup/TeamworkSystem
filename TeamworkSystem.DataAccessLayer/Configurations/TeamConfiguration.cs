@@ -1,21 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
-using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
+using TeamworkSystem.DataAccessLayer.Seeders;
 
 namespace TeamworkSystem.DataAccessLayer.Configurations;
 
 public class TeamConfiguration : IEntityTypeConfiguration<Team>
 {
-    private readonly ITeamSeeder _teamSeeder;
-    private readonly ITeamsMembersSeeder _teamsMembersSeeder;
-
-    public TeamConfiguration(ITeamSeeder teamSeeder, ITeamsMembersSeeder teamsMembersSeeder)
-    {
-        _teamSeeder = teamSeeder;
-        _teamsMembersSeeder = teamsMembersSeeder;
-    }
-
     public void Configure(EntityTypeBuilder<Team> builder)
     {
         builder.Property(team => team.Id)
@@ -45,9 +36,9 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
                    entity.ToTable("TeamsMembers");
                    entity.Property("MembersId").HasColumnName("UserId");
                    entity.Property("TeamsId").HasColumnName("TeamId");
-                   _teamsMembersSeeder.Seed(entity);
+                   new TeamsMembersSeeder().Seed(entity);
                });
 
-        _teamSeeder.Seed(builder);
+        new TeamSeeder().Seed(builder);
     }
 }
