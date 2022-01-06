@@ -18,7 +18,7 @@ public class TicketSeeder : ISeeder<Ticket>
             Type = "Epic",
             Status = "Backlog",
             Priority = "Medium",
-            CreationTime = DateTime.Now,
+            CreationTime = DateTime.Parse("1/6/2022 1:57:03 PM"),
         },
     };
 
