@@ -1,10 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using TeamworkSystem.DataAccessLayer.Entities;
 
-namespace TeamworkSystem.BusinessLogicLayer.Interfaces
+namespace TeamworkSystem.BusinessLogicLayer.Interfaces;
+
+public interface IJwtSecurityTokenFactory
 {
-    public interface IJwtSecurityTokenFactory
-    {
-        JwtSecurityToken BuildToken(User user);
-    }
+    JwtSecurityToken BuildToken(User user);
 }

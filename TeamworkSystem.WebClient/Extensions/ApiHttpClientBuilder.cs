@@ -1,22 +1,21 @@
-﻿using System.Net.Http;
-using TeamworkSystem.WebClient.Authentication;
+﻿using TeamworkSystem.WebClient.Authentication;
 
 namespace TeamworkSystem.WebClient.Extensions
 {
     public class ApiHttpClientBuilder
     {
-        private readonly HttpClient httpClient;
+        private readonly HttpClient _httpClient;
 
-        private ApiAuthenticationStateProvider stateProvider;
+        private ApiAuthenticationStateProvider _stateProvider;
 
         public ApiHttpClientBuilder AddAuthorization(ApiAuthenticationStateProvider stateProvider)
         {
-            this.stateProvider = stateProvider;
+            _stateProvider = stateProvider;
             return this;
         }
 
-        public ApiHttpClient Build() => new(httpClient, stateProvider);
+        public ApiHttpClient Build() => new(_httpClient, _stateProvider!);
 
-        public ApiHttpClientBuilder(HttpClient httpClient) => this.httpClient = httpClient;
+        public ApiHttpClientBuilder(HttpClient httpClient) => _httpClient = httpClient;
     }
 }

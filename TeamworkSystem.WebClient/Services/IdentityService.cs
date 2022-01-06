@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using TeamworkSystem.WebClient.Authentication;
+﻿using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.ViewModels;
@@ -9,9 +7,8 @@ namespace TeamworkSystem.WebClient.Services
 {
     public class IdentityService : IIdentityService
     {
-        private readonly ApiHttpClient httpClient;
-
-        private readonly ApiAuthenticationStateProvider stateProvider;
+        private readonly ApiHttpClient _httpClient;
+        private readonly ApiAuthenticationStateProvider _stateProvider;
 
         public async Task<JwtViewModel> SignInAsync(UserSignInViewModel viewModel) =>
             await ExecuteRequestAsync("signIn", viewModel);
@@ -21,22 +18,21 @@ namespace TeamworkSystem.WebClient.Services
 
         private async Task<JwtViewModel> ExecuteRequestAsync<T>(string requestUri, T model)
         {
-            var jwtModel = await httpClient.PostWithoutAuthorizationAsync<T, JwtViewModel>(
+            var jwtModel = await _httpClient.PostWithoutAuthorizationAsync<T, JwtViewModel>(
                 requestUri,
                 model);
 
-            await stateProvider.MarkUserAsAuthenticatedAsync(jwtModel.Token);
+            await _stateProvider.MarkUserAsAuthenticatedAsync(jwtModel.Token);
             return jwtModel;
         }
 
-        public IdentityService(
-            HttpClient httpClient,
-            ApiAuthenticationStateProvider stateProvider)
+        public IdentityService(HttpClient httpClient,
+                               ApiAuthenticationStateProvider stateProvider)
         {
-            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(stateProvider)
+            _httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(stateProvider)
                                                                   .Build();
 
-            this.stateProvider = stateProvider;
+            _stateProvider = stateProvider;
         }
     }
 }

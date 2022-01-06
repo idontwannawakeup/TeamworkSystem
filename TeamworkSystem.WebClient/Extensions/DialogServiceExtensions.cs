@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
 using MudBlazor;
 using TeamworkSystem.WebClient.Shared.Dialogs;
 
@@ -18,11 +16,11 @@ namespace TeamworkSystem.WebClient.Extensions
         public static void ShowRatingDialog(
             this IDialogService dialogService,
             int ratingId,
-            IStringLocalizer<SharedLocalization> SL)
+            IStringLocalizer<SharedLocalization> sl)
         {
             dialogService.Show<RatingDialog>(
-                SL["Rating"],
-                new DialogParameters() { ["RatingId"] = ratingId },
+                sl["Rating"],
+                new DialogParameters { ["RatingId"] = ratingId },
                 DialogOptions);
         }
 
@@ -30,11 +28,11 @@ namespace TeamworkSystem.WebClient.Extensions
             this IDialogService dialogService,
             string userId,
             Func<Task> onCreated,
-            IStringLocalizer<SharedLocalization> SL)
+            IStringLocalizer<SharedLocalization> sl)
         {
             dialogService.Show<TeamCreationDialog>(
-                SL["CreateTeam"],
-                new DialogParameters()
+                sl["CreateTeam"],
+                new DialogParameters
                 {
                     ["UserId"] = userId,
                     ["OnCreated"] = onCreated
@@ -46,11 +44,11 @@ namespace TeamworkSystem.WebClient.Extensions
             this IDialogService dialogService,
             string userId,
             Func<Task> onCreated,
-            IStringLocalizer<SharedLocalization> SL)
+            IStringLocalizer<SharedLocalization> sl)
         {
             dialogService.Show<ProjectCreationDialog>(
-                SL["CreateProject"],
-                new DialogParameters()
+                sl["CreateProject"],
+                new DialogParameters
                 {
                     ["UserId"] = userId,
                     ["OnCreated"] = onCreated
@@ -62,11 +60,11 @@ namespace TeamworkSystem.WebClient.Extensions
             this IDialogService dialogService,
             int projectId,
             Func<Task> onCreated,
-            IStringLocalizer<SharedLocalization> SL)
+            IStringLocalizer<SharedLocalization> sl)
         {
             dialogService.Show<TicketCreationDialog>(
-                SL["CreateTicket"],
-                new DialogParameters()
+                sl["CreateTicket"],
+                new DialogParameters
                 {
                     ["ProjectId"] = projectId,
                     ["OnCreated"] = onCreated
@@ -78,11 +76,11 @@ namespace TeamworkSystem.WebClient.Extensions
             this IDialogService dialogService,
             string userId,
             Func<Task> onCreated,
-            IStringLocalizer<SharedLocalization> SL)
+            IStringLocalizer<SharedLocalization> sl)
         {
             dialogService.Show<FriendsCreationDialog>(
-                SL["AddFriend"],
-                new DialogParameters()
+                sl["AddFriend"],
+                new DialogParameters
                 {
                     ["UserId"] = userId,
                     ["OnCreated"] = onCreated
@@ -94,11 +92,11 @@ namespace TeamworkSystem.WebClient.Extensions
             this IDialogService dialogService,
             int teamId,
             Func<Task> onCreated,
-            IStringLocalizer<SharedLocalization> SL)
+            IStringLocalizer<SharedLocalization> sl)
         {
             dialogService.Show<MemberAddingDialog>(
-                SL["AddMember"],
-                new DialogParameters()
+                sl["AddMember"],
+                new DialogParameters
                 {
                     ["TeamId"] = teamId,
                     ["OnCreated"] = onCreated
@@ -108,13 +106,13 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static async Task<bool?> ShowDeleteConfirmingDialog(
             this IDialogService dialogService,
-            IStringLocalizer<SharedLocalization> SL,
+            IStringLocalizer<SharedLocalization> sl,
             string message = "Are you sure you want to delete this item?")
         {
             return await dialogService.ShowMessageBox(
-                title: SL["ConfirmDeleting"],
+                title: sl["ConfirmDeleting"],
                 message: message,
-                cancelText: SL["Cancel"],
+                cancelText: sl["Cancel"],
                 options: DialogOptions);
         }
     }

@@ -1,25 +1,23 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace TeamworkSystem.BusinessLogicLayer.Configurations
+namespace TeamworkSystem.BusinessLogicLayer.Configurations;
+
+public class JwtTokenConfiguration
 {
-    public class JwtTokenConfiguration
-    {
-        private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
 
-        public JwtTokenConfiguration(IConfiguration configuration) =>
-            _configuration = configuration;
+    public JwtTokenConfiguration(IConfiguration configuration) =>
+        _configuration = configuration;
 
-        public string Issuer => _configuration["JwtIssuer"];
-        public string Audience => _configuration["JwtAudience"];
-        public static DateTime ExpirationDate => DateTime.UtcNow.AddYears(1);
+    public string Issuer => _configuration["JwtIssuer"];
+    public string Audience => _configuration["JwtAudience"];
+    public static DateTime ExpirationDate => DateTime.UtcNow.AddYears(1);
 
-        public SymmetricSecurityKey Key =>
-            new(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
+    public SymmetricSecurityKey Key =>
+        new(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
 
-        public SigningCredentials Credentials =>
-            new(Key, SecurityAlgorithms.HmacSha256);
-    }
+    public SigningCredentials Credentials =>
+        new(Key, SecurityAlgorithms.HmacSha256);
 }

@@ -12,9 +12,7 @@
         {
             get => pageSize;
 
-            set => pageSize = (value > MaxPageSize)
-                ? MaxPageSize
-                : value;
+            set => pageSize = value > MaxPageSize ? MaxPageSize : value;
         }
     }
 }

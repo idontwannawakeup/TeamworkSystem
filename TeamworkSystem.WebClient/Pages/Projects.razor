@@ -18,7 +18,7 @@
           Dense="@true">
     <ToolBarContent>
         <MudText Typo="@Typo.h3">@SL["Projects"]</MudText>
-        <MudToolBarSpacer />
+        <MudSpacer />
         <MudTextField T="@string"
                       ValueChanged="@(async title => await OnSearchAsync(title))"
                       Placeholder="@SL["SearchByTitle"]"

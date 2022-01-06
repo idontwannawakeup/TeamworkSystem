@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TeamworkSystem.WebClient.ViewModels
+﻿namespace TeamworkSystem.WebClient.ViewModels
 {
     public class TicketViewModel
     {

@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Blazored.LocalStorage;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;

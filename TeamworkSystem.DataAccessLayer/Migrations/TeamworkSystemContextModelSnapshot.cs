@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamworkSystem.DataAccessLayer;
 
+#nullable disable
+
 namespace TeamworkSystem.DataAccessLayer.Migrations
 {
     [DbContext(typeof(TeamworkSystemContext))]
@@ -15,9 +17,10 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -43,15 +46,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -67,15 +71,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -91,7 +96,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -113,7 +118,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -128,7 +133,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -147,7 +152,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("TeamUser", b =>
@@ -164,17 +169,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("TeamsId");
 
-                    b.ToTable("TeamsMembers");
+                    b.ToTable("TeamsMembers", (string)null);
                 });
 
             modelBuilder.Entity("TeamworkSystem.DataAccessLayer.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasColumnType("ntext");
@@ -199,7 +203,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
 
                     b.HasData(
                         new
@@ -216,8 +220,9 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Comment")
                         .HasColumnType("ntext");
@@ -249,7 +254,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("ToId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
 
                     b.HasData(
                         new
@@ -269,10 +274,9 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("About")
                         .HasColumnType("ntext");
@@ -296,7 +300,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("LeaderId");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
 
                     b.HasData(
                         new
@@ -369,10 +373,9 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
@@ -417,7 +420,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
 
                     b.HasData(
                         new
@@ -517,7 +520,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
@@ -725,7 +728,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
 
                     b.HasIndex("FriendsId");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -799,9 +802,9 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                     b.HasOne("TeamworkSystem.DataAccessLayer.Entities.Team", "Team")
                         .WithMany("Projects")
                         .HasForeignKey("TeamId")
-                        .HasConstraintName("FK_Projects_TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Projects_TeamId");
 
                     b.Navigation("Team");
                 });
@@ -811,16 +814,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                     b.HasOne("TeamworkSystem.DataAccessLayer.Entities.User", "From")
                         .WithMany("MyRatings")
                         .HasForeignKey("FromId")
-                        .HasConstraintName("FK_Ratings_FromId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Ratings_FromId");
 
                     b.HasOne("TeamworkSystem.DataAccessLayer.Entities.User", "To")
                         .WithMany("RatingsFromMe")
                         .HasForeignKey("ToId")
-                        .HasConstraintName("FK_Ratings_ToId")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Ratings_ToId");
 
                     b.Navigation("From");
 
@@ -832,8 +835,8 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                     b.HasOne("TeamworkSystem.DataAccessLayer.Entities.User", "Leader")
                         .WithMany()
                         .HasForeignKey("LeaderId")
-                        .HasConstraintName("FK_Teams_LeaderId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_Teams_LeaderId");
 
                     b.Navigation("Leader");
                 });
@@ -843,15 +846,15 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                     b.HasOne("TeamworkSystem.DataAccessLayer.Entities.User", "Executor")
                         .WithMany("Tickets")
                         .HasForeignKey("ExecutorId")
-                        .HasConstraintName("FK_Tickets_ExecutorId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_Tickets_ExecutorId");
 
                     b.HasOne("TeamworkSystem.DataAccessLayer.Entities.Project", "Project")
                         .WithMany("Tickets")
                         .HasForeignKey("ProjectId")
-                        .HasConstraintName("FK_Tickets_ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Tickets_ProjectId");
 
                     b.Navigation("Executor");
 

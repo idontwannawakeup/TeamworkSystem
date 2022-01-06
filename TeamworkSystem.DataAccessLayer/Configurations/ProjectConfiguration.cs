@@ -3,36 +3,35 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Seeding;
 
-namespace TeamworkSystem.DataAccessLayer.Configurations
+namespace TeamworkSystem.DataAccessLayer.Configurations;
+
+public class ProjectConfiguration : IEntityTypeConfiguration<Project>
 {
-    public class ProjectConfiguration : IEntityTypeConfiguration<Project>
-    {
-        public void Configure(EntityTypeBuilder<Project> builder)
-        {
-            builder.Property(project => project.Id)
-                   .UseIdentityColumn()
-                   .IsRequired();
+       public void Configure(EntityTypeBuilder<Project> builder)
+       {
+              builder.Property(project => project.Id)
+                     .UseIdentityColumn()
+                     .IsRequired();
 
-            builder.Property(project => project.Title)
-                   .HasMaxLength(50)
-                   .IsRequired();
+              builder.Property(project => project.Title)
+                     .HasMaxLength(50)
+                     .IsRequired();
 
-            builder.Property(project => project.Type)
-                   .HasMaxLength(50);
+              builder.Property(project => project.Type)
+                     .HasMaxLength(50);
 
-            builder.Property(project => project.Url)
-                   .HasMaxLength(50);
+              builder.Property(project => project.Url)
+                     .HasMaxLength(50);
 
-            builder.Property(project => project.Description)
-                   .HasColumnType("ntext");
+              builder.Property(project => project.Description)
+                     .HasColumnType("ntext");
 
-            builder.HasOne(project => project.Team)
-                   .WithMany(team => team.Projects)
-                   .HasForeignKey(project => project.TeamId)
-                   .OnDelete(DeleteBehavior.Cascade)
-                   .HasConstraintName("FK_Projects_TeamId");
+              builder.HasOne(project => project.Team)
+                     .WithMany(team => team.Projects)
+                     .HasForeignKey(project => project.TeamId)
+                     .OnDelete(DeleteBehavior.Cascade)
+                     .HasConstraintName("FK_Projects_TeamId");
 
-            new ProjectSeeder().Seed(builder);
-        }
-    }
+              new ProjectSeeder().Seed(builder);
+       }
 }

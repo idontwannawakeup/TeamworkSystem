@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using TeamworkSystem.WebClient.Authentication;
+﻿using TeamworkSystem.WebClient.Authentication;
 using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Parameters;
@@ -11,39 +8,38 @@ namespace TeamworkSystem.WebClient.Services
 {
     public class TicketsService : ITicketsService
     {
-        private readonly ApiHttpClient httpClient;
+        private readonly ApiHttpClient _httpClient;
 
         public async Task<IEnumerable<TicketViewModel>> GetAsync(TicketsParameters parameters) =>
-            await httpClient.GetAsync<List<TicketViewModel>>(
+            await _httpClient.GetAsync<List<TicketViewModel>>(
                 ParametersStringFactory.GenerateParametersString(parameters));
 
         public async Task<(IEnumerable<TicketViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
             TicketsParameters parameters)
         {
-            return await httpClient.GetWithPaginationHeaderAsync<List<TicketViewModel>>(
+            return await _httpClient.GetWithPaginationHeaderAsync<List<TicketViewModel>>(
                 ParametersStringFactory.GenerateParametersString(parameters));
         }
 
         public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId) =>
-            await httpClient.GetAsync<List<TicketViewModel>>($"?ExecutorId={userId}");
+            await _httpClient.GetAsync<List<TicketViewModel>>($"?ExecutorId={userId}");
 
         public async Task<TicketViewModel> GetByIdAsync(int id) =>
-            await httpClient.GetAsync<TicketViewModel>($"{id}");
+            await _httpClient.GetAsync<TicketViewModel>($"{id}");
 
         public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId) =>
-            await httpClient.GetAsync<List<TicketViewModel>>($"?ProjectId={projectId}");
+            await _httpClient.GetAsync<List<TicketViewModel>>($"?ProjectId={projectId}");
 
         public async Task CreateAsync(TicketViewModel viewModel) =>
-            await httpClient.PostAsync(string.Empty, viewModel);
+            await _httpClient.PostAsync(string.Empty, viewModel);
 
         public async Task UpdateAsync(TicketViewModel viewModel) =>
-            await httpClient.PutAsync(string.Empty, viewModel);
+            await _httpClient.PutAsync(string.Empty, viewModel);
 
         public async Task DeleteAsync(int id) =>
-            await httpClient.DeleteAsync($"{id}");
+            await _httpClient.DeleteAsync($"{id}");
 
         public TicketsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
-            this.httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state)
-                                                                  .Build();
+            _httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state).Build();
     }
 }

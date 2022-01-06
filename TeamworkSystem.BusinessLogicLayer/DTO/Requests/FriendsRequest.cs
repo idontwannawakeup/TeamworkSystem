@@ -1,9 +1,8 @@
-﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests
-{
-    public class FriendsRequest
-    {
-        public string FirstId { get; set; }
+﻿namespace TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 
-        public string SecondId { get; set; }
-    }
+public class FriendsRequest
+{
+    public string FirstId { get; set; } = default!;
+
+    public string SecondId { get; set; } = default!;
 }
