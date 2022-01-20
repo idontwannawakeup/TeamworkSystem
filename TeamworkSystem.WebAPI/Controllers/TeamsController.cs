@@ -148,8 +148,9 @@ public class TeamsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> DeleteMemberAsync([FromRoute] int teamId,
-                                                      [FromRoute] string memberId)
+    public async Task<ActionResult> DeleteMemberAsync(
+        [FromRoute] int teamId,
+        [FromRoute] string memberId)
     {
         try
         {

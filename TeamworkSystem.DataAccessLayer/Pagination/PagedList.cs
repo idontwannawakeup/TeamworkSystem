@@ -4,10 +4,11 @@ namespace TeamworkSystem.DataAccessLayer.Pagination;
 
 public class PagedList<T> : List<T>
 {
-    public PagedList(IEnumerable<T> items,
-                     int totalEntitiesCount,
-                     int pageNumber,
-                     int pageSize)
+    public PagedList(
+        IEnumerable<T> items,
+        int totalEntitiesCount,
+        int pageNumber,
+        int pageSize)
     {
         CurrentPage = pageNumber;
         PageSize = pageSize;
@@ -31,21 +32,23 @@ public class PagedList<T> : List<T>
         PageSize,
         TotalEntitiesCount,
         HasPrevious,
-        HasNext,
+        HasNext
     };
 
     public PagedList<TOut> Map<TOut>(Func<T, TOut> selectExpression)
     {
         var mappedItems = this.Select(selectExpression);
-        return new PagedList<TOut>(mappedItems,
+        return new PagedList<TOut>(
+            mappedItems,
             TotalEntitiesCount,
             CurrentPage,
             PageSize);
     }
 
-    public static async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> source,
-                                                            int pageNumber,
-                                                            int pageSize)
+    public static async Task<PagedList<T>> ToPagedListAsync(
+        IQueryable<T> source,
+        int pageNumber,
+        int pageSize)
     {
         var totalEntitiesCount = source.Count();
         IEnumerable<T> items = await source.Skip((pageNumber - 1) * pageSize)

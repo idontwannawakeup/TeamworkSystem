@@ -16,8 +16,7 @@ public class RatingsController : ControllerBase
 {
     private readonly IRatingsService _ratingsService;
 
-    public RatingsController(IRatingsService ratingsService) =>
-        _ratingsService = ratingsService;
+    public RatingsController(IRatingsService ratingsService) => _ratingsService = ratingsService;
 
     [HttpGet]
     [Authorize]
@@ -36,8 +35,7 @@ public class RatingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync(
-        [FromRoute] int id) =>
+    public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync([FromRoute] int id) =>
         Ok(await _ratingsService.GetByIdAsync(id));
 
     [HttpPost]
@@ -54,7 +52,8 @@ public class RatingsController : ControllerBase
         }
         catch (DbUpdateException)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
                 new { Message = "Rating from you to this user already exists." });
         }
     }

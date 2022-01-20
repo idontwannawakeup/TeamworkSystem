@@ -4,7 +4,7 @@ using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
 
 namespace TeamworkSystem.DataAccessLayer.Seeders;
 
-public class TeamSeeder : ITeamSeeder 
+public class TeamSeeder : ITeamSeeder
 {
     private static readonly Team[] Teams =
     {

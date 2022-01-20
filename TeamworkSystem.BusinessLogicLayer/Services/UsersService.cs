@@ -81,21 +81,14 @@ public class UsersService : IUsersService
     }
 
     public async Task AddFriendAsync(FriendsRequest friendsRequest) =>
-        await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
-        {
-            firstUser.Friends.Add(secondUser);
-            secondUser.Friends.Add(firstUser);
-        });
+        await MakeActionWithFriends(friendsRequest, AddToFriends);
 
     public async Task DeleteFriendAsync(FriendsRequest friendsRequest) =>
-        await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
-        {
-            firstUser.Friends.Remove(secondUser);
-            secondUser.Friends.Remove(firstUser);
-        });
+        await MakeActionWithFriends(friendsRequest, DeleteFromFriends);
 
-    private async Task MakeActionWithFriends(FriendsRequest friendsRequest,
-                                             Action<User, User>? action)
+    private async Task MakeActionWithFriends(
+        FriendsRequest friendsRequest,
+        Action<User, User>? action)
     {
         var firstUser = await _userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
         var secondUser = await _userManager.GetCompleteEntityAsync(friendsRequest.SecondId);
@@ -105,5 +98,17 @@ public class UsersService : IUsersService
         await _userManager.UpdateAsync(secondUser);
 
         await _unitOfWork.SaveChangesAsync();
+    }
+
+    private static void AddToFriends(User first, User second)
+    {
+        first.Friends.Add(second);
+        second.Friends.Add(first);
+    }
+
+    private static void DeleteFromFriends(User first, User second)
+    {
+        first.Friends.Remove(first);
+        second.Friends.Remove(second);
     }
 }

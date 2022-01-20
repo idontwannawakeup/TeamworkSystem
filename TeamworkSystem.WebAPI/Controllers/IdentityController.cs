@@ -19,8 +19,7 @@ public class IdentityController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<JwtResponse>> SignInAsync(
-        [FromBody] UserSignInRequest request)
+    public async Task<ActionResult<JwtResponse>> SignInAsync([FromBody] UserSignInRequest request)
     {
         var response = await _identityService.SignInAsync(request);
         return Ok(response);
@@ -30,8 +29,7 @@ public class IdentityController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<JwtResponse>> SignUpAsync(
-        [FromBody] UserSignUpRequest request)
+    public async Task<ActionResult<JwtResponse>> SignUpAsync([FromBody] UserSignUpRequest request)
     {
         var response = await _identityService.SignUpAsync(request);
         return Ok(response);

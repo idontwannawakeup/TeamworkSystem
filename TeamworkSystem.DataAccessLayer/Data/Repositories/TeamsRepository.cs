@@ -99,8 +99,9 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
         source = source.Where(team => team.Name.Contains(name));
     }
 
-    private static void SearchBySpecialization(ref IQueryable<Team> source,
-                                               string? specialization)
+    private static void SearchBySpecialization(
+        ref IQueryable<Team> source,
+        string? specialization)
     {
         if (string.IsNullOrWhiteSpace(specialization))
         {

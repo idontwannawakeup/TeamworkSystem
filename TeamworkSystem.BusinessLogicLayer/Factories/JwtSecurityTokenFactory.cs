@@ -24,6 +24,6 @@ public class JwtSecurityTokenFactory : IJwtSecurityTokenFactory
     {
         new(JwtRegisteredClaimNames.UniqueName, user.UserName),
         new(ClaimTypes.Name, user.UserName),
-        new(ClaimTypes.Authentication, user.Id),
+        new(ClaimTypes.Authentication, user.Id)
     };
 }

@@ -14,7 +14,7 @@ public class ProjectSeeder : IProjectSeeder
             TeamId = 9,
             Title = "Blog",
             Type = "Website",
-            Description = "Just a simple blog from small team",
+            Description = "Just a simple blog from small team"
         }
     };
 

@@ -41,8 +41,8 @@ public class ProjectsRepository : GenericRepository<Project>, IProjectsRepositor
         var project = await Table.Include(project => project.Team)
                                  .SingleOrDefaultAsync(project => project.Id == id);
 
-        return project?.Team ??
-               throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+        return project?.Team
+               ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
     }
 
     private static void SearchByTeamId(ref IQueryable<Project> source, int? teamId)
@@ -55,16 +55,14 @@ public class ProjectsRepository : GenericRepository<Project>, IProjectsRepositor
         source = source.Where(project => project.TeamId == teamId);
     }
 
-    private static void SearchByTeamMemberId(ref IQueryable<Project> source,
-                                             string? teamMemberId)
+    private static void SearchByTeamMemberId(ref IQueryable<Project> source, string? teamMemberId)
     {
         if (string.IsNullOrWhiteSpace(teamMemberId))
         {
             return;
         }
 
-        source = source.Where(
-            project => project.Team.Members.Any(user => user.Id == teamMemberId));
+        source = source.Where(project => project.Team.Members.Any(user => user.Id == teamMemberId));
     }
 
     private static void SearchByTitle(ref IQueryable<Project> source, string? title)
