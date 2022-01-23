@@ -39,7 +39,12 @@ services.AddTransient<ITeamsRepository, TeamsRepository>();
 services.AddTransient<ITicketsRepository, TicketsRepository>();
 
 services.AddTransient<IFilterCriteriaFactory, FilterCriteriaFactory>();
-services.AddTransient<IFilterFactory, FilterFactory>();
+
+services.AddTransient<IFilterFactory<Project>, FilterFactory<Project>>();
+services.AddTransient<IFilterFactory<Rating>, FilterFactory<Rating>>();
+services.AddTransient<IFilterFactory<Team>, FilterFactory<Team>>();
+services.AddTransient<IFilterFactory<Ticket>, FilterFactory<Ticket>>();
+services.AddTransient<IFilterFactory<User>, FilterFactory<User>>();
 
 services.AddTransient<IUnitOfWork, UnitOfWork>();
 
@@ -89,28 +94,31 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 services.AddControllers()
         .AddFluentValidation(configuration =>
         {
-            configuration.RegisterValidatorsFromAssemblyContaining<ValidationDependencyInjection>();
+            configuration
+                .RegisterValidatorsFromAssemblyContaining<ValidationDependencyInjection>();
         });
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "TeamworkSystem.WebAPI",
-        Version = "v1",
-    });
+    c.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "TeamworkSystem.WebAPI",
+            Version = "v1",
+        });
 
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = @"JWT Authorization header using the Bearer scheme.
+    c.AddSecurityDefinition("Bearer",
+        new OpenApiSecurityScheme
+        {
+            Description = @"JWT Authorization header using the Bearer scheme.
                                     Enter 'Bearer' [space] and then your token in the
                                     text input below. Example: 'Bearer 12345abcdef'",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-    });
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+        });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {

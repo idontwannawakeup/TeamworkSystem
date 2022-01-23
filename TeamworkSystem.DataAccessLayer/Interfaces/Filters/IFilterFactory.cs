@@ -1,6 +1,6 @@
 namespace TeamworkSystem.DataAccessLayer.Interfaces.Filters;
 
-public interface IFilterFactory
+public interface IFilterFactory<T>
 {
-    IFilter<T> Get<T, TParams>(TParams parameters) where TParams : IFilterParameters<T>;
+    IFilter<T> Get<TParams>(TParams parameters) where TParams : IFilterParameters<T>;
 }
