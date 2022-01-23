@@ -17,8 +17,8 @@ public class RatingSeeder : IRatingSeeder
             Skills = 5,
             Punctuality = 4,
             Responsibility = 5,
-            Comment = "Just a great person",
-        },
+            Comment = "Just a great person"
+        }
     };
 
     public void Seed(EntityTypeBuilder<Rating> builder) => builder.HasData(Ratings);

@@ -40,10 +40,21 @@ public static class UserManagerExtensions
             parameters.PageSize);
     }
 
-    public static async Task<User> GetByIdAsync(this UserManager<User> userManager, string id)
+    public static async Task<User> GetByIdAsync(
+        this UserManager<User> userManager,
+        string id)
     {
         var user = await userManager.FindByIdAsync(id);
         return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
+    }
+
+    public static async Task<User> FindByNameOrThrowAsync(
+        this UserManager<User> userManager,
+        string name)
+    {
+        var user = await userManager.FindByNameAsync(name);
+        return user ?? throw new EntityNotFoundException(
+            $"{nameof(User)} with user name {name} not found.");
     }
 
     public static async Task<User> GetCompleteEntityAsync(

@@ -41,7 +41,7 @@ public class ProjectsRepository : GenericRepository<Project>, IProjectsRepositor
         var project = await Table.Include(project => project.Team)
                                  .SingleOrDefaultAsync(project => project.Id == id);
 
-        return project?.Team ??
-               throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+        return project?.Team
+               ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
     }
 }

@@ -7,6 +7,7 @@ using TeamworkSystem.BusinessLogicLayer.Interfaces;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
+using TeamworkSystem.DataAccessLayer.Extensions;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 
 namespace TeamworkSystem.BusinessLogicLayer.Services;
@@ -18,9 +19,10 @@ public class IdentityService : IIdentityService
     private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<User> _userManager;
 
-    public IdentityService(IUnitOfWork unitOfWork,
-                           IMapper mapper,
-                           IJwtSecurityTokenFactory tokenFactory)
+    public IdentityService(
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        IJwtSecurityTokenFactory tokenFactory)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -30,9 +32,7 @@ public class IdentityService : IIdentityService
 
     public async Task<JwtResponse> SignInAsync(UserSignInRequest request)
     {
-        var user = await _userManager.FindByNameAsync(request.UserName)
-                   ?? throw new EntityNotFoundException(
-                       $"{nameof(User)} with user name {request.UserName} not found.");
+        var user = await _userManager.FindByNameOrThrowAsync(request.UserName);
 
         if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
@@ -50,7 +50,8 @@ public class IdentityService : IIdentityService
 
         if (!signUpResult.Succeeded)
         {
-            var errors = string.Join("\n",
+            var errors = string.Join(
+                Environment.NewLine,
                 signUpResult.Errors.Select(error => error.Description));
 
             throw new ArgumentException(errors);

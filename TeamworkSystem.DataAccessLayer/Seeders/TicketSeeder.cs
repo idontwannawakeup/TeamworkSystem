@@ -18,8 +18,8 @@ public class TicketSeeder : ITicketSeeder
             Type = "Epic",
             Status = "Backlog",
             Priority = "Medium",
-            CreationTime = DateTime.Parse("1/6/2022 1:57:03 PM"),
-        },
+            CreationTime = DateTime.Parse("1/6/2022 1:57:03 PM")
+        }
     };
 
     public void Seed(EntityTypeBuilder<Ticket> builder) => builder.HasData(Tickets);

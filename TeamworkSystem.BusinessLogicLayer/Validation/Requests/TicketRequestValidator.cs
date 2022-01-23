@@ -11,7 +11,7 @@ public class TicketRequestValidator : AbstractValidator<TicketRequest>
         {
             "Epic",
             "Task",
-            "Bug",
+            "Bug"
         };
 
         var statuses = new List<string>
@@ -19,14 +19,14 @@ public class TicketRequestValidator : AbstractValidator<TicketRequest>
             "Backlog",
             "Chosen For Development",
             "In Progress",
-            "Done",
+            "Done"
         };
 
         var priorities = new List<string>
         {
             "Low",
             "Medium",
-            "High",
+            "High"
         };
 
         RuleFor(ticket => ticket.ProjectId)
@@ -37,14 +37,12 @@ public class TicketRequestValidator : AbstractValidator<TicketRequest>
             .NotEmpty()
             .WithMessage(ticket => $"{nameof(ticket.Title)} can't be empty.")
             .MaximumLength(50)
-            .WithMessage(
-                ticket => $"{nameof(ticket.Title)} should be less than 50 characters.");
+            .WithMessage(ticket => $"{nameof(ticket.Title)} should be less than 50 characters.");
 
         RuleFor(ticket => ticket.Type)
             .Must(type => types.Contains(type!))
-            .WithMessage(
-                ticket =>
-                    $"{nameof(ticket.Type)} should be one of: {string.Join(", ", types)}");
+            .WithMessage(ticket =>
+                $"{nameof(ticket.Type)} should be one of: {string.Join(", ", types)}");
 
         RuleFor(ticket => ticket.Description)
             .NotEmpty()
@@ -52,15 +50,13 @@ public class TicketRequestValidator : AbstractValidator<TicketRequest>
 
         RuleFor(ticket => ticket.Status)
             .Must(status => statuses.Contains(status))
-            .WithMessage(
-                ticket =>
-                    $"{nameof(ticket.Status)} should be one of: {string.Join(", ", statuses)}");
+            .WithMessage(ticket =>
+                $"{nameof(ticket.Status)} should be one of: {string.Join(", ", statuses)}");
 
         RuleFor(ticket => ticket.Priority)
             .Must(priority => priorities.Contains(priority))
-            .WithMessage(
-                ticket =>
-                    $"{nameof(ticket.Priority)} should be one of: {string.Join(", ", priorities)}");
+            .WithMessage(ticket =>
+                $"{nameof(ticket.Priority)} should be one of: {string.Join(", ", priorities)}");
 
         RuleFor(ticket => ticket.Deadline)
             .GreaterThan(DateTime.Now)
