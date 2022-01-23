@@ -16,7 +16,9 @@ using TeamworkSystem.DataAccessLayer;
 using TeamworkSystem.DataAccessLayer.Data;
 using TeamworkSystem.DataAccessLayer.Data.Repositories;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Filters;
 using TeamworkSystem.DataAccessLayer.Interfaces;
+using TeamworkSystem.DataAccessLayer.Interfaces.Filters;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 using TeamworkSystem.DataAccessLayer.Interfaces.Seeders;
 using TeamworkSystem.DataAccessLayer.Seeders;
@@ -35,6 +37,9 @@ services.AddTransient<IProjectsRepository, ProjectsRepository>();
 services.AddTransient<IRatingsRepository, RatingsRepository>();
 services.AddTransient<ITeamsRepository, TeamsRepository>();
 services.AddTransient<ITicketsRepository, TicketsRepository>();
+
+services.AddTransient<IFilterCriteriaFactory, FilterCriteriaFactory>();
+services.AddTransient<IFilterFactory, FilterFactory>();
 
 services.AddTransient<IUnitOfWork, UnitOfWork>();
 
