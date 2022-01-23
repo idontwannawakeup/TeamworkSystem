@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Exceptions;
+using TeamworkSystem.DataAccessLayer.Extensions;
+using TeamworkSystem.DataAccessLayer.Interfaces.Filters;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
@@ -9,9 +11,10 @@ namespace TeamworkSystem.DataAccessLayer.Data.Repositories;
 
 public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
 {
-    public TeamsRepository(TeamworkSystemContext databaseContext) : base(databaseContext)
-    {
-    }
+    private readonly IFilterFactory<Team> _filter;
+
+    public TeamsRepository(TeamworkSystemContext databaseContext, IFilterFactory<Team> filter) :
+        base(databaseContext) => _filter = filter;
 
     public override async Task<Team> GetCompleteEntityAsync(int id)
     {
@@ -25,11 +28,8 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
 
     public async Task<PagedList<Team>> GetAsync(TeamsParameters parameters)
     {
-        IQueryable<Team> source = Table.Include(team => team.Leader);
-
-        SearchByMemberId(ref source, parameters.UserId);
-        SearchByName(ref source, parameters.Name);
-        SearchBySpecialization(ref source, parameters.Specialization);
+        IQueryable<Team> source = Table.Include(team => team.Leader)
+                                       .FilterWith(_filter.Get(parameters));
 
         return await PagedList<Team>.ToPagedListAsync(
             source,
@@ -77,36 +77,5 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
         }
 
         team.Members.Remove(member);
-    }
-
-    private static void SearchByMemberId(ref IQueryable<Team> source, string? userId)
-    {
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            return;
-        }
-
-        source = source.Where(team => team.Members.Any(user => user.Id == userId));
-    }
-
-    private static void SearchByName(ref IQueryable<Team> source, string? name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            return;
-        }
-
-        source = source.Where(team => team.Name.Contains(name));
-    }
-
-    private static void SearchBySpecialization(ref IQueryable<Team> source,
-                                               string? specialization)
-    {
-        if (string.IsNullOrWhiteSpace(specialization))
-        {
-            return;
-        }
-
-        source = source.Where(team => team.Specialization == specialization);
     }
 }

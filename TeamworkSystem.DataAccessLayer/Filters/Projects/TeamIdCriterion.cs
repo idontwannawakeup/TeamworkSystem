@@ -5,8 +5,6 @@ using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Filters.Projects;
 
-using ProjectExpression = Expression<Func<Project, bool>>;
-
 public class TeamIdCriterion : IFilterCriterion<Project>
 {
     private readonly ProjectsParameters _parameters;
@@ -15,5 +13,6 @@ public class TeamIdCriterion : IFilterCriterion<Project>
 
     public bool Condition => _parameters.TeamId is not null or 0;
 
-    public ProjectExpression Expression => project => project.TeamId == _parameters.TeamId;
+    public Expression<Func<Project, bool>> Expression =>
+        project => project.TeamId == _parameters.TeamId;
 }
