@@ -50,7 +50,8 @@ public static class UserManagerExtensions
         this UserManager<User> userManager,
         string id)
     {
-        var user = await userManager.Users.Include(user => user.Teams)
+        var user = await userManager.Users
+                                    .Include(user => user.Teams)
                                     .Include(user => user.Tickets)
                                     .Include(user => user.MyRatings)
                                     .Include(user => user.Friends)
