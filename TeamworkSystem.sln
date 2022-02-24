@@ -17,6 +17,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Bus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.DataAccess", "TeamworkSystem.Identity.DataAccess\TeamworkSystem.Identity.DataAccess.csproj", "{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Social", "Social", "{84CDE9D4-C6D9-4910-A990-B5785BD2C92D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Social.API", "TeamworkSystem.Social.API\TeamworkSystem.Social.API.csproj", "{5D9FB114-CA77-446D-988A-A00643B55161}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Social.BusinessLogic", "TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj", "{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Social.DataAccess", "TeamworkSystem.Social.DataAccess\TeamworkSystem.Social.DataAccess.csproj", "{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +55,18 @@ Global
 		{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D9FB114-CA77-446D-988A-A00643B55161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D9FB114-CA77-446D-988A-A00643B55161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D9FB114-CA77-446D-988A-A00643B55161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D9FB114-CA77-446D-988A-A00643B55161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +78,8 @@ Global
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
 		{364B12B3-B348-4EAA-8594-E33006FF5BA8} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
 		{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
+		{5D9FB114-CA77-446D-988A-A00643B55161} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
+		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
+		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
 	EndGlobalSection
 EndGlobal
