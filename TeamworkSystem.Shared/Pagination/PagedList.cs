@@ -46,9 +46,8 @@ public class PagedList<T> : List<T>
             PageSize);
     }
 
-    public string SerializeMetadata(PagedList<T> list) => JsonSerializer.Serialize(
-        list.Metadata,
-        new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+    public string SerializeMetadata() => JsonSerializer.Serialize(
+        Metadata, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
     public static async Task<PagedList<T>> ToPagedListAsync(
         IQueryable<T> source,
