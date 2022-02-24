@@ -1,6 +1,9 @@
-﻿namespace TeamworkSystem.DataAccessLayer.Parameters;
+﻿using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Interfaces.Filters;
 
-public class TicketsParameters : QueryStringParameters
+namespace TeamworkSystem.DataAccessLayer.Parameters;
+
+public class TicketsParameters : QueryStringParameters, IFilterParameters<Ticket>
 {
     public int? ProjectId { get; set; }
     public string? ExecutorId { get; set; }
