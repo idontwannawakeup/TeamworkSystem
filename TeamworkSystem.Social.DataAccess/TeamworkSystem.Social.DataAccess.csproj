@@ -15,4 +15,8 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

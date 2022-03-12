@@ -2,14 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Interfaces;
 
-namespace TeamworkSystem.Core.DataAccess.Data.Repositories;
+namespace TeamworkSystem.Social.DataAccess.Data.Repositories;
 
 public abstract class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
 {
-    protected readonly TeamworkSystemCoreDbContext DatabaseContext;
+    protected readonly TeamworkSystemSocialDbContext DatabaseContext;
     protected readonly DbSet<TEntity> Table;
 
-    public GenericRepository(TeamworkSystemCoreDbContext databaseContext)
+    public GenericRepository(TeamworkSystemSocialDbContext databaseContext)
     {
         DatabaseContext = databaseContext;
         Table = DatabaseContext.Set<TEntity>();
