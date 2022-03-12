@@ -13,4 +13,9 @@
       <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TeamworkSystem.Core.DataAccess\TeamworkSystem.Core.DataAccess.csproj" />
+      <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
+    </ItemGroup>
+
 </Project>
