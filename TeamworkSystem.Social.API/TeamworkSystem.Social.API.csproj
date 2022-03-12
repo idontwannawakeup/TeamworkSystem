@@ -16,7 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
+      <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
+      <ProjectReference Include="..\TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj" />
     </ItemGroup>
 
 </Project>
