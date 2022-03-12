@@ -1,0 +1,81 @@
+﻿using Microsoft.EntityFrameworkCore;
+using TeamworkSystem.Core.DataAccess.Entities;
+using TeamworkSystem.Core.DataAccess.Interfaces.Repositories;
+using TeamworkSystem.Core.DataAccess.Parameters;
+using TeamworkSystem.Shared.Exceptions;
+using TeamworkSystem.Shared.Extensions;
+using TeamworkSystem.Shared.Interfaces.Filters;
+using TeamworkSystem.Shared.Pagination;
+
+namespace TeamworkSystem.Core.DataAccess.Data.Repositories;
+
+public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
+{
+    private readonly IFilterFactory<Team> _filter;
+
+    public TeamsRepository(TeamworkSystemCoreDbContext databaseContext, IFilterFactory<Team> filter) :
+        base(databaseContext) => _filter = filter;
+
+    public override async Task<Team> GetCompleteEntityAsync(int id)
+    {
+        var team = await Table.Include(team => team.Leader)
+                              .Include(team => team.Projects)
+                              .Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        return team ?? throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+    }
+
+    public async Task<PagedList<Team>> GetAsync(TeamsParameters parameters)
+    {
+        IQueryable<Team> source = Table.Include(team => team.Leader)
+                                       .FilterWith(_filter.Get(parameters));
+
+        return await PagedList<Team>.ToPagedListAsync(
+            source,
+            parameters.PageNumber,
+            parameters.PageSize);
+    }
+
+    public async Task<IEnumerable<Team>> GetUserTeams(UserProfile user) =>
+        await Table.Where(team => team.Members.Contains(user)).ToListAsync();
+
+    public async Task<IEnumerable<UserProfile>> GetMembersAsync(int id)
+    {
+        var team = await Table.Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        if (team is null)
+        {
+            throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+        }
+
+        return team.Members;
+    }
+
+    public async Task AddMemberAsync(int id, UserProfile member)
+    {
+        var team = await Table.Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        if (team is null)
+        {
+            throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+        }
+
+        team.Members.Add(member);
+    }
+
+    public async Task DeleteMemberAsync(int id, UserProfile member)
+    {
+        var team = await Table.Include(team => team.Members)
+                              .SingleOrDefaultAsync(team => team.Id == id);
+
+        if (team is null)
+        {
+            throw new EntityNotFoundException(GetEntityNotFoundErrorMessage(id));
+        }
+
+        team.Members.Remove(member);
+    }
+}

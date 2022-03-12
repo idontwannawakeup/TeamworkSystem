@@ -1,6 +1,6 @@
-﻿using TeamworkSystem.DataAccessLayer.Parameters;
-using TeamworkSystem.Identity.DataAccess.Entities;
+﻿using TeamworkSystem.Identity.DataAccess.Entities;
 using TeamworkSystem.Shared.Interfaces.Filters;
+using TeamworkSystem.Shared.Parameters;
 
 namespace TeamworkSystem.Identity.DataAccess.Parameters;
 

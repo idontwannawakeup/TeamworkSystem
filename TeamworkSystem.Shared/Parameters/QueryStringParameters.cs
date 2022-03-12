@@ -1,4 +1,4 @@
-﻿namespace TeamworkSystem.DataAccessLayer.Parameters;
+﻿namespace TeamworkSystem.Shared.Parameters;
 
 public class QueryStringParameters
 {
