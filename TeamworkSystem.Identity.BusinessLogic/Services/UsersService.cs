@@ -39,14 +39,14 @@ public class UsersService : IUsersService
         return users.Map(_mapper.Map<User, UserResponse>);
     }
 
-    public async Task<UserResponse> GetByIdAsync(string id)
+    public async Task<UserResponse> GetByIdAsync(Guid id)
     {
         var user = await _userManager.GetCompleteEntityAsync(id);
         return _mapper.Map<User, UserResponse>(user);
     }
 
     public async Task<PagedList<UserResponse>> GetFriendsAsync(
-        string id,
+        Guid id,
         UsersParameters parameters)
     {
         var friends = await _userManager.GetFriendsAsync(id, parameters);
@@ -73,7 +73,7 @@ public class UsersService : IUsersService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(string id)
+    public async Task DeleteAsync(Guid id)
     {
         var user = await _userManager.GetByIdAsync(id);
         await _unitOfWork.UserManager.DeleteAsync(user);

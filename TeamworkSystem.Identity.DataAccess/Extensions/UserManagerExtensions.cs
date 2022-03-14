@@ -24,7 +24,7 @@ public static class UserManagerExtensions
 
     public static async Task<PagedList<User>> GetFriendsAsync(
         this UserManager<User> userManager,
-        string id,
+        Guid id,
         UsersParameters parameters)
     {
         var user = await userManager.GetByIdAsync(id);
@@ -40,9 +40,9 @@ public static class UserManagerExtensions
 
     public static async Task<User> GetByIdAsync(
         this UserManager<User> userManager,
-        string id)
+        Guid id)
     {
-        var user = await userManager.FindByIdAsync(id);
+        var user = await userManager.FindByIdAsync(id.ToString());
         return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
     }
 
@@ -57,7 +57,7 @@ public static class UserManagerExtensions
 
     public static async Task<User> GetCompleteEntityAsync(
         this UserManager<User> userManager,
-        string id)
+        Guid id)
     {
         var user = await userManager.Users
                                     .Include(user => user.Friends)
@@ -66,6 +66,6 @@ public static class UserManagerExtensions
         return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
     }
 
-    private static string GetUserNotFoundErrorMessage(string id) =>
+    private static string GetUserNotFoundErrorMessage(Guid id) =>
         $"{nameof(User)} with id {id} not found.";
 }

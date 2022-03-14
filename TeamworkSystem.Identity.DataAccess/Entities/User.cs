@@ -2,7 +2,7 @@
 
 namespace TeamworkSystem.Identity.DataAccess.Entities;
 
-public class User : IdentityUser
+public class User : IdentityUser<Guid>
 {
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;

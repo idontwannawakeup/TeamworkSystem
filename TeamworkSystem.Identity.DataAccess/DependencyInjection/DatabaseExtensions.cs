@@ -19,7 +19,7 @@ public static class DatabaseExtensions
         });
 
         services.AddIdentityCore<User>()
-                .AddRoles<IdentityRole>()
+                .AddRoles<IdentityRole<Guid>>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<TeamworkSystemIdentityDbContext>();

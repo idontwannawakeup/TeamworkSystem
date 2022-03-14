@@ -4,7 +4,7 @@ namespace TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 
 public class UserAvatarRequest
 {
-    public string UserId { get; set; } = default!;
+    public Guid UserId { get; set; } = default!;
 
     public IFormFile Avatar { get; set; } = default!;
 }

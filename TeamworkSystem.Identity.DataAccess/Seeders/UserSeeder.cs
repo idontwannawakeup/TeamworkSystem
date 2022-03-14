@@ -12,7 +12,7 @@ public class UserSeeder : IUserSeeder
     {
         new User
         {
-            Id = "61dfb9e3-1c27-424a-9963-9586ca110220",
+            Id = Guid.Parse("61dfb9e3-1c27-424a-9963-9586ca110220"),
             UserName = "User1",
             NormalizedUserName = "USER1",
             Email = "user1@gmail.com",
@@ -28,7 +28,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "3b333929-f974-444e-a8d3-68f50a0459c0",
+            Id = Guid.Parse("3b333929-f974-444e-a8d3-68f50a0459c0"),
             UserName = "User2",
             NormalizedUserName = "USER2",
             Email = "user2@gmail.com",
@@ -44,7 +44,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "a36b02e1-81a9-47f4-89b6-d33c4f40ed5f",
+            Id = Guid.Parse("a36b02e1-81a9-47f4-89b6-d33c4f40ed5f"),
             UserName = "User3",
             NormalizedUserName = "USER3",
             Email = "user3@gmail.com",
@@ -60,7 +60,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "013a2014-4a25-4a3d-9fae-e0f783d42ef9",
+            Id = Guid.Parse("013a2014-4a25-4a3d-9fae-e0f783d42ef9"),
             UserName = "User4",
             NormalizedUserName = "USER4",
             Email = "user4@gmail.com",
@@ -76,7 +76,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "ae557ffc-2906-4913-bd26-40aa98a55570",
+            Id = Guid.Parse("ae557ffc-2906-4913-bd26-40aa98a55570"),
             UserName = "User5",
             NormalizedUserName = "USER5",
             Email = "user5@gmail.com",
@@ -92,7 +92,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "e5ca09a8-d3c6-4114-99a0-6b2f86ff1df2",
+            Id = Guid.Parse("e5ca09a8-d3c6-4114-99a0-6b2f86ff1df2"),
             UserName = "User6",
             NormalizedUserName = "USER6",
             Email = "user6@gmail.com",
@@ -108,7 +108,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "bc0c5522-0a02-4f23-bb6a-319529716a94",
+            Id = Guid.Parse("bc0c5522-0a02-4f23-bb6a-319529716a94"),
             UserName = "User7",
             NormalizedUserName = "USER7",
             Email = "user7@gmail.com",
@@ -124,7 +124,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "7484e532-dc8e-4005-8b67-15ad8a421a37",
+            Id = Guid.Parse("7484e532-dc8e-4005-8b67-15ad8a421a37"),
             UserName = "User8",
             NormalizedUserName = "USER8",
             Email = "user8@gmail.com",
@@ -140,7 +140,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "3f036c83-88e8-4aeb-ad33-290d60cf6b66",
+            Id = Guid.Parse("3f036c83-88e8-4aeb-ad33-290d60cf6b66"),
             UserName = "User9",
             NormalizedUserName = "USER9",
             Email = "user9@gmail.com",
@@ -156,7 +156,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "7ad5c481-f391-45bb-a79c-cfcb1adb448b",
+            Id = Guid.Parse("7ad5c481-f391-45bb-a79c-cfcb1adb448b"),
             UserName = "User10",
             NormalizedUserName = "USER10",
             Email = "user10@gmail.com",
@@ -172,7 +172,7 @@ public class UserSeeder : IUserSeeder
         },
         new User
         {
-            Id = "0a906f06-fc52-417b-bc81-352df8bbe721",
+            Id = Guid.Parse("0a906f06-fc52-417b-bc81-352df8bbe721"),
             UserName = "User11",
             NormalizedUserName = "USER11",
             Email = "user11@gmail.com",

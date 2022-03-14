@@ -2,7 +2,6 @@
 
 public class FriendsRequest
 {
-    public string FirstId { get; set; } = default!;
-
-    public string SecondId { get; set; } = default!;
+    public Guid FirstId { get; set; }
+    public Guid SecondId { get; set; }
 }

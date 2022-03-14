@@ -28,12 +28,12 @@ public class UsersController : ControllerBase
         return Ok(users);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserResponse>> GetByIdAsync([FromRoute] string id) =>
+    public async Task<ActionResult<UserResponse>> GetByIdAsync([FromRoute] Guid id) =>
         Ok(await _usersService.GetByIdAsync(id));
 
     [HttpPut]
@@ -48,25 +48,25 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> DeleteAsync([FromRoute] string id)
+    public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await _usersService.DeleteAsync(id);
         return Ok();
     }
 
-    [HttpGet("friends/{id}")]
+    [HttpGet("friends/{id:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PagedList<UserResponse>>> GetFriendsAsync(
-        [FromRoute] string id,
+        [FromRoute] Guid id,
         [FromQuery] UsersParameters parameters)
     {
         var friends = await _usersService.GetFriendsAsync(id, parameters);
@@ -97,15 +97,15 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("friends/{firstId}/{secondId}")]
+    [HttpDelete("friends/{firstId:guid}/{secondId:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> DeleteFriendAsync(
-        [FromRoute] string firstId,
-        [FromRoute] string secondId)
+        [FromRoute] Guid firstId,
+        [FromRoute] Guid secondId)
     {
         var request = new FriendsRequest
         {
