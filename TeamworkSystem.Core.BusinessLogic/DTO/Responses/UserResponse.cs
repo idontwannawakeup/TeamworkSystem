@@ -2,7 +2,8 @@
 
 public class UserResponse
 {
-    public string Id { get; set; } = default!;
+    public Guid Id { get; set; }
+
     public string FullName { get; set; } = default!;
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;

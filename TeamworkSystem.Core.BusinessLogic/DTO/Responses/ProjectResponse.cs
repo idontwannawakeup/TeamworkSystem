@@ -2,8 +2,8 @@
 
 public class ProjectResponse
 {
-    public int Id { get; set; }
-    public int TeamId { get; set; }
+    public Guid Id { get; set; }
+    public Guid TeamId { get; set; }
 
     public string Title { get; set; } = default!;
     public string? Type { get; set; }

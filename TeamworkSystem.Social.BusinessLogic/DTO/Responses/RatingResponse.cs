@@ -2,9 +2,9 @@
 
 public class RatingResponse
 {
-    public int Id { get; set; }
-    public string FromId { get; set; } = default!;
-    public string ToId { get; set; } = default!;
+    public Guid Id { get; set; }
+    public Guid FromId { get; set; }
+    public Guid ToId { get; set; }
 
     public int Social { get; set; }
     public int Skills { get; set; }
