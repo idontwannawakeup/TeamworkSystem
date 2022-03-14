@@ -2,6 +2,6 @@
 
 public class TeamMemberRequest
 {
-    public string UserId { get; set; } = default!;
-    public int TeamId { get; set; }
+    public Guid UserId { get; set; } = default!;
+    public Guid TeamId { get; set; }
 }

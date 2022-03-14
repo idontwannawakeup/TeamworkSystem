@@ -37,14 +37,14 @@ public class ProjectsService : IProjectsService
         return projects.Map(_mapper.Map<Project, ProjectResponse>);
     }
 
-    public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId)
+    public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(Guid teamId)
     {
         var team = await _teamsRepository.GetCompleteEntityAsync(teamId);
         var projects = team.Projects;
         return projects.Select(_mapper.Map<Project, ProjectResponse>);
     }
 
-    public async Task<ProjectResponse> GetByIdAsync(int id)
+    public async Task<ProjectResponse> GetByIdAsync(Guid id)
     {
         var project = await _projectsRepository.GetCompleteEntityAsync(id);
         return _mapper.Map<Project, ProjectResponse>(project);
@@ -64,7 +64,7 @@ public class ProjectsService : IProjectsService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
         await _projectsRepository.DeleteAsync(id);
         await _unitOfWork.SaveChangesAsync();

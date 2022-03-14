@@ -6,5 +6,5 @@ namespace TeamworkSystem.Social.DataAccess.Parameters;
 
 public class RatingsParameters : QueryStringParameters, IFilterParameters<Rating>
 {
-    public string? RatedUserId { get; set; }
+    public Guid? RatedUserId { get; set; }
 }

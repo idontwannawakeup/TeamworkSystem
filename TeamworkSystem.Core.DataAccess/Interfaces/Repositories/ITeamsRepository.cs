@@ -9,7 +9,7 @@ public interface ITeamsRepository : IRepository<Team>
 {
     Task<PagedList<Team>> GetAsync(TeamsParameters parameters);
     Task<IEnumerable<Team>> GetUserTeams(UserProfile user);
-    Task<IEnumerable<UserProfile>> GetMembersAsync(int id);
-    Task AddMemberAsync(int id, UserProfile member);
-    Task DeleteMemberAsync(int id, UserProfile member);
+    Task<IEnumerable<UserProfile>> GetMembersAsync(Guid id);
+    Task AddMemberAsync(Guid id, UserProfile member);
+    Task DeleteMemberAsync(Guid id, UserProfile member);
 }

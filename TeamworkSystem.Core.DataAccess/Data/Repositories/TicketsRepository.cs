@@ -16,7 +16,7 @@ public class TicketsRepository : GenericRepository<Ticket>, ITicketsRepository
     public TicketsRepository(TeamworkSystemCoreDbContext databaseContext, IFilterFactory<Ticket> filter)
         : base(databaseContext) => _filter = filter;
 
-    public override async Task<Ticket> GetCompleteEntityAsync(int id)
+    public override async Task<Ticket> GetCompleteEntityAsync(Guid id)
     {
         var ticket = await Table.Include(ticket => ticket.Executor)
                                 .Include(ticket => ticket.Project)

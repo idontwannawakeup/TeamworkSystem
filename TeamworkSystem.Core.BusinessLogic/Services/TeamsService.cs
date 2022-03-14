@@ -38,14 +38,14 @@ public class TeamsService : ITeamsService
         return teamsPage.Map(_mapper.Map<Team, TeamResponse>);
     }
 
-    public async Task<IEnumerable<TeamResponse>> GetUserTeamsAsync(string userId)
+    public async Task<IEnumerable<TeamResponse>> GetUserTeamsAsync(Guid userId)
     {
         var user = new UserProfile { Id = userId };
         var teams = await _teamsRepository.GetUserTeams(user);
         return teams.Select(_mapper.Map<Team, TeamResponse>);
     }
 
-    public async Task<TeamResponse> GetByIdAsync(int id)
+    public async Task<TeamResponse> GetByIdAsync(Guid id)
     {
         var team = await _teamsRepository.GetByIdAsync(id);
         return _mapper.Map<Team, TeamResponse>(team);
@@ -75,7 +75,7 @@ public class TeamsService : ITeamsService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
         await _teamsRepository.DeleteAsync(id);
         await _unitOfWork.SaveChangesAsync();

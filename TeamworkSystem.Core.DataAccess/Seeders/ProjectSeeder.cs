@@ -10,8 +10,8 @@ public class ProjectSeeder : IProjectSeeder
     {
         new Project
         {
-            Id = 1,
-            TeamId = 9,
+            Id = Guid.Parse("2f73e5de-7fb3-47c1-9756-ea8a499d8eac"),
+            TeamId = Guid.Parse("1ee4f75c-099d-4de3-a298-7d5ed17556f9"),
             Title = "Blog",
             Type = "Website",
             Description = "Just a simple blog from small team"

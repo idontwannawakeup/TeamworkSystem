@@ -29,12 +29,12 @@ public class RatingsController : ControllerBase
         return Ok(ratings);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync([FromRoute] int id) =>
+    public async Task<ActionResult<IEnumerable<RatingResponse>>> GetByIdAsync([FromRoute] Guid id) =>
         Ok(await _ratingsService.GetByIdAsync(id));
 
     [HttpPost]
@@ -68,12 +68,12 @@ public class RatingsController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+    public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await _ratingsService.DeleteAsync(id);
         return Ok();

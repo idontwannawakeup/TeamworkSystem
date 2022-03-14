@@ -10,9 +10,9 @@ public class TicketSeeder : ITicketSeeder
     {
         new Ticket
         {
-            Id = 1,
-            ProjectId = 1,
-            ExecutorId = "61dfb9e3-1c27-424a-9963-9586ca110220",
+            Id = new Guid("61c21020-30a0-47a6-8b9d-607b6b9f68b0"),
+            ProjectId = Guid.Parse("2f73e5de-7fb3-47c1-9756-ea8a499d8eac"),
+            ExecutorId = Guid.Parse("61dfb9e3-1c27-424a-9963-9586ca110220"),
             Title = "Fix bug",
             Description = "There's unknown bug. Just fix it.",
             Type = "Epic",

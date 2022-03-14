@@ -11,7 +11,7 @@ public class TeamMemberIdCriterion : IFilterCriterion<Project>
 
     public TeamMemberIdCriterion(ProjectsParameters parameters) => _parameters = parameters;
 
-    public bool Condition => !string.IsNullOrWhiteSpace(_parameters.TeamMemberId);
+    public bool Condition => _parameters.TeamMemberId is not null;
 
     public Expression<Func<Project, bool>> Expression => project =>
         project.Team.Members.Any(user => user.Id == _parameters.TeamMemberId);

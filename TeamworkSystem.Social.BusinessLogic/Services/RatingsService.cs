@@ -35,7 +35,7 @@ public class RatingsService : IRatingsService
         return ratings.Map(_mapper.Map<Rating, RatingResponse>);
     }
 
-    public async Task<RatingResponse> GetByIdAsync(int id)
+    public async Task<RatingResponse> GetByIdAsync(Guid id)
     {
         var rating = await _ratingsRepository.GetByIdAsync(id);
         return _mapper.Map<Rating, RatingResponse>(rating);
@@ -55,19 +55,19 @@ public class RatingsService : IRatingsService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
         await _ratingsRepository.DeleteAsync(id);
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<RatingResponse>> GetRatingProfilesFromUserAsync(string userId)
+    public async Task<IEnumerable<RatingResponse>> GetRatingProfilesFromUserAsync(Guid userId)
     {
         var ratings = await _ratingsRepository.GetRatingsFromUserAsync(userId);
         return ratings.Select(_mapper.Map<Rating, RatingResponse>);
     }
 
-    public async Task<IEnumerable<RatingResponse>> GetRatingProfilesForUserAsync(string userId)
+    public async Task<IEnumerable<RatingResponse>> GetRatingProfilesForUserAsync(Guid userId)
     {
         var ratings = await _ratingsRepository.GetRatingsForUserAsync(userId);
         return ratings.Select(_mapper.Map<Rating, RatingResponse>);

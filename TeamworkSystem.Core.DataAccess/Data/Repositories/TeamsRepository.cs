@@ -16,7 +16,7 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
     public TeamsRepository(TeamworkSystemCoreDbContext databaseContext, IFilterFactory<Team> filter) :
         base(databaseContext) => _filter = filter;
 
-    public override async Task<Team> GetCompleteEntityAsync(int id)
+    public override async Task<Team> GetCompleteEntityAsync(Guid id)
     {
         var team = await Table.Include(team => team.Leader)
                               .Include(team => team.Projects)
@@ -40,7 +40,7 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
     public async Task<IEnumerable<Team>> GetUserTeams(UserProfile user) =>
         await Table.Where(team => team.Members.Contains(user)).ToListAsync();
 
-    public async Task<IEnumerable<UserProfile>> GetMembersAsync(int id)
+    public async Task<IEnumerable<UserProfile>> GetMembersAsync(Guid id)
     {
         var team = await Table.Include(team => team.Members)
                               .SingleOrDefaultAsync(team => team.Id == id);
@@ -53,7 +53,7 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
         return team.Members;
     }
 
-    public async Task AddMemberAsync(int id, UserProfile member)
+    public async Task AddMemberAsync(Guid id, UserProfile member)
     {
         var team = await Table.Include(team => team.Members)
                               .SingleOrDefaultAsync(team => team.Id == id);
@@ -66,7 +66,7 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
         team.Members.Add(member);
     }
 
-    public async Task DeleteMemberAsync(int id, UserProfile member)
+    public async Task DeleteMemberAsync(Guid id, UserProfile member)
     {
         var team = await Table.Include(team => team.Members)
                               .SingleOrDefaultAsync(team => team.Id == id);

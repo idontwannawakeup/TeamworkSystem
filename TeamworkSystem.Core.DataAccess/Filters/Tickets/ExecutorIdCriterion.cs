@@ -12,7 +12,7 @@ public class ExecutorIdCriterion : IFilterCriterion<Ticket>
     public ExecutorIdCriterion(TicketsParameters parameters) =>
         _parameters = parameters;
 
-    public bool Condition => !string.IsNullOrWhiteSpace(_parameters.ExecutorId);
+    public bool Condition => _parameters.ExecutorId is not null;
 
     public Expression<Func<Ticket, bool>> Expression =>
         ticket => ticket.ExecutorId == _parameters.ExecutorId;

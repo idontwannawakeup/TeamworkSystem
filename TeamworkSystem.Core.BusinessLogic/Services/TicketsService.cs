@@ -35,7 +35,7 @@ public class TicketsService : ITicketsService
         return tickets.Map(_mapper.Map<Ticket, TicketResponse>);
     }
 
-    public async Task<TicketResponse> GetByIdAsync(int id)
+    public async Task<TicketResponse> GetByIdAsync(Guid id)
     {
         var ticket = await _ticketsRepository.GetCompleteEntityAsync(id);
         return _mapper.Map<Ticket, TicketResponse>(ticket);
@@ -78,7 +78,7 @@ public class TicketsService : ITicketsService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
         await _ticketsRepository.DeleteAsync(id);
         await _unitOfWork.SaveChangesAsync();

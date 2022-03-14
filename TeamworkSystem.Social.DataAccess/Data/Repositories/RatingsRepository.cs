@@ -16,7 +16,7 @@ public class RatingsRepository : GenericRepository<Rating>, IRatingsRepository
     public RatingsRepository(TeamworkSystemSocialDbContext databaseContext, IFilterFactory<Rating> filter) :
         base(databaseContext) => _filter = filter;
 
-    public override async Task<Rating> GetCompleteEntityAsync(int id)
+    public override async Task<Rating> GetCompleteEntityAsync(Guid id)
     {
         var rating = await Table.Include(rating => rating.From)
                                 .Include(rating => rating.To)
@@ -37,9 +37,9 @@ public class RatingsRepository : GenericRepository<Rating>, IRatingsRepository
             parameters.PageSize);
     }
 
-    public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(string userId) =>
+    public async Task<IEnumerable<Rating>> GetRatingsFromUserAsync(Guid userId) =>
         await Table.Where(rating => rating.FromId == userId).ToListAsync();
 
-    public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(string userId) =>
+    public async Task<IEnumerable<Rating>> GetRatingsForUserAsync(Guid userId) =>
         await Table.Where(rating => rating.ToId == userId).ToListAsync();
 }

@@ -11,7 +11,7 @@ public class RatedUserIdCriterion : IFilterCriterion<Rating>
 
     public RatedUserIdCriterion(RatingsParameters parameters) => _parameters = parameters;
 
-    public bool Condition => !string.IsNullOrWhiteSpace(_parameters.RatedUserId);
+    public bool Condition => _parameters.RatedUserId is not null;
 
     public Expression<Func<Rating, bool>> Expression =>
         rating => rating.ToId == _parameters.RatedUserId;

@@ -11,7 +11,7 @@ public class TeamIdCriterion : IFilterCriterion<Project>
 
     public TeamIdCriterion(ProjectsParameters parameters) => _parameters = parameters;
 
-    public bool Condition => _parameters.TeamId is not null or 0;
+    public bool Condition => _parameters.TeamId is not null;
 
     public Expression<Func<Project, bool>> Expression =>
         project => project.TeamId == _parameters.TeamId;

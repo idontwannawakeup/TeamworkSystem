@@ -16,7 +16,7 @@ public class ProjectsRepository : GenericRepository<Project>, IProjectsRepositor
     public ProjectsRepository(TeamworkSystemCoreDbContext databaseContext, IFilterFactory<Project> filter)
         : base(databaseContext) => _filter = filter;
 
-    public override async Task<Project> GetCompleteEntityAsync(int id)
+    public override async Task<Project> GetCompleteEntityAsync(Guid id)
     {
         var project = await Table.Include(project => project.Team)
                                  .Include(project => project.Tickets)
@@ -36,7 +36,7 @@ public class ProjectsRepository : GenericRepository<Project>, IProjectsRepositor
             parameters.PageSize);
     }
 
-    public async Task<Team> GetRelatedTeamAsync(int id)
+    public async Task<Team> GetRelatedTeamAsync(Guid id)
     {
         var project = await Table.Include(project => project.Team)
                                  .SingleOrDefaultAsync(project => project.Id == id);
