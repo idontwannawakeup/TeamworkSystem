@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.Social.API.DependencyInjection;
 using TeamworkSystem.Social.BusinessLogic.DependencyInjection;
 using TeamworkSystem.Social.DataAccess.DependencyInjection;
 
@@ -12,6 +13,7 @@ services.AddFilterFactories();
 services.AddServices();
 services.AddSeeding();
 services.AddValidation();
+services.AddAuthenticationWithJwtBearer(builder.Configuration);
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -69,7 +71,7 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
-// TODO: maybe it's required to add authentication
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,4 +1,8 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.Core.API.DependencyInjection;
 using TeamworkSystem.Core.API.Middlewares;
 using TeamworkSystem.Core.BusinessLogic.DependencyInjection;
 using TeamworkSystem.Core.DataAccess.DependencyInjection;
@@ -12,6 +16,7 @@ services.AddFilterFactories();
 services.AddServices();
 services.AddSeeding();
 services.AddValidation();
+services.AddAuthenticationWithJwtBearer(builder.Configuration);
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -72,7 +77,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseStaticFiles();
 
-// TODO: maybe it's required to add authentication
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
