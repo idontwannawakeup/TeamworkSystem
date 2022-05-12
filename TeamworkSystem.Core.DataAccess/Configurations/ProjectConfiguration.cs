@@ -10,7 +10,7 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
     public void Configure(EntityTypeBuilder<Project> builder)
     {
         builder.Property(project => project.Id)
-               .UseIdentityColumn()
+               .ValueGeneratedOnAdd()
                .IsRequired();
 
         builder.Property(project => project.Title)

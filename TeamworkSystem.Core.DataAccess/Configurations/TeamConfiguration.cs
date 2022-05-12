@@ -10,7 +10,7 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
     public void Configure(EntityTypeBuilder<Team> builder)
     {
         builder.Property(team => team.Id)
-               .UseIdentityColumn()
+               .ValueGeneratedOnAdd()
                .IsRequired();
 
         builder.Property(team => team.Name)

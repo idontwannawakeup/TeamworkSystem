@@ -10,7 +10,7 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
     public void Configure(EntityTypeBuilder<Ticket> builder)
     {
         builder.Property(ticket => ticket.Id)
-               .UseIdentityColumn()
+               .ValueGeneratedOnAdd()
                .IsRequired();
 
         builder.Property(ticket => ticket.ProjectId)

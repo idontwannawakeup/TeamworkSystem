@@ -9,6 +9,10 @@ public class RatingConfiguration : IEntityTypeConfiguration<Rating>
 {
     public void Configure(EntityTypeBuilder<Rating> builder)
     {
+        builder.Property(rating => rating.Id)
+               .ValueGeneratedOnAdd()
+               .IsRequired();
+
         builder.Property(rating => rating.Social)
                .IsRequired();
 
