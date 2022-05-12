@@ -7,7 +7,7 @@ namespace TeamworkSystem.Core.BusinessLogic.Configurations;
 
 public class TeamMapperProfile : Profile
 {
-    private TeamMapperProfile()
+    public TeamMapperProfile()
     {
         CreateMap<TeamRequest, Team>();
         CreateMap<Team, TeamResponse>()
