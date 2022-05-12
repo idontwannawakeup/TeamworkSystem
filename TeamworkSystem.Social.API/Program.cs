@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Social.API.DependencyInjection;
+using TeamworkSystem.Social.API.Middlewares;
 using TeamworkSystem.Social.BusinessLogic.DependencyInjection;
 using TeamworkSystem.Social.DataAccess.DependencyInjection;
 
