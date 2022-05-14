@@ -14,7 +14,7 @@ public class FriendsController : ControllerBase
 
     public FriendsController(FriendsService friendsService) => _friendsService = friendsService;
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
