@@ -11,8 +11,8 @@ namespace TeamworkSystem.Social.BusinessLogic.Services;
 
 public class RatingsService : IRatingsService
 {
-    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
     public RatingsService(IUnitOfWork unitOfWork, IMapper mapper)
     {
