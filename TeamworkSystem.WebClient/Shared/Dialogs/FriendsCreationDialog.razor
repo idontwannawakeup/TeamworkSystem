@@ -1,6 +1,7 @@
 ﻿@inject IStringLocalizer<SharedLocalization> SL
 @inject ISnackbar Snackbar
 @inject IUsersService UsersService
+@inject IFriendsService FriendsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
 <EditForm Model="@friends" OnValidSubmit="@OnValidSubmitAsync">
@@ -56,7 +57,7 @@
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await UsersService.AddFriendsAsync(friends);
+            await FriendsService.AddFriendsAsync(friends);
             DialogInstance.Close();
             Snackbar.Add("Friend added", Severity.Success);
             OnCreated?.Invoke();

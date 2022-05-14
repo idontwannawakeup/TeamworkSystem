@@ -32,20 +32,6 @@ namespace TeamworkSystem.WebClient.Services
         public async Task<UserViewModel> GetByIdAsync(Guid id) =>
             await _httpClient.GetAsync<UserViewModel>($"{id}");
 
-        public async Task<IEnumerable<UserViewModel>> GetFriendsAsync(Guid id) =>
-            await _httpClient.GetAsync<List<UserViewModel>>($"friends/{id}");
-
-        public async Task<(IEnumerable<UserViewModel>, PaginationHeaderViewModel)> GetFriendsWithPaginationHeaderAsync(
-            Guid id,
-            UsersParameters parameters)
-        {
-            return await _httpClient.GetWithPaginationHeaderAsync<List<UserViewModel>>(
-                $"friends/{id}"
-                + $"?{nameof(parameters.PageNumber)}={parameters.PageNumber}"
-                + $"&{nameof(parameters.PageSize)}={parameters.PageSize}"
-                + $"&{nameof(parameters.LastName)}={parameters.LastName}");
-        }
-
         public async Task UpdateAsync(UserViewModel viewModel) =>
             await _httpClient.PutAsync(string.Empty, viewModel);
 
@@ -69,12 +55,6 @@ namespace TeamworkSystem.WebClient.Services
 
         public async Task DeleteAsync(Guid userId) =>
             await _httpClient.DeleteAsync($"{userId}");
-
-        public async Task AddFriendsAsync(FriendsViewModel viewModel) =>
-            await _httpClient.PostAsync("friends", viewModel);
-
-        public async Task DeleteFriendsAsync(FriendsViewModel viewModel) =>
-            await _httpClient.DeleteAsync($"friends/{viewModel.FirstId}/{viewModel.SecondId}");
 
         public UsersService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>
             _httpClient = new ApiHttpClientBuilder(httpClient).AddAuthorization(state).Build();

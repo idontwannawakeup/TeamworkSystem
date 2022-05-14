@@ -5,17 +5,12 @@ namespace TeamworkSystem.Social.DataAccess.Data;
 
 public class UnitOfWork : IUnitOfWork
 {
-    protected readonly TeamworkSystemSocialDbContext DatabaseContext;
-
-    public UnitOfWork(
-        TeamworkSystemSocialDbContext databaseContext,
-        IRatingsRepository ratingsRepository)
+    public UnitOfWork(IRatingsRepository ratingsRepository, IFriendsRepository friendsRepository)
     {
-        DatabaseContext = databaseContext;
         RatingsRepository = ratingsRepository;
+        FriendsRepository = friendsRepository;
     }
 
     public IRatingsRepository RatingsRepository { get; }
-
-    public async Task SaveChangesAsync() => await DatabaseContext.SaveChangesAsync();
+    public IFriendsRepository FriendsRepository { get; }
 }

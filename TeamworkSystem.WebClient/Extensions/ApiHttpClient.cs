@@ -38,6 +38,14 @@ namespace TeamworkSystem.WebClient.Extensions
             return (responseBody.Deserialize<T>(), pagination);
         }
 
+        public async Task PostAsync(string requestUri)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
+            var response = await _httpClient.PostAsync(requestUri, default);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
+        }
+
         public async Task PostAsync<T>(string requestUri, T viewModel)
         {
             _httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();

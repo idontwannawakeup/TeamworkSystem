@@ -4,7 +4,7 @@
 @inject IConfiguration Configuration
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
-@inject IUsersService UsersService
+@inject IFriendsService FriendsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
 <MudTable Class="mt-md-12 mb-12"
@@ -105,7 +105,7 @@
             await RequestErrorsHandler.HandleRequestAsync(async () =>
             {
                 var viewModel = new FriendsViewModel() { FirstId = userId, SecondId = friendId };
-                await UsersService.DeleteFriendsAsync(viewModel);
+                await FriendsService.DeleteFriendsAsync(viewModel);
                 await table.ReloadServerData();
                 Snackbar.Add("Friend deleted.", Severity.Success);
             });
@@ -124,9 +124,9 @@
     private async Task<TableData<UserViewModel>> InitializeFriendsAsync(TableState state)
     {
         userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
-        var (friends, pagination) = await UsersService.GetFriendsWithPaginationHeaderAsync(
+        var (friends, pagination) = await FriendsService.GetFriendsWithPaginationHeaderAsync(
             userId,
-            new UsersParameters()
+            new FriendsParameters()
             {
                 PageNumber = state.Page + 1,
                 PageSize = state.PageSize,

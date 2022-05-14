@@ -1,4 +1,4 @@
-﻿namespace TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
+﻿namespace TeamworkSystem.Social.BusinessLogic.DTO.Requests;
 
 public class FriendsRequest
 {

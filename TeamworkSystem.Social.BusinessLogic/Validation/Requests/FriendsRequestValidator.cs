@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
+using TeamworkSystem.Social.BusinessLogic.DTO.Requests;
 
-namespace TeamworkSystem.Identity.BusinessLogic.Validation.Requests;
+namespace TeamworkSystem.Social.BusinessLogic.Validation.Requests;
 
 public class FriendsRequestValidator : AbstractValidator<FriendsRequest>
 {

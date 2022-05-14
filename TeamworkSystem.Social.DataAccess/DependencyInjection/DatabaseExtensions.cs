@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,9 +12,10 @@ public static class DatabaseExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddTransient<IDbConnection>(_ => new SqlConnection(connectionString));
         services.AddDbContext<TeamworkSystemSocialDbContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
             options.UseSqlServer(connectionString);
         });
 

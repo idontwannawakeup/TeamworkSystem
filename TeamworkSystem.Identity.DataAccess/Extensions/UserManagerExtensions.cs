@@ -22,22 +22,6 @@ public static class UserManagerExtensions
             parameters.PageSize);
     }
 
-    public static async Task<PagedList<User>> GetFriendsAsync(
-        this UserManager<User> userManager,
-        Guid id,
-        UsersParameters parameters)
-    {
-        var user = await userManager.GetByIdAsync(id);
-        var source = userManager.Users
-                                .Where(secondUser => secondUser.Friends.Contains(user))
-                                .FilterBy(new LastNameCriterion(parameters));
-
-        return await PagedList<User>.ToPagedListAsync(
-            source,
-            parameters.PageNumber,
-            parameters.PageSize);
-    }
-
     public static async Task<User> GetByIdAsync(
         this UserManager<User> userManager,
         Guid id)

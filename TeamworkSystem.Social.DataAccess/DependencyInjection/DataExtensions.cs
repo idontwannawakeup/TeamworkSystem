@@ -10,6 +10,7 @@ public static class DataExtensions
 {
     public static IServiceCollection AddData(this IServiceCollection services)
     {
+        services.AddTransient<IFriendsRepository, FriendsRepository>();
         services.AddTransient<IRatingsRepository, RatingsRepository>();
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         return services;

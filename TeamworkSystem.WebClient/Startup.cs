@@ -66,6 +66,11 @@ namespace TeamworkSystem.WebClient
                 httpClient.BaseAddress = new($"{socialUrl}/Ratings/");
             });
 
+            services.AddHttpClient<IFriendsService, FriendsService>(httpClient =>
+            {
+                httpClient.BaseAddress = new($"{socialUrl}/Friends/");
+            });
+
             services.AddHttpClient<ITeamsService, TeamsService>(httpClient =>
             {
                 httpClient.BaseAddress = new($"{coreUrl}/Teams/");
