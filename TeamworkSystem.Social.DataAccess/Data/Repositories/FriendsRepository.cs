@@ -1,6 +1,9 @@
 ﻿using System.Data;
+using System.Text;
 using Dapper;
+using TeamworkSystem.Shared.Pagination;
 using TeamworkSystem.Social.DataAccess.Entities;
+using TeamworkSystem.Social.DataAccess.Parameters;
 
 namespace TeamworkSystem.Social.DataAccess.Data.Repositories;
 
@@ -17,6 +20,32 @@ public class FriendsRepository
               join Friends f on up.Id = f.SecondId
               where f.FirstId = @UserId",
             new { UserId = userId });
+    }
+
+    public async Task<PagedList<UserProfile>> GetAsync(Guid userId, FriendsParameters parameters)
+    {
+        var queryBuilder = new StringBuilder(
+            @"select * from UserProfile up
+              join Friends f on up.Id = f.SecondId
+              join UserProfile fup on fup.Id = f.SecondId
+              where f.FirstId = @UserId");
+
+        if (!string.IsNullOrWhiteSpace(parameters.LastName))
+        {
+            queryBuilder.Append(" and fup.LastName like '%' + @LastName + '%'");
+        }
+
+        var enumerable = await _connection.QueryAsync<UserProfile>(
+            queryBuilder.ToString(),
+            new { UserId = userId });
+
+        var friends = enumerable as UserProfile[] ?? enumerable.ToArray();
+        int pageNumber = parameters.PageNumber, pageSize = parameters.PageSize;
+        return new PagedList<UserProfile>(
+            friends.Skip((pageNumber - 1) * pageSize).Take(pageSize),
+            friends.Length,
+            pageNumber,
+            pageSize);
     }
 
     public async Task AddToFriendsAsync(Guid firstId, Guid secondId)

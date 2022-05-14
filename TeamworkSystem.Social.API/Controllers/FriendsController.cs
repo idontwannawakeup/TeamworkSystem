@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.Social.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Social.BusinessLogic.Services;
+using TeamworkSystem.Social.DataAccess.Parameters;
 
 namespace TeamworkSystem.Social.API.Controllers;
 
@@ -19,9 +20,13 @@ public class FriendsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Get([FromRoute] Guid id)
+    public async Task<IActionResult> Get(
+        [FromRoute] Guid id,
+        [FromQuery] FriendsParameters parameters)
     {
-        return Ok(await _friendsService.GetAsync(id));
+        var friends = await _friendsService.GetAsync(id, parameters);
+        Response.Headers.Add("X-Pagination", friends.SerializeMetadata());
+        return Ok(friends);
     }
 
     [HttpPost("{firstId:guid}/{secondId:guid}")]
