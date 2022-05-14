@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TeamworkSystem.Social.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Social.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Social.DataAccess.Entities;
 using TeamworkSystem.Social.DataAccess.Interfaces;
@@ -20,5 +21,15 @@ public class FriendsService
     {
         var friends = await _unitOfWork.FriendsRepository.GetAsync(userId);
         return friends.Select(_mapper.Map<UserProfile, UserResponse>);
+    }
+
+    public async Task AddToFriendsAsync(FriendsRequest request)
+    {
+        await _unitOfWork.FriendsRepository.AddToFriendsAsync(request.FirstId, request.SecondId);
+    }
+
+    public async Task DeleteFromFriendsAsync(FriendsRequest request)
+    {
+        await _unitOfWork.FriendsRepository.DeleteFromFriendsAsync(request.FirstId, request.SecondId);
     }
 }

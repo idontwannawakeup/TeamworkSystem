@@ -18,4 +18,18 @@ public class FriendsRepository
               where f.FirstId = @UserId",
             new { UserId = userId });
     }
+
+    public async Task AddToFriendsAsync(Guid firstId, Guid secondId)
+    {
+        const string query = @"insert into Friends (FirstId, SecondId) values (@FirstId, @SecondId)";
+        await _connection.ExecuteAsync(query, new { FirstId = firstId, SecondId = secondId });
+        await _connection.ExecuteAsync(query, new { FirstId = secondId, SecondId = firstId });
+    }
+
+    public async Task DeleteFromFriendsAsync(Guid firstId, Guid secondId)
+    {
+        const string query = @"delete f from Friends f where f.FirstId = @FirstId and f.SecondId = @SecondId";
+        await _connection.ExecuteAsync(query, new { FirstId = firstId, SecondId = secondId });
+        await _connection.ExecuteAsync(query, new { FirstId = secondId, SecondId = firstId });
+    }
 }
