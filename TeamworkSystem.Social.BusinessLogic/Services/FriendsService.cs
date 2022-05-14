@@ -2,13 +2,14 @@
 using TeamworkSystem.Shared.Pagination;
 using TeamworkSystem.Social.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Social.BusinessLogic.DTO.Responses;
+using TeamworkSystem.Social.BusinessLogic.Interfaces.Services;
 using TeamworkSystem.Social.DataAccess.Entities;
 using TeamworkSystem.Social.DataAccess.Interfaces;
 using TeamworkSystem.Social.DataAccess.Parameters;
 
 namespace TeamworkSystem.Social.BusinessLogic.Services;
 
-public class FriendsService
+public class FriendsService : IFriendsService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;

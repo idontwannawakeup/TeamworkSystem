@@ -3,11 +3,12 @@ using System.Text;
 using Dapper;
 using TeamworkSystem.Shared.Pagination;
 using TeamworkSystem.Social.DataAccess.Entities;
+using TeamworkSystem.Social.DataAccess.Interfaces.Repositories;
 using TeamworkSystem.Social.DataAccess.Parameters;
 
 namespace TeamworkSystem.Social.DataAccess.Data.Repositories;
 
-public class FriendsRepository
+public class FriendsRepository : IFriendsRepository
 {
     private readonly IDbConnection _connection;
 

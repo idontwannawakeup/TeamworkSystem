@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.Social.BusinessLogic.DTO.Requests;
-using TeamworkSystem.Social.BusinessLogic.Services;
+using TeamworkSystem.Social.BusinessLogic.Interfaces.Services;
 using TeamworkSystem.Social.DataAccess.Parameters;
 
 namespace TeamworkSystem.Social.API.Controllers;
@@ -10,9 +10,9 @@ namespace TeamworkSystem.Social.API.Controllers;
 [Route("api/[controller]")]
 public class FriendsController : ControllerBase
 {
-    private readonly FriendsService _friendsService;
+    private readonly IFriendsService _friendsService;
 
-    public FriendsController(FriendsService friendsService) => _friendsService = friendsService;
+    public FriendsController(IFriendsService friendsService) => _friendsService = friendsService;
 
     [HttpGet("{id:guid}")]
     [Authorize]

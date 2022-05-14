@@ -8,7 +8,7 @@ public static class ServicesExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddTransient<FriendsService>();
+        services.AddTransient<IFriendsService, FriendsService>();
         services.AddTransient<IRatingsService, RatingsService>();
         return services;
     }
