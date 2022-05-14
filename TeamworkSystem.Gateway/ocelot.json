@@ -50,6 +50,41 @@
         "Put",
         "Delete"
       ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/Public/Photos/{all}",
+      "UpstreamPathTemplate": "/IdentityService/Public/Photos/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7137
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/Public/Photos/{all}",
+      "UpstreamPathTemplate": "/CoreService/Public/Photos/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7077
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
     }
   ]
 }
