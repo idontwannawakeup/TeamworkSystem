@@ -47,35 +47,38 @@ namespace TeamworkSystem.WebClient
             services.AddScoped<ApiAuthenticationStateProvider>();
 
             string apiUrl = Configuration["ApiUrl"];
+            var identityUrl = $"{apiUrl}/{Configuration["Intermediate:IdentityService"]}";
+            var coreUrl = $"{apiUrl}/{Configuration["Intermediate:CoreService"]}";
+            var socialUrl = $"{apiUrl}/{Configuration["Intermediate:SocialService"]}";
 
             services.AddHttpClient<IIdentityService, IdentityService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/Identity/");
+                httpClient.BaseAddress = new($"{identityUrl}/Identity/");
             });
 
             services.AddHttpClient<IProjectsService, ProjectsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/Projects/");
+                httpClient.BaseAddress = new($"{coreUrl}/Projects/");
             });
 
             services.AddHttpClient<IRatingsService, RatingsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/Ratings/");
+                httpClient.BaseAddress = new($"{socialUrl}/Ratings/");
             });
 
             services.AddHttpClient<ITeamsService, TeamsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/Teams/");
+                httpClient.BaseAddress = new($"{coreUrl}/Teams/");
             });
 
             services.AddHttpClient<ITicketsService, TicketsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/Tickets/");
+                httpClient.BaseAddress = new($"{coreUrl}/Tickets/");
             });
 
             services.AddHttpClient<IUsersService, UsersService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/Users/");
+                httpClient.BaseAddress = new($"{identityUrl}/Users/");
             });
 
             services.AddLocalization(options => options.ResourcesPath = "Localization");
