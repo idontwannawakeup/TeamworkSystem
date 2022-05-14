@@ -5,6 +5,10 @@
 
 /TeamworkSystem.WebAPI/wwwroot/Public/Photos/*
 !/TeamworkSystem.WebAPI/wwwroot/Public/Photos/.gitkeep
+/TeamworkSystem.Identity.API/wwwroot/Public/Photos/*
+!/TeamworkSystem.Identity.API/wwwroot/Public/Photos/.gitkeep
+/TeamworkSystem.Core.API/wwwroot/Public/Photos/*
+!/TeamworkSystem.Core.API/wwwroot/Public/Photos/.gitkeep
 
 .vscode
 .idea

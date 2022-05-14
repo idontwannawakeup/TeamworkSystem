@@ -1,0 +1,83 @@
+﻿@page "/signIn"
+@using InputType = MudBlazor.InputType
+@layout EmptyLayout
+@inject IStringLocalizer<SignIn> L
+@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@inject IIdentityService IdentityService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@user" OnValidSubmit="@SignInAsync">
+    <FluentValidationValidator />
+    <MudContainer Class="pb-8" MaxWidth="@MaxWidth.Small">
+        <MudCard Elevation="4" Class="px-sm-4 px-md-12 px-lg-16 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
+            <MudCardContent>
+                <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">@L["PleaseSignIn"]</MudText>
+                <MudElement HtmlTag="div" Class="d-flex flex-column gap-2">
+
+                    <MudTextField T="@string"
+                                  Label="@SL["UserName"]"
+                                  Variant="Variant.Outlined"
+                                  @bind-Value="@user.UserName"
+                                  For="@(() => user.UserName)" />
+
+                    <MudTextField T="@string"
+                                  Label="@SL["Password"]"
+                                  Variant="@Variant.Outlined"
+                                  @bind-Value="@user.Password"
+                                  For="@(() => user.Password)"
+                                  InputType="@passwordType"
+                                  Adornment="@Adornment.End"
+                                  AdornmentIcon="@passwordIcon"
+                                  OnAdornmentClick="@(e => ChangePasswordIcon())" />
+
+                </MudElement>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Class="mx-auto mt-8 py-2 px-12"
+                           Size="@Size.Large"
+                           Color="@Color.Primary"
+                           Variant="@Variant.Filled"
+                           ButtonType="@ButtonType.Submit">
+                    @SL["SignIn"]
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudContainer>
+</EditForm>
+
+@code {
+
+    private readonly string showIcon = Icons.Material.Filled.VisibilityOff;
+
+    private readonly string hideIcon = Icons.Material.Filled.Visibility;
+
+    private bool passwordShow = false;
+
+    private InputType passwordType = InputType.Password;
+
+    private string passwordIcon = Icons.Material.Filled.Visibility;
+
+    private void ChangePasswordIcon()
+    {
+        (passwordType, passwordIcon) = passwordShow
+            ? (InputType.Password, hideIcon)
+            : (InputType.Text, showIcon);
+
+        passwordShow = !passwordShow;
+    }
+
+    private UserSignInViewModel user = new();
+
+    private async Task SignInAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            var token = await IdentityService.SignInAsync(user);
+            NavigationManager.NavigateTo($"/home");
+            Snackbar.Add("You logged in succesfull!", Severity.Success);
+        });
+    }
+
+}

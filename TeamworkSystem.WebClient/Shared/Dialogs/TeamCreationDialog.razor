@@ -1,0 +1,67 @@
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
+@inject ITeamsService TeamsService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@team" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator />
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField T="@string"
+                          Label="@SL["NameAsTitle"]"
+                          @bind-Value="@team.Name"
+                          For="@(() => team.Name)" />
+
+            <MudTextField T="@string"
+                          Label="@SL["Specialization"]"
+                          @bind-Value="@team.Specialization"
+                          For="@(() => team.Specialization)" />
+
+            <MudTextField T="@string"
+                          Label="@SL["About"]"
+                          @bind-Value="@team.About"
+                          For="@(() => team.About)"
+                          Lines="10" />
+
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Color="@Color.Primary"
+                       ButtonType="@ButtonType.Submit">
+                @SL["Create"]
+            </MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+        </DialogActions>
+
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public Guid UserId { get; set; }
+
+    [Parameter] public Func<Task> OnCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private TeamViewModel team;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        team = new() { LeaderId = UserId };
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TeamsService.CreateAsync(team);
+            DialogInstance.Close();
+            Snackbar.Add("Team created", Severity.Success);
+            await OnCreated?.Invoke();
+        });
+    }
+
+}

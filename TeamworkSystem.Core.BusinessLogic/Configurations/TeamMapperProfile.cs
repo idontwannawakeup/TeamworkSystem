@@ -14,7 +14,7 @@ public class TeamMapperProfile : Profile
             .ForMember(response => response.Avatar,
                 options => options.MapFrom(
                     team => !string.IsNullOrWhiteSpace(team.Avatar)
-                        ? $"Public/Photos/{team.Avatar}"
+                        ? $"CoreService/Public/Photos/{team.Avatar}"
                         : null));
     }
 }

@@ -2,17 +2,43 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/{all}",
-      "UpstreamPathTemplate": "/gateway/{all}",
+      "UpstreamPathTemplate": "/gateway/IdentityService/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 7137
-        },
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{all}",
+      "UpstreamPathTemplate": "/gateway/CoreService/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 7077
-        },
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{all}",
+      "UpstreamPathTemplate": "/gateway/SocialService/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 7158
@@ -24,9 +50,41 @@
         "Put",
         "Delete"
       ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/Public/Photos/{all}",
+      "UpstreamPathTemplate": "/IdentityService/Public/Photos/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7137
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/Public/Photos/{all}",
+      "UpstreamPathTemplate": "/CoreService/Public/Photos/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7077
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
     }
-  ],
-  "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7161"
-  }
+  ]
 }

@@ -1,0 +1,153 @@
+﻿@page "/ticket/{TicketId:guid}/settings"
+@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
+@inject ITicketsService TicketsService
+@inject IUsersService UsersService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+@if (ticket is not null)
+{
+    <EditForm Model="@ticket" OnValidSubmit="@UpdateTicketAsync">
+        <FluentValidationValidator />
+        <MudContainer MaxWidth="@MaxWidth.Small">
+            <MudGrid Spacing="2" Class="mt-8">
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Title"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@ticket.Title"
+                                  For="@(() => ticket.Title)"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Executor"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudAutocomplete T="@UserViewModel"
+                                     HelperText="@SL["FindExecutortByLastName"]"
+                                     Value="@ticket.Executor"
+                                     ValueChanged="@(e => (ticket.Executor, ticket.ExecutorId) = (e, e.Id))"
+                                     SearchFunc="@InitializeMembersAsync"
+                                     ToStringFunc="@(user => user?.FullName)"
+                                     Immediate="@true"
+                                     CoerceText="@true" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Type"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="@string"
+                               @bind-Value="@ticket.Type"
+                               For="@(() => ticket.Type)">
+                        @foreach (var type in TicketPropertiesValues.Types)
+                        {
+                            <MudSelectItem Value="@type">@type</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Status"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="@string"
+                               @bind-Value="@ticket.Status"
+                               For="@(() => ticket.Status)">
+                        @foreach (var status in TicketPropertiesValues.Statuses)
+                        {
+                            <MudSelectItem Value="@status">@status</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Priority"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="@string"
+                               @bind-Value="@ticket.Priority"
+                               For="@(() => ticket.Priority)">
+                        @foreach (var priority in TicketPropertiesValues.Priorities)
+                        {
+                            <MudSelectItem Value="@priority">@priority</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Deadline"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudDatePicker @bind-Date="@ticket.Deadline" For="@(() => ticket.Deadline)" />
+                </MudItem>
+
+                <MudItem xs="12" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Description"]</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField T="@string"
+                                  @bind-Value="@ticket.Description"
+                                  For="@(() => ticket.Description)"
+                                  Variant="@Variant.Outlined"
+                                  Lines="15" />
+                </MudItem>
+
+            </MudGrid>
+            <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
+                <MudButton Variant="@Variant.Filled"
+                           Color="@Color.Primary"
+                           EndIcon="@Icons.Material.Filled.Save"
+                           Class="mt-4"
+                           ButtonType="@ButtonType.Submit">
+                    @SL["SaveChanges"]
+                </MudButton>
+            </MudElement>
+        </MudContainer>
+    </EditForm>
+}
+else
+{
+    <Loader />
+}
+
+@code {
+
+    [Parameter] public Guid TicketId { get; set; }
+
+    private TicketViewModel ticket;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeTicketAsync();
+    }
+
+    private async Task InitializeTicketAsync() =>
+        ticket = await TicketsService.GetByIdAsync(TicketId);
+
+    private async Task<IEnumerable<UserViewModel>> InitializeMembersAsync(string lastName)
+    {
+        var members = await UsersService.GetAsync(new UsersParameters()
+        {
+            TeamId = ticket.Project.Team.Id,
+            LastName = lastName,
+            PageSize = 50
+        });
+
+        return members;
+    }
+
+    private async Task UpdateTicketAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await TicketsService.UpdateAsync(ticket);
+            Snackbar.Add("Ticket updated", Severity.Success);
+        });
+    }
+
+}

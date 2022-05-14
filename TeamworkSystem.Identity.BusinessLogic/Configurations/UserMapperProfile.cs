@@ -17,7 +17,7 @@ public class UserMapperProfile : Profile
             .ForMember(response => response.Avatar,
                 options => options.MapFrom(
                     user => !string.IsNullOrWhiteSpace(user.Avatar)
-                        ? $"Public/Photos/{user.Avatar}"
+                        ? $"IdentityService/Public/Photos/{user.Avatar}"
                         : null));
     }
 }

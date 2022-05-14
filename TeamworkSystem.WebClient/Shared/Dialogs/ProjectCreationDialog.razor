@@ -1,0 +1,90 @@
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
+@inject IProjectsService ProjectsService
+@inject ITeamsService TeamsService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@project" OnValidSubmit="@CreateProjectAsync">
+    <FluentValidationValidator />
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField T="@string"
+                          Label="@SL["Title"]"
+                          @bind-Value="@project.Title"
+                          For="@(() => project.Title)" />
+
+            <MudAutocomplete T="@TeamViewModel"
+                             Label="@SL["Team"]"
+                             HelperText="@SL["FindTeamByName"]"
+                             SearchFunc="@InitializeTeamsAsync"
+                             Value="@project.Team"
+                             ValueChanged="@(e => (project.Team, project.TeamId) = (e, e.Id))"
+                             ToStringFunc="@(team => team?.Name)"
+                             For="@(() => project.Team)"
+                             Immediate="@true"
+                             CoerceText="@true" />
+
+            <MudTextField T="@string"
+                          Label="@SL["Type"]"
+                          @bind-Value="@project.Type"
+                          For="@(() => project.Type)" />
+
+            <MudTextField T="@string"
+                          Label="@SL["Url"]"
+                          @bind-Value="@project.Url"
+                          For="@(() => project.Url)" />
+
+            <MudTextField T="@string"
+                          Label="@SL["Description"]"
+                          @bind-Value="@project.Description"
+                          For="@(() => project.Description)"
+                          Lines="10" />
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Create"]</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public Guid UserId { get; set; }
+
+    [Parameter] public Func<Task> OnCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private ProjectViewModel project = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async Task<IEnumerable<TeamViewModel>> InitializeTeamsAsync(string name)
+    {
+        var teams = await TeamsService.GetAsync(new TeamsParameters()
+        {
+            UserId = UserId,
+            Name = name,
+            PageSize = 50
+        });
+
+        return teams;
+    }
+
+    private async Task CreateProjectAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await ProjectsService.CreateAsync(project);
+            DialogInstance.Close();
+            Snackbar.Add("Project created", Severity.Success);
+            await OnCreated?.Invoke();
+        });
+    }
+
+}

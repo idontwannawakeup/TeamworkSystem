@@ -1,0 +1,66 @@
+﻿@inject IStringLocalizer<SharedLocalization> SL
+@inject ISnackbar Snackbar
+@inject IUsersService UsersService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+<EditForm Model="@friends" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator />
+    <MudDialog>
+        <DialogContent>
+            <MudAutocomplete T="@UserViewModel"
+                             Label="@SL["User"]"
+                             HelperText="@SL["FindFriendByLastName"]"
+                             Value="@friends.Second"
+                             ValueChanged="@(e => (friends.Second, friends.SecondId) = (e, e.Id))"
+                             SearchFunc="@InitializeUsersAsync"
+                             For="@(() => friends.Second)"
+                             ToStringFunc="@(user => user?.FullName)"
+                             Immediate="@true"
+                             CoerceText="@true" />
+        </DialogContent>
+        <DialogActions>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Add"]</MudButton>
+            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+
+    [Parameter] public Guid UserId { get; set; }
+
+    [Parameter] public Func<Task> OnCreated { get; set; }
+
+    [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
+
+    private FriendsViewModel friends = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        friends.FirstId = UserId;
+    }
+
+    private async Task<IEnumerable<UserViewModel>> InitializeUsersAsync(string lastName)
+    {
+        var users = await UsersService.GetAsync(new UsersParameters()
+        {
+            LastName = lastName,
+            PageSize = 50
+        });
+
+        return users;
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await UsersService.AddFriendsAsync(friends);
+            DialogInstance.Close();
+            Snackbar.Add("Friend added", Severity.Success);
+            OnCreated?.Invoke();
+        });
+    }
+
+}

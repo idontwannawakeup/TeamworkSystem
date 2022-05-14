@@ -1,0 +1,21 @@
+﻿<MudCard Outlined="@true">
+    <MudCardContent>
+        <MudSkeleton />
+        <MudSkeleton Width="113px" Height="32px" Class="mx-0 my-3" />
+        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+            <MudSkeleton Width="20px" Height="32px" />
+            <MudSkeleton Width="20px" Height="32px" />
+            <MudSkeleton SkeletonType="SkeletonType.Circle"
+                         Animation="Animation.Wave"
+                         Height="30px" Width="30px"
+                         Class="ml-auto" />
+            <MudSkeleton SkeletonType="SkeletonType.Circle"
+                         Animation="Animation.Wave"
+                         Height="30px" Width="30px" />
+        </MudElement>
+    </MudCardContent>
+</MudCard>
+
+@code {
+
+}
