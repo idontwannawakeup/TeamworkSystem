@@ -50,40 +50,36 @@ namespace TeamworkSystem.WebClient
 
             services.AddHttpClient<IIdentityService, IdentityService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/api/Identity/");
+                httpClient.BaseAddress = new($"{apiUrl}/Identity/");
             });
 
             services.AddHttpClient<IProjectsService, ProjectsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/api/Projects/");
+                httpClient.BaseAddress = new($"{apiUrl}/Projects/");
             });
 
             services.AddHttpClient<IRatingsService, RatingsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/api/Ratings/");
+                httpClient.BaseAddress = new($"{apiUrl}/Ratings/");
             });
 
             services.AddHttpClient<ITeamsService, TeamsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/api/Teams/");
+                httpClient.BaseAddress = new($"{apiUrl}/Teams/");
             });
 
             services.AddHttpClient<ITicketsService, TicketsService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/api/Tickets/");
+                httpClient.BaseAddress = new($"{apiUrl}/Tickets/");
             });
 
             services.AddHttpClient<IUsersService, UsersService>(httpClient =>
             {
-                httpClient.BaseAddress = new($"{apiUrl}/api/Users/");
+                httpClient.BaseAddress = new($"{apiUrl}/Users/");
             });
 
             services.AddLocalization(options => options.ResourcesPath = "Localization");
-            var supportedCultures = new List<CultureInfo>()
-            {
-                new CultureInfo("en-US"),
-                new CultureInfo("uk-UA")
-            };
+            var supportedCultures = new List<CultureInfo> { new ("en-US"), new ("uk-UA") };
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
