@@ -24,19 +24,27 @@ public class FriendsController : ControllerBase
         return Ok(await _friendsService.GetAsync(id));
     }
 
-    [HttpPost]
+    [HttpPost("{firstId:guid}/{secondId:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> AddFriendAsync([FromBody] FriendsRequest request)
+    public async Task<ActionResult> AddFriendAsync(
+        [FromRoute] Guid firstId,
+        [FromRoute] Guid secondId)
     {
+        var request = new FriendsRequest
+        {
+            FirstId = firstId,
+            SecondId = secondId,
+        };
+
         await _friendsService.AddToFriendsAsync(request);
         return Ok();
     }
 
-    [HttpDelete("/{firstId:guid}/{secondId:guid}")]
+    [HttpDelete("{firstId:guid}/{secondId:guid}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
