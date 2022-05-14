@@ -23,7 +23,7 @@ services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1",
         new OpenApiInfo
         {
-            Title = "TeamworkSystem.WebAPI",
+            Title = "TeamworkSystem.Social.API",
             Version = "v1"
         });
 
