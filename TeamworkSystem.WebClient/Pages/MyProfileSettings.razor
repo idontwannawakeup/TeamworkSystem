@@ -1,0 +1,136 @@
+﻿@page "/profile/settings"
+@inject IStringLocalizer<SharedLocalization> SL
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject IUsersService UsersService
+@inject RequestErrorsHandler RequestErrorsHandler
+
+@if (user is not null)
+{
+    <EditForm Model="@user" OnValidSubmit="@UpdateUserAsync">
+        <FluentValidationValidator />
+        <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
+            <MudGrid Spacing="2" Class="mt-8">
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["FirstName"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@user.FirstName"
+                                  For="@(() => user.FirstName)"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["LastName"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@user.LastName"
+                                  For="@(() => user.LastName)"
+                                  Variant="@Variant.Outlined" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Email"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@user.Email"
+                                  Variant="@Variant.Outlined"
+                                  For="@(() => user.Email)" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Profession"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@user.Profession"
+                                  Variant="@Variant.Outlined"
+                                  For="@(() => user.Profession)" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Specialization"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="@string"
+                                  @bind-Value="@user.Specialization"
+                                  Variant="@Variant.Outlined"
+                                  For="@(() => user.Specialization)" />
+                </MudItem>
+
+                <MudItem xs="12" md="6" Class="d-flex align-center">
+                    <MudText Typo="@Typo.h6">@SL["Language"]</MudText>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="@string"
+                               ToStringFunc="@(culture => CultureInfo.CurrentCulture.NativeName)"
+                               ValueChanged="@ChangeCulture"
+                               Label="@SL["SelectLanguage"]"
+                               Variant="@Variant.Outlined">
+                        <MudSelectItem Value="@("en-US")">@SL["English"]</MudSelectItem>
+                        <MudSelectItem Value="@("uk-UA")">@SL["Ukrainian"]</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+            </MudGrid>
+            <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
+                <MudButton Variant="@Variant.Filled"
+                           Color="@Color.Primary"
+                           EndIcon="@Icons.Material.Filled.Save"
+                           Class="mt-4"
+                           ButtonType="@ButtonType.Submit">
+                    @SL["SaveChanges"]
+                </MudButton>
+            </MudElement>
+        </MudContainer>
+    </EditForm>
+}
+else
+{
+    <Loader />
+}
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private string userId = null;
+
+    private UserViewModel user = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        await InitializeUserAsync();
+    }
+
+    private async Task InitializeUserAsync() =>
+        user = await UsersService.GetByIdAsync(userId);
+
+    private async Task UpdateUserAsync()
+    {
+        await RequestErrorsHandler.HandleRequestAsync(async () =>
+        {
+            await UsersService.UpdateAsync(user);
+            Snackbar.Add("User updated", Severity.Success);
+        });
+    }
+
+    private void ChangeCulture(string culture)
+    {
+        var uri = new Uri(NavigationManager.Uri).GetComponents(
+            UriComponents.PathAndQuery,
+            UriFormat.Unescaped);
+
+        var query = $"?culture={Uri.EscapeDataString(culture)}&" +
+                    $"redirectUri={Uri.EscapeDataString(uri)}";
+
+        NavigationManager.NavigateTo("Culture/SetCulture" + query, forceLoad: true);
+    }
+
+}

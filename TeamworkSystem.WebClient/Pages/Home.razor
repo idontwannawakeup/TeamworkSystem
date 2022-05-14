@@ -1,0 +1,109 @@
+﻿@page "/home"
+@inject IStringLocalizer<Home> L
+@inject IStringLocalizer<SharedLocalization> SL
+@inject IUsersService UsersService
+
+@if (user is not null)
+{
+    <MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
+        @L["Greeting"], @user.FullName!
+    </MudText>
+}
+else
+{
+    <MudText Class="mt-md-12" Typo="@Typo.h3" Align="@Align.Center">
+        @L["Greeting"]!
+    </MudText>
+}
+
+<MudText Class="mt-2 mb-6" Style="@subtitleStyle" Typo="@Typo.h5" Align="@Align.Center">
+    @L["Welcome"]
+</MudText>
+
+<MudGrid Spacing="4">
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/teams.png" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">@L["TeamsHint"]</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/teams"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    @SL["Teams"]
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/projects.png" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">@L["ProjectsHint"]</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/projects"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    @SL["Projects"]
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/tickets.jpg" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">@L["TicketsHint"]</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/tickets"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    @SL["Tickets"]
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="d-flex flex-column" Style="height: 100%">
+            <MudCardMedia Height="200"
+                          Image="assets/home/friends.png" />
+            <MudCardContent>
+                <MudText Typo="@Typo.body1">@L["FriendsHint"]</MudText>
+            </MudCardContent>
+            <MudCardActions Class="mt-auto">
+                <MudButton Link="/friends"
+                           Variant="@Variant.Text"
+                           Color="@Color.Primary">
+                    @SL["Friends"]
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState> StateAsync { get; set; }
+
+    private UserViewModel user = null;
+
+    private string subtitleStyle = $"color: {Colors.Grey.Default};";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await StateAsync;
+        if (state.User.Identity.IsAuthenticated)
+        {
+            var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+            user = await UsersService.GetByIdAsync(userId);
+        }
+    }
+
+}

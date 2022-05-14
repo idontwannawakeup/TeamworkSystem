@@ -1,0 +1,54 @@
+﻿@page "/tickets"
+@inject IStringLocalizer<UserTickets> L 
+@inject ITicketsService TicketsService
+
+<MudText Class="mt-md-12 mb-4" Typo="@Typo.h3" Align="@Align.Left">@L["UserTickets"]</MudText>
+
+<MudGrid Spacing="3">
+    @if (tickets is not null && tickets.Count != 0)
+    {
+        @foreach (var ticket in tickets)
+        {
+            <MudItem xs="12" sm="6" md="3">
+                <TicketCard Ticket="@ticket" DeleteCallback="@(async () => await InitializeTicketsAsync())" />
+            </MudItem>
+        }
+    }
+    else if (tickets is not null)
+    {
+        <MudItem xs="12">
+            <MudText Typo="@Typo.h5" Align="@Align.Center">@L["NoUserTickets"]</MudText>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" Class="d-flex justify-center">
+            <Loader />
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private List<TicketViewModel> tickets = null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await InitializeTicketsAsync();
+    }
+
+    private async Task InitializeTicketsAsync()
+    {
+        var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        tickets = await TicketsService.GetAsync(
+            new TicketsParameters()
+            {
+                ExecutorId = userId,
+                PageSize = 50
+            }) as List<TicketViewModel>;
+    }
+
+}

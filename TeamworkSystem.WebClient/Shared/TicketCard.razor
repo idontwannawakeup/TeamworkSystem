@@ -1,0 +1,77 @@
+﻿@inject IStringLocalizer<SharedLocalization> SL 
+@inject IDialogService DialogService
+@inject ITicketsService TicketsService
+
+<MudCard Outlined="@true">
+    <MudCardContent>
+        <MudText Typo="@Typo.body1">@Ticket.Title</MudText>
+
+        <MudChip Color="@Color.Primary"
+                 Size="@Size.Small"
+                 Label="@true"
+                 Class="mx-0 my-3">
+            @Ticket.Type
+        </MudChip>
+
+        <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
+            <MudTooltip Text="@Ticket.Type">
+                <MudIcon Icon="@Icons.Material.Filled.Explicit"
+                         Color="@Color.Primary"
+                         Size="@Size.Small" />
+            </MudTooltip>
+
+            <MudTooltip Text="@($"Priority: {Ticket.Priority}")">
+                <MudIcon Icon="@Icons.Material.Filled.CompareArrows"
+                         Color="@Color.Warning"
+                         Size="@Size.Small" />
+            </MudTooltip>
+
+            <MudIconButton Icon="@Icons.Material.Filled.OpenInNew"
+                           Size="@Size.Small"
+                           Color="@Color.Primary"
+                           Class="ml-auto"
+                           Link="@TicketLink" />
+            @if (userId == Ticket.Project.Team.LeaderId)
+            {
+                <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="@Size.Small" Dense="@true">
+                    <MudMenuItem Link="@SettingsLink">@SL["Edit"]</MudMenuItem>
+                    <MudMenuItem OnClick="@DeleteTicketAsync">@SL["Delete"]</MudMenuItem>
+                </MudMenu>
+            }
+        </MudElement>
+    </MudCardContent>
+</MudCard>
+
+@code {
+
+    [Parameter] public TicketViewModel Ticket { get; set; }
+
+    [Parameter] public EventCallback DeleteCallback { get; set; }
+
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private string TicketLink => $"/ticket/{Ticket.Id}";
+
+    private string SettingsLink => $"/ticket/{Ticket.Id}/settings";
+
+    private string userId = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+    }
+
+    private async Task DeleteTicketAsync()
+    {
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
+            SL["ConfirmTicketDeleting"]) ?? false;
+
+        if (confirmed)
+        {
+            await TicketsService.DeleteAsync(Ticket.Id);
+            await DeleteCallback.InvokeAsync();
+        }
+    }
+
+}

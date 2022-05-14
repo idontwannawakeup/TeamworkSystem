@@ -1,0 +1,170 @@
+﻿@page "/profile"
+@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<MyProfile> L
+@inject IConfiguration Configuration
+@inject IDialogService DialogService
+@inject IUsersService UsersService
+@inject IRatingsService RatingsService
+
+@if (user is not null)
+{
+    <MudPaper Elevation="@elevation" Class="mt-10">
+        <MudGrid>
+            @if (!string.IsNullOrWhiteSpace(user.Avatar))
+            {
+                <MudItem xs="6" md="4" Class="mx-auto mx-md-0 pa-6">
+                    <MudElement HtmlTag="div"
+                                Style="@($"background: url({Configuration["ApiUrl"]}/{user.Avatar}) no-repeat center; background-size: cover; width: 350px; height: 250px;")" />
+                </MudItem>
+            }
+            <MudItem xs="12" md="8">
+                <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
+                    <MudElement HtmlTag="div" Class="user-profile__title">
+                        <MudText Typo="@Typo.h5" Color="@Color.Dark">@user.FullName</MudText>
+                        <MudText Typo="@Typo.subtitle1" Color="@Color.Surface">@user.UserName</MudText>
+                        @if (!string.IsNullOrWhiteSpace(user.Profession))
+                        {
+                            <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
+                        }
+                    </MudElement>
+                    <InputFile id="fileInput" OnChange="@UpdateAvatarAsync" hidden accept=".jpg, .jpeg, .png" />
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Outlined"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Filled.CloudUpload"
+                               Class="my-2"
+                               for="fileInput">
+                        @SL["UpdateAvatar"]
+                    </MudButton>
+                </MudElement>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <MudGrid Spacing="4">
+        <MudItem xs="12" md="4">
+            <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Profession"]</MudText>
+                @if (!string.IsNullOrWhiteSpace(user.Profession))
+                {
+                    <MudText Typo="@Typo.subtitle2">@user.Profession</MudText>
+                }
+                else
+                {
+                    <NoneChip />
+                }
+                <MudDivider Class="mt-2 mb-4" />
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Specialization"]</MudText>
+                @if (!string.IsNullOrWhiteSpace(user.Specialization))
+                {
+                    <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
+                }
+                else
+                {
+                    <NoneChip />
+                }
+                <MudDivider Class="mt-2 mb-4" />
+                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Email"]</MudText>
+                @if (!string.IsNullOrWhiteSpace(user.Email))
+                {
+                    <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
+                }
+                else
+                {
+                    <NoneChip />
+                }
+                <MudDivider Class="mt-2 mb-4" />
+                <MudButton FullWidth="@true"
+                           Variant="@Variant.Outlined"
+                           Color="@Color.Info"
+                           EndIcon="@Icons.Material.Filled.Edit"
+                           Link="/profile/settings">
+                    @SL["Edit"]
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="8">
+            <MudTabs Elevation="@elevation"
+                     ApplyEffectsToContainer="@true"
+                     Rounded="@true"
+                     Class="mt-10">
+
+                <MudTabPanel Text="@SL["Ratings"]">
+                    <MudElement HtmlTag="div" Class="pa-6">
+                        @if (ratings is not null && ratings.Count != 0)
+                        {
+                            <MudList Clickable="@true">
+                                @foreach (var rating in ratings)
+                                {
+                                    <MudListItem OnClick="@(e => OpenFullRating(rating))">
+                                        <MudElement HtmlTag="div"
+                                                    Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
+                                            <MudElement HtmlTag="div"
+                                                        Class="rating-item__author d-flex align-center gap-4">
+                                                <MudAvatar Image="@(rating.From?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{rating.From.Avatar}" : null)"
+                                                           Color="@Color.Secondary">
+                                                    A
+                                                </MudAvatar>
+                                                <MudText Typo="@Typo.subtitle1">@rating.From.FullName</MudText>
+                                            </MudElement>
+                                            <MudElement HtmlTag="div"
+                                                        Class="rating-item__average d-flex flex-column align-center gap-1">
+                                                <MudText Typo="@Typo.subtitle2">@SL["Average"]: @rating.Average</MudText>
+                                                <MudRating SelectedValue="@((int) rating.Average)" ReadOnly="@true" />
+                                            </MudElement>
+                                        </MudElement>
+                                    </MudListItem>
+                                    <MudDivider Class="mb-4" />
+                                }
+                            </MudList>
+                        }
+                        else
+                        {
+                            <MudText Typo="@Typo.h6">@L["NoRatings"]</MudText>
+                        }
+                    </MudElement>
+                </MudTabPanel>
+
+            </MudTabs>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState> State { get; set; }
+
+    private string userId = null;
+
+    private UserViewModel user = null;
+
+    private List<RatingViewModel> ratings = null;
+
+    private readonly string colorGrey = $"color: {Colors.Grey.Default};";
+
+    private readonly int elevation = 4;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        await InitializeUserAsync();
+        await InitializeRatingsAsync();
+    }
+
+    private async Task InitializeUserAsync() =>
+        user = await UsersService.GetByIdAsync(userId);
+
+    private async Task InitializeRatingsAsync() =>
+        ratings = await RatingsService.GetByRatedUserId(userId) as List<RatingViewModel>;
+
+    private void OpenFullRating(RatingViewModel rating) =>
+        DialogService.ShowRatingDialog(rating.Id, SL);
+
+    private async Task UpdateAvatarAsync(InputFileChangeEventArgs e)
+    {
+        await UsersService.SetAvatarForUserAsync(userId, e.File);
+        await InitializeUserAsync();
+    }
+
+}
