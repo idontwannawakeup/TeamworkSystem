@@ -5,6 +5,4 @@ namespace TeamworkSystem.Social.DataAccess.Interfaces;
 public interface IUnitOfWork
 {
     IRatingsRepository RatingsRepository { get; }
-
-    Task SaveChangesAsync();
 }
