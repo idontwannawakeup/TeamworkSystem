@@ -228,17 +228,17 @@ else
 
 @code {
 
-    [Parameter] public string UserId { get; set; }
+    [Parameter] public Guid UserId { get; set; }
 
     [CascadingParameter] public Task<AuthenticationState> State { get; set; }
 
-    private UserViewModel user = null;
+    private UserViewModel user;
 
-    private RatingViewModel ratingFromVisitedUser = null;
+    private RatingViewModel ratingFromVisitedUser;
 
-    private List<RatingViewModel> ratings = null;
+    private List<RatingViewModel> ratings;
 
-    private List<TeamViewModel> teams = null;
+    private List<TeamViewModel> teams;
 
     private readonly string colorGrey = $"color: {Colors.Grey.Default};";
 

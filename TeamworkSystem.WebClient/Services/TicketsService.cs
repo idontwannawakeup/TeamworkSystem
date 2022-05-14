@@ -21,13 +21,13 @@ namespace TeamworkSystem.WebClient.Services
                 ParametersStringFactory.GenerateParametersString(parameters));
         }
 
-        public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(string userId) =>
+        public async Task<IEnumerable<TicketViewModel>> GetTicketsForUserAsync(Guid userId) =>
             await _httpClient.GetAsync<List<TicketViewModel>>($"?ExecutorId={userId}");
 
-        public async Task<TicketViewModel> GetByIdAsync(int id) =>
+        public async Task<TicketViewModel> GetByIdAsync(Guid id) =>
             await _httpClient.GetAsync<TicketViewModel>($"{id}");
 
-        public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(int projectId) =>
+        public async Task<IEnumerable<TicketViewModel>> GetByProjectIdAsync(Guid projectId) =>
             await _httpClient.GetAsync<List<TicketViewModel>>($"?ProjectId={projectId}");
 
         public async Task CreateAsync(TicketViewModel viewModel) =>
@@ -36,7 +36,7 @@ namespace TeamworkSystem.WebClient.Services
         public async Task UpdateAsync(TicketViewModel viewModel) =>
             await _httpClient.PutAsync(string.Empty, viewModel);
 
-        public async Task DeleteAsync(int id) =>
+        public async Task DeleteAsync(Guid id) =>
             await _httpClient.DeleteAsync($"{id}");
 
         public TicketsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>

@@ -1,4 +1,4 @@
-﻿@page "/ticket/{TicketId:int}/settings"
+﻿@page "/ticket/{TicketId:guid}/settings"
 @inject IStringLocalizer<SharedLocalization> SL
 @inject ISnackbar Snackbar
 @inject ITicketsService TicketsService
@@ -116,9 +116,9 @@ else
 
 @code {
 
-    [Parameter] public int TicketId { get; set; }
+    [Parameter] public Guid TicketId { get; set; }
 
-    private TicketViewModel ticket = null;
+    private TicketViewModel ticket;
 
     protected override async Task OnInitializedAsync()
     {

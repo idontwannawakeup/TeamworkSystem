@@ -101,7 +101,7 @@ else
         var state = await StateAsync;
         if (state.User.Identity.IsAuthenticated)
         {
-            var userId = state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+            Guid userId = new(state.User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value);
             user = await UsersService.GetByIdAsync(userId);
         }
     }

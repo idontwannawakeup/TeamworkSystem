@@ -2,7 +2,7 @@
 {
     public class TeamsParameters : QueryStringParameters
     {
-        public string UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         public string Name { get; set; }
 

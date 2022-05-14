@@ -21,14 +21,14 @@ namespace TeamworkSystem.WebClient.Services
                 ParametersStringFactory.GenerateParametersString(parameters));
         }
 
-        public async Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId) =>
+        public async Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(Guid teamId) =>
             await _httpClient.GetAsync<List<ProjectViewModel>>($"?TeamId={teamId}");
 
         public async Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(
-            string teamMemberId) =>
+            Guid teamMemberId) =>
             await _httpClient.GetAsync<List<ProjectViewModel>>($"?TeamMemberId={teamMemberId}");
 
-        public async Task<ProjectViewModel> GetByIdAsync(int id) =>
+        public async Task<ProjectViewModel> GetByIdAsync(Guid id) =>
             await _httpClient.GetAsync<ProjectViewModel>($"{id}");
 
         public async Task CreateAsync(ProjectViewModel viewModel) =>
@@ -37,7 +37,7 @@ namespace TeamworkSystem.WebClient.Services
         public async Task UpdateAsync(ProjectViewModel viewModel) =>
             await _httpClient.PutAsync(string.Empty, viewModel);
 
-        public async Task DeleteAsync(int id) =>
+        public async Task DeleteAsync(Guid id) =>
             await _httpClient.DeleteAsync($"{id}");
 
         public ProjectsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>

@@ -54,7 +54,7 @@
 
     private string SettingsLink => $"/ticket/{Ticket.Id}/settings";
 
-    private string userId = null;
+    private Guid userId;
 
     protected override async Task OnInitializedAsync()
     {

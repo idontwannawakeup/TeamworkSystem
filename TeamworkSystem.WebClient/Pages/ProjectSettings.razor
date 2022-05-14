@@ -1,4 +1,4 @@
-﻿@page "/project/{ProjectId:int}/settings"
+﻿@page "/project/{ProjectId:guid}/settings"
 @layout ContainerlessLayout
 @inject IStringLocalizer<SharedLocalization> SL
 @inject IStringLocalizer<ProjectSettings> L
@@ -92,13 +92,13 @@ else
 
 @code {
 
-    [Parameter] public int ProjectId { get; set; }
+    [Parameter] public Guid ProjectId { get; set; }
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private ProjectViewModel project = null;
+    private ProjectViewModel project;
 
-    private string userId = null;
+    private Guid userId;
 
     protected override async Task OnInitializedAsync()
     {

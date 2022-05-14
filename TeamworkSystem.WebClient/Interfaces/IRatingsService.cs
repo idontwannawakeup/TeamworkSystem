@@ -10,14 +10,14 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task<(IEnumerable<RatingViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
             RatingsParameters parameters);
 
-        Task<IEnumerable<RatingViewModel>> GetByRatedUserId(string userId);
+        Task<IEnumerable<RatingViewModel>> GetByRatedUserId(Guid userId);
 
-        Task<RatingViewModel> GetByIdAsync(int id);
+        Task<RatingViewModel> GetByIdAsync(Guid id);
 
         Task CreateAsync(RatingViewModel viewModel);
 
         Task UpdateAsync(RatingViewModel viewModel);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Guid id);
     }
 }

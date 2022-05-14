@@ -1,4 +1,4 @@
-﻿@page "/project/{ProjectId:int}/overview"
+﻿@page "/project/{ProjectId:guid}/overview"
 @inject IStringLocalizer<SharedLocalization> SL 
 @layout ContainerlessLayout
 @inject IProjectsService ProjectsService  
@@ -26,9 +26,9 @@
 
 @code {
 
-    [Parameter] public int ProjectId { get; set; }
+    [Parameter] public Guid ProjectId { get; set; }
 
-    private ProjectViewModel project = null;
+    private ProjectViewModel project;
 
     private string backgroundColorStyle = $"background-color: {Colors.Teal.Darken1}";
 

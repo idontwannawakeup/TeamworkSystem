@@ -2,9 +2,9 @@
 {
     public class FriendsViewModel
     {
-        public string FirstId { get; set; }
+        public Guid FirstId { get; set; }
 
-        public string SecondId { get; set; }
+        public Guid SecondId { get; set; }
 
         public UserViewModel Second { get; set; }
     }

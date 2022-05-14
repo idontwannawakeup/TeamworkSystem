@@ -11,17 +11,17 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task<(IEnumerable<TeamViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
             TeamsParameters parameters);
 
-        Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(string userId);
+        Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(Guid userId);
 
-        Task<TeamViewModel> GetByIdAsync(int id);
+        Task<TeamViewModel> GetByIdAsync(Guid id);
 
         Task CreateAsync(TeamViewModel viewModel);
 
         Task UpdateAsync(TeamViewModel viewModel);
 
-        Task SetAvatarForTeamAsync(int id, IBrowserFile file);
+        Task SetAvatarForTeamAsync(Guid id, IBrowserFile file);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Guid id);
 
         Task AddMemberAsync(TeamMemberViewModel viewModel);
 

@@ -178,7 +178,7 @@
 
 @code {
 
-    [Parameter] public int TeamId { get; set; }
+    [Parameter] public Guid TeamId { get; set; }
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
@@ -188,13 +188,13 @@
 
     private string searchTitle;
 
-    private TeamViewModel team = null;
+    private TeamViewModel team;
 
-    private IEnumerable<UserViewModel> members = null;
+    private IEnumerable<UserViewModel> members;
 
-    private PaginationHeaderViewModel membersPagination = null;
+    private PaginationHeaderViewModel membersPagination;
 
-    private string userId = null;
+    private Guid userId;
 
     private string colorGrey = $"color: {Colors.Grey.Default};";
 

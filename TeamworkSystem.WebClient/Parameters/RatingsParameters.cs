@@ -2,6 +2,6 @@
 {
     public class RatingsParameters : QueryStringParameters
     {
-        public string RatedUserId { get; set; }
+        public Guid? RatedUserId { get; set; }
     }
 }

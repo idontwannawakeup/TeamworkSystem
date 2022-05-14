@@ -2,9 +2,9 @@
 {
     public class TeamMemberViewModel
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
-        public int TeamId { get; set; }
+        public Guid TeamId { get; set; }
 
         public UserViewModel User { get; set; }
     }

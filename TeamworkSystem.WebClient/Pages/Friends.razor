@@ -82,7 +82,7 @@
 
     private MudTable<UserViewModel> table;
 
-    private string userId = null;
+    private Guid userId;
 
     private string searchLastName = null;
 
@@ -95,7 +95,7 @@
     private void OpenFriendProfile(TableRowClickEventArgs<UserViewModel> args) =>
         NavigationManager.NavigateTo($"/users/{args.Item.Id}/profile");
 
-    private async Task DeleteFriendAsync(string friendId)
+    private async Task DeleteFriendAsync(Guid friendId)
     {
         var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
             SL["ConfirmFriendDeleting"]) ?? false;

@@ -1,4 +1,4 @@
-﻿@page "/ticket/{TicketId:int}"
+﻿@page "/ticket/{TicketId:guid}"
 @layout ContainerlessLayout
 @inject IStringLocalizer<SharedLocalization> SL 
 @inject NavigationManager NavigationManager
@@ -137,13 +137,13 @@
 
 @code {
 
-    [Parameter] public int TicketId { get; set; }
+    [Parameter] public Guid TicketId { get; set; }
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private TicketViewModel ticket = null;
+    private TicketViewModel ticket;
 
-    private string userId = null;
+    private Guid userId;
 
     private string SettingsLink => $"/ticket/{TicketId}/settings";
 

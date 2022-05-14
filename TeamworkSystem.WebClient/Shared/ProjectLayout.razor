@@ -49,7 +49,7 @@
 
 @code {
 
-    [Parameter] public int ProjectId { get; set; }
+    [Parameter] public Guid ProjectId { get; set; }
 
     [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -57,7 +57,7 @@
 
     private ProjectViewModel project = null;
 
-    private string userId = null;
+    private Guid userId;
 
     private string OverviewLink => $"/project/{ProjectId}/overview";
 

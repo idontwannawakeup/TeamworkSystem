@@ -23,10 +23,10 @@ namespace TeamworkSystem.WebClient.Services
                 ParametersStringFactory.GenerateParametersString(parameters));
         }
 
-        public async Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(string userId) =>
+        public async Task<IEnumerable<TeamViewModel>> GetTeamsForUserAsync(Guid userId) =>
             await _httpClient.GetAsync<List<TeamViewModel>>($"?UserId={userId}");
 
-        public async Task<TeamViewModel> GetByIdAsync(int id) =>
+        public async Task<TeamViewModel> GetByIdAsync(Guid id) =>
             await _httpClient.GetAsync<TeamViewModel>($"{id}");
 
         public async Task CreateAsync(TeamViewModel viewModel) =>
@@ -35,7 +35,7 @@ namespace TeamworkSystem.WebClient.Services
         public async Task UpdateAsync(TeamViewModel viewModel) =>
             await _httpClient.PutAsync(string.Empty, viewModel);
 
-        public async Task SetAvatarForTeamAsync(int id, IBrowserFile file)
+        public async Task SetAvatarForTeamAsync(Guid id, IBrowserFile file)
         {
             var buffer = new byte[file.Size];
             await file.OpenReadStream().ReadAsync(buffer);
@@ -53,7 +53,7 @@ namespace TeamworkSystem.WebClient.Services
             await _httpClient.PostFormDataAsync("avatar", requestContent);
         }
 
-        public async Task DeleteAsync(int id) => await _httpClient.DeleteAsync($"{id}");
+        public async Task DeleteAsync(Guid id) => await _httpClient.DeleteAsync($"{id}");
 
         public async Task AddMemberAsync(TeamMemberViewModel viewModel) =>
             await _httpClient.PostAsync("members", viewModel);

@@ -1,4 +1,4 @@
-﻿@page "/team/{TeamId:int}/settings"
+﻿@page "/team/{TeamId:guid}/settings"
 @inject IStringLocalizer<TeamSettings> L
 @inject IStringLocalizer<SharedLocalization> SL
 @inject NavigationManager NavigationManager
@@ -73,13 +73,13 @@ else
 
 @code {
 
-    [Parameter] public int TeamId { get; set; }
+    [Parameter] public Guid TeamId { get; set; }
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
     private TeamViewModel team = null;
 
-    private string userId = null;
+    private Guid userId;
 
     protected override async Task OnInitializedAsync()
     {

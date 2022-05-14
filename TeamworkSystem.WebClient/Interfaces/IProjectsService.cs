@@ -10,16 +10,16 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task<(IEnumerable<ProjectViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
             ProjectsParameters parameters);
 
-        Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(int teamId);
+        Task<IEnumerable<ProjectViewModel>> GetByTeamIdAsync(Guid teamId);
 
-        Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(string teamMemberId);
+        Task<IEnumerable<ProjectViewModel>> GetProjectsForTeamMemberAsync(Guid teamMemberId);
 
-        Task<ProjectViewModel> GetByIdAsync(int id);
+        Task<ProjectViewModel> GetByIdAsync(Guid id);
 
         Task CreateAsync(ProjectViewModel viewModel);
 
         Task UpdateAsync(ProjectViewModel viewModel);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Guid id);
     }
 }

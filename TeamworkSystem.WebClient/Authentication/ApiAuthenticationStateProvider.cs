@@ -41,8 +41,8 @@ namespace TeamworkSystem.WebClient.Authentication
             NotifyAuthenticationStateChanged(Task.FromResult(AnonymousState));
         }
 
-        public static async Task<string> GetUserIdFromStateAsync(Task<AuthenticationState> state) =>
-            (await state).User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value;
+        public static async Task<Guid> GetUserIdFromStateAsync(Task<AuthenticationState> state) => new(
+            (await state).User.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value);
 
         private static AuthenticationState GenerateStateFromToken(JwtSecurityToken token)
         {

@@ -15,7 +15,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static void ShowRatingDialog(
             this IDialogService dialogService,
-            int ratingId,
+            Guid ratingId,
             IStringLocalizer<SharedLocalization> sl)
         {
             dialogService.Show<RatingDialog>(
@@ -26,7 +26,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static void ShowTeamCreationDialog(
             this IDialogService dialogService,
-            string userId,
+            Guid userId,
             Func<Task> onCreated,
             IStringLocalizer<SharedLocalization> sl)
         {
@@ -42,7 +42,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static void ShowProjectCreationDialog(
             this IDialogService dialogService,
-            string userId,
+            Guid userId,
             Func<Task> onCreated,
             IStringLocalizer<SharedLocalization> sl)
         {
@@ -58,7 +58,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static void ShowTicketCreationDialog(
             this IDialogService dialogService,
-            int projectId,
+            Guid projectId,
             Func<Task> onCreated,
             IStringLocalizer<SharedLocalization> sl)
         {
@@ -74,7 +74,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static void ShowFriendsCreationDialog(
             this IDialogService dialogService,
-            string userId,
+            Guid userId,
             Func<Task> onCreated,
             IStringLocalizer<SharedLocalization> sl)
         {
@@ -90,7 +90,7 @@ namespace TeamworkSystem.WebClient.Extensions
 
         public static void ShowMemberAddingDialog(
             this IDialogService dialogService,
-            int teamId,
+            Guid teamId,
             Func<Task> onCreated,
             IStringLocalizer<SharedLocalization> sl)
         {

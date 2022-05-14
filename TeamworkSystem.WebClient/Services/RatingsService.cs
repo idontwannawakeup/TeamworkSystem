@@ -21,10 +21,10 @@ namespace TeamworkSystem.WebClient.Services
                 ParametersStringFactory.GenerateParametersString(parameters));
         }
 
-        public async Task<IEnumerable<RatingViewModel>> GetByRatedUserId(string userId) =>
+        public async Task<IEnumerable<RatingViewModel>> GetByRatedUserId(Guid userId) =>
             await _httpClient.GetAsync<List<RatingViewModel>>($"?RatedUserId={userId}");
 
-        public async Task<RatingViewModel> GetByIdAsync(int id) =>
+        public async Task<RatingViewModel> GetByIdAsync(Guid id) =>
             await _httpClient.GetAsync<RatingViewModel>($"{id}");
 
         public async Task CreateAsync(RatingViewModel viewModel) =>
@@ -33,7 +33,7 @@ namespace TeamworkSystem.WebClient.Services
         public async Task UpdateAsync(RatingViewModel viewModel) =>
             await _httpClient.PutAsync(string.Empty, viewModel);
 
-        public async Task DeleteAsync(int id) =>
+        public async Task DeleteAsync(Guid id) =>
             await _httpClient.DeleteAsync($"{id}");
 
         public RatingsService(HttpClient httpClient, ApiAuthenticationStateProvider state) =>

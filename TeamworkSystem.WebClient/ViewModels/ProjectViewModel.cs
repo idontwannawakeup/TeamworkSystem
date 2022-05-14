@@ -2,9 +2,9 @@
 {
     public class ProjectViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public int TeamId { get; set; }
+        public Guid TeamId { get; set; }
 
         public string Title { get; set; }
 

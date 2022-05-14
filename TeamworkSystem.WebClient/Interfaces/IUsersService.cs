@@ -13,21 +13,21 @@ namespace TeamworkSystem.WebClient.Interfaces
 
         Task<IEnumerable<UserViewModel>> GetAsync();
 
-        Task<IEnumerable<UserViewModel>> GetByTeamIdAsync(int teamId);
+        Task<IEnumerable<UserViewModel>> GetByTeamIdAsync(Guid teamId);
 
-        Task<UserViewModel> GetByIdAsync(string id);
+        Task<UserViewModel> GetByIdAsync(Guid id);
 
-        Task<IEnumerable<UserViewModel>> GetFriendsAsync(string id);
+        Task<IEnumerable<UserViewModel>> GetFriendsAsync(Guid id);
 
         Task<(IEnumerable<UserViewModel>, PaginationHeaderViewModel)> GetFriendsWithPaginationHeaderAsync(
-            string id,
+            Guid id,
             UsersParameters parameters);
 
         Task UpdateAsync(UserViewModel viewModel);
 
-        Task SetAvatarForUserAsync(string id, IBrowserFile file);
+        Task SetAvatarForUserAsync(Guid id, IBrowserFile file);
 
-        Task DeleteAsync(string userId);
+        Task DeleteAsync(Guid userId);
 
         Task AddFriendsAsync(FriendsViewModel viewModel);
 

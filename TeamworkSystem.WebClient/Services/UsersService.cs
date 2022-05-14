@@ -26,17 +26,17 @@ namespace TeamworkSystem.WebClient.Services
         public async Task<IEnumerable<UserViewModel>> GetAsync() =>
             await _httpClient.GetAsync<List<UserViewModel>>(string.Empty);
 
-        public async Task<IEnumerable<UserViewModel>> GetByTeamIdAsync(int teamId) =>
+        public async Task<IEnumerable<UserViewModel>> GetByTeamIdAsync(Guid teamId) =>
             await _httpClient.GetAsync<List<UserViewModel>>($"?TeamId={teamId}");
 
-        public async Task<UserViewModel> GetByIdAsync(string id) =>
+        public async Task<UserViewModel> GetByIdAsync(Guid id) =>
             await _httpClient.GetAsync<UserViewModel>($"{id}");
 
-        public async Task<IEnumerable<UserViewModel>> GetFriendsAsync(string id) =>
+        public async Task<IEnumerable<UserViewModel>> GetFriendsAsync(Guid id) =>
             await _httpClient.GetAsync<List<UserViewModel>>($"friends/{id}");
 
         public async Task<(IEnumerable<UserViewModel>, PaginationHeaderViewModel)> GetFriendsWithPaginationHeaderAsync(
-            string id,
+            Guid id,
             UsersParameters parameters)
         {
             return await _httpClient.GetWithPaginationHeaderAsync<List<UserViewModel>>(
@@ -49,14 +49,14 @@ namespace TeamworkSystem.WebClient.Services
         public async Task UpdateAsync(UserViewModel viewModel) =>
             await _httpClient.PutAsync(string.Empty, viewModel);
 
-        public async Task SetAvatarForUserAsync(string id, IBrowserFile file)
+        public async Task SetAvatarForUserAsync(Guid id, IBrowserFile file)
         {
             var buffer = new byte[file.Size];
             await file.OpenReadStream().ReadAsync(buffer);
             var imageContent = new ByteArrayContent(buffer);
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
 
-            var userIdContent = new StringContent(id);
+            var userIdContent = new StringContent(id.ToString());
 
             var requestContent = new MultipartFormDataContent
             {
@@ -67,7 +67,7 @@ namespace TeamworkSystem.WebClient.Services
             await _httpClient.PostFormDataAsync("avatar", requestContent);
         }
 
-        public async Task DeleteAsync(string userId) =>
+        public async Task DeleteAsync(Guid userId) =>
             await _httpClient.DeleteAsync($"{userId}");
 
         public async Task AddFriendsAsync(FriendsViewModel viewModel) =>

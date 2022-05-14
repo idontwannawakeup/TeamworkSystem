@@ -2,11 +2,11 @@
 {
     public class RatingViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public string FromId { get; set; }
+        public Guid FromId { get; set; }
 
-        public string ToId { get; set; }
+        public Guid ToId { get; set; }
 
         public int Social { get; set; }
 

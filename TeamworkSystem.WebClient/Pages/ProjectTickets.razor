@@ -1,4 +1,4 @@
-﻿@page "/project/{ProjectId:int}/tickets"
+﻿@page "/project/{ProjectId:guid}/tickets"
 @inject IStringLocalizer<SharedLocalization> SL  
 @layout ContainerlessLayout
 @inject NavigationManager NavigationManager
@@ -79,15 +79,15 @@
 
 @code {
 
-    [Parameter] public int ProjectId { get; set; }
+    [Parameter] public Guid ProjectId { get; set; }
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
     private MudTable<TicketViewModel> table;
 
-    private string searchTitle = null;
+    private string searchTitle;
 
-    private string userId = null;
+    private Guid userId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,13 +95,13 @@
         userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
     }
 
-    private string GetSettingsLink(int ticketId) =>
+    private string GetSettingsLink(Guid ticketId) =>
         $"/ticket/{ticketId}/settings";
 
     private void OpenTicketPage(TableRowClickEventArgs<TicketViewModel> args) =>
         NavigationManager.NavigateTo($"/ticket/{args.Item.Id}");
 
-    private async Task DeleteTicketAsync(int id)
+    private async Task DeleteTicketAsync(Guid id)
     {
         var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
             SL["ConfirmTicketDeleting"]) ?? false;

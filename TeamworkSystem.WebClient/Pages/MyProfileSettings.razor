@@ -98,9 +98,9 @@ else
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private string userId = null;
+    private Guid userId;
 
-    private UserViewModel user = null;
+    private UserViewModel user;
 
     protected override async Task OnInitializedAsync()
     {
