@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Shared", "Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monolith", "Monolith", "{A7C8356E-8C51-49B0-A894-B17B160349B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Gateway", "TeamworkSystem.Gateway\TeamworkSystem.Gateway.csproj", "{36DA7203-BE84-4597-BC75-B44E1E98F2DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{246FC4CE-82BC-4477-921A-50AAEF8D243A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{246FC4CE-82BC-4477-921A-50AAEF8D243A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{246FC4CE-82BC-4477-921A-50AAEF8D243A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36DA7203-BE84-4597-BC75-B44E1E98F2DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36DA7203-BE84-4597-BC75-B44E1E98F2DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36DA7203-BE84-4597-BC75-B44E1E98F2DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36DA7203-BE84-4597-BC75-B44E1E98F2DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
