@@ -60,20 +60,6 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("friends/{id:guid}")]
-    [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedList<UserResponse>>> GetFriendsAsync(
-        [FromRoute] Guid id,
-        [FromQuery] UsersParameters parameters)
-    {
-        var friends = await _usersService.GetFriendsAsync(id, parameters);
-        Response.Headers.Add("X-Pagination", friends.SerializeMetadata());
-        return Ok(friends);
-    }
-
     [HttpPost("avatar")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -82,38 +68,6 @@ public class UsersController : ControllerBase
     public async Task<ActionResult> SetAvatarForUserAsync([FromForm] UserAvatarRequest request)
     {
         await _usersService.SetAvatarForUserAsync(request);
-        return Ok();
-    }
-
-    [HttpPost("friends")]
-    [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> AddFriendAsync([FromBody] FriendsRequest request)
-    {
-        await _usersService.AddFriendAsync(request);
-        return Ok();
-    }
-
-    [HttpDelete("friends/{firstId:guid}/{secondId:guid}")]
-    [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> DeleteFriendAsync(
-        [FromRoute] Guid firstId,
-        [FromRoute] Guid secondId)
-    {
-        var request = new FriendsRequest
-        {
-            FirstId = firstId,
-            SecondId = secondId,
-        };
-
-        await _usersService.DeleteFriendAsync(request);
         return Ok();
     }
 }

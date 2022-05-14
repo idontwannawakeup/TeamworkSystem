@@ -45,14 +45,6 @@ public class UsersService : IUsersService
         return _mapper.Map<User, UserResponse>(user);
     }
 
-    public async Task<PagedList<UserResponse>> GetFriendsAsync(
-        Guid id,
-        UsersParameters parameters)
-    {
-        var friends = await _userManager.GetFriendsAsync(id, parameters);
-        return friends.Map(_mapper.Map<User, UserResponse>);
-    }
-
     public async Task UpdateAsync(UserRequest request)
     {
         var user = await _userManager.GetByIdAsync(request.Id);
@@ -78,37 +70,5 @@ public class UsersService : IUsersService
         var user = await _userManager.GetByIdAsync(id);
         await _unitOfWork.UserManager.DeleteAsync(user);
         await _unitOfWork.SaveChangesAsync();
-    }
-
-    public async Task AddFriendAsync(FriendsRequest friendsRequest) =>
-        await MakeActionWithFriends(friendsRequest, AddToFriends);
-
-    public async Task DeleteFriendAsync(FriendsRequest friendsRequest) =>
-        await MakeActionWithFriends(friendsRequest, DeleteFromFriends);
-
-    private async Task MakeActionWithFriends(
-        FriendsRequest friendsRequest,
-        Action<User, User>? action)
-    {
-        var firstUser = await _userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
-        var secondUser = await _userManager.GetCompleteEntityAsync(friendsRequest.SecondId);
-
-        action?.Invoke(firstUser, secondUser);
-        await _userManager.UpdateAsync(firstUser);
-        await _userManager.UpdateAsync(secondUser);
-
-        await _unitOfWork.SaveChangesAsync();
-    }
-
-    private static void AddToFriends(User first, User second)
-    {
-        first.Friends.Add(second);
-        second.Friends.Add(first);
-    }
-
-    private static void DeleteFromFriends(User first, User second)
-    {
-        first.Friends.Remove(first);
-        second.Friends.Remove(second);
     }
 }
