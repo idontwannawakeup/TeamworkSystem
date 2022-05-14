@@ -30,11 +30,11 @@ namespace TeamworkSystem.WebClient.Extensions
             _httpClient.DefaultRequestHeaders.Authorization = await GenerateAuthorizationHeaderAsync();
             var response = await _httpClient.GetAsync(requestUri)!;
             var responseBody = await response.Content.ReadAsStringAsync();
+            StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
             var pagination = response.Headers.GetValues("X-Pagination")
                                              .First()
                                              .Deserialize<PaginationHeaderViewModel>();
 
-            StatusCodeHandler.TryHandleStatusCode(response.StatusCode, responseBody);
             return (responseBody.Deserialize<T>(), pagination);
         }
 
