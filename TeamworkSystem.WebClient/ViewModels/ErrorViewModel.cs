@@ -1,7 +1,6 @@
-﻿namespace TeamworkSystem.WebClient.ViewModels
+﻿namespace TeamworkSystem.WebClient.ViewModels;
+
+public class ErrorViewModel
 {
-    public class ErrorViewModel
-    {
-        public string Message { get; set; }
-    }
+    public string Message { get; set; }
 }

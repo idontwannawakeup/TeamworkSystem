@@ -1,9 +1,8 @@
-﻿namespace TeamworkSystem.WebClient.Exceptions
-{
-    public class EntityNotFoundException : Exception
-    {
-        public EntityNotFoundException(string error) => Error = error;
+﻿namespace TeamworkSystem.WebClient.Exceptions;
 
-        public string Error { get; set; }
-    }
+public class EntityNotFoundException : Exception
+{
+    public EntityNotFoundException(string error) => Error = error;
+
+    public string Error { get; set; }
 }

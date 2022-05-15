@@ -1,7 +1,6 @@
-﻿namespace TeamworkSystem.WebClient.Parameters
+﻿namespace TeamworkSystem.WebClient.Parameters;
+
+public class RatingsParameters : QueryStringParameters
 {
-    public class RatingsParameters : QueryStringParameters
-    {
-        public Guid? RatedUserId { get; set; }
-    }
+    public Guid? RatedUserId { get; set; }
 }

@@ -2,25 +2,24 @@
 using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
-namespace TeamworkSystem.WebClient.Interfaces
+namespace TeamworkSystem.WebClient.Interfaces;
+
+public interface IUsersService
 {
-    public interface IUsersService
-    {
-        Task<IEnumerable<UserViewModel>> GetAsync(UsersParameters parameters);
+    Task<IEnumerable<UserViewModel>> GetAsync(UsersParameters parameters);
 
-        Task<(IEnumerable<UserViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
-            UsersParameters parameters);
+    Task<(IEnumerable<UserViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
+        UsersParameters parameters);
 
-        Task<IEnumerable<UserViewModel>> GetAsync();
+    Task<IEnumerable<UserViewModel>> GetAsync();
 
-        Task<IEnumerable<UserViewModel>> GetByTeamIdAsync(Guid teamId);
+    Task<IEnumerable<UserViewModel>> GetByTeamIdAsync(Guid teamId);
 
-        Task<UserViewModel> GetByIdAsync(Guid id);
+    Task<UserViewModel> GetByIdAsync(Guid id);
 
-        Task UpdateAsync(UserViewModel viewModel);
+    Task UpdateAsync(UserViewModel viewModel);
 
-        Task SetAvatarForUserAsync(Guid id, IBrowserFile file);
+    Task SetAvatarForUserAsync(Guid id, IBrowserFile file);
 
-        Task DeleteAsync(Guid userId);
-    }
+    Task DeleteAsync(Guid userId);
 }

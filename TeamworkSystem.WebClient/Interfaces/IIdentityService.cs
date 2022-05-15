@@ -1,11 +1,10 @@
 ﻿using TeamworkSystem.WebClient.ViewModels;
 
-namespace TeamworkSystem.WebClient.Interfaces
-{
-    public interface IIdentityService
-    {
-        Task<JwtViewModel> SignInAsync(UserSignInViewModel viewModel);
+namespace TeamworkSystem.WebClient.Interfaces;
 
-        Task<JwtViewModel> SignUpAsync(UserSignUpViewModel viewModel);
-    }
+public interface IIdentityService
+{
+    Task<JwtViewModel> SignInAsync(UserSignInViewModel viewModel);
+
+    Task<JwtViewModel> SignUpAsync(UserSignUpViewModel viewModel);
 }
