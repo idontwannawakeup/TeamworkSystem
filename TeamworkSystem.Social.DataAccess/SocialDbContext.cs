@@ -3,9 +3,9 @@ using TeamworkSystem.Social.DataAccess.Entities;
 
 namespace TeamworkSystem.Social.DataAccess;
 
-public class TeamworkSystemSocialDbContext : DbContext
+public class SocialDbContext : DbContext
 {
-    public TeamworkSystemSocialDbContext(DbContextOptions<TeamworkSystemSocialDbContext> options) : base(options)
+    public SocialDbContext(DbContextOptions<SocialDbContext> options) : base(options)
     {
     }
 

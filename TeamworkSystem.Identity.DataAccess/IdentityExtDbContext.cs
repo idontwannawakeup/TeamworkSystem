@@ -5,9 +5,9 @@ using TeamworkSystem.Identity.DataAccess.Entities;
 
 namespace TeamworkSystem.Identity.DataAccess;
 
-public class TeamworkSystemIdentityDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+public class IdentityExtDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
-    public TeamworkSystemIdentityDbContext(DbContextOptions<TeamworkSystemIdentityDbContext> options) : base(options)
+    public IdentityExtDbContext(DbContextOptions<IdentityExtDbContext> options) : base(options)
     {
     }
 
