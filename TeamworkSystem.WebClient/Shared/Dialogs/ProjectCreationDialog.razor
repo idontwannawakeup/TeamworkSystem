@@ -1,50 +1,50 @@
-﻿@inject IStringLocalizer<SharedLocalization> SL
+﻿@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject ISnackbar Snackbar
 @inject IProjectsService ProjectsService
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@project" OnValidSubmit="@CreateProjectAsync">
+<EditForm Model="@_project" OnValidSubmit="@CreateProjectAsync">
     <FluentValidationValidator />
     <MudDialog>
         <DialogContent>
 
             <MudTextField T="@string"
-                          Label="@SL["Title"]"
-                          @bind-Value="@project.Title"
-                          For="@(() => project.Title)" />
+                          Label="@SharedLocalizer["Title"]"
+                          @bind-Value="@_project.Title"
+                          For="@(() => _project.Title)" />
 
             <MudAutocomplete T="@TeamViewModel"
-                             Label="@SL["Team"]"
-                             HelperText="@SL["FindTeamByName"]"
+                             Label="@SharedLocalizer["Team"]"
+                             HelperText="@SharedLocalizer["FindTeamByName"]"
                              SearchFunc="@InitializeTeamsAsync"
-                             Value="@project.Team"
-                             ValueChanged="@(e => (project.Team, project.TeamId) = (e, e.Id))"
+                             Value="@_project.Team"
+                             ValueChanged="@(e => (_project.Team, _project.TeamId) = (e, e.Id))"
                              ToStringFunc="@(team => team?.Name)"
-                             For="@(() => project.Team)"
+                             For="@(() => _project.Team)"
                              Immediate="@true"
                              CoerceText="@true" />
 
             <MudTextField T="@string"
-                          Label="@SL["Type"]"
-                          @bind-Value="@project.Type"
-                          For="@(() => project.Type)" />
+                          Label="@SharedLocalizer["Type"]"
+                          @bind-Value="@_project.Type"
+                          For="@(() => _project.Type)" />
 
             <MudTextField T="@string"
-                          Label="@SL["Url"]"
-                          @bind-Value="@project.Url"
-                          For="@(() => project.Url)" />
+                          Label="@SharedLocalizer["Url"]"
+                          @bind-Value="@_project.Url"
+                          For="@(() => _project.Url)" />
 
             <MudTextField T="@string"
-                          Label="@SL["Description"]"
-                          @bind-Value="@project.Description"
-                          For="@(() => project.Description)"
+                          Label="@SharedLocalizer["Description"]"
+                          @bind-Value="@_project.Description"
+                          For="@(() => _project.Description)"
                           Lines="10" />
 
         </DialogContent>
         <DialogActions>
-            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Create"]</MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SharedLocalizer["Create"]</MudButton>
+            <MudButton OnClick="@(_ => DialogInstance.Close())">@SharedLocalizer["Cancel"]</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>
@@ -57,7 +57,7 @@
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private ProjectViewModel project = new();
+    private ProjectViewModel _project = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,10 +80,10 @@
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await ProjectsService.CreateAsync(project);
+            await ProjectsService.CreateAsync(_project);
             DialogInstance.Close();
             Snackbar.Add("Project created", Severity.Success);
-            await OnCreated?.Invoke();
+            await OnCreated?.Invoke()!;
         });
     }
 

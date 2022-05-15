@@ -1,73 +1,73 @@
 ﻿@page "/signUp"
 @layout EmptyLayout
-@inject IStringLocalizer<SignUp> L
-@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<SignUp> Localizer
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 @inject IIdentityService IdentityService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="user" OnValidSubmit="@SignUpAsync">
+<EditForm Model="_user" OnValidSubmit="@SignUpAsync">
     <FluentValidationValidator />
     <MudContainer Class="pb-8" MaxWidth="@MaxWidth.Medium">
         <MudCard Elevation="4" Class="px-sm-4 px-md-12 py-sm-4 py-md-6 py-lg-8 mt-4 mt-md-8 mt-lg-16 mx-auto">
             <MudCardContent>
-                <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">@L["PleaseSignUp"]</MudText>
+                <MudText Class="mb-xs-4 mb-sm-8 mb-md-16" Typo="@Typo.h4" Align="@Align.Center">@Localizer["PleaseSignUp"]</MudText>
                 <MudGrid Spacing="2">
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["UserName"]"
+                                      Label="@SharedLocalizer["UserName"]"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@user.UserName"
-                                      For="@(() => user.UserName)" />
+                                      @bind-Value="@_user.UserName"
+                                      For="@(() => _user.UserName)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["Email"]"
+                                      Label="@SharedLocalizer["Email"]"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@user.Email"
-                                      For="@(() => user.Email)" />
+                                      @bind-Value="@_user.Email"
+                                      For="@(() => _user.Email)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["Password"]"
+                                      Label="@SharedLocalizer["Password"]"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@user.Password"
-                                      For="@(() => user.Password)" />
+                                      @bind-Value="@_user.Password"
+                                      For="@(() => _user.Password)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["ConfirmPassword"]"
+                                      Label="@SharedLocalizer["ConfirmPassword"]"
                                       Variant="Variant.Outlined"
-                                      For="@(() => user.ConfirmPassword)" />
+                                      For="@(() => _user.ConfirmPassword)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["FirstName"]"
+                                      Label="@SharedLocalizer["FirstName"]"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@user.FirstName"
-                                      For="@(() => user.FirstName)" />
+                                      @bind-Value="@_user.FirstName"
+                                      For="@(() => _user.FirstName)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["LastName"]"
+                                      Label="@SharedLocalizer["LastName"]"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@user.LastName"
-                                      For="@(() => user.LastName)" />
+                                      @bind-Value="@_user.LastName"
+                                      For="@(() => _user.LastName)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["Profession"]"
+                                      Label="@SharedLocalizer["Profession"]"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@user.Profession"
-                                      For="@(() => user.Profession)" />
+                                      @bind-Value="@_user.Profession"
+                                      For="@(() => _user.Profession)" />
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      Label="@SL["Specialization"]"
+                                      Label="@SharedLocalizer["Specialization"]"
                                       Variant="Variant.Outlined"
-                                      @bind-Value="@user.Specialization"
-                                      For="@(() => user.Specialization)" />
+                                      @bind-Value="@_user.Specialization"
+                                      For="@(() => _user.Specialization)" />
                     </MudItem>
                 </MudGrid>
             </MudCardContent>
@@ -77,7 +77,7 @@
                            Color="@Color.Primary"
                            Variant="@Variant.Filled"
                            ButtonType="@ButtonType.Submit">
-                    @SL["SignUp"]
+                    @SharedLocalizer["SignUp"]
                 </MudButton>
             </MudCardActions>
         </MudCard>
@@ -86,15 +86,15 @@
 
 @code {
 
-    private UserSignUpViewModel user = new();
+    private readonly UserSignUpViewModel _user = new();
 
     private async Task SignUpAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            var token = await IdentityService.SignUpAsync(user);
+            await IdentityService.SignUpAsync(_user);
             NavigationManager.NavigateTo("/home");
-            Snackbar.Add("You signed up succesfull!", Severity.Success);
+            Snackbar.Add("You signed up successful!", Severity.Success);
         });
     }
 

@@ -1,27 +1,27 @@
-﻿@inject IStringLocalizer<SharedLocalization> SL
+﻿@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject ISnackbar Snackbar
 @inject IUsersService UsersService
 @inject IFriendsService FriendsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@friends" OnValidSubmit="@OnValidSubmitAsync">
+<EditForm Model="@_friends" OnValidSubmit="@OnValidSubmitAsync">
     <FluentValidationValidator />
     <MudDialog>
         <DialogContent>
             <MudAutocomplete T="@UserViewModel"
-                             Label="@SL["User"]"
-                             HelperText="@SL["FindFriendByLastName"]"
-                             Value="@friends.Second"
-                             ValueChanged="@(e => (friends.Second, friends.SecondId) = (e, e.Id))"
+                             Label="@SharedLocalizer["User"]"
+                             HelperText="@SharedLocalizer["FindFriendByLastName"]"
+                             Value="@_friends.Second"
+                             ValueChanged="@(e => (_friends.Second, _friends.SecondId) = (e, e.Id))"
                              SearchFunc="@InitializeUsersAsync"
-                             For="@(() => friends.Second)"
+                             For="@(() => _friends.Second)"
                              ToStringFunc="@(user => user?.FullName)"
                              Immediate="@true"
                              CoerceText="@true" />
         </DialogContent>
         <DialogActions>
-            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Add"]</MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SharedLocalizer["Add"]</MudButton>
+            <MudButton OnClick="@(_ => DialogInstance.Close())">@SharedLocalizer["Cancel"]</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>
@@ -34,12 +34,12 @@
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private FriendsViewModel friends = new();
+    private readonly FriendsViewModel _friends = new();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        friends.FirstId = UserId;
+        _friends.FirstId = UserId;
     }
 
     private async Task<IEnumerable<UserViewModel>> InitializeUsersAsync(string lastName)
@@ -57,7 +57,7 @@
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await FriendsService.AddFriendsAsync(friends);
+            await FriendsService.AddFriendsAsync(_friends);
             DialogInstance.Close();
             Snackbar.Add("Friend added", Severity.Success);
             OnCreated?.Invoke();

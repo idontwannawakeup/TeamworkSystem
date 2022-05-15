@@ -1,5 +1,5 @@
 ﻿@page "/friends"
-@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IDialogService DialogService
@@ -10,7 +10,7 @@
 <MudTable Class="mt-md-12 mb-12"
           T="@UserViewModel"
           ServerData="@InitializeFriendsAsync"
-          @ref="@table"
+          @ref="@_table"
           Hover="@true"
           Breakpoint="@Breakpoint.Sm"
           Elevation="0"
@@ -18,23 +18,23 @@
           OnRowClick="@(args => OpenFriendProfile(args))"
           RowClass="cursor-pointer">
     <ToolBarContent>
-        <MudText Typo="@Typo.h3">@SL["Friends"]</MudText>
+        <MudText Typo="@Typo.h3">@SharedLocalizer["Friends"]</MudText>
         <MudSpacer />
         <MudTextField T="@string"
                       ValueChanged="@(async lastName => await OnSearchAsync(lastName))"
-                      Placeholder="@SL["SearchByLastName"]"
+                      Placeholder="@SharedLocalizer["SearchByLastName"]"
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"
                       Class="mt-0" />
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>@SL["Name"]</MudTh>
-        <MudTh>@SL["Profession"]</MudTh>
+        <MudTh>@SharedLocalizer["Name"]</MudTh>
+        <MudTh>@SharedLocalizer["Profession"]</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="@SL["Name"]">
+        <MudTd DataLabel="@SharedLocalizer["Name"]">
             <MudElement HtmlTag="div" Class="d-flex align-center">
                 <MudAvatar Image="@(context.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Avatar}" : null)"
                            Color="@Color.Info">
@@ -43,7 +43,7 @@
                 <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.FullName</MudText>
             </MudElement>
         </MudTd>
-        <MudTd DataLabel="@SL["Profession"]">
+        <MudTd DataLabel="@SharedLocalizer["Profession"]">
             @if (!string.IsNullOrWhiteSpace(context.Profession))
             {
                 @context.Profession
@@ -58,8 +58,8 @@
                 <MudMenu Icon="@Icons.Material.Filled.MoreHoriz"
                          Class="ml-auto" OffsetX="@true"
                          Direction="@Direction.Left">
-                    <MudMenuItem OnClick="@(async e => await DeleteFriendAsync(context.Id))">
-                        @SL["Delete"]
+                    <MudMenuItem OnClick="@(async _ => await DeleteFriendAsync(context.Id))">
+                        @SharedLocalizer["Delete"]
                     </MudMenuItem>
                 </MudMenu>
             </MudElement>
@@ -73,23 +73,23 @@
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="@SL["Friend"]"
+        Label="@SharedLocalizer["Friend"]"
         OnClick="@ShowFriendsCreationDialog" />
 
 @code {
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private MudTable<UserViewModel> table;
+    private MudTable<UserViewModel> _table;
 
-    private Guid userId;
+    private Guid _userId;
 
-    private string searchLastName = null;
+    private string _searchLastName;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
     }
 
     private void OpenFriendProfile(TableRowClickEventArgs<UserViewModel> args) =>
@@ -97,16 +97,16 @@
 
     private async Task DeleteFriendAsync(Guid friendId)
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
-            SL["ConfirmFriendDeleting"]) ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SharedLocalizer,
+            SharedLocalizer["ConfirmFriendDeleting"]) ?? false;
 
         if (confirmed)
         {
             await RequestErrorsHandler.HandleRequestAsync(async () =>
             {
-                var viewModel = new FriendsViewModel() { FirstId = userId, SecondId = friendId };
+                var viewModel = new FriendsViewModel() { FirstId = _userId, SecondId = friendId };
                 await FriendsService.DeleteFriendsAsync(viewModel);
-                await table.ReloadServerData();
+                await _table.ReloadServerData();
                 Snackbar.Add("Friend deleted.", Severity.Success);
             });
         }
@@ -114,23 +114,23 @@
 
     private void ShowFriendsCreationDialog()
     {
-        DialogService.ShowFriendsCreationDialog(userId, async () =>
+        DialogService.ShowFriendsCreationDialog(_userId, async () =>
         {
-            await table.ReloadServerData();
+            await _table.ReloadServerData();
             StateHasChanged();
-        }, SL);
+        }, SharedLocalizer);
     }
 
     private async Task<TableData<UserViewModel>> InitializeFriendsAsync(TableState state)
     {
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         var (friends, pagination) = await FriendsService.GetFriendsWithPaginationHeaderAsync(
-            userId,
+            _userId,
             new FriendsParameters()
             {
                 PageNumber = state.Page + 1,
                 PageSize = state.PageSize,
-                LastName = searchLastName
+                LastName = _searchLastName
             });
 
         return new() { Items = friends, TotalItems = pagination.TotalEntitiesCount };
@@ -138,8 +138,8 @@
 
     private async Task OnSearchAsync(string name)
     {
-        searchLastName = name;
-        await table.ReloadServerData();
+        _searchLastName = name;
+        await _table.ReloadServerData();
     }
 
 }
