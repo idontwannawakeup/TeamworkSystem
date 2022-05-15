@@ -19,4 +19,8 @@
       <ProjectReference Include="..\TeamworkSystem.WorkManagement.Domain\TeamworkSystem.WorkManagement.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\Mapping" />
+    </ItemGroup>
+
 </Project>
