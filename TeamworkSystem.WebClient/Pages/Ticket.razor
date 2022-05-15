@@ -1,6 +1,6 @@
 ﻿@page "/ticket/{TicketId:guid}"
 @layout ContainerlessLayout
-@inject IStringLocalizer<SharedLocalization> SL 
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer 
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject ISnackbar Snackbar
@@ -10,29 +10,29 @@
 
 <MudContainer MaxWidth="@MaxWidth.Large">
     <MudElement HtmlTag="div" Class="d-flex flex-wrap justify-space-between mb-2">
-        @if (ticket is not null)
+        @if (_ticket is not null)
         {
-            <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">@ticket.Title</MudText>
+            <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">@_ticket.Title</MudText>
         }
         else
         {
             <MudSkeleton Width="25%" Height="45px" Class="mt-3 mt-md-8 mb-4" />
         }
 
-        @if (userId == ticket?.Project?.Team?.LeaderId)
+        @if (_userId == _ticket?.Project?.Team?.LeaderId)
         {
             <MudElement HtmlTag="div" Class="d-flex align-center gap-4">
                 <MudButton Variant="@Variant.Outlined"
                            Color="@Color.Info"
                            EndIcon="@Icons.Material.Filled.Edit"
                            Link="@SettingsLink">
-                    @SL["Edit"]
+                    @SharedLocalizer["Edit"]
                 </MudButton>
                 <MudButton Variant="@Variant.Outlined"
                            Color="@Color.Error"
                            EndIcon="@Icons.Material.Filled.Delete"
                            OnClick="@DeleteTicketAsync">
-                    @SL["Delete"]
+                    @SharedLocalizer["Delete"]
                 </MudButton>
             </MudElement>
         }
@@ -41,10 +41,10 @@
         
     <MudGrid Spacing="2">
         <MudItem xs="12" md="7" Class="pb-md-4">
-            <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Description"]</MudText>
-            @if (ticket is not null)
+            <MudText Typo="@Typo.h6" Style="@_colorGrey">@SharedLocalizer["Description"]</MudText>
+            @if (_ticket is not null)
             {
-                <MudText Typo="@Typo.body1">@ticket.Description</MudText>
+                <MudText Typo="@Typo.body1">@_ticket.Description</MudText>
             }
             else
             {
@@ -58,24 +58,24 @@
         @* Attributes *@
         <MudItem xs="12" md="5" Class="pb-md-4">
             <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
-                <MudIcon Icon="@Icons.Material.Filled.ViewList" Style="@fillGrey" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Attributes"]</MudText>
+                <MudIcon Icon="@Icons.Material.Filled.ViewList" Style="@_fillGrey" />
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">@SharedLocalizer["Attributes"]</MudText>
             </MudElement>
             <MudDivider Class="mt-2 mb-4" />
             <MudElement HtmlTag="div" Class="ticket__attributes d-flex flex-column gap-3 px-3">
-                @if (ticket is not null)
+                @if (_ticket is not null)
                 {
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">@SL["Executor"]</MudText>
-                        @if (ticket.Executor is not null)
+                        <MudText Typo="@Typo.subtitle1">@SharedLocalizer["Executor"]</MudText>
+                        @if (_ticket.Executor is not null)
                         {
                             <MudElement HtmlTag="div" Class="d-flex align-center gap-2">
-                                <MudAvatar Image="@(ticket.Executor.Avatar is not null ? $"{Configuration["ApiUrl"]}/{ticket.Executor.Avatar}" : null)"
+                                <MudAvatar Image="@(_ticket.Executor.Avatar is not null ? $"{Configuration["ApiUrl"]}/{_ticket.Executor.Avatar}" : null)"
                                            Color="@Color.Secondary"
                                            Size="@Size.Small">
                                     A
                                 </MudAvatar>
-                                <MudText Typo="@Typo.subtitle2">@ticket.Executor.FullName</MudText>
+                                <MudText Typo="@Typo.subtitle2">@_ticket.Executor.FullName</MudText>
                             </MudElement>
                         }
                         else
@@ -84,10 +84,10 @@
                         }
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">@SL["Project"]</MudText>
-                        @if (ticket.Project is not null)
+                        <MudText Typo="@Typo.subtitle1">@SharedLocalizer["Project"]</MudText>
+                        @if (_ticket.Project is not null)
                         {
-                            <MudText Typo="@Typo.subtitle2">@ticket.Project.Title</MudText>
+                            <MudText Typo="@Typo.subtitle2">@_ticket.Project.Title</MudText>
                         }
                         else
                         {
@@ -95,30 +95,30 @@
                         }
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">@SL["Type"]</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SharedLocalizer["Type"]</MudText>
                         <MudChip Color="@Color.Primary"
                                  Size="@Size.Small"
                                  Label="@true">
-                            @ticket.Type
+                            @_ticket.Type
                         </MudChip>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">@SL["Status"]</MudText>
-                        <MudChip Color="@Color.Default" Text="@ticket.Status" Class="ma-0">@ticket.Status</MudChip>
+                        <MudText Typo="@Typo.subtitle1">@SharedLocalizer["Status"]</MudText>
+                        <MudChip Color="@Color.Default" Text="@_ticket.Status" Class="ma-0">@_ticket.Status</MudChip>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">@SL["Priority"]</MudText>
-                        <MudText Typo="@Typo.subtitle2">@ticket.Priority</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SharedLocalizer["Priority"]</MudText>
+                        <MudText Typo="@Typo.subtitle2">@_ticket.Priority</MudText>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">@SL["CreationTime"]</MudText>
-                        <MudText Typo="@Typo.subtitle2">@ticket.CreationTime</MudText>
+                        <MudText Typo="@Typo.subtitle1">@SharedLocalizer["CreationTime"]</MudText>
+                        <MudText Typo="@Typo.subtitle2">@_ticket.CreationTime</MudText>
                     </MudElement>
                     <MudElement Class="d-flex align-center justify-space-between">
-                        <MudText Typo="@Typo.subtitle1">@SL["Deadline"]</MudText>
-                        @if (ticket.Deadline is not null)
+                        <MudText Typo="@Typo.subtitle1">@SharedLocalizer["Deadline"]</MudText>
+                        @if (_ticket.Deadline is not null)
                         {
-                            <MudText Typo="@Typo.subtitle2">@ticket.Deadline</MudText>
+                            <MudText Typo="@Typo.subtitle2">@_ticket.Deadline</MudText>
                         }
                         else
                         {
@@ -141,27 +141,25 @@
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private TicketViewModel ticket;
+    private readonly string _colorGrey = $"color: {Colors.Grey.Default};";
+    private readonly string _fillGrey = $"fill: {Colors.Grey.Default};";
 
-    private Guid userId;
+    private TicketViewModel _ticket;
+    private Guid _userId;
 
     private string SettingsLink => $"/ticket/{TicketId}/settings";
-
-    private readonly string colorGrey = $"color: {Colors.Grey.Default};";
-
-    private readonly string fillGrey = $"fill: {Colors.Grey.Default};";
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeTicketAsync();
     }
 
     private async Task DeleteTicketAsync()
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
-            SL["ConfirmTicketDeleting"]) ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SharedLocalizer,
+            SharedLocalizer["ConfirmTicketDeleting"]) ?? false;
 
         if (confirmed)
         {
@@ -178,7 +176,7 @@
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            ticket = await TicketsService.GetByIdAsync(TicketId);
+            _ticket = await TicketsService.GetByIdAsync(TicketId);
         });
     }
 

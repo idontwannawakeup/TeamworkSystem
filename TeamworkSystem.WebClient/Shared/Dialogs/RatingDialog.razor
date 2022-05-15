@@ -1,47 +1,47 @@
-﻿@inject IStringLocalizer<SharedLocalization> SL
+﻿@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject IRatingsService RatingsService
 
 <MudDialog>
     <DialogContent>
-        @if (rating is not null)
+        @if (_rating is not null)
         {
             <MudElement HtmlTag="div" Class="user-profile__rating">
-                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @SL["Social"]
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                    @SharedLocalizer["Social"]
                 </MudText>
-                <MudRating SelectedValue="@rating.Social" ReadOnly="@true" />
+                <MudRating SelectedValue="@_rating.Social" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
 
             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @SL["Skills"]
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                    @SharedLocalizer["Skills"]
                 </MudText>
-                <MudRating SelectedValue="@rating.Skills" ReadOnly="@true" />
+                <MudRating SelectedValue="@_rating.Skills" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
 
             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @SL["Responsibility"]
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                    @SharedLocalizer["Responsibility"]
                 </MudText>
-                <MudRating SelectedValue="@rating.Responsibility" ReadOnly="@true" />
+                <MudRating SelectedValue="@_rating.Responsibility" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
 
             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                    @SL["Punctuality"]
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                    @SharedLocalizer["Punctuality"]
                 </MudText>
-                <MudRating SelectedValue="@rating.Punctuality" ReadOnly="@true" />
+                <MudRating SelectedValue="@_rating.Punctuality" ReadOnly="@true" />
                 <MudDivider Class="mt-2 mb-4" />
             </MudElement>
 
-            @if (rating.Comment is not null)
+            @if (_rating.Comment is not null)
             {
                 <MudTextField T="@string"
-                              Label="@SL["Comment"]"
-                              Value="@rating.Comment"
+                              Label="@SharedLocalizer["Comment"]"
+                              Value="@_rating.Comment"
                               ReadOnly="@true"
                               Disabled="@true"
                               Lines="4" />
@@ -50,7 +50,7 @@
         }
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Close"]</MudButton>
+        <MudButton OnClick="@(_ => DialogInstance.Close())">@SharedLocalizer["Close"]</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -60,9 +60,9 @@
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private readonly string colorGrey = $"color: {Colors.Grey.Default};";
+    private readonly string _colorGrey = $"color: {Colors.Grey.Default};";
 
-    private RatingViewModel rating = null;
+    private RatingViewModel _rating;
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,5 +71,5 @@
     }
 
     private async Task InitializeRatingAsync() =>
-        rating = await RatingsService.GetByIdAsync(RatingId);
+        _rating = await RatingsService.GetByIdAsync(RatingId);
 }

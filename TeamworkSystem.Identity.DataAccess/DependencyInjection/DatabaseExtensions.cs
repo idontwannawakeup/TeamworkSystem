@@ -12,7 +12,7 @@ public static class DatabaseExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<TeamworkSystemIdentityDbContext>(options =>
+        services.AddDbContext<IdentityExtDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             options.UseSqlServer(connectionString);
@@ -22,7 +22,7 @@ public static class DatabaseExtensions
                 .AddRoles<IdentityRole<Guid>>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<TeamworkSystemIdentityDbContext>();
+                .AddEntityFrameworkStores<IdentityExtDbContext>();
 
         return services;
     }

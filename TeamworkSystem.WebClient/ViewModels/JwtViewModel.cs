@@ -1,10 +1,9 @@
-﻿namespace TeamworkSystem.WebClient.ViewModels
-{
-    public class JwtViewModel
-    {
-        // TODO remove this property. It's temporary
-        public string UserId { get; set; }
+﻿namespace TeamworkSystem.WebClient.ViewModels;
 
-        public string Token { get; set; }
-    }
+public class JwtViewModel
+{
+    // TODO remove this property. It's temporary
+    public string UserId { get; set; }
+
+    public string Token { get; set; }
 }

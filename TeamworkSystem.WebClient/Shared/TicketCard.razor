@@ -1,4 +1,4 @@
-﻿@inject IStringLocalizer<SharedLocalization> SL 
+﻿@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject IDialogService DialogService
 @inject ITicketsService TicketsService
 
@@ -31,11 +31,11 @@
                            Color="@Color.Primary"
                            Class="ml-auto"
                            Link="@TicketLink" />
-            @if (userId == Ticket.Project.Team.LeaderId)
+            @if (_userId == Ticket.Project.Team.LeaderId)
             {
                 <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="@Size.Small" Dense="@true">
-                    <MudMenuItem Link="@SettingsLink">@SL["Edit"]</MudMenuItem>
-                    <MudMenuItem OnClick="@DeleteTicketAsync">@SL["Delete"]</MudMenuItem>
+                    <MudMenuItem Link="@SettingsLink">@SharedLocalizer["Edit"]</MudMenuItem>
+                    <MudMenuItem OnClick="@DeleteTicketAsync">@SharedLocalizer["Delete"]</MudMenuItem>
                 </MudMenu>
             }
         </MudElement>
@@ -54,18 +54,18 @@
 
     private string SettingsLink => $"/ticket/{Ticket.Id}/settings";
 
-    private Guid userId;
+    private Guid _userId;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
     }
 
     private async Task DeleteTicketAsync()
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
-            SL["ConfirmTicketDeleting"]) ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SharedLocalizer,
+            SharedLocalizer["ConfirmTicketDeleting"]) ?? false;
 
         if (confirmed)
         {

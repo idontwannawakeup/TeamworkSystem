@@ -1,18 +1,18 @@
-﻿@inject IStringLocalizer<SharedLocalization> SL
+﻿@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject ISnackbar Snackbar
 @inject IUsersService UsersService
 @inject ITeamsService TeamsService 
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@teamMember" OnValidSubmit="@OnValidSubmitAsync">
+<EditForm Model="@_teamMember" OnValidSubmit="@OnValidSubmitAsync">
     <MudDialog>
 
         <DialogContent>
             <MudAutocomplete T="@UserViewModel"
-                             Label="@SL["Member"]"
-                             HelperText="@SL["FindUserByLastName"]"
-                             Value="@teamMember.User"
-                             ValueChanged="@(e => (teamMember.User, teamMember.UserId) = (e, e.Id))"
+                             Label="@SharedLocalizer["Member"]"
+                             HelperText="@SharedLocalizer["FindUserByLastName"]"
+                             Value="@_teamMember.User"
+                             ValueChanged="@(e => (_teamMember.User, _teamMember.UserId) = (e, e.Id))"
                              SearchFunc="@InitializeUsersAsync"
                              ToStringFunc="@(user => user?.FullName)"
                              Immediate="@true"
@@ -20,8 +20,8 @@
         </DialogContent>
 
         <DialogActions>
-            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SL["Add"]</MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+            <MudButton Color="@Color.Primary" ButtonType="@ButtonType.Submit">@SharedLocalizer["Add"]</MudButton>
+            <MudButton OnClick="@(_ => DialogInstance.Close())">@SharedLocalizer["Cancel"]</MudButton>
         </DialogActions>
 
     </MudDialog>
@@ -35,12 +35,12 @@
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private TeamMemberViewModel teamMember = new();
+    private readonly TeamMemberViewModel _teamMember = new();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        teamMember.TeamId = TeamId;
+        _teamMember.TeamId = TeamId;
     }
 
     private async Task<IEnumerable<UserViewModel>> InitializeUsersAsync(string lastName)
@@ -58,7 +58,7 @@
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await TeamsService.AddMemberAsync(teamMember);
+            await TeamsService.AddMemberAsync(_teamMember);
             DialogInstance.Close();
             Snackbar.Add("Member added", Severity.Success);
             OnCreated?.Invoke();

@@ -1,23 +1,22 @@
 ﻿using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
 
-namespace TeamworkSystem.WebClient.Interfaces
+namespace TeamworkSystem.WebClient.Interfaces;
+
+public interface IRatingsService
 {
-    public interface IRatingsService
-    {
-        Task<IEnumerable<RatingViewModel>> GetAsync(RatingsParameters parameters);
+    Task<IEnumerable<RatingViewModel>> GetAsync(RatingsParameters parameters);
 
-        Task<(IEnumerable<RatingViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
-            RatingsParameters parameters);
+    Task<(IEnumerable<RatingViewModel>, PaginationHeaderViewModel)> GetWithPaginationHeaderAsync(
+        RatingsParameters parameters);
 
-        Task<IEnumerable<RatingViewModel>> GetByRatedUserId(Guid userId);
+    Task<IEnumerable<RatingViewModel>> GetByRatedUserId(Guid userId);
 
-        Task<RatingViewModel> GetByIdAsync(Guid id);
+    Task<RatingViewModel> GetByIdAsync(Guid id);
 
-        Task CreateAsync(RatingViewModel viewModel);
+    Task CreateAsync(RatingViewModel viewModel);
 
-        Task UpdateAsync(RatingViewModel viewModel);
+    Task UpdateAsync(RatingViewModel viewModel);
 
-        Task DeleteAsync(Guid id);
-    }
+    Task DeleteAsync(Guid id);
 }

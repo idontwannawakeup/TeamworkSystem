@@ -1,48 +1,48 @@
 ﻿@page "/team/{TeamId:guid}/settings"
-@inject IStringLocalizer<TeamSettings> L
-@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<TeamSettings> Localizer
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-@if (team is not null)
+@if (_team is not null)
 {
-    <EditForm Model="@team" OnValidSubmit="UpdateTeamAsync">
+    <EditForm Model="@_team" OnValidSubmit="UpdateTeamAsync">
         <FluentValidationValidator />
         <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
             <MudGrid Spacing="2" Class="mt-8">
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@SL["NameAsTitle"]</MudText>
+                    <MudText Typo="@Typo.h6">@SharedLocalizer["NameAsTitle"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
-                                  @bind-Value="@team.Name"
-                                  For="@(() => team.Name)"
+                                  @bind-Value="@_team.Name"
+                                  For="@(() => _team.Name)"
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" md="6" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@SL["Specialization"]</MudText>
+                    <MudText Typo="@Typo.h6">@SharedLocalizer["Specialization"]</MudText>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="@string"
-                                  @bind-Value="@team.Specialization"
-                                  For="@(() => team.Specialization)"
+                                  @bind-Value="@_team.Specialization"
+                                  For="@(() => _team.Specialization)"
                                   Variant="@Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12" Class="d-flex align-center">
-                    <MudText Typo="@Typo.h6">@SL["About"]</MudText>
+                    <MudText Typo="@Typo.h6">@SharedLocalizer["About"]</MudText>
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField T="@string"
-                                  @bind-Value="@team.About"
-                                  For="@(() => team.About)"
+                                  @bind-Value="@_team.About"
+                                  For="@(() => _team.About)"
                                   Variant="@Variant.Outlined"
                                   Lines="15" />
                 </MudItem>
             </MudGrid>
-            @if (userId == team.LeaderId)
+            @if (_userId == _team.LeaderId)
             {
                 <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
                     <MudButton Variant="@Variant.Filled"
@@ -50,7 +50,7 @@
                                EndIcon="@Icons.Material.Filled.Delete"
                                Class="mt-4"
                                OnClick="@DeleteTeamAsync">
-                        @L["DeleteTeam"]
+                        @Localizer["DeleteTeam"]
                     </MudButton>
                 </MudElement>
             }
@@ -60,7 +60,7 @@
                            EndIcon="@Icons.Material.Filled.Save"
                            Class="mt-4"
                            ButtonType="@ButtonType.Submit">
-                    @SL["SaveChanges"]
+                    @SharedLocalizer["SaveChanges"]
                 </MudButton>
             </MudElement>
         </MudContainer>
@@ -77,24 +77,23 @@ else
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private TeamViewModel team = null;
-
-    private Guid userId;
+    private TeamViewModel _team;
+    private Guid _userId;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeTeamAsync();
     }
 
     private async Task InitializeTeamAsync() =>
-        team = await TeamsService.GetByIdAsync(TeamId);
+        _team = await TeamsService.GetByIdAsync(TeamId);
 
     private async Task DeleteTeamAsync()
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
-            SL["ConfirmTeamDeleting"]) ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SharedLocalizer,
+            SharedLocalizer["ConfirmTeamDeleting"]) ?? false;
 
         if (confirmed)
         {
@@ -111,7 +110,7 @@ else
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await TeamsService.UpdateAsync(team);
+            await TeamsService.UpdateAsync(_team);
             Snackbar.Add("Team updated", Severity.Success);
         });
     }

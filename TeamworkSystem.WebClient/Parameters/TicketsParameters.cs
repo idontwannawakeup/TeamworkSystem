@@ -1,13 +1,12 @@
-﻿namespace TeamworkSystem.WebClient.Parameters
+﻿namespace TeamworkSystem.WebClient.Parameters;
+
+public class TicketsParameters : QueryStringParameters
 {
-    public class TicketsParameters : QueryStringParameters
-    {
-        public Guid? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
-        public Guid? ExecutorId { get; set; }
+    public Guid? ExecutorId { get; set; }
 
-        public string Title { get; set; }
+    public string Title { get; set; }
 
-        public string Status { get; set; }
-    }
+    public string Status { get; set; }
 }

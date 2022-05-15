@@ -1,22 +1,22 @@
 ﻿@page "/project/{ProjectId:guid}/board"
 @layout ContainerlessLayout
-@inject IStringLocalizer<Board> L
-@inject ITicketsService TicketsService  
+@inject IStringLocalizer<Board> Localizer
+@inject ITicketsService TicketsService
 
 <ProjectLayout ProjectId="@ProjectId">
     <MudContainer MaxWidth="@MaxWidth.ExtraLarge">
-        <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">@L["KanbanBoard"]</MudText>
-        @if (tickets is not null)
+        <MudText Class="mt-3 mt-md-8 mb-4" Typo="@Typo.h4">@Localizer["KanbanBoard"]</MudText>
+        @if (_tickets is not null)
         {
             <MudGrid Spacing="3">
 
                 <MudItem xs="12" md="6" lg="3">
                     <MudPaper Elevation="3" Class="pa-5">
-                        <MudText Typo="@Typo.h5" Class="py-1">@L["Backlog"]</MudText>
+                        <MudText Typo="@Typo.h5" Class="py-1">@Localizer["Backlog"]</MudText>
                         <MudDivider Class="mb-4" />
 
                         <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                            @foreach (var ticket in tickets["Backlog"])
+                            @foreach (var ticket in _tickets["Backlog"])
                             {
                                 <TicketCard Ticket="@ticket" />
                             }
@@ -27,11 +27,11 @@
 
                 <MudItem xs="12" md="6" lg="3">
                     <MudPaper Elevation="3" Class="pa-5">
-                        <MudText Typo="@Typo.h5" Class="py-1">@L["ChosenForDevelopment"]</MudText>
+                        <MudText Typo="@Typo.h5" Class="py-1">@Localizer["ChosenForDevelopment"]</MudText>
                         <MudDivider Class="mb-4" />
 
                         <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                            @foreach (var ticket in tickets["Chosen For Development"])
+                            @foreach (var ticket in _tickets["Chosen For Development"])
                             {
                                 <TicketCard Ticket="@ticket" />
                             }
@@ -42,11 +42,11 @@
 
                 <MudItem xs="12" md="6" lg="3">
                     <MudPaper Elevation="3" Class="pa-5">
-                        <MudText Typo="@Typo.h5" Class="py-1">@L["InProgress"]</MudText>
+                        <MudText Typo="@Typo.h5" Class="py-1">@Localizer["InProgress"]</MudText>
                         <MudDivider Class="mb-4" />
 
                         <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                            @foreach (var ticket in tickets["In Progress"])
+                            @foreach (var ticket in _tickets["In Progress"])
                             {
                                 <TicketCard Ticket="@ticket" />
                             }
@@ -57,11 +57,11 @@
 
                 <MudItem xs="12" md="6" lg="3">
                     <MudPaper Elevation="3" Class="pa-5">
-                        <MudText Typo="@Typo.h5" Class="py-1">@L["Done"]</MudText>
+                        <MudText Typo="@Typo.h5" Class="py-1">@Localizer["Done"]</MudText>
                         <MudDivider Class="mb-4" />
 
                         <MudElement HtmlTag="div" Class="d-flex flex-column gap-4">
-                            @foreach (var ticket in tickets["Done"])
+                            @foreach (var ticket in _tickets["Done"])
                             {
                                 <TicketCard Ticket="@ticket" />
                             }
@@ -79,7 +79,7 @@
 
     [Parameter] public Guid ProjectId { get; set; }
 
-    private Dictionary<string, IEnumerable<TicketViewModel>> tickets;
+    private Dictionary<string, IEnumerable<TicketViewModel>> _tickets;
 
     protected override async Task OnInitializedAsync()
     {
@@ -88,7 +88,7 @@
     }
 
     private async Task InitializeTicketsAsync() =>
-        tickets = new()
+        _tickets = new()
         {
             {
                 "Backlog",

@@ -1,11 +1,10 @@
-﻿namespace TeamworkSystem.WebClient.ViewModels
+﻿namespace TeamworkSystem.WebClient.ViewModels;
+
+public class FriendsViewModel
 {
-    public class FriendsViewModel
-    {
-        public Guid FirstId { get; set; }
+    public Guid FirstId { get; set; }
 
-        public Guid SecondId { get; set; }
+    public Guid SecondId { get; set; }
 
-        public UserViewModel Second { get; set; }
-    }
+    public UserViewModel Second { get; set; }
 }

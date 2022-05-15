@@ -1,65 +1,65 @@
 ﻿@page "/project/{ProjectId:guid}/settings"
 @layout ContainerlessLayout
-@inject IStringLocalizer<SharedLocalization> SL
-@inject IStringLocalizer<ProjectSettings> L
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
+@inject IStringLocalizer<ProjectSettings> Localizer
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject IProjectsService ProjectsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-@if (project is not null)
+@if (_project is not null)
 {
     <ProjectLayout ProjectId="@ProjectId">
 
-        <EditForm Model="@project" OnValidSubmit="@UpdateProjectAsync">
+        <EditForm Model="@_project" OnValidSubmit="@UpdateProjectAsync">
             <FluentValidationValidator />
             <MudContainer MaxWidth="@MaxWidth.Small" Class="mb-8">
                 <MudGrid Spacing="2" Class="mt-8">
 
                     <MudItem xs="12" md="6" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">@SL["Title"]</MudText>
+                        <MudText Typo="@Typo.h6">@SharedLocalizer["Title"]</MudText>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      @bind-Value="@project.Title"
-                                      For="@(() => project.Title)"
+                                      @bind-Value="@_project.Title"
+                                      For="@(() => _project.Title)"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
 
                     <MudItem xs="12" md="6" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">@SL["Type"]</MudText>
+                        <MudText Typo="@Typo.h6">@SharedLocalizer["Type"]</MudText>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      @bind-Value="@project.Type"
-                                      For="@(() => project.Type)"
+                                      @bind-Value="@_project.Type"
+                                      For="@(() => _project.Type)"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
 
                     <MudItem xs="12" md="6" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">@SL["Url"]</MudText>
+                        <MudText Typo="@Typo.h6">@SharedLocalizer["Url"]</MudText>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudTextField T="@string"
-                                      @bind-Value="@project.Url"
-                                      For="@(() => project.Url)"
+                                      @bind-Value="@_project.Url"
+                                      For="@(() => _project.Url)"
                                       Variant="@Variant.Outlined" />
                     </MudItem>
 
                     <MudItem xs="12" Class="d-flex align-center">
-                        <MudText Typo="@Typo.h6">@SL["Description"]</MudText>
+                        <MudText Typo="@Typo.h6">@SharedLocalizer["Description"]</MudText>
                     </MudItem>
                     <MudItem xs="12">
                         <MudTextField T="@string"
-                                      @bind-Value="@project.Description"
-                                      For="@(() => project.Description)"
+                                      @bind-Value="@_project.Description"
+                                      For="@(() => _project.Description)"
                                       Variant="@Variant.Outlined"
                                       Lines="15" />
                     </MudItem>
 
                 </MudGrid>
-                @if (userId == project.Team.LeaderId)
+                @if (_userId == _project.Team.LeaderId)
                 {
                     <MudElement HtmlTag="div" Class="d-flex justify-center align-center">
                         <MudButton Variant="@Variant.Filled"
@@ -67,7 +67,7 @@
                                    EndIcon="@Icons.Material.Filled.Delete"
                                    Class="mt-4"
                                    OnClick="@DeleteProjectAsync">
-                            @L["DeleteProject"]
+                            @Localizer["DeleteProject"]
                         </MudButton>
                     </MudElement>
                 }
@@ -77,7 +77,7 @@
                                EndIcon="@Icons.Material.Filled.Save"
                                Class="mt-4"
                                ButtonType="@ButtonType.Submit">
-                        @SL["SaveChanges"]
+                        @SharedLocalizer["SaveChanges"]
                     </MudButton>
                 </MudElement>
             </MudContainer>
@@ -96,24 +96,23 @@ else
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private ProjectViewModel project;
-
-    private Guid userId;
+    private ProjectViewModel _project;
+    private Guid _userId;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeProjectAsync();
     }
 
     private async Task InitializeProjectAsync() =>
-        project = await ProjectsService.GetByIdAsync(ProjectId);
+        _project = await ProjectsService.GetByIdAsync(ProjectId);
 
     private async Task DeleteProjectAsync()
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
-            SL["ConfirmProjectDeleting"]) ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SharedLocalizer,
+            SharedLocalizer["ConfirmProjectDeleting"]) ?? false;
 
         if (confirmed)
         {
@@ -130,7 +129,7 @@ else
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await ProjectsService.UpdateAsync(project);
+            await ProjectsService.UpdateAsync(_project);
             Snackbar.Add("Project updated", Severity.Success);
         });
     }

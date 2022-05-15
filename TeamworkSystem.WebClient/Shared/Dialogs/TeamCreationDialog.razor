@@ -1,27 +1,27 @@
-﻿@inject IStringLocalizer<SharedLocalization> SL
+﻿@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject ISnackbar Snackbar
 @inject ITeamsService TeamsService
 @inject RequestErrorsHandler RequestErrorsHandler
 
-<EditForm Model="@team" OnValidSubmit="@OnValidSubmitAsync">
+<EditForm Model="@_team" OnValidSubmit="@OnValidSubmitAsync">
     <FluentValidationValidator />
     <MudDialog>
         <DialogContent>
 
             <MudTextField T="@string"
-                          Label="@SL["NameAsTitle"]"
-                          @bind-Value="@team.Name"
-                          For="@(() => team.Name)" />
+                          Label="@SharedLocalizer["NameAsTitle"]"
+                          @bind-Value="@_team.Name"
+                          For="@(() => _team.Name)" />
 
             <MudTextField T="@string"
-                          Label="@SL["Specialization"]"
-                          @bind-Value="@team.Specialization"
-                          For="@(() => team.Specialization)" />
+                          Label="@SharedLocalizer["Specialization"]"
+                          @bind-Value="@_team.Specialization"
+                          For="@(() => _team.Specialization)" />
 
             <MudTextField T="@string"
-                          Label="@SL["About"]"
-                          @bind-Value="@team.About"
-                          For="@(() => team.About)"
+                          Label="@SharedLocalizer["About"]"
+                          @bind-Value="@_team.About"
+                          For="@(() => _team.About)"
                           Lines="10" />
 
         </DialogContent>
@@ -29,9 +29,9 @@
         <DialogActions>
             <MudButton Color="@Color.Primary"
                        ButtonType="@ButtonType.Submit">
-                @SL["Create"]
+                @SharedLocalizer["Create"]
             </MudButton>
-            <MudButton OnClick="@(e => DialogInstance.Close())">@SL["Cancel"]</MudButton>
+            <MudButton OnClick="@(_ => DialogInstance.Close())">@SharedLocalizer["Cancel"]</MudButton>
         </DialogActions>
 
     </MudDialog>
@@ -45,22 +45,22 @@
 
     [CascadingParameter] private MudDialogInstance DialogInstance { get; set; }
 
-    private TeamViewModel team;
+    private TeamViewModel _team;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        team = new() { LeaderId = UserId };
+        _team = new() { LeaderId = UserId };
     }
 
     private async Task OnValidSubmitAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await TeamsService.CreateAsync(team);
+            await TeamsService.CreateAsync(_team);
             DialogInstance.Close();
             Snackbar.Add("Team created", Severity.Success);
-            await OnCreated?.Invoke();
+            await OnCreated?.Invoke()!;
         });
     }
 

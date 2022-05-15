@@ -1,4 +1,4 @@
-﻿@inject IStringLocalizer<SharedLocalization> SL
+﻿@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IUsersService UsersService
@@ -11,46 +11,46 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
                        Color="@Color.Inherit"
                        Edge="@Edge.Start"
-                       OnClick="@(e => ToggleNavigationMenu())" />
+                       OnClick="@(_ => ToggleNavigationMenu())" />
 
         <MudSpacer />
 
         <MudElement Class="avatar-menu d-flex" HtmlTag="div" Style="position: relative;">
-            <MudIconButton OnClick="@(e => ToggleAvatarMenu())">
-                <MudAvatar Image="@(user?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{user.Avatar}" : null)"
+            <MudIconButton OnClick="@(_ => ToggleAvatarMenu())">
+                <MudAvatar Image="@(_user?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{_user.Avatar}" : null)"
                            Color="@Color.Secondary">
                     A
                 </MudAvatar>
             </MudIconButton>
             <MudPopover Class="py-3"
                         Square="@true"
-                        Open="@avatarMenuOpen"
+                        Open="@_avatarMenuOpen"
                         OffsetX="@true"
                         Direction="@Direction.Left"
                         Style="width: 250px; top: 12px;">
                 <MudNavMenu>
 
-                    <MudText Typo="Typo.h6" Class="px-4">@(user?.FullName ?? "Loading...")</MudText>
-                    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@(user?.Email)</MudText>
+                    <MudText Typo="Typo.h6" Class="px-4">@(_user?.FullName ?? "Loading...")</MudText>
+                    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@(_user?.Email)</MudText>
                     <MudDivider Class="my-2" />
                     <MudNavLink Match="@NavLinkMatch.All"
                                 Href="/profile"
                                 Icon="@Icons.Filled.AccountCircle">
-                        <span>@SL["Profile"]</span>
+                        <span>@SharedLocalizer["Profile"]</span>
                     </MudNavLink>
                     <MudNavLink Match="@NavLinkMatch.All"
                                 Href="/profile/settings"
                                 Icon="@Icons.Filled.Settings">
-                        <span>@SL["Settings"]</span>
+                        <span>@SharedLocalizer["Settings"]</span>
                     </MudNavLink>
                     <MudDivider Class="my-2" />
-                    <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">@SL["Exit"]</MudNavLink>
+                    <MudNavLink OnClick="@SignOutAsync" Icon="@Icons.Filled.ExitToApp">@SharedLocalizer["Exit"]</MudNavLink>
 
                 </MudNavMenu>
             </MudPopover>
 
             @* Overlay for MudPopover for automatic close on click *@
-            <MudOverlay @bind-Visible="@avatarMenuOpen"
+            <MudOverlay @bind-Visible="@_avatarMenuOpen"
                         DarkBackground="@false"
                         AutoClose="@true"
                         LockScroll="@false" />
@@ -59,7 +59,7 @@
     </MudAppBar>
 
     @* Sidebar menu *@
-    <MudDrawer @bind-Open="@navigationMenuOpen" ClipMode="@DrawerClipMode.Always" Elevation="2">
+    <MudDrawer @bind-Open="@_navigationMenuOpen" ClipMode="@DrawerClipMode.Always" Elevation="2">
         <MudNavMenu>
             <MudText Typo="@Typo.h6" Class="py-2 px-4">TeamworkSystem</MudText>
             <MudDivider Class="my-2" />
@@ -67,27 +67,27 @@
             <MudNavLink Href="/home"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Home">
-                <span>@SL["Home"]</span>
+                <span>@SharedLocalizer["Home"]</span>
             </MudNavLink>
             <MudNavLink Href="/teams"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Groups">
-                <span>@SL["Teams"]</span>
+                <span>@SharedLocalizer["Teams"]</span>
             </MudNavLink>
             <MudNavLink Href="/projects"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Folder">
-                <span>@SL["Projects"]</span>
+                <span>@SharedLocalizer["Projects"]</span>
             </MudNavLink>
             <MudNavLink Href="/tickets"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Assignment">
-                <span>@SL["Tickets"]</span>
+                <span>@SharedLocalizer["Tickets"]</span>
             </MudNavLink>
             <MudNavLink Href="/friends"
                         Match="@NavLinkMatch.All"
                         Icon="@Icons.Material.Filled.Group">
-                <span>@SL["Friends"]</span>
+                <span>@SharedLocalizer["Friends"]</span>
             </MudNavLink>
         </MudNavMenu>
     </MudDrawer>
@@ -104,24 +104,24 @@
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private UserViewModel user;
+    private UserViewModel _user;
 
-    private bool navigationMenuOpen = false;
+    private bool _navigationMenuOpen = false;
 
-    private bool avatarMenuOpen = false;
+    private bool _avatarMenuOpen = false;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         var userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
-        user = await UsersService.GetByIdAsync(userId);
+        _user = await UsersService.GetByIdAsync(userId);
     }
 
     private void ToggleNavigationMenu() =>
-        navigationMenuOpen = !navigationMenuOpen;
+        _navigationMenuOpen = !_navigationMenuOpen;
 
     private void ToggleAvatarMenu() =>
-        avatarMenuOpen = !avatarMenuOpen;
+        _avatarMenuOpen = !_avatarMenuOpen;
 
     private async Task SignOutAsync()
     {

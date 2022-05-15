@@ -1,7 +1,7 @@
 ﻿@page "/users/{UserId:guid}/profile"
 @inject NavigationManager NavigationManager
-@inject IStringLocalizer<UserProfile> L
-@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<UserProfile> Localizer
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject IConfiguration Configuration
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -10,25 +10,25 @@
 @inject ITeamsService TeamsService 
 @inject RequestErrorsHandler RequestErrorsHandler
 
-@if (user is not null)
+@if (_user is not null)
 {
-    <MudPaper Elevation="@elevation" Class="mt-10">
+    <MudPaper Elevation="@Elevation" Class="mt-10">
         <MudGrid>
-            @if (!string.IsNullOrWhiteSpace(user.Avatar))
+            @if (!string.IsNullOrWhiteSpace(_user.Avatar))
             {
                 <MudItem xs="6" md="4" Class="mx-auto mx-md-0 pa-6">
                     <MudElement HtmlTag="div"
-                                Style="@($"background: url({Configuration["ApiUrl"]}/{user.Avatar}) no-repeat center; background-size: cover; width: 350px; height: 250px;")" />
+                                Style="@($"background: url({Configuration["ApiUrl"]}/{_user.Avatar}) no-repeat center; background-size: cover; width: 350px; height: 250px;")" />
                 </MudItem>
             }
             <MudItem xs="12" md="8">
                 <MudElement HtmlTag="div" Class="user-profile__main-information pa-6">
                     <MudElement HtmlTag="div" Class="user-profile__title">
-                        <MudText Typo="@Typo.h5" Color="@Color.Dark">@user.FullName</MudText>
-                        <MudText Typo="@Typo.subtitle1" Color="@Color.Surface">@user.UserName</MudText>
-                        @if (!string.IsNullOrWhiteSpace(user.Profession))
+                        <MudText Typo="@Typo.h5" Color="@Color.Dark">@_user.FullName</MudText>
+                        <MudText Typo="@Typo.subtitle1" Color="@Color.Surface">@_user.UserName</MudText>
+                        @if (!string.IsNullOrWhiteSpace(_user.Profession))
                         {
-                            <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@user.Profession</MudText>
+                            <MudText Typo="@Typo.subtitle1" Color="@Color.Secondary">@_user.Profession</MudText>
                         }
                     </MudElement>
                 </MudElement>
@@ -38,31 +38,31 @@
 
     <MudGrid Spacing="4">
         <MudItem xs="12" md="4">
-            <MudPaper Elevation="@elevation" Class="mt-10 pa-6">
-                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Profession"]</MudText>
-                @if (!string.IsNullOrWhiteSpace(user.Profession))
+            <MudPaper Elevation="@Elevation" Class="mt-10 pa-6">
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">@SharedLocalizer["Profession"]</MudText>
+                @if (!string.IsNullOrWhiteSpace(_user.Profession))
                 {
-                    <MudText Typo="@Typo.subtitle2">@user.Profession</MudText>
+                    <MudText Typo="@Typo.subtitle2">@_user.Profession</MudText>
                 }
                 else
                 {
                     <NoneChip />
                 }
                 <MudDivider Class="mt-2 mb-4" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Specialization"]</MudText>
-                @if (!string.IsNullOrWhiteSpace(user.Specialization))
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">@SharedLocalizer["Specialization"]</MudText>
+                @if (!string.IsNullOrWhiteSpace(_user.Specialization))
                 {
-                    <MudText Typo="@Typo.subtitle2">@user.Specialization</MudText>
+                    <MudText Typo="@Typo.subtitle2">@_user.Specialization</MudText>
                 }
                 else
                 {
                     <NoneChip />
                 }
                 <MudDivider Class="mt-2 mb-4" />
-                <MudText Typo="@Typo.h6" Style="@colorGrey">@SL["Email"]</MudText>
-                @if (!string.IsNullOrWhiteSpace(user.Email))
+                <MudText Typo="@Typo.h6" Style="@_colorGrey">@SharedLocalizer["Email"]</MudText>
+                @if (!string.IsNullOrWhiteSpace(_user.Email))
                 {
-                    <MudText Typo="@Typo.subtitle2">@user.Email</MudText>
+                    <MudText Typo="@Typo.subtitle2">@_user.Email</MudText>
                 }
                 else
                 {
@@ -72,19 +72,19 @@
             </MudPaper>
         </MudItem>
         <MudItem xs="12" md="8">
-            <MudTabs Elevation="@elevation"
+            <MudTabs Elevation="@Elevation"
                      ApplyEffectsToContainer="@true"
                      Rounded="@true"
                      Class="mt-10">
 
-                <MudTabPanel Text="@SL["Teams"]">
+                <MudTabPanel Text="@SharedLocalizer["Teams"]">
                     <MudElement HtmlTag="div" Class="pa-6">
-                        @if (teams is not null && teams.Count != 0)
+                        @if (_teams is not null && _teams.Count != 0)
                         {
                             <MudList Clickable="@true">
-                                @foreach (var team in teams)
+                                @foreach (var team in _teams)
                                 {
-                                    <MudListItem OnClick="@(e => OpenTeamPage(team))">
+                                    <MudListItem OnClick="@(_ => OpenTeamPage(team))">
                                         <MudElement HtmlTag="div" Class="d-flex justify-space-between align-center">
                                             <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
                                                 <MudAvatar Image="@(team.Avatar is not null ? $"{Configuration["ApiUrl"]}/{team.Avatar}" : null)"
@@ -95,7 +95,7 @@
                                                     <MudText Typo="@Typo.subtitle2">@team.Name</MudText>
                                                     @if (!string.IsNullOrWhiteSpace(team.Specialization))
                                                     {
-                                                        <MudText Typo="@Typo.caption" Style="@colorGrey">@team.Specialization</MudText>
+                                                        <MudText Typo="@Typo.caption" Style="@_colorGrey">@team.Specialization</MudText>
                                                     }
                                                 </MudElement>
                                             </MudElement>
@@ -105,7 +105,7 @@
                                                            Size="@Size.Small">
                                                     A
                                                 </MudAvatar>
-                                                <span>@team.Leader.FullName</span>
+                                                <span>@team.Leader?.FullName</span>
                                             </MudElement>
                                         </MudElement>
                                     </MudListItem>
@@ -115,19 +115,19 @@
                         }
                         else
                         {
-                            <MudText Typo="@Typo.h6">@L["NoTeams"]</MudText>
+                            <MudText Typo="@Typo.h6">@Localizer["NoTeams"]</MudText>
                         }
                     </MudElement>
                 </MudTabPanel>
 
-                <MudTabPanel Text="@SL["Ratings"]">
+                <MudTabPanel Text="@SharedLocalizer["Ratings"]">
                     <MudElement HtmlTag="div" Class="pa-6">
-                        @if (ratings is not null && ratings.Count != 0)
+                        @if (_ratings is not null && _ratings.Count != 0)
                         {
                             <MudList Clickable="@true">
-                                @foreach (var rating in ratings)
+                                @foreach (var rating in _ratings)
                                 {
-                                    <MudListItem OnClick="@(e => OpenFullRating(rating))">
+                                    <MudListItem OnClick="@(_ => OpenFullRating(rating))">
                                         <MudElement HtmlTag="div"
                                                     Class="d-flex flex-column flex-sm-row justify-space-between gap-2">
                                             <MudElement HtmlTag="div"
@@ -151,53 +151,53 @@
                         }
                         else
                         {
-                            <MudText Typo="@Typo.h6">@L["NoRatings"]</MudText>
+                            <MudText Typo="@Typo.h6">@Localizer["NoRatings"]</MudText>
                         }
                     </MudElement>
                 </MudTabPanel>
 
-                <MudTabPanel Text="@SL["LeaveRate"]">
-                    <EditForm Model="@ratingFromVisitedUser" OnValidSubmit="@LeaveRatingAsync">
+                <MudTabPanel Text="@SharedLocalizer["LeaveRate"]">
+                    <EditForm Model="@_ratingFromVisitedUser" OnValidSubmit="@LeaveRatingAsync">
                         <FluentValidationValidator />
                         <MudElement HtmlTag="div" Class="pa-6">
-                            <MudText Typo="@Typo.h5">@L["RateThisUser"]</MudText>
+                            <MudText Typo="@Typo.h5">@Localizer["RateThisUser"]</MudText>
 
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @SL["Social"]
+                                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                                    @SharedLocalizer["Social"]
                                 </MudText>
-                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Social" />
+                                <MudRating @bind-SelectedValue="@_ratingFromVisitedUser.Social" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
 
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @SL["Skills"]
+                                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                                    @SharedLocalizer["Skills"]
                                 </MudText>
-                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Skills" />
+                                <MudRating @bind-SelectedValue="@_ratingFromVisitedUser.Skills" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
 
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @SL["Responsibility"]
+                                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                                    @SharedLocalizer["Responsibility"]
                                 </MudText>
-                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Responsibility" />
+                                <MudRating @bind-SelectedValue="@_ratingFromVisitedUser.Responsibility" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
 
                             <MudElement HtmlTag="div" Class="user-profile__rating mt-4">
-                                <MudText Typo="@Typo.h6" Style="@colorGrey">
-                                    @SL["Punctuality"]
+                                <MudText Typo="@Typo.h6" Style="@_colorGrey">
+                                    @SharedLocalizer["Punctuality"]
                                 </MudText>
-                                <MudRating @bind-SelectedValue="@ratingFromVisitedUser.Punctuality" />
+                                <MudRating @bind-SelectedValue="@_ratingFromVisitedUser.Punctuality" />
                                 <MudDivider Class="mt-2 mb-4" />
                             </MudElement>
 
                             <MudTextField T="@string"
-                                          Label="@SL["Comment"]"
-                                          @bind-Value="@ratingFromVisitedUser.Comment"
-                                          For="@(() => ratingFromVisitedUser.Comment)"
+                                          Label="@SharedLocalizer["Comment"]"
+                                          @bind-Value="@_ratingFromVisitedUser.Comment"
+                                          For="@(() => _ratingFromVisitedUser.Comment)"
                                           HelperText="Write your thoughts on this person!"
                                           Lines="4" />
 
@@ -209,8 +209,8 @@
                                        EndIcon="@Icons.Material.Filled.Send"
                                        Class="mt-4"
                                        ButtonType="@ButtonType.Submit"
-                                       Disabled="@addRatingButtonDisabled">
-                                @SL["Save"]
+                                       Disabled="@_addRatingButtonDisabled">
+                                @SharedLocalizer["Save"]
                             </MudButton>
 
                         </MudElement>
@@ -232,52 +232,47 @@ else
 
     [CascadingParameter] public Task<AuthenticationState> State { get; set; }
 
-    private UserViewModel user;
+    private const int Elevation = 4;
+    private readonly string _colorGrey = $"color: {Colors.Grey.Default};";
 
-    private RatingViewModel ratingFromVisitedUser;
-
-    private List<RatingViewModel> ratings;
-
-    private List<TeamViewModel> teams;
-
-    private readonly string colorGrey = $"color: {Colors.Grey.Default};";
-
-    private readonly int elevation = 4;
-
-    private bool addRatingButtonDisabled = false;
+    private UserViewModel _user;
+    private RatingViewModel _ratingFromVisitedUser;
+    private List<RatingViewModel> _ratings;
+    private List<TeamViewModel> _teams;
+    private bool _addRatingButtonDisabled;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         var visitedUserId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeUserAsync();
-        ratingFromVisitedUser = new() { FromId = visitedUserId, ToId = user.Id };
+        _ratingFromVisitedUser = new() { FromId = visitedUserId, ToId = _user.Id };
         await InitializeRatingsAsync();
         await InitializeTeamsAsync();
     }
 
     private async Task InitializeUserAsync() =>
-        user = await UsersService.GetByIdAsync(UserId);
+        _user = await UsersService.GetByIdAsync(UserId);
 
     private async Task InitializeRatingsAsync() =>
-        ratings = await RatingsService.GetByRatedUserId(UserId) as List<RatingViewModel>;
+        _ratings = await RatingsService.GetByRatedUserId(UserId) as List<RatingViewModel>;
 
     private async Task InitializeTeamsAsync() =>
-        teams = await TeamsService.GetTeamsForUserAsync(UserId) as List<TeamViewModel>;
+        _teams = await TeamsService.GetTeamsForUserAsync(UserId) as List<TeamViewModel>;
 
     private void OpenTeamPage(TeamViewModel team) =>
         NavigationManager.NavigateTo($"/team/{team.Id}");
 
     private void OpenFullRating(RatingViewModel rating) =>
-        DialogService.ShowRatingDialog(rating.Id, SL);
+        DialogService.ShowRatingDialog(rating.Id, SharedLocalizer);
 
     private async Task LeaveRatingAsync()
     {
         await RequestErrorsHandler.HandleRequestAsync(async () =>
         {
-            await RatingsService.CreateAsync(ratingFromVisitedUser);
+            await RatingsService.CreateAsync(_ratingFromVisitedUser);
             Snackbar.Add("Rating added", Severity.Success);
-            addRatingButtonDisabled = true;
+            _addRatingButtonDisabled = true;
             await InitializeRatingsAsync();
         });
     }

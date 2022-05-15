@@ -1,11 +1,10 @@
-﻿namespace TeamworkSystem.WebClient.Parameters
+﻿namespace TeamworkSystem.WebClient.Parameters;
+
+public class TeamsParameters : QueryStringParameters
 {
-    public class TeamsParameters : QueryStringParameters
-    {
-        public Guid? UserId { get; set; }
+    public Guid? UserId { get; set; }
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public string Specialization { get; set; }
-    }
+    public string Specialization { get; set; }
 }

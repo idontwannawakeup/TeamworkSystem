@@ -1,24 +1,24 @@
 ﻿@page "/project/{ProjectId:guid}/overview"
-@inject IStringLocalizer<SharedLocalization> SL 
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @layout ContainerlessLayout
-@inject IProjectsService ProjectsService  
+@inject IProjectsService ProjectsService
 
 <ProjectLayout ProjectId="@ProjectId">
     <MudPaper Width="100%"
               Square="@true"
               Elevation="3"
               Class="py-12 px-4"
-              Style="@backgroundColorStyle">
-        @if (project is not null)
+              Style="@_backgroundColorStyle">
+        @if (_project is not null)
         {
-            <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@textColorStyle">
-                @project.Title
+            <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@_textColorStyle">
+                @_project.Title
             </MudText>
         }
         else
         {
-            <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@textColorStyle">
-                @SL["Loading"]...
+            <MudText Typo="@Typo.h6" Align="@Align.Center" Style="@_textColorStyle">
+                @SharedLocalizer["Loading"]...
             </MudText>
         }
     </MudPaper>
@@ -28,16 +28,15 @@
 
     [Parameter] public Guid ProjectId { get; set; }
 
-    private ProjectViewModel project;
+    private readonly string _backgroundColorStyle = $"background-color: {Colors.Teal.Darken1}";
+    private readonly string _textColorStyle = $"color: {Colors.Shades.White}";
 
-    private string backgroundColorStyle = $"background-color: {Colors.Teal.Darken1}";
-
-    private string textColorStyle = $"color: {Colors.Shades.White}";
+    private ProjectViewModel _project;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        project = await ProjectsService.GetByIdAsync(ProjectId);
+        _project = await ProjectsService.GetByIdAsync(ProjectId);
     }
 
 }

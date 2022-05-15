@@ -14,7 +14,7 @@ public static class DatabaseExtensions
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddTransient<IDbConnection>(_ => new SqlConnection(connectionString));
-        services.AddDbContext<TeamworkSystemSocialDbContext>(options =>
+        services.AddDbContext<SocialDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
         });

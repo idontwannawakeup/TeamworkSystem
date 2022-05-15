@@ -6,10 +6,10 @@ namespace TeamworkSystem.Identity.DataAccess.Data;
 
 public class UnitOfWork : IUnitOfWork
 {
-    protected readonly TeamworkSystemIdentityDbContext DatabaseContext;
+    protected readonly IdentityExtDbContext DatabaseContext;
 
     public UnitOfWork(
-        TeamworkSystemIdentityDbContext databaseContext,
+        IdentityExtDbContext databaseContext,
         UserManager<User> userManager)
     {
         DatabaseContext = databaseContext;

@@ -25,13 +25,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Social.Busin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Social.DataAccess", "TeamworkSystem.Social.DataAccess\TeamworkSystem.Social.DataAccess.csproj", "{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{41ADC202-2A0B-40C6-8B41-2FF5528F60E4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkManagement", "WorkManagement", "{41ADC202-2A0B-40C6-8B41-2FF5528F60E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Core.API", "TeamworkSystem.Core.API\TeamworkSystem.Core.API.csproj", "{A13AB74F-4B35-4A0B-BD6A-66A4D1D37E0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WorkManagement.API", "TeamworkSystem.WorkManagement.API\TeamworkSystem.WorkManagement.API.csproj", "{A13AB74F-4B35-4A0B-BD6A-66A4D1D37E0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Core.BusinessLogic", "TeamworkSystem.Core.BusinessLogic\TeamworkSystem.Core.BusinessLogic.csproj", "{A99417EC-7C5F-4710-9EE5-61E7122E35B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WorkManagement.BusinessLogic", "TeamworkSystem.WorkManagement.BusinessLogic\TeamworkSystem.WorkManagement.BusinessLogic.csproj", "{A99417EC-7C5F-4710-9EE5-61E7122E35B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Core.DataAccess", "TeamworkSystem.Core.DataAccess\TeamworkSystem.Core.DataAccess.csproj", "{51709909-50A9-4E34-8641-3F54D354B2F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WorkManagement.DataAccess", "TeamworkSystem.WorkManagement.DataAccess\TeamworkSystem.WorkManagement.DataAccess.csproj", "{51709909-50A9-4E34-8641-3F54D354B2F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Shared", "TeamworkSystem.Shared\TeamworkSystem.Shared.csproj", "{246FC4CE-82BC-4477-921A-50AAEF8D243A}"
 EndProject

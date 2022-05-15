@@ -9,126 +9,125 @@ using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Services;
 
-namespace TeamworkSystem.WebClient
+namespace TeamworkSystem.WebClient;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration) =>
+        Configuration = configuration;
+
+    public IConfiguration Configuration { get; }
+
+    // This method gets called by the runtime.
+    // Use this method to add services to the container.
+    // For more information on how to configure your application,
+    // visit https://go.microsoft.com/fwlink/?LinkID=398940
+    public void ConfigureServices(IServiceCollection services)
     {
-        public Startup(IConfiguration configuration) =>
-            Configuration = configuration;
+        services.AddRazorPages();
+        services.AddServerSideBlazor();
+        services.AddMudServices();
+        services.AddBlazoredLocalStorage();
+        services.AddAuthorizationCore();
 
-        public IConfiguration Configuration { get; }
+        services.AddControllers();
 
-        // This method gets called by the runtime.
-        // Use this method to add services to the container.
-        // For more information on how to configure your application,
-        // visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        services.AddMvc()
+                .AddFluentValidation(configuration =>
+                {
+                    configuration.RegisterValidatorsFromAssemblies(
+                        AppDomain.CurrentDomain.GetAssemblies());
+                });
+
+        services.AddTransient<RequestErrorsHandler>();
+
+        services.AddScoped<AuthenticationStateProvider>(
+            provider => provider.GetRequiredService<ApiAuthenticationStateProvider>());
+
+        services.AddScoped<ApiAuthenticationStateProvider>();
+
+        string apiUrl = Configuration["ApiUrl"];
+        var identityUrl = $"{apiUrl}/{Configuration["Intermediate:IdentityService"]}";
+        var coreUrl = $"{apiUrl}/{Configuration["Intermediate:CoreService"]}";
+        var socialUrl = $"{apiUrl}/{Configuration["Intermediate:SocialService"]}";
+
+        services.AddHttpClient<IIdentityService, IdentityService>(httpClient =>
         {
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-            services.AddMudServices();
-            services.AddBlazoredLocalStorage();
-            services.AddAuthorizationCore();
+            httpClient.BaseAddress = new($"{identityUrl}/Identity/");
+        });
 
-            services.AddControllers();
+        services.AddHttpClient<IProjectsService, ProjectsService>(httpClient =>
+        {
+            httpClient.BaseAddress = new($"{coreUrl}/Projects/");
+        });
 
-            services.AddMvc()
-                    .AddFluentValidation(configuration =>
-                    {
-                        configuration.RegisterValidatorsFromAssemblies(
-                            AppDomain.CurrentDomain.GetAssemblies());
-                    });
+        services.AddHttpClient<IRatingsService, RatingsService>(httpClient =>
+        {
+            httpClient.BaseAddress = new($"{socialUrl}/Ratings/");
+        });
 
-            services.AddTransient<RequestErrorsHandler>();
+        services.AddHttpClient<IFriendsService, FriendsService>(httpClient =>
+        {
+            httpClient.BaseAddress = new($"{socialUrl}/Friends/");
+        });
 
-            services.AddScoped<AuthenticationStateProvider>(
-                provider => provider.GetRequiredService<ApiAuthenticationStateProvider>());
+        services.AddHttpClient<ITeamsService, TeamsService>(httpClient =>
+        {
+            httpClient.BaseAddress = new($"{coreUrl}/Teams/");
+        });
 
-            services.AddScoped<ApiAuthenticationStateProvider>();
+        services.AddHttpClient<ITicketsService, TicketsService>(httpClient =>
+        {
+            httpClient.BaseAddress = new($"{coreUrl}/Tickets/");
+        });
 
-            string apiUrl = Configuration["ApiUrl"];
-            var identityUrl = $"{apiUrl}/{Configuration["Intermediate:IdentityService"]}";
-            var coreUrl = $"{apiUrl}/{Configuration["Intermediate:CoreService"]}";
-            var socialUrl = $"{apiUrl}/{Configuration["Intermediate:SocialService"]}";
+        services.AddHttpClient<IUsersService, UsersService>(httpClient =>
+        {
+            httpClient.BaseAddress = new($"{identityUrl}/Users/");
+        });
 
-            services.AddHttpClient<IIdentityService, IdentityService>(httpClient =>
-            {
-                httpClient.BaseAddress = new($"{identityUrl}/Identity/");
-            });
+        services.AddLocalization(options => options.ResourcesPath = "Localization");
+        var supportedCultures = new List<CultureInfo> { new ("en-US"), new ("uk-UA") };
 
-            services.AddHttpClient<IProjectsService, ProjectsService>(httpClient =>
-            {
-                httpClient.BaseAddress = new($"{coreUrl}/Projects/");
-            });
+        services.Configure<RequestLocalizationOptions>(options =>
+        {
+            options.DefaultRequestCulture = new RequestCulture("en-US");
+            options.SupportedCultures = supportedCultures;
+            options.SupportedUICultures = supportedCultures;
+        });
+    }
 
-            services.AddHttpClient<IRatingsService, RatingsService>(httpClient =>
-            {
-                httpClient.BaseAddress = new($"{socialUrl}/Ratings/");
-            });
-
-            services.AddHttpClient<IFriendsService, FriendsService>(httpClient =>
-            {
-                httpClient.BaseAddress = new($"{socialUrl}/Friends/");
-            });
-
-            services.AddHttpClient<ITeamsService, TeamsService>(httpClient =>
-            {
-                httpClient.BaseAddress = new($"{coreUrl}/Teams/");
-            });
-
-            services.AddHttpClient<ITicketsService, TicketsService>(httpClient =>
-            {
-                httpClient.BaseAddress = new($"{coreUrl}/Tickets/");
-            });
-
-            services.AddHttpClient<IUsersService, UsersService>(httpClient =>
-            {
-                httpClient.BaseAddress = new($"{identityUrl}/Users/");
-            });
-
-            services.AddLocalization(options => options.ResourcesPath = "Localization");
-            var supportedCultures = new List<CultureInfo> { new ("en-US"), new ("uk-UA") };
-
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en-US");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
-            });
+    // This method gets called by the runtime.
+    // Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            // The default HSTS value is 30 days.
+            // You may want to change this for production scenarios,
+            // see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
         }
 
-        // This method gets called by the runtime.
-        // Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        app.UseHttpsRedirection();
+        app.UseRequestLocalization();
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days.
-                // You may want to change this for production scenarios,
-                // see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseRequestLocalization();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
-        }
+            endpoints.MapControllers();
+            endpoints.MapBlazorHub();
+            endpoints.MapFallbackToPage("/_Host");
+        });
     }
 }

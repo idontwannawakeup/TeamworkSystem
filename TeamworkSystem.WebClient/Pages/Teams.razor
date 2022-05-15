@@ -1,5 +1,5 @@
 ﻿@page "/teams"
-@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IDialogService DialogService 
@@ -8,7 +8,7 @@
 <MudTable Class="mt-md-12 mb-12"
           T="@TeamViewModel"
           ServerData="@InitializeTeamsAsync"
-          @ref="@table"
+          @ref="@_table"
           Hover="@true"
           Breakpoint="@Breakpoint.Sm"
           Elevation="0"
@@ -16,23 +16,23 @@
           RowClass="cursor-pointer"
           Dense="@true">
     <ToolBarContent>
-        <MudText Typo="@Typo.h3">@SL["Teams"]</MudText>
+        <MudText Typo="@Typo.h3">@SharedLocalizer["Teams"]</MudText>
         <MudSpacer />
         <MudTextField T="@string"
                       ValueChanged="@(async name => await OnSearchAsync(name))"
-                      Placeholder="@SL["SearchByNameAsTitle"]"
+                      Placeholder="@SharedLocalizer["SearchByNameAsTitle"]"
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"
                       Class="mt-0" />
     </ToolBarContent>
     <HeaderContent>
-        <MudTh Class="ml-3">@SL["Name"]</MudTh>
-        <MudTh>@SL["Specialization"]</MudTh>
-        <MudTh>@SL["Leader"]</MudTh>
+        <MudTh Class="ml-3">@SharedLocalizer["Name"]</MudTh>
+        <MudTh>@SharedLocalizer["Specialization"]</MudTh>
+        <MudTh>@SharedLocalizer["Leader"]</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd Class="ml-3" DataLabel="@SL["Name"]">
+        <MudTd Class="ml-3" DataLabel="@SharedLocalizer["Name"]">
             <MudElement HtmlTag="div" Class="d-flex align-center">
                 <MudAvatar Image="@(context.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Avatar}" : null)"
                            Color="@Color.Success">
@@ -41,7 +41,7 @@
                 <MudText Typo="@Typo.subtitle1" Class="ml-4">@context.Name</MudText>
             </MudElement>
         </MudTd>
-        <MudTd DataLabel="@SL["Specialization"]">
+        <MudTd DataLabel="@SharedLocalizer["Specialization"]">
             @if (context.Specialization is not null)
             {
                 @context.Specialization
@@ -51,13 +51,13 @@
                 <NoneChip />
             }
         </MudTd>
-        <MudTd DataLabel="@SL["Leader"]">
+        <MudTd DataLabel="@SharedLocalizer["Leader"]">
             <MudElement HtmlTag="div" Class="d-flex align-center">
                 <MudAvatar Image="@(context.Leader?.Avatar is not null ? $"{Configuration["ApiUrl"]}/{context.Leader.Avatar}" : null)"
                            Color="@Color.Secondary">
                     A
                 </MudAvatar>
-                <span class="ml-2">@context.Leader.FullName</span>
+                <span class="ml-2">@context.Leader?.FullName</span>
             </MudElement>
         </MudTd>
     </RowTemplate>
@@ -69,23 +69,21 @@
 <MudFab Style="position: fixed; bottom: 20px; right: 20px;"
         Color="Color.Primary"
         Icon="@Icons.Material.Filled.Add"
-        Label="@SL["Team"]"
+        Label="@SharedLocalizer["Team"]"
         OnClick="@ShowTeamCreationDialog" />
 
 @code {
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
-    private MudTable<TeamViewModel> table;
-
-    private Guid userId;
-
-    private string searchName;
+    private MudTable<TeamViewModel> _table;
+    private Guid _userId;
+    private string _searchName;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
     }
 
     private void ShowTeamPage(TableRowClickEventArgs<TeamViewModel> args) =>
@@ -93,11 +91,11 @@
 
     private void ShowTeamCreationDialog()
     {
-        DialogService.ShowTeamCreationDialog(userId, async () =>
+        DialogService.ShowTeamCreationDialog(_userId, async () =>
         {
-            await table.ReloadServerData();
+            await _table.ReloadServerData();
             StateHasChanged();
-        }, SL);
+        }, SharedLocalizer);
     }
 
     private async Task<TableData<TeamViewModel>> InitializeTeamsAsync(TableState state)
@@ -107,8 +105,8 @@
             {
                 PageNumber = state.Page + 1,
                 PageSize = state.PageSize,
-                UserId = userId,
-                Name = searchName
+                UserId = _userId,
+                Name = _searchName
             });
 
         return new() { Items = teams, TotalItems = pagination.TotalEntitiesCount };
@@ -116,8 +114,8 @@
 
     private async Task OnSearchAsync(string name)
     {
-        searchName = name;
-        await table.ReloadServerData();
+        _searchName = name;
+        await _table.ReloadServerData();
     }
 
 }

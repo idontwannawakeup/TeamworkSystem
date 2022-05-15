@@ -1,10 +1,10 @@
 ﻿@page "/team/{TeamId:guid}"
-@inject IStringLocalizer<Team> L
-@inject IStringLocalizer<SharedLocalization> SL
+@inject IStringLocalizer<Team> Localizer
+@inject IStringLocalizer<SharedLocalization> SharedLocalizer
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject ISnackbar Snackbar 
-@inject IDialogService DialogService  
+@inject IDialogService DialogService
 @inject ITeamsService TeamsService
 @inject IProjectsService ProjectsService
 @inject IUsersService UsersService
@@ -15,17 +15,17 @@
     <MudItem xs="12" lg="4" Class="d-flex flex-column gap-4">
 
         <MudCard Elevation="4">
-            @if (!string.IsNullOrWhiteSpace(team?.Avatar))
+            @if (!string.IsNullOrWhiteSpace(_team?.Avatar))
             {
-                <MudCardMedia Image="@($"{Configuration["ApiUrl"]}/{team.Avatar}")" Height="250" />
+                <MudCardMedia Image="@($"{Configuration["ApiUrl"]}/{_team.Avatar}")" Height="250" />
             }
             <MudCardContent>
-                @if (team is not null)
+                @if (_team is not null)
                 {
                     <MudElement HtmlTag="div" Class="d-flex flex-column align-start gap-2 pa-4">
-                        <MudText Typo="@Typo.h6">@team.Name</MudText>
-                        <MudText Typo="@Typo.subtitle1">@team.Specialization</MudText>
-                        @if (userId == team.LeaderId)
+                        <MudText Typo="@Typo.h6">@_team.Name</MudText>
+                        <MudText Typo="@Typo.subtitle1">@_team.Specialization</MudText>
+                        @if (_userId == _team.LeaderId)
                         {
                             <InputFile id="fileInput" OnChange="@UpdateAvatarAsync" hidden accept=".jpg, .jpeg, .png" />
                             <MudButton HtmlTag="label"
@@ -33,21 +33,21 @@
                                        Color="Color.Primary"
                                        StartIcon="@Icons.Filled.CloudUpload"
                                        for="fileInput">
-                                @SL["UpdateAvatar"]
+                                @SharedLocalizer["UpdateAvatar"]
                             </MudButton>
                             <MudButton Variant="@Variant.Outlined"
                                        Color="@Color.Tertiary"
                                        EndIcon="@Icons.Material.Filled.Add"
                                        IconColor="@Color.Inherit"
                                        OnClick="@ShowMemberAddingDialog">
-                                @L["AddMember"]
+                                @Localizer["AddMember"]
                             </MudButton>
                             <MudButton Variant="@Variant.Outlined"
                                        Color="@Color.Info"
                                        EndIcon="@Icons.Material.Filled.Edit"
                                        IconColor="@Color.Inherit"
                                        Link="@EditLink">
-                                @SL["Edit"]
+                                @SharedLocalizer["Edit"]
                             </MudButton>
                         }
                     </MudElement>
@@ -62,21 +62,21 @@
         </MudCard>
 
         <MudPaper Elevation="4" Class="pa-4">
-            @if (members is not null)
+            @if (_members is not null)
             {
-                <MudText Typo="@Typo.h6" Class="py-1">@SL["Members"]</MudText>
+                <MudText Typo="@Typo.h6" Class="py-1">@SharedLocalizer["Members"]</MudText>
                 <MudText Typo="@Typo.subtitle1"
-                         Style="@colorGrey"
+                         Style="@_colorGrey"
                          Class="pb-1">
-                    @L["TotalCount"]: @membersPagination.TotalEntitiesCount
+                    @Localizer["TotalCount"]: @_membersPagination.TotalEntitiesCount
                 </MudText>
                 <MudDivider Class="my-2" />
-                @if (members.Count() != 0)
+                @if (_members.Count() != 0)
                 {
                     <MudList Clickable="@true">
-                        @foreach (var member in members)
+                        @foreach (var member in _members)
                         {
-                            <MudListItem OnClick="@(e => OpenMemberProfile(member))">
+                            <MudListItem OnClick="@(_ => OpenMemberProfile(member))">
                                 <MudElement HtmlTag="div" Class="d-flex align-center gap-3">
 
                                     <MudAvatar Image="@(member.Avatar is not null ? $"{Configuration["ApiUrl"]}/{member.Avatar}" : null)"
@@ -86,18 +86,18 @@
 
                                     <MudElement HtmlTag="div" Class="d-flex flex-column">
                                         <MudText Typo="@Typo.subtitle2">@member.FullName</MudText>
-                                        <MudText Typo="@Typo.caption" Style="@colorGrey">@member.Profession</MudText>
+                                        <MudText Typo="@Typo.caption" Style="@_colorGrey">@member.Profession</MudText>
                                     </MudElement>
 
-                                    @if (userId == team?.LeaderId)
+                                    @if (_userId == _team?.LeaderId)
                                     {
                                         <MudMenu Class="ml-auto"
                                                  Icon="@Icons.Material.Filled.MoreHoriz"
                                                  Dense="@true"
                                                  OffsetX="true"
                                                  Direction="@Direction.Left">
-                                            <MudMenuItem OnClick="@(async e => await DeleteMemberAsync(member))">
-                                                @SL["Remove"]
+                                            <MudMenuItem OnClick="@(async _ => await DeleteMemberAsync(member))">
+                                                @SharedLocalizer["Remove"]
                                             </MudMenuItem>
                                         </MudMenu>
                                     }
@@ -109,7 +109,7 @@
                 }
                 else
                 {
-                    <MudText Typo="@Typo.subtitle1">@L["NoMembers"]</MudText>
+                    <MudText Typo="@Typo.subtitle1">@Localizer["NoMembers"]</MudText>
                 }
             }
             else
@@ -123,31 +123,31 @@
     <MudItem xs="12" lg="8">
         <MudTable T="@ProjectViewModel"
                   ServerData="@InitializeProjectsAsync"
-                  @ref="@projectsTable"
+                  @ref="@_projectsTable"
                   Hover="@true"
                   Breakpoint="@Breakpoint.Sm"
                   Elevation="4"
-                  OnRowClick="@(args => OpenProjectPage(args))"
+                  OnRowClick="@(OpenProjectPage)"
                   RowClass="cursor-pointer">
             <ToolBarContent>
-                <MudText Typo="@Typo.h4">@SL["Projects"]</MudText>
+                <MudText Typo="@Typo.h4">@SharedLocalizer["Projects"]</MudText>
                 <MudSpacer />
                 <MudTextField T="@string"
                               ValueChanged="@(async title => await OnSearchAsync(title))"
-                              Placeholder="@SL["SearchByTitle"]"
+                              Placeholder="@SharedLocalizer["SearchByTitle"]"
                               Adornment="Adornment.Start"
                               AdornmentIcon="@Icons.Material.Filled.Search"
                               IconSize="Size.Medium"
                               Class="mt-0" />
             </ToolBarContent>
             <HeaderContent>
-                <MudTh>@SL["Title"]</MudTh>
-                <MudTh>@SL["Type"]</MudTh>
-                <MudTh>@SL["Url"]</MudTh>
+                <MudTh>@SharedLocalizer["Title"]</MudTh>
+                <MudTh>@SharedLocalizer["Type"]</MudTh>
+                <MudTh>@SharedLocalizer["Url"]</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="@SL["Title"]">@context.Title</MudTd>
-                <MudTd DataLabel="@SL["Type"]">
+                <MudTd DataLabel="@SharedLocalizer["Title"]">@context.Title</MudTd>
+                <MudTd DataLabel="@SharedLocalizer["Type"]">
                     @if (context.Type is not null)
                     {
                         @context.Type
@@ -157,7 +157,7 @@
                         <NoneChip />
                     }
                 </MudTd>
-                <MudTd DataLabel="@SL["Url"]">
+                <MudTd DataLabel="@SharedLocalizer["Url"]">
                     @if (!string.IsNullOrWhiteSpace(context.Url))
                     {
                         @context.Url
@@ -182,26 +182,21 @@
 
     [CascadingParameter] private Task<AuthenticationState> State { get; set; }
 
+    private readonly string _colorGrey = $"color: {Colors.Grey.Default};";
+
+    private MudTable<ProjectViewModel> _projectsTable;
+    private string _searchTitle;
+    private TeamViewModel _team;
+    private IEnumerable<UserViewModel> _members;
+    private PaginationHeaderViewModel _membersPagination;
+    private Guid _userId;
+
     private string EditLink => $"/team/{TeamId}/settings";
-
-    private MudTable<ProjectViewModel> projectsTable;
-
-    private string searchTitle;
-
-    private TeamViewModel team;
-
-    private IEnumerable<UserViewModel> members;
-
-    private PaginationHeaderViewModel membersPagination;
-
-    private Guid userId;
-
-    private string colorGrey = $"color: {Colors.Grey.Default};";
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
+        _userId = await ApiAuthenticationStateProvider.GetUserIdFromStateAsync(State);
         await InitializeTeamAsync();
         await InitializeMembersAsync();
     }
@@ -210,10 +205,10 @@
         NavigationManager.NavigateTo($"/project/{args.Item.Id}/overview");
 
     private async Task InitializeTeamAsync() =>
-        team = await TeamsService.GetByIdAsync(TeamId);
+        _team = await TeamsService.GetByIdAsync(TeamId);
 
     private async Task InitializeMembersAsync() =>
-        (members, membersPagination) = await UsersService.GetWithPaginationHeaderAsync(new()
+        (_members, _membersPagination) = await UsersService.GetWithPaginationHeaderAsync(new()
         {
             TeamId = TeamId,
             PageSize = 30
@@ -221,14 +216,14 @@
 
     private async Task DeleteMemberAsync(UserViewModel user)
     {
-        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SL,
-            SL["ConfirmMemberDeleting"]) ?? false;
+        var confirmed = await DialogService.ShowDeleteConfirmingDialog(SharedLocalizer,
+            SharedLocalizer["ConfirmMemberDeleting"]) ?? false;
 
         if (confirmed)
         {
             await RequestErrorsHandler.HandleRequestAsync(async () =>
             {
-                await TeamsService.DeleteMemberAsync(new() { TeamId = team.Id, UserId = user.Id });
+                await TeamsService.DeleteMemberAsync(new() { TeamId = _team.Id, UserId = user.Id });
                 Snackbar.Add("Member deleted", Severity.Success);
                 await InitializeMembersAsync();
             });
@@ -241,12 +236,12 @@
         {
             await InitializeMembersAsync();
             StateHasChanged();
-        }, SL);
+        }, SharedLocalizer);
     }
 
     private void OpenMemberProfile(UserViewModel member)
     {
-        if (userId == member.Id)
+        if (_userId == member.Id)
         {
             NavigationManager.NavigateTo($"/profile");
             return;
@@ -263,7 +258,7 @@
                 PageNumber = state.Page + 1,
                 PageSize = state.PageSize,
                 TeamId = TeamId,
-                Title = searchTitle
+                Title = _searchTitle
             });
 
         return new() { Items = projects, TotalItems = pagination.TotalEntitiesCount };
@@ -271,8 +266,8 @@
 
     private async Task OnSearchAsync(string title)
     {
-        searchTitle = title;
-        await projectsTable.ReloadServerData();
+        _searchTitle = title;
+        await _projectsTable.ReloadServerData();
     }
 
     private async Task UpdateAvatarAsync(InputFileChangeEventArgs e)
