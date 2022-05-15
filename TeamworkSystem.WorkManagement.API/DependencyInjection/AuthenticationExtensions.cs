@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace TeamworkSystem.Core.API.DependencyInjection;
+namespace TeamworkSystem.WorkManagement.API.DependencyInjection;
 
 public static class AuthenticationExtensions
 {

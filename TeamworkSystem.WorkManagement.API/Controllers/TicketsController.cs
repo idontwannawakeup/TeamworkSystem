@@ -6,7 +6,7 @@ using TeamworkSystem.Core.BusinessLogic.Interfaces.Services;
 using TeamworkSystem.Core.DataAccess.Parameters;
 using TeamworkSystem.Shared.Pagination;
 
-namespace TeamworkSystem.Core.API.Controllers;
+namespace TeamworkSystem.WorkManagement.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

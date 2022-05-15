@@ -2,10 +2,10 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using TeamworkSystem.Core.API.DependencyInjection;
-using TeamworkSystem.Core.API.Middlewares;
 using TeamworkSystem.Core.BusinessLogic.DependencyInjection;
 using TeamworkSystem.Core.DataAccess.DependencyInjection;
+using TeamworkSystem.WorkManagement.API.DependencyInjection;
+using TeamworkSystem.WorkManagement.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;

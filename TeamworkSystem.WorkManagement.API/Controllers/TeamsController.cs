@@ -7,7 +7,7 @@ using TeamworkSystem.Core.DataAccess.Parameters;
 using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Pagination;
 
-namespace TeamworkSystem.Core.API.Controllers;
+namespace TeamworkSystem.WorkManagement.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

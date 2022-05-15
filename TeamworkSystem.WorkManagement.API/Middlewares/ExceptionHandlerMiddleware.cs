@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using TeamworkSystem.Shared.Exceptions;
 
-namespace TeamworkSystem.Core.API.Middlewares;
+namespace TeamworkSystem.WorkManagement.API.Middlewares;
 
 public class ExceptionHandlerMiddleware
 {
