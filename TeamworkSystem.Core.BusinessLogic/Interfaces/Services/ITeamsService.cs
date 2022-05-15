@@ -1,7 +1,7 @@
 ﻿using TeamworkSystem.Core.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Core.BusinessLogic.DTO.Responses;
-using TeamworkSystem.Core.DataAccess.Parameters;
 using TeamworkSystem.Shared.Pagination;
+using TeamworkSystem.WorkManagement.DataAccess.Parameters;
 
 namespace TeamworkSystem.Core.BusinessLogic.Interfaces.Services;
 

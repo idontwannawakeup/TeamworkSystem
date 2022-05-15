@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Core.BusinessLogic.DependencyInjection;
-using TeamworkSystem.Core.DataAccess.DependencyInjection;
 using TeamworkSystem.WorkManagement.API.DependencyInjection;
 using TeamworkSystem.WorkManagement.API.Middlewares;
+using TeamworkSystem.WorkManagement.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;

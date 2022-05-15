@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using TeamworkSystem.Core.BusinessLogic.DTO.Responses;
-using TeamworkSystem.Core.DataAccess.Entities;
+using TeamworkSystem.WorkManagement.DataAccess.Entities;
 
 namespace TeamworkSystem.Core.BusinessLogic.Configurations;
 

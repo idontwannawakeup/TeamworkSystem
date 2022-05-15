@@ -2,11 +2,11 @@
 using TeamworkSystem.Core.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Core.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Core.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Core.DataAccess.Entities;
-using TeamworkSystem.Core.DataAccess.Interfaces;
-using TeamworkSystem.Core.DataAccess.Interfaces.Repositories;
-using TeamworkSystem.Core.DataAccess.Parameters;
 using TeamworkSystem.Shared.Pagination;
+using TeamworkSystem.WorkManagement.DataAccess.Entities;
+using TeamworkSystem.WorkManagement.DataAccess.Interfaces;
+using TeamworkSystem.WorkManagement.DataAccess.Interfaces.Repositories;
+using TeamworkSystem.WorkManagement.DataAccess.Parameters;
 
 namespace TeamworkSystem.Core.BusinessLogic.Services;
 

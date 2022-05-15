@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.Core.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Core.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Core.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Core.DataAccess.Parameters;
 using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Pagination;
+using TeamworkSystem.WorkManagement.DataAccess.Parameters;
 
 namespace TeamworkSystem.WorkManagement.API.Controllers;
 

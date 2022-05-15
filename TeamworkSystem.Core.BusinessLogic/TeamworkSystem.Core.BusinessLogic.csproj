@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TeamworkSystem.Core.DataAccess\TeamworkSystem.Core.DataAccess.csproj" />
+      <ProjectReference Include="..\TeamworkSystem.WorkManagement.DataAccess\TeamworkSystem.WorkManagement.DataAccess.csproj" />
       <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
     </ItemGroup>
 

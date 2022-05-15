@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WorkManageme
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Core.BusinessLogic", "TeamworkSystem.Core.BusinessLogic\TeamworkSystem.Core.BusinessLogic.csproj", "{A99417EC-7C5F-4710-9EE5-61E7122E35B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Core.DataAccess", "TeamworkSystem.Core.DataAccess\TeamworkSystem.Core.DataAccess.csproj", "{51709909-50A9-4E34-8641-3F54D354B2F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WorkManagement.DataAccess", "TeamworkSystem.WorkManagement.DataAccess\TeamworkSystem.WorkManagement.DataAccess.csproj", "{51709909-50A9-4E34-8641-3F54D354B2F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Shared", "TeamworkSystem.Shared\TeamworkSystem.Shared.csproj", "{246FC4CE-82BC-4477-921A-50AAEF8D243A}"
 EndProject
