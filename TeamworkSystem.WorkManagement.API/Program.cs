@@ -1,20 +1,16 @@
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.WorkManagement.API.DependencyInjection;
 using TeamworkSystem.WorkManagement.API.Middlewares;
-using TeamworkSystem.WorkManagement.BusinessLogic.DependencyInjection;
-using TeamworkSystem.WorkManagement.DataAccess.DependencyInjection;
+using TeamworkSystem.WorkManagement.Application.DependencyInjection;
+using TeamworkSystem.WorkManagement.Persistence.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-services.AddDatabase(builder.Configuration);
-services.AddData();
-services.AddFilterFactories();
-services.AddServices();
-services.AddSeeding();
+services.AddPersistence(builder.Configuration);
+services.AddApplication();
 services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
-
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 services.AddEndpointsApiExplorer();

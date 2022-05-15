@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Requests;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Responses;
-using TeamworkSystem.WorkManagement.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.WorkManagement.DataAccess.Parameters;
+using TeamworkSystem.WorkManagement.Application.Common.Requests;
+using TeamworkSystem.WorkManagement.Application.Common.Responses;
+using TeamworkSystem.WorkManagement.Application.Interfaces.Services;
+using TeamworkSystem.WorkManagement.Domain.Parameters;
 
 namespace TeamworkSystem.WorkManagement.API.Controllers;
 
