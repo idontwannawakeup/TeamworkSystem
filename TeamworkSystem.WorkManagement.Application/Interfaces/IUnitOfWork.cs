@@ -8,5 +8,5 @@ public interface IUnitOfWork
     ITeamsRepository TeamsRepository { get; }
     ITicketsRepository TicketsRepository { get; }
 
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

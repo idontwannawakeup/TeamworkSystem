@@ -23,6 +23,6 @@ public class UnitOfWork : IUnitOfWork
     public ITeamsRepository TeamsRepository { get; }
     public ITicketsRepository TicketsRepository { get; }
 
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken) =>
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
         await DatabaseContext.SaveChangesAsync(cancellationToken);
 }
