@@ -1,0 +1,15 @@
+﻿using MediatR;
+
+namespace TeamworkSystem.WorkManagement.Application.Tickets.Commands.CreateTicket;
+
+public class CreateTicketCommand : IRequest
+{
+    public Guid ProjectId { get; set; }
+    public Guid? ExecutorId { get; set; }
+    public string Title { get; set; } = default!;
+    public string? Type { get; set; }
+    public string Description { get; set; } = default!;
+    public string Status { get; set; } = default!;
+    public string Priority { get; set; } = default!;
+    public DateTime? Deadline { get; set; }
+}
