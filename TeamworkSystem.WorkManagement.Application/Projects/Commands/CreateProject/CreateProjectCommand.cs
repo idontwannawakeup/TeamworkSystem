@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace TeamworkSystem.WorkManagement.Application.Projects.Commands.AddProject;
+namespace TeamworkSystem.WorkManagement.Application.Projects.Commands.CreateProject;
 
-public class AddProjectCommand : IRequest
+public class CreateProjectCommand : IRequest
 {
     public Guid TeamId { get; set; }
     public string Title { get; set; } = default!;
