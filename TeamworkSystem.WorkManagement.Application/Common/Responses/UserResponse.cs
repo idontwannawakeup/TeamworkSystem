@@ -3,7 +3,6 @@
 public class UserResponse
 {
     public Guid Id { get; set; }
-
     public string FullName { get; set; } = default!;
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;
