@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using TeamworkSystem.WorkManagement.Application.Interfaces;
 
 namespace TeamworkSystem.WorkManagement.Application.Projects.Commands.DeleteProject;
@@ -7,12 +6,10 @@ namespace TeamworkSystem.WorkManagement.Application.Projects.Commands.DeleteProj
 public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
-    public DeleteProjectCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public DeleteProjectCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
 
     public async Task<Unit> Handle(
