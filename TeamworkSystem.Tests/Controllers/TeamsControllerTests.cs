@@ -161,4 +161,82 @@ public class TeamsControllerTests
         Assert.IsInstanceOf<ActionResult>(result);
         Assert.AreEqual(expectedStatusCode, actualStatusCode);
     }
+
+    [TestCase]
+    public async Task UpdateAsync_WhenValidTeamPassed_ReturnsOk()
+    {
+        const int expectedStatusCode = StatusCodes.Status200OK;
+        var teamId = Random.Shared.Next(10);
+        var leaderId = Guid.NewGuid().ToString();
+        var team = new TeamRequest { Id = teamId, LeaderId = leaderId };
+        _service.Setup(service => service.UpdateAsync(team)).Returns(Task.CompletedTask);
+
+        var result = await _controller.UpdateAsync(team);
+        var okResult = result as OkResult;
+        var actualStatusCode = okResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task UpdateAsync_WhenExceptionThrown_ReturnsInternalServerError()
+    {
+        const int expectedStatusCode = StatusCodes.Status500InternalServerError;
+        var teamId = Random.Shared.Next(10);
+        var team = new TeamRequest { Id = teamId };
+        _service.Setup(service => service.UpdateAsync(It.IsAny<TeamRequest>())).Throws<Exception>();
+
+        var result = await _controller.UpdateAsync(team);
+        var objectResult = result as ObjectResult;
+        var actualStatusCode = objectResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+    
+    [TestCase]
+    public async Task DeleteAsync_WhenValidTeamPassed_ReturnsOk()
+    {
+        const int expectedStatusCode = StatusCodes.Status200OK;
+        var teamId = Random.Shared.Next(10);
+        _service.Setup(service => service.DeleteAsync(teamId)).Returns(Task.CompletedTask);
+
+        var result = await _controller.DeleteAsync(teamId);
+        var okResult = result as OkResult;
+        var actualStatusCode = okResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task DeleteAsync_WhenTeamNotFound_ReturnsNotFound()
+    {
+        const int expectedStatusCode = StatusCodes.Status404NotFound;
+        var teamId = Random.Shared.Next(10);
+        _service.Setup(service => service.DeleteAsync(teamId)).Throws<EntityNotFoundException>();
+
+        var result = await _controller.DeleteAsync(teamId);
+        var okResult = result as NotFoundObjectResult;
+        var actualStatusCode = okResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task DeleteAsync_WhenExceptionThrown_ReturnsInternalServerError()
+    {
+        const int expectedStatusCode = StatusCodes.Status500InternalServerError;
+        var teamId = Random.Shared.Next(10);
+        _service.Setup(service => service.DeleteAsync(teamId)).Throws<Exception>();
+
+        var result = await _controller.DeleteAsync(teamId);
+        var objectResult = result as ObjectResult;
+        var actualStatusCode = objectResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
 }
