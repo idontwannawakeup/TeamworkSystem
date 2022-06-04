@@ -194,7 +194,7 @@ public class TeamsControllerTests
         Assert.IsInstanceOf<ActionResult>(result);
         Assert.AreEqual(expectedStatusCode, actualStatusCode);
     }
-    
+
     [TestCase]
     public async Task DeleteAsync_WhenValidTeamPassed_ReturnsOk()
     {
@@ -233,6 +233,112 @@ public class TeamsControllerTests
         _service.Setup(service => service.DeleteAsync(teamId)).Throws<Exception>();
 
         var result = await _controller.DeleteAsync(teamId);
+        var objectResult = result as ObjectResult;
+        var actualStatusCode = objectResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task AddMemberAsync_WhenValidIdsPassed_ReturnsOk()
+    {
+        const int expectedStatusCode = StatusCodes.Status200OK;
+        var teamId = Random.Shared.Next(10);
+        var memberId = Guid.NewGuid().ToString();
+        var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
+        _service.Setup(service => service.AddMemberAsync(request)).Returns(Task.CompletedTask);
+
+        var result = await _controller.AddMemberAsync(request);
+        var okResult = result as OkResult;
+        var actualStatusCode = okResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task AddMemberAsync_WhenTeamOrMemberNotFound_ReturnsNotFound()
+    {
+        const int expectedStatusCode = StatusCodes.Status404NotFound;
+        var teamId = Random.Shared.Next(10);
+        var memberId = Guid.NewGuid().ToString();
+        var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
+        _service.Setup(service => service.AddMemberAsync(request))
+                .Throws<EntityNotFoundException>();
+
+        var result = await _controller.AddMemberAsync(request);
+        var okResult = result as NotFoundObjectResult;
+        var actualStatusCode = okResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task AddMemberAsync_WhenExceptionThrown_ReturnsInternalServerError()
+    {
+        const int expectedStatusCode = StatusCodes.Status500InternalServerError;
+        var teamId = Random.Shared.Next(10);
+        var memberId = Guid.NewGuid().ToString();
+        var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
+        _service.Setup(service => service.AddMemberAsync(It.IsAny<TeamMemberRequest>()))
+                .Throws<Exception>();
+
+        var result = await _controller.AddMemberAsync(request);
+        var objectResult = result as ObjectResult;
+        var actualStatusCode = objectResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task DeleteMemberAsync_WhenValidIdsPassed_ReturnsOk()
+    {
+        const int expectedStatusCode = StatusCodes.Status200OK;
+        var teamId = Random.Shared.Next(10);
+        var memberId = Guid.NewGuid().ToString();
+        var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
+        _service.Setup(service => service.DeleteMemberAsync(request)).Returns(Task.CompletedTask);
+
+        var result = await _controller.DeleteMemberAsync(request.TeamId, request.UserId);
+        var okResult = result as OkResult;
+        var actualStatusCode = okResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task DeleteMemberAsync_WhenTeamOrMemberNotFound_ReturnsNotFound()
+    {
+        const int expectedStatusCode = StatusCodes.Status404NotFound;
+        var teamId = Random.Shared.Next(10);
+        var memberId = Guid.NewGuid().ToString();
+        var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
+        _service.Setup(service => service.DeleteMemberAsync(It.IsAny<TeamMemberRequest>()))
+                .Throws<EntityNotFoundException>();
+
+        var result = await _controller.DeleteMemberAsync(request.TeamId, request.UserId);
+        var notFoundResult = result as NotFoundObjectResult;
+        var actualStatusCode = notFoundResult?.StatusCode;
+
+        Assert.IsInstanceOf<ActionResult>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+    }
+
+    [TestCase]
+    public async Task DeleteMemberAsync_WhenExceptionThrown_ReturnsInternalServerError()
+    {
+        const int expectedStatusCode = StatusCodes.Status500InternalServerError;
+        var teamId = Random.Shared.Next(10);
+        var memberId = Guid.NewGuid().ToString();
+        var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
+        _service.Setup(service => service.DeleteMemberAsync(It.IsAny<TeamMemberRequest>()))
+                .Throws<Exception>();
+
+        var result = await _controller.DeleteMemberAsync(request.TeamId, request.UserId);
         var objectResult = result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
