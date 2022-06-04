@@ -42,8 +42,21 @@ public class TeamsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<TeamResponse>> GetByIdAsync([FromRoute] int id) =>
-        Ok(await _teamsService.GetByIdAsync(id));
+    public async Task<ActionResult<TeamResponse>> GetByIdAsync([FromRoute] int id)
+    {
+        try
+        {
+            return Ok(await _teamsService.GetByIdAsync(id));
+        }
+        catch (EntityNotFoundException e)
+        {
+            return NotFound(new { e.Message });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
+        }
+    }
 
     [HttpPost]
     [Authorize]
@@ -56,6 +69,10 @@ public class TeamsController : ControllerBase
         {
             await _teamsService.InsertAsync(request);
             return Ok();
+        }
+        catch (EntityNotFoundException e)
+        {
+            return NotFound(new { e.Message });
         }
         catch (Exception e)
         {
@@ -136,6 +153,10 @@ public class TeamsController : ControllerBase
         {
             await _teamsService.AddMemberAsync(request);
             return Ok();
+        }
+        catch (EntityNotFoundException e)
+        {
+            return NotFound(new { e.Message });
         }
         catch (Exception e)
         {
