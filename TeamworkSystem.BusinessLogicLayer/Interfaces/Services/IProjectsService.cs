@@ -9,7 +9,6 @@ public interface IProjectsService
 {
     Task<IEnumerable<ProjectResponse>> GetAsync();
     Task<PagedList<ProjectResponse>> GetAsync(ProjectsParameters parameters);
-    Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId);
     Task<ProjectResponse> GetByIdAsync(int id);
     Task InsertAsync(ProjectRequest request);
     Task UpdateAsync(ProjectRequest request);
