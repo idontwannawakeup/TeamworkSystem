@@ -95,6 +95,35 @@ public class ProjectsServiceTests
     }
 
     [TestCase]
+    public async Task GetAsync_WithNoParameters_ShouldReturnPagedProjects()
+    {
+        var project = new Project
+        {
+            Id = 1,
+            TeamId = 9,
+            Title = "Blog",
+            Type = "Website",
+            Description = "Just a simple blog from small team"
+        };
+
+        var projects = new List<Project> { project };
+        const int expectedPageNumber = 1;
+        const int expectedPageSize = 1;
+
+        _projectsRepository.Setup(repository => repository.GetAsync())
+                           .ReturnsAsync(new PagedList<Project>(
+                               projects,
+                               projects.Count,
+                               expectedPageNumber,
+                               expectedPageSize));
+
+        var actualProjects = await _service.GetAsync();
+        var actualProject = actualProjects.First();
+
+        Assert.AreEqual(project.Id, actualProject.Id);
+    }
+
+    [TestCase]
     public async Task GetByIdAsync_WhenExistingIdPassed_ShouldReturnProject()
     {
         var project = new Project
