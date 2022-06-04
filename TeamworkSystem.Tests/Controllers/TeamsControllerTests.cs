@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,25 +14,35 @@ namespace TeamworkSystem.Tests.Controllers;
 
 public class TeamsControllerTests
 {
-    private TeamsController _controller;
-    private Mock<ITeamsService> _service;
+    private TeamsController _controller = default!;
+    private Mock<ITeamsService> _service = default!;
 
     [SetUp]
     public void Initialize()
     {
         _service = new Mock<ITeamsService>();
 
-        _controller = new TeamsController(_service.Object);
+        _controller = new TeamsController(_service.Object)
+        {
+            ControllerContext = { HttpContext = new DefaultHttpContext() }
+        };
     }
 
     [TestCase]
     public async Task GetAsync_WhenCalled_ReturnsActionResultWithTeams()
     {
+        const int expectedStatusCode = StatusCodes.Status200OK;
         var parameters = new TeamsParameters();
+        var teamsPage = new PagedList<TeamResponse>(Array.Empty<TeamResponse>(), 0, 1, 1);
+        _service.Setup(service => service.GetAsync(It.IsAny<TeamsParameters>()))
+                .ReturnsAsync(teamsPage);
 
         var result = await _controller.GetAsync(parameters);
+        var objectResult = result.Result as ObjectResult;
+        var actualStatusCode = objectResult?.StatusCode;
 
         Assert.IsInstanceOf<ActionResult<PagedList<TeamResponse>>>(result);
+        Assert.AreEqual(expectedStatusCode, actualStatusCode);
     }
 
     [TestCase]
