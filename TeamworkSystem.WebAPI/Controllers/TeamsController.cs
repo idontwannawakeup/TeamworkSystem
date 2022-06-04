@@ -46,7 +46,8 @@ public class TeamsController : ControllerBase
     {
         try
         {
-            return Ok(await _teamsService.GetByIdAsync(id));
+            var team = await _teamsService.GetByIdAsync(id);
+            return Ok(team);
         }
         catch (EntityNotFoundException e)
         {

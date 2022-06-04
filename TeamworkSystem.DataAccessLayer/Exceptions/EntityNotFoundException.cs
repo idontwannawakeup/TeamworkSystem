@@ -6,4 +6,8 @@ public class EntityNotFoundException : Exception
         : base(message)
     {
     }
+
+    public EntityNotFoundException()
+    {
+    }
 }
