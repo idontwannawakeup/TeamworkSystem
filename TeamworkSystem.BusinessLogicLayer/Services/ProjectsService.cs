@@ -37,13 +37,6 @@ public class ProjectsService : IProjectsService
         return projects.Map(_mapper.Map<Project, ProjectResponse>);
     }
 
-    public async Task<IEnumerable<ProjectResponse>> GetTeamProjectsAsync(int teamId)
-    {
-        var team = await _teamsRepository.GetCompleteEntityAsync(teamId);
-        var projects = team.Projects;
-        return projects.Select(_mapper.Map<Project, ProjectResponse>);
-    }
-
     public async Task<ProjectResponse> GetByIdAsync(int id)
     {
         var project = await _projectsRepository.GetCompleteEntityAsync(id);
