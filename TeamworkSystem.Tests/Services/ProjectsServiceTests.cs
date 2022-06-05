@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
@@ -89,9 +90,9 @@ public class ProjectsServiceTests
         var actualProjects = await _service.GetAsync(parameters);
         var actualProject = actualProjects.First();
 
-        Assert.AreEqual(expectedPageNumber, actualProjects.CurrentPage);
-        Assert.AreEqual(expectedPageSize, actualProjects.PageSize);
-        Assert.AreEqual(project.Id, actualProject.Id);
+        actualProjects.CurrentPage.Should().Be(expectedPageNumber);
+        actualProjects.PageSize.Should().Be(expectedPageSize);
+        actualProject.Id.Should().Be(project.Id);
     }
 
     [TestCase]
@@ -120,7 +121,7 @@ public class ProjectsServiceTests
         var actualProjects = await _service.GetAsync();
         var actualProject = actualProjects.First();
 
-        Assert.AreEqual(project.Id, actualProject.Id);
+        actualProject.Id.Should().Be(project.Id);
     }
 
     [TestCase]
@@ -140,11 +141,11 @@ public class ProjectsServiceTests
 
         var actualProject = await _service.GetByIdAsync(project.Id);
 
-        Assert.AreEqual(project.Id, actualProject.Id);
-        Assert.AreEqual(project.TeamId, actualProject.TeamId);
-        Assert.AreEqual(project.Title, actualProject.Title);
-        Assert.AreEqual(project.Type, actualProject.Type);
-        Assert.AreEqual(project.Description, actualProject.Description);
+        actualProject.Id.Should().Be(project.Id);
+        actualProject.TeamId.Should().Be(project.TeamId);
+        actualProject.Title.Should().Be(project.Title);
+        actualProject.Type.Should().Be(project.Type);
+        actualProject.Description.Should().Be(project.Description);
     }
 
     [TestCase]
@@ -154,9 +155,9 @@ public class ProjectsServiceTests
         _projectsRepository.Setup(repository => repository.GetCompleteEntityAsync(projectId))
                            .Throws<EntityNotFoundException>();
 
-        async Task<ProjectResponse> UnitAction() => await _service.GetByIdAsync(projectId);
+        Func<Task<ProjectResponse>> unitAction = async () => await _service.GetByIdAsync(projectId);
 
-        Assert.ThrowsAsync<EntityNotFoundException>(UnitAction);
+        unitAction.Should().ThrowAsync<EntityNotFoundException>();
     }
 
     [TestCase]
@@ -187,9 +188,9 @@ public class ProjectsServiceTests
         _projectsRepository.Setup(repository => repository.InsertAsync(It.IsAny<Project>()))
                            .Throws<Exception>();
 
-        async Task UnitAction() => await _service.InsertAsync(request);
+        Func<Task> unitAction = async () => await _service.InsertAsync(request);
 
-        Assert.ThrowsAsync<Exception>(UnitAction);
+        unitAction.Should().ThrowAsync<Exception>();
     }
 
     [TestCase]
@@ -220,9 +221,9 @@ public class ProjectsServiceTests
         _projectsRepository.Setup(repository => repository.UpdateAsync(It.IsAny<Project>()))
                            .Throws<Exception>();
 
-        async Task UnitAction() => await _service.UpdateAsync(request);
+        Func<Task> unitAction = async () => await _service.UpdateAsync(request);
 
-        Assert.ThrowsAsync<Exception>(UnitAction);
+        unitAction.Should().ThrowAsync<Exception>();
     }
 
     [TestCase]
@@ -245,8 +246,8 @@ public class ProjectsServiceTests
         _projectsRepository.Setup(repository => repository.DeleteAsync(It.IsAny<int>()))
                            .Throws<Exception>();
 
-        async Task UnitAction() => await _service.DeleteAsync(projectId);
+        Func<Task> unitAction = async () => await _service.DeleteAsync(projectId);
 
-        Assert.ThrowsAsync<Exception>(UnitAction);
+        unitAction.Should().ThrowAsync<Exception>();
     }
 }

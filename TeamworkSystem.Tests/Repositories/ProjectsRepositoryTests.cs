@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -129,7 +131,7 @@ public class ProjectsRepositoryTests
         foreach (var (expectedProject, actualProject) in expected.OrderBy(e => e.Id)
                                                                  .Zip(actual.OrderBy(a => a.Id)))
         {
-            Assert.AreEqual(expectedProject.Id, actualProject.Id);
+            actualProject.Id.Should().Be(expectedProject.Id);
         }
     }
 
@@ -165,7 +167,7 @@ public class ProjectsRepositoryTests
         foreach (var (expectedProject, actualProject) in expected.OrderBy(e => e.Id)
                                                                  .Zip(actual.OrderBy(a => a.Id)))
         {
-            Assert.AreEqual(expectedProject.Id, actualProject.Id);
+            actualProject.Id.Should().Be(expectedProject.Id);
         }
     }
 
@@ -183,7 +185,7 @@ public class ProjectsRepositoryTests
 
         var actual = await _repository.GetByIdAsync(expected.Id);
 
-        Assert.AreEqual(expected.Id, actual.Id);
+        actual.Id.Should().Be(expected.Id);
     }
 
     [TestCase]
@@ -191,9 +193,9 @@ public class ProjectsRepositoryTests
     {
         const int id = 10000;
 
-        async Task<Project> UnitAction() => await _repository.GetByIdAsync(id);
+        Func<Task<Project>> unitAction = async () => await _repository.GetByIdAsync(id);
 
-        Assert.ThrowsAsync<EntityNotFoundException>(UnitAction);
+        unitAction.Should().ThrowAsync<EntityNotFoundException>();
     }
 
     [TestCase]
@@ -210,7 +212,7 @@ public class ProjectsRepositoryTests
 
         var actual = await _repository.GetCompleteEntityAsync(expected.Id);
 
-        Assert.AreEqual(expected.Id, actual.Id);
+        actual.Id.Should().Be(expected.Id);
     }
 
     [TestCase]
@@ -218,9 +220,9 @@ public class ProjectsRepositoryTests
     {
         const int id = 10000;
 
-        async Task<Project> UnitAction() => await _repository.GetCompleteEntityAsync(id);
+        Func<Task<Project>> unitAction = async () => await _repository.GetCompleteEntityAsync(id);
 
-        Assert.ThrowsAsync<EntityNotFoundException>(UnitAction);
+        unitAction.Should().ThrowAsync<EntityNotFoundException>();
     }
 
     [TestCase]
@@ -237,7 +239,7 @@ public class ProjectsRepositoryTests
 
         var actual = await _repository.GetRelatedTeamAsync(projectId);
 
-        Assert.AreEqual(expected.Id, actual.Id);
+        actual.Id.Should().Be(expected.Id);
     }
 
     [TestCase]
@@ -245,9 +247,9 @@ public class ProjectsRepositoryTests
     {
         const int id = 10000;
 
-        async Task<Team> UnitAction() => await _repository.GetRelatedTeamAsync(id);
+        Func<Task<Team>> unitAction = async () => await _repository.GetRelatedTeamAsync(id);
 
-        Assert.ThrowsAsync<EntityNotFoundException>(UnitAction);
+        unitAction.Should().ThrowAsync<EntityNotFoundException>();
     }
 
     [TestCase]
@@ -266,7 +268,7 @@ public class ProjectsRepositoryTests
         await _context.SaveChangesAsync();
         var actualCount = _context.Projects.Count();
 
-        Assert.AreEqual(expectedCount, actualCount);
+        actualCount.Should().Be(expectedCount);
     }
 
     [TestCase]
@@ -287,8 +289,8 @@ public class ProjectsRepositoryTests
         await _context.SaveChangesAsync();
         var actual = await _repository.GetByIdAsync(expected.Id);
 
-        Assert.AreEqual(expected.Id, actual.Id);
-        Assert.AreEqual(expected.Title, actual.Title);
+        expected.Id.Should().Be(actual.Id);
+        expected.Title.Should().Be(actual.Title);
     }
 
     [TestCase(1)]
@@ -301,7 +303,7 @@ public class ProjectsRepositoryTests
         await _context.SaveChangesAsync();
         var actualCount = _context.Projects.Count();
 
-        Assert.AreEqual(expectedCount, actualCount);
+        actualCount.Should().Be(expectedCount);
     }
 
     [TestCase(5)]
@@ -309,8 +311,8 @@ public class ProjectsRepositoryTests
     [TestCase(7)]
     public void DeleteAsync_WhenNonExistingProjectIdPassed_ShouldThrowNotFound(int projectId)
     {
-        async Task UnitAction() => await _repository.DeleteAsync(projectId);
+        Func<Task> unitAction = async () => await _repository.DeleteAsync(projectId);
 
-        Assert.ThrowsAsync<EntityNotFoundException>(UnitAction);
+        unitAction.Should().ThrowAsync<EntityNotFoundException>();
     }
 }

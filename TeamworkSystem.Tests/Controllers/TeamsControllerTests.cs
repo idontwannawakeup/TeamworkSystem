@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -43,8 +44,8 @@ public class TeamsControllerTests
         var objectResult = result.Result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult<PagedList<TeamResponse>>>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeOfType<ActionResult<PagedList<TeamResponse>>>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -59,8 +60,8 @@ public class TeamsControllerTests
         var objectResult = result.Result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult<PagedList<TeamResponse>>>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeOfType<ActionResult<PagedList<TeamResponse>>>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -76,9 +77,9 @@ public class TeamsControllerTests
         var actualStatusCode = objectResult?.StatusCode;
         var actualTeam = objectResult?.Value as TeamResponse;
 
-        Assert.IsInstanceOf<ActionResult<TeamResponse>>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
-        Assert.AreEqual(team.Id, actualTeam?.Id);
+        result.Should().BeOfType<ActionResult<TeamResponse>>();
+        actualStatusCode.Should().Be(expectedStatusCode);
+        actualTeam?.Id.Should().Be(team.Id);
     }
 
     [TestCase]
@@ -92,8 +93,8 @@ public class TeamsControllerTests
         var objectResult = result.Result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult<TeamResponse>>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeOfType<ActionResult<TeamResponse>>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -108,8 +109,8 @@ public class TeamsControllerTests
         var objectResult = result.Result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult<TeamResponse>>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeOfType<ActionResult<TeamResponse>>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -125,8 +126,9 @@ public class TeamsControllerTests
         var okResult = result as OkResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<OkResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -142,8 +144,9 @@ public class TeamsControllerTests
         var okResult = result as NotFoundObjectResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -158,8 +161,9 @@ public class TeamsControllerTests
         var objectResult = result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<ObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -175,8 +179,9 @@ public class TeamsControllerTests
         var okResult = result as OkResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<OkResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -191,8 +196,9 @@ public class TeamsControllerTests
         var objectResult = result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<ObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -206,8 +212,9 @@ public class TeamsControllerTests
         var okResult = result as OkResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<OkResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -221,8 +228,9 @@ public class TeamsControllerTests
         var okResult = result as NotFoundObjectResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -236,8 +244,9 @@ public class TeamsControllerTests
         var objectResult = result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<ObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -253,8 +262,9 @@ public class TeamsControllerTests
         var okResult = result as OkResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<OkResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -271,8 +281,9 @@ public class TeamsControllerTests
         var okResult = result as NotFoundObjectResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -289,8 +300,9 @@ public class TeamsControllerTests
         var objectResult = result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<ObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -306,8 +318,9 @@ public class TeamsControllerTests
         var okResult = result as OkResult;
         var actualStatusCode = okResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<OkResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -324,8 +337,9 @@ public class TeamsControllerTests
         var notFoundResult = result as NotFoundObjectResult;
         var actualStatusCode = notFoundResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 
     [TestCase]
@@ -342,7 +356,8 @@ public class TeamsControllerTests
         var objectResult = result as ObjectResult;
         var actualStatusCode = objectResult?.StatusCode;
 
-        Assert.IsInstanceOf<ActionResult>(result);
-        Assert.AreEqual(expectedStatusCode, actualStatusCode);
+        result.Should().BeAssignableTo<ActionResult>();
+        result.Should().BeOfType<ObjectResult>();
+        actualStatusCode.Should().Be(expectedStatusCode);
     }
 }
