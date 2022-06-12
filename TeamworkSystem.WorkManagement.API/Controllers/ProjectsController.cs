@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Requests;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Responses;
-using TeamworkSystem.WorkManagement.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.WorkManagement.DataAccess.Parameters;
+using TeamworkSystem.WorkManagement.Application.Common.Responses;
+using TeamworkSystem.WorkManagement.Application.Projects.Commands.CreateProject;
+using TeamworkSystem.WorkManagement.Application.Projects.Commands.DeleteProject;
+using TeamworkSystem.WorkManagement.Application.Projects.Commands.UpdateProject;
+using TeamworkSystem.WorkManagement.Application.Projects.Queries.GetProjectById;
+using TeamworkSystem.WorkManagement.Application.Projects.Queries.GetProjects;
+using TeamworkSystem.WorkManagement.Domain.Parameters;
 
 namespace TeamworkSystem.WorkManagement.API.Controllers;
 
@@ -12,10 +16,9 @@ namespace TeamworkSystem.WorkManagement.API.Controllers;
 [Route("api/[controller]")]
 public class ProjectsController : ControllerBase
 {
-    private readonly IProjectsService _projectsService;
+    private readonly IMediator _mediator;
 
-    public ProjectsController(IProjectsService projectsService) =>
-        _projectsService = projectsService;
+    public ProjectsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
     [Authorize]
@@ -24,7 +27,8 @@ public class ProjectsController : ControllerBase
     public async Task<ActionResult<PagedList<ProjectResponse>>> GetAsync(
         [FromQuery] ProjectsParameters parameters)
     {
-        var projects = await _projectsService.GetAsync(parameters);
+        var query = new GetProjectsQuery { Parameters = parameters };
+        var projects = await _mediator.Send(query);
         Response.Headers.Add("X-Pagination", projects.SerializeMetadata());
         return Ok(projects);
     }
@@ -34,17 +38,21 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ProjectResponse>> GetByIdAsync([FromRoute] Guid id) =>
-        Ok(await _projectsService.GetByIdAsync(id));
+    public async Task<ActionResult<ProjectResponse>> GetByIdAsync([FromRoute] Guid id)
+    {
+        var query = new GetProjectByIdQuery { Id = id };
+        var project = await _mediator.Send(query);
+        return Ok(project);
+    }
 
     [HttpPost]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> InsertAsync([FromBody] ProjectRequest request)
+    public async Task<ActionResult> InsertAsync([FromBody] CreateProjectCommand command)
     {
-        await _projectsService.InsertAsync(request);
+        await _mediator.Send(command);
         return Ok();
     }
 
@@ -53,9 +61,9 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> UpdateAsync([FromBody] ProjectRequest request)
+    public async Task<ActionResult> UpdateAsync([FromBody] UpdateProjectCommand command)
     {
-        await _projectsService.UpdateAsync(request);
+        await _mediator.Send(command);
         return Ok();
     }
 
@@ -64,9 +72,9 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult> DeleteAsync([FromRoute] DeleteProjectCommand command)
     {
-        await _projectsService.DeleteAsync(id);
+        await _mediator.Send(command);
         return Ok();
     }
 }

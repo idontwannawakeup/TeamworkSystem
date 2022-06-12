@@ -8,8 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["TeamworkSystem.WorkManagement.API/TeamworkSystem.WorkManagement.API.csproj", "TeamworkSystem.WorkManagement.API/"]
-COPY ["TeamworkSystem.WorkManagement.BusinessLogic/TeamworkSystem.WorkManagement.BusinessLogic.csproj", "TeamworkSystem.WorkManagement.BusinessLogic/"]
-COPY ["TeamworkSystem.WorkManagement.DataAccess/TeamworkSystem.WorkManagement.DataAccess.csproj", "TeamworkSystem.WorkManagement.DataAccess/"]
+COPY ["TeamworkSystem.WorkManagement.Application/TeamworkSystem.WorkManagement.Application.csproj", "TeamworkSystem.WorkManagement.Application/"]
+COPY ["TeamworkSystem.WorkManagement.Domain/TeamworkSystem.WorkManagement.Domain.csproj", "TeamworkSystem.WorkManagement.Domain/"]
+COPY ["TeamworkSystem.WorkManagement.Persistence/TeamworkSystem.WorkManagement.Persistence.csproj", "TeamworkSystem.Persistence.Domain/"]
 COPY ["TeamworkSystem.Shared/TeamworkSystem.Shared.csproj", "TeamworkSystem.Shared/"]
 RUN dotnet restore "TeamworkSystem.WorkManagement.API/TeamworkSystem.WorkManagement.API.csproj"
 COPY . .

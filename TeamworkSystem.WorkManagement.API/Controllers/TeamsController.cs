@@ -1,11 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Requests;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Responses;
-using TeamworkSystem.WorkManagement.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.WorkManagement.DataAccess.Parameters;
+using TeamworkSystem.WorkManagement.Application.Common.Responses;
+using TeamworkSystem.WorkManagement.Application.Teams.Commands.AddMember;
+using TeamworkSystem.WorkManagement.Application.Teams.Commands.CreateTeam;
+using TeamworkSystem.WorkManagement.Application.Teams.Commands.DeleteMember;
+using TeamworkSystem.WorkManagement.Application.Teams.Commands.DeleteTeam;
+using TeamworkSystem.WorkManagement.Application.Teams.Commands.SetTeamAvatar;
+using TeamworkSystem.WorkManagement.Application.Teams.Commands.UpdateTeam;
+using TeamworkSystem.WorkManagement.Application.Teams.Queries.GetTeamById;
+using TeamworkSystem.WorkManagement.Application.Teams.Queries.GetTeamMembers;
+using TeamworkSystem.WorkManagement.Application.Teams.Queries.GetTeams;
+using TeamworkSystem.WorkManagement.Domain.Parameters;
 
 namespace TeamworkSystem.WorkManagement.API.Controllers;
 
@@ -13,9 +21,9 @@ namespace TeamworkSystem.WorkManagement.API.Controllers;
 [Route("api/[controller]")]
 public class TeamsController : ControllerBase
 {
-    private readonly ITeamsService _teamsService;
+    private readonly IMediator _mediator;
 
-    public TeamsController(ITeamsService teamsService) => _teamsService = teamsService;
+    public TeamsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
     [Authorize]
@@ -26,7 +34,8 @@ public class TeamsController : ControllerBase
     {
         try
         {
-            var teams = await _teamsService.GetAsync(parameters);
+            var query = new GetTeamsQuery { Parameters = parameters };
+            var teams = await _mediator.Send(query);
             Response.Headers.Add("X-Pagination", teams.SerializeMetadata());
             return Ok(teams);
         }
@@ -41,19 +50,23 @@ public class TeamsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<TeamResponse>> GetByIdAsync([FromRoute] Guid id) =>
-        Ok(await _teamsService.GetByIdAsync(id));
+    public async Task<ActionResult<TeamResponse>> GetByIdAsync([FromRoute] Guid id)
+    {
+        var query = new GetTeamByIdQuery { Id = id };
+        var team = await _mediator.Send(query);
+        return Ok(team);
+    }
 
     [HttpPost]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> InsertAsync([FromBody] TeamRequest request)
+    public async Task<ActionResult> InsertAsync([FromBody] CreateTeamCommand command)
     {
         try
         {
-            await _teamsService.InsertAsync(request);
+            await _mediator.Send(command);
             return Ok();
         }
         catch (Exception e)
@@ -67,11 +80,11 @@ public class TeamsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> UpdateAsync([FromBody] TeamRequest request)
+    public async Task<ActionResult> UpdateAsync([FromBody] UpdateTeamCommand command)
     {
         try
         {
-            await _teamsService.UpdateAsync(request);
+            await _mediator.Send(command);
             return Ok();
         }
         catch (Exception e)
@@ -85,11 +98,11 @@ public class TeamsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> SetAvatarForTeamAsync([FromForm] TeamAvatarRequest request)
+    public async Task<ActionResult> SetAvatarForTeamAsync([FromForm] SetTeamAvatarCommand command)
     {
         try
         {
-            await _teamsService.SetAvatarForTeamAsync(request);
+            await _mediator.Send(command);
             return Ok();
         }
         catch (EntityNotFoundException e)
@@ -111,7 +124,8 @@ public class TeamsController : ControllerBase
     {
         try
         {
-            await _teamsService.DeleteAsync(id);
+            var command = new DeleteTeamCommand { Id = id };
+            await _mediator.Send(command);
             return Ok();
         }
         catch (EntityNotFoundException e)
@@ -124,16 +138,29 @@ public class TeamsController : ControllerBase
         }
     }
 
+    [HttpGet("{teamId:guid}/members")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetMembersAsync([FromRoute] Guid teamId)
+    {
+        var query = new GetTeamMembersQuery { TeamId = teamId };
+        var members = await _mediator.Send(query);
+        return Ok(members);
+    }
+
     [HttpPost("members")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> AddMemberAsync([FromBody] TeamMemberRequest request)
+    public async Task<ActionResult> AddMemberAsync([FromBody] AddMemberCommand command)
     {
         try
         {
-            await _teamsService.AddMemberAsync(request);
+            await _mediator.Send(command);
             return Ok();
         }
         catch (Exception e)
@@ -153,8 +180,8 @@ public class TeamsController : ControllerBase
     {
         try
         {
-            var request = new TeamMemberRequest { TeamId = teamId, UserId = memberId };
-            await _teamsService.DeleteMemberAsync(request);
+            var command = new DeleteMemberCommand { TeamId = teamId, UserId = memberId };
+            await _mediator.Send(command);
             return Ok();
         }
         catch (EntityNotFoundException e)

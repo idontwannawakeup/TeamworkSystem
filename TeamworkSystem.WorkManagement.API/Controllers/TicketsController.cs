@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Requests;
-using TeamworkSystem.WorkManagement.BusinessLogic.DTO.Responses;
-using TeamworkSystem.WorkManagement.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.WorkManagement.DataAccess.Parameters;
+using TeamworkSystem.WorkManagement.Application.Common.Responses;
+using TeamworkSystem.WorkManagement.Application.Tickets.Commands.CreateTicket;
+using TeamworkSystem.WorkManagement.Application.Tickets.Commands.DeleteTicket;
+using TeamworkSystem.WorkManagement.Application.Tickets.Commands.ExtendDeadline;
+using TeamworkSystem.WorkManagement.Application.Tickets.Commands.UpdateTicket;
+using TeamworkSystem.WorkManagement.Application.Tickets.Queries.GetTicketById;
+using TeamworkSystem.WorkManagement.Application.Tickets.Queries.GetTickets;
+using TeamworkSystem.WorkManagement.Domain.Parameters;
 
 namespace TeamworkSystem.WorkManagement.API.Controllers;
 
@@ -12,10 +17,9 @@ namespace TeamworkSystem.WorkManagement.API.Controllers;
 [Route("api/[controller]")]
 public class TicketsController : ControllerBase
 {
-    private readonly ITicketsService _ticketsService;
+    private readonly IMediator _mediator;
 
-    public TicketsController(ITicketsService ticketsService) =>
-        _ticketsService = ticketsService;
+    public TicketsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
     [Authorize]
@@ -24,7 +28,8 @@ public class TicketsController : ControllerBase
     public async Task<ActionResult<PagedList<TicketResponse>>> GetAsync(
         [FromQuery] TicketsParameters parameters)
     {
-        var tickets = await _ticketsService.GetAsync(parameters);
+        var query = new GetTicketsQuery { Parameters = parameters };
+        var tickets = await _mediator.Send(query);
         Response.Headers.Add("X-Pagination", tickets.SerializeMetadata());
         return Ok(tickets);
     }
@@ -34,17 +39,21 @@ public class TicketsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<TicketResponse>> GetByIdAsync([FromRoute] Guid id) =>
-        Ok(await _ticketsService.GetByIdAsync(id));
+    public async Task<ActionResult<TicketResponse>> GetByIdAsync([FromRoute] Guid id)
+    {
+        var query = new GetTicketByIdQuery { Id = id };
+        var ticket = await _mediator.Send(query);
+        return Ok(ticket);
+    }
 
     [HttpPost]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> InsertAsync([FromBody] TicketRequest request)
+    public async Task<ActionResult> InsertAsync([FromBody] CreateTicketCommand command)
     {
-        await _ticketsService.InsertAsync(request);
+        await _mediator.Send(command);
         return Ok();
     }
 
@@ -53,9 +62,9 @@ public class TicketsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> UpdateAsync([FromBody] TicketRequest request)
+    public async Task<ActionResult> UpdateAsync([FromBody] UpdateTicketCommand command)
     {
-        await _ticketsService.UpdateAsync(request);
+        await _mediator.Send(command);
         return Ok();
     }
 
@@ -66,9 +75,9 @@ public class TicketsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> ExtendDeadlineAsync(
-        [FromBody] TicketWithExtendedDeadlineRequest request)
+        [FromBody] ExtendDeadlineCommand command)
     {
-        await _ticketsService.ExtendDeadlineAsync(request);
+        await _mediator.Send(command);
         return Ok();
     }
 
@@ -79,7 +88,8 @@ public class TicketsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        await _ticketsService.DeleteAsync(id);
+        var command = new DeleteTicketCommand { Id = id };
+        await _mediator.Send(command);
         return Ok();
     }
 }
