@@ -11,6 +11,7 @@ COPY ["TeamworkSystem.Identity.API/TeamworkSystem.Identity.API.csproj", "Teamwor
 COPY ["TeamworkSystem.Identity.BusinessLogic/TeamworkSystem.Identity.BusinessLogic.csproj", "TeamworkSystem.Identity.BusinessLogic/"]
 COPY ["TeamworkSystem.Identity.DataAccess/TeamworkSystem.Identity.DataAccess.csproj", "TeamworkSystem.Identity.DataAccess/"]
 COPY ["TeamworkSystem.Shared/TeamworkSystem.Shared.csproj", "TeamworkSystem.Shared/"]
+COPY ["TeamworkSystem.EventBus.Messages/TeamworkSystem.EventBus.Messages.csproj", "TeamworkSystem.EventBus.Messages/"]
 RUN dotnet restore "TeamworkSystem.Identity.API/TeamworkSystem.Identity.API.csproj"
 COPY . .
 WORKDIR "/src/TeamworkSystem.Identity.API"
