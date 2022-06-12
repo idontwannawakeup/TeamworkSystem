@@ -1,4 +1,6 @@
+using MassTransit;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.WorkManagement.API.Consumers;
 using TeamworkSystem.WorkManagement.API.DependencyInjection;
 using TeamworkSystem.WorkManagement.API.Middlewares;
 using TeamworkSystem.WorkManagement.Application.DependencyInjection;
@@ -12,6 +14,21 @@ services.AddApplication();
 services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+services.AddMassTransit(configuration =>
+{
+    configuration.AddConsumer<UserCreatedEventConsumer>();
+    configuration.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+        configurator.ReceiveEndpoint(
+            "user-created",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserCreatedEventConsumer>(context);
+            });
+    });
+});
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>

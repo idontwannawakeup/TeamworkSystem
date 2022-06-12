@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
       <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
       <ProjectReference Include="..\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj" />
       <ProjectReference Include="..\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj" />
