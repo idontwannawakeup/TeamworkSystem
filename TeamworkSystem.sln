@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WorkManageme
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.WorkManagement.Persistence", "TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj", "{39117289-408C-4122-BE96-51F0004991B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.EventBus.Messages", "TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj", "{238CA245-3AF6-4A6C-B86B-87978D4081EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{39117289-408C-4122-BE96-51F0004991B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39117289-408C-4122-BE96-51F0004991B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39117289-408C-4122-BE96-51F0004991B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{238CA245-3AF6-4A6C-B86B-87978D4081EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{238CA245-3AF6-4A6C-B86B-87978D4081EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{238CA245-3AF6-4A6C-B86B-87978D4081EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{238CA245-3AF6-4A6C-B86B-87978D4081EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
