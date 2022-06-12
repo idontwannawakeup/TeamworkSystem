@@ -12,6 +12,7 @@ public class WorkManagementDbContext : DbContext
     public DbSet<Team> Teams { get; set; } = default!;
     public DbSet<Project> Projects { get; set; } = default!;
     public DbSet<Ticket> Tickets { get; set; } = default!;
+    public DbSet<UserProfile> UserProfiles { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
