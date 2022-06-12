@@ -45,7 +45,7 @@ public class UsersService : IUsersService
         return _mapper.Map<User, UserResponse>(user);
     }
 
-    public async Task UpdateAsync(UserRequest request)
+    public async Task<UserResponse> UpdateAsync(UserRequest request)
     {
         var user = await _userManager.GetByIdAsync(request.Id);
         user.FirstName = request.FirstName;
@@ -55,14 +55,16 @@ public class UsersService : IUsersService
         user.Specialization = request.Specialization;
         await _userManager.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
+        return _mapper.Map<UserResponse>(user);
     }
 
-    public async Task SetAvatarForUserAsync(UserAvatarRequest request)
+    public async Task<string> SetAvatarForUserAsync(UserAvatarRequest request)
     {
         var user = await _userManager.GetByIdAsync(request.UserId);
         user.Avatar = await _photosService.SavePhotoAsync(request.Avatar);
         await _userManager.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
+        return user.Avatar;
     }
 
     public async Task DeleteAsync(Guid id)

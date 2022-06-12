@@ -1,7 +1,11 @@
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.WorkManagement.API.Consumers;
 using TeamworkSystem.WorkManagement.API.DependencyInjection;
 using TeamworkSystem.WorkManagement.API.Middlewares;
 using TeamworkSystem.WorkManagement.Application.DependencyInjection;
+using TeamworkSystem.WorkManagement.Persistence;
 using TeamworkSystem.WorkManagement.Persistence.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +16,38 @@ services.AddApplication();
 services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+services.AddMassTransit(configuration =>
+{
+    configuration.AddConsumer<UserCreatedEventConsumer>();
+    configuration.AddConsumer<UserChangedEventConsumer>();
+    configuration.AddConsumer<UserAvatarChangedEventConsumer>();
+
+    configuration.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+        configurator.ReceiveEndpoint(
+            "work-management-user-created",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserCreatedEventConsumer>(context);
+            });
+
+        configurator.ReceiveEndpoint(
+            "work-management-user-changed",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserChangedEventConsumer>(context);
+            });
+
+        configurator.ReceiveEndpoint(
+            "work-management-user-avatar-changed",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserAvatarChangedEventConsumer>(context);
+            });
+    });
+});
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
@@ -74,5 +110,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<WorkManagementDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.Run();

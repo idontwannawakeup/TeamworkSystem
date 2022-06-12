@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamworkSystem.EventBus.Messages;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Identity.BusinessLogic.Interfaces.Services;
@@ -13,8 +16,18 @@ namespace TeamworkSystem.Identity.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUsersService _usersService;
+    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IMapper _mapper;
 
-    public UsersController(IUsersService usersService) => _usersService = usersService;
+    public UsersController(
+        IUsersService usersService,
+        IPublishEndpoint publishEndpoint,
+        IMapper mapper)
+    {
+        _usersService = usersService;
+        _publishEndpoint = publishEndpoint;
+        _mapper = mapper;
+    }
 
     [HttpGet]
     [Authorize]
@@ -44,7 +57,9 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> UpdateAsync([FromBody] UserRequest request)
     {
-        await _usersService.UpdateAsync(request);
+        var updatedUser = await _usersService.UpdateAsync(request);
+        var eventMessage = _mapper.Map<UserChangedEvent>(updatedUser);
+        await _publishEndpoint.Publish(eventMessage);
         return Ok();
     }
 
@@ -67,7 +82,13 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> SetAvatarForUserAsync([FromForm] UserAvatarRequest request)
     {
-        await _usersService.SetAvatarForUserAsync(request);
+        var avatar = await _usersService.SetAvatarForUserAsync(request);
+        await _publishEndpoint.Publish(new UserAvatarChangedEvent
+        {
+            UserId = request.UserId,
+            Avatar = avatar
+        });
+
         return Ok();
     }
 }

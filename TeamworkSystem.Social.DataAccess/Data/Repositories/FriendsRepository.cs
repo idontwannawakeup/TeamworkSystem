@@ -17,7 +17,7 @@ public class FriendsRepository : IFriendsRepository
     public async Task<IEnumerable<UserProfile>> GetAsync(Guid userId)
     {
         return await _connection.QueryAsync<UserProfile>(
-            @"select * from UserProfile up
+            @"select * from UserProfiles up
               join Friends f on up.Id = f.SecondId
               where f.FirstId = @UserId",
             new { UserId = userId });
@@ -26,9 +26,9 @@ public class FriendsRepository : IFriendsRepository
     public async Task<PagedList<UserProfile>> GetAsync(Guid userId, FriendsParameters parameters)
     {
         var queryBuilder = new StringBuilder(
-            @"select * from UserProfile up
+            @"select * from UserProfiles up
               join Friends f on up.Id = f.SecondId
-              join UserProfile fup on fup.Id = f.SecondId
+              join UserProfiles fup on fup.Id = f.SecondId
               where f.FirstId = @UserId");
 
         if (!string.IsNullOrWhiteSpace(parameters.LastName))

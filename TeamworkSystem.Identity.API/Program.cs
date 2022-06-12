@@ -1,6 +1,9 @@
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Identity.API.Middlewares;
 using TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
+using TeamworkSystem.Identity.DataAccess;
 using TeamworkSystem.Identity.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +18,14 @@ services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+services.AddMassTransit(configuration =>
+{
+    configuration.UsingRabbitMq((_, configurator) =>
+    {
+        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+    });
+});
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
@@ -77,5 +88,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<IdentityExtDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.Run();

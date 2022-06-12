@@ -39,6 +39,7 @@
                         <MudTextField T="@string"
                                       Label="@SharedLocalizer["ConfirmPassword"]"
                                       Variant="Variant.Outlined"
+                                      @bind-Value="@_user.ConfirmPassword"
                                       For="@(() => _user.ConfirmPassword)" />
                     </MudItem>
                     <MudItem xs="12" md="6">

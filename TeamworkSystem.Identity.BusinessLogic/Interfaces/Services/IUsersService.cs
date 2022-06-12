@@ -10,7 +10,7 @@ public interface IUsersService
     Task<IEnumerable<UserResponse>> GetAsync();
     Task<PagedList<UserResponse>> GetAsync(UsersParameters parameters);
     Task<UserResponse> GetByIdAsync(Guid id);
-    Task UpdateAsync(UserRequest request);
-    Task SetAvatarForUserAsync(UserAvatarRequest request);
+    Task<UserResponse> UpdateAsync(UserRequest request);
+    Task<string> SetAvatarForUserAsync(UserAvatarRequest request);
     Task DeleteAsync(Guid id);
 }

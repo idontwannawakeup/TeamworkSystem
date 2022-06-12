@@ -12,12 +12,13 @@ public class UserMapperProfile : Profile
         CreateMap<UserSignUpRequest, User>();
         CreateMap<UserRequest, User>();
         CreateMap<User, UserResponse>()
-            .ForMember(response => response.FullName,
+            .ForMember(
+                response => response.FullName,
                 options => options.MapFrom(user => $"{user.FirstName} {user.LastName}"))
-            .ForMember(response => response.Avatar,
-                options => options.MapFrom(
-                    user => !string.IsNullOrWhiteSpace(user.Avatar)
-                        ? $"IdentityService/Public/Photos/{user.Avatar}"
-                        : null));
+            .ForMember(
+                response => response.Avatar,
+                options => options.MapFrom(user => !string.IsNullOrWhiteSpace(user.Avatar)
+                    ? $"IdentityService/Public/Photos/{user.Avatar}"
+                    : null));
     }
 }

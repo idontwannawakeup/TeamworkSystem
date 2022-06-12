@@ -32,8 +32,8 @@ public class RatingsRepository : IRatingsRepository
         var ratings = await _connection.QueryAsync<Rating, UserProfile, UserProfile, Rating>(
             @"select *
               from Ratings r
-              join UserProfile upf on r.FromId = upf.Id
-              join UserProfile upt on r.ToId = upt.Id",
+              join UserProfiles upf on r.FromId = upf.Id
+              join UserProfiles upt on r.ToId = upt.Id",
             (rating, from, to) =>
             {
                 rating.From = from;
@@ -79,8 +79,8 @@ public class RatingsRepository : IRatingsRepository
         var queryBuilder = new StringBuilder(
             @"select *
               from Ratings r
-              join UserProfile upf on r.FromId = upf.Id
-              join UserProfile upt on r.ToId = upt.Id");
+              join UserProfiles upf on r.FromId = upf.Id
+              join UserProfiles upt on r.ToId = upt.Id");
 
         if (parameters.RatedUserId is not null)
         {

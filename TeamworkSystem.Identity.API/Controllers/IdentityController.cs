@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using MassTransit;
+using Microsoft.AspNetCore.Mvc;
+using TeamworkSystem.EventBus.Messages;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Identity.BusinessLogic.Interfaces.Services;
@@ -10,9 +13,18 @@ namespace TeamworkSystem.Identity.API.Controllers;
 public class IdentityController : ControllerBase
 {
     private readonly IIdentityService _identityService;
+    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IMapper _mapper;
 
-    public IdentityController(IIdentityService identityService) =>
+    public IdentityController(
+        IIdentityService identityService,
+        IPublishEndpoint publishEndpoint,
+        IMapper mapper)
+    {
         _identityService = identityService;
+        _publishEndpoint = publishEndpoint;
+        _mapper = mapper;
+    }
 
     [HttpPost("signIn")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,6 +44,9 @@ public class IdentityController : ControllerBase
     public async Task<ActionResult<JwtResponse>> SignUpAsync([FromBody] UserSignUpRequest request)
     {
         var response = await _identityService.SignUpAsync(request);
+        var eventMessage = _mapper.Map<UserCreatedEvent>(request);
+        eventMessage.Id = response.UserId;
+        await _publishEndpoint.Publish(eventMessage);
         return Ok(response);
     }
 }

@@ -1,7 +1,11 @@
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.Social.API.Consumers;
 using TeamworkSystem.Social.API.DependencyInjection;
 using TeamworkSystem.Social.API.Middlewares;
 using TeamworkSystem.Social.BusinessLogic.DependencyInjection;
+using TeamworkSystem.Social.DataAccess;
 using TeamworkSystem.Social.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +20,38 @@ services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+services.AddMassTransit(configuration =>
+{
+    configuration.AddConsumer<UserCreatedEventConsumer>();
+    configuration.AddConsumer<UserChangedEventConsumer>();
+    configuration.AddConsumer<UserAvatarChangedEventConsumer>();
+
+    configuration.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+        configurator.ReceiveEndpoint(
+            "social-user-created",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserCreatedEventConsumer>(context);
+            });
+
+        configurator.ReceiveEndpoint(
+            "social-user-changed",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserChangedEventConsumer>(context);
+            });
+
+        configurator.ReceiveEndpoint(
+            "social-user-avatar-changed",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserAvatarChangedEventConsumer>(context);
+            });
+    });
+});
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
@@ -75,5 +111,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<SocialDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.Run();
