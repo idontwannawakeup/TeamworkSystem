@@ -18,6 +18,7 @@ services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 services.AddMassTransit(configuration =>
 {
     configuration.AddConsumer<UserCreatedEventConsumer>();
+    configuration.AddConsumer<UserChangedEventConsumer>();
     configuration.AddConsumer<UserAvatarChangedEventConsumer>();
 
     configuration.UsingRabbitMq((context, configurator) =>
@@ -28,6 +29,13 @@ services.AddMassTransit(configuration =>
             endpointConfigurator =>
             {
                 endpointConfigurator.ConfigureConsumer<UserCreatedEventConsumer>(context);
+            });
+
+        configurator.ReceiveEndpoint(
+            "work-management-user-changed",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<UserChangedEventConsumer>(context);
             });
 
         configurator.ReceiveEndpoint(

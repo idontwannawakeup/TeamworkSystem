@@ -45,7 +45,7 @@ public class UsersService : IUsersService
         return _mapper.Map<User, UserResponse>(user);
     }
 
-    public async Task UpdateAsync(UserRequest request)
+    public async Task<UserResponse> UpdateAsync(UserRequest request)
     {
         var user = await _userManager.GetByIdAsync(request.Id);
         user.FirstName = request.FirstName;
@@ -55,6 +55,7 @@ public class UsersService : IUsersService
         user.Specialization = request.Specialization;
         await _userManager.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
+        return _mapper.Map<UserResponse>(user);
     }
 
     public async Task<string> SetAvatarForUserAsync(UserAvatarRequest request)
