@@ -57,12 +57,13 @@ public class UsersService : IUsersService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task SetAvatarForUserAsync(UserAvatarRequest request)
+    public async Task<string> SetAvatarForUserAsync(UserAvatarRequest request)
     {
         var user = await _userManager.GetByIdAsync(request.UserId);
         user.Avatar = await _photosService.SavePhotoAsync(request.Avatar);
         await _userManager.UpdateAsync(user);
         await _unitOfWork.SaveChangesAsync();
+        return user.Avatar;
     }
 
     public async Task DeleteAsync(Guid id)

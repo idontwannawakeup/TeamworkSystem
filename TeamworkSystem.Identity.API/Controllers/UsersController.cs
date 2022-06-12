@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamworkSystem.EventBus.Messages;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Identity.BusinessLogic.Interfaces.Services;
@@ -13,8 +15,13 @@ namespace TeamworkSystem.Identity.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUsersService _usersService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public UsersController(IUsersService usersService) => _usersService = usersService;
+    public UsersController(IUsersService usersService, IPublishEndpoint publishEndpoint)
+    {
+        _usersService = usersService;
+        _publishEndpoint = publishEndpoint;
+    }
 
     [HttpGet]
     [Authorize]
@@ -67,7 +74,13 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> SetAvatarForUserAsync([FromForm] UserAvatarRequest request)
     {
-        await _usersService.SetAvatarForUserAsync(request);
+        var avatar = await _usersService.SetAvatarForUserAsync(request);
+        await _publishEndpoint.Publish(new UserAvatarChangedEvent
+        {
+            UserId = request.UserId,
+            Avatar = avatar
+        });
+
         return Ok();
     }
 }

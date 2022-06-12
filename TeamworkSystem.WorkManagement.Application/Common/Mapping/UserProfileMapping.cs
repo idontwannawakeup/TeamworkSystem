@@ -10,7 +10,12 @@ public class UserProfileMapping : Profile
     {
         CreateMap<UserProfile, UserResponse>()
             .ForMember(
-                user => user.FullName,
-                options => options.MapFrom(user => $"{user.FirstName} {user.LastName}"));
+                response => response.FullName,
+                options => options.MapFrom(user => $"{user.FirstName} {user.LastName}"))
+            .ForMember(
+                response => response.Avatar,
+                options => options.MapFrom(user => !string.IsNullOrWhiteSpace(user.Avatar)
+                    ? $"IdentityService/Public/Photos/{user.Avatar}"
+                    : null));
     }
 }
