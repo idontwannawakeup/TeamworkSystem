@@ -101,6 +101,46 @@
         "Put",
         "Delete"
       ]
+    },
+
+    {
+      "Key": "AggregatedTicketExecutor",
+      "DownstreamPathTemplate": "/api/users/{executorId}",
+      "UpstreamPathTemplate": "/IdentityService/gateway/aggregatedTicket/{ticketId}/{executorId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7137
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get"
+      ]
+    },
+    {
+      "Key": "AggregatedTicket",
+      "DownstreamPathTemplate": "/api/Tickets/{ticketId}",
+      "UpstreamPathTemplate": "/CoreService/gateway/aggregatedTicket/{ticketId}/{executorId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7077
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get"
+      ]
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "AggregatedTicketExecutor",
+        "AggregatedTicket"
+      ],
+      "UpstreamPathTemplate": "/gateway/aggregatedTicket/{ticketId}/{executorId}"
     }
   ]
 }
