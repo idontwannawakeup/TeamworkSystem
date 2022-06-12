@@ -1,7 +1,9 @@
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Identity.API.Middlewares;
 using TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
+using TeamworkSystem.Identity.DataAccess;
 using TeamworkSystem.Identity.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,5 +88,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<IdentityExtDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.Run();

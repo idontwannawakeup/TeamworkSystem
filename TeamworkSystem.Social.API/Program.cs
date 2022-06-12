@@ -1,9 +1,11 @@
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Social.API.Consumers;
 using TeamworkSystem.Social.API.DependencyInjection;
 using TeamworkSystem.Social.API.Middlewares;
 using TeamworkSystem.Social.BusinessLogic.DependencyInjection;
+using TeamworkSystem.Social.DataAccess;
 using TeamworkSystem.Social.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -109,5 +111,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<SocialDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.Run();

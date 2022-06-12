@@ -1,9 +1,11 @@
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.WorkManagement.API.Consumers;
 using TeamworkSystem.WorkManagement.API.DependencyInjection;
 using TeamworkSystem.WorkManagement.API.Middlewares;
 using TeamworkSystem.WorkManagement.Application.DependencyInjection;
+using TeamworkSystem.WorkManagement.Persistence;
 using TeamworkSystem.WorkManagement.Persistence.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -108,5 +110,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<WorkManagementDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.Run();
