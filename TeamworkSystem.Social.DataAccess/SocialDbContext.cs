@@ -10,6 +10,7 @@ public class SocialDbContext : DbContext
     }
 
     public DbSet<Rating> Ratings { get; set; } = default!;
+    public DbSet<Rating> UserProfiles { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
