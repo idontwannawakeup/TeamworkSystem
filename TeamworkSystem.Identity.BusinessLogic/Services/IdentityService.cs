@@ -60,7 +60,7 @@ public class IdentityService : IIdentityService
         await _unitOfWork.SaveChangesAsync();
 
         var jwtToken = _tokenFactory.BuildToken(user);
-        return new JwtResponse { Token = SerializeToken(jwtToken) };
+        return new JwtResponse { UserId = user.Id, Token = SerializeToken(jwtToken) };
     }
 
     private static string SerializeToken(JwtSecurityToken jwtToken) =>
