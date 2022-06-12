@@ -25,15 +25,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.Specialization)
                .HasMaxLength(50);
 
-        builder.HasMany(user => user.Friends)
-               .WithMany(user => user.FriendForUsers)
-               .UsingEntity(entity =>
-               {
-                   entity.ToTable("Friends");
-                   entity.Property("FriendsId").HasColumnName("FirstId");
-                   entity.Property("FriendForUsersId").HasColumnName("SecondId");
-               });
-
         new UserSeeder().Seed(builder);
     }
 }

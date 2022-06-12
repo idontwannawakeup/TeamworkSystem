@@ -43,10 +43,7 @@ public static class UserManagerExtensions
         this UserManager<User> userManager,
         Guid id)
     {
-        var user = await userManager.Users
-                                    .Include(user => user.Friends)
-                                    .SingleOrDefaultAsync(user => user.Id == id);
-
+        var user = await userManager.Users.SingleOrDefaultAsync(user => user.Id == id);
         return user ?? throw new EntityNotFoundException(GetUserNotFoundErrorMessage(id));
     }
 

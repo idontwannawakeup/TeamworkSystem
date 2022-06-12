@@ -9,7 +9,4 @@ public class User : IdentityUser<Guid>
     public string? Profession { get; set; }
     public string? Specialization { get; set; }
     public string? Avatar { get; set; }
-
-    public List<User> Friends { get; set; } = default!;
-    public List<User> FriendForUsers { get; set; } = default!;
 }
