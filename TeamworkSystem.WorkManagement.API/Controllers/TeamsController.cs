@@ -11,6 +11,7 @@ using TeamworkSystem.WorkManagement.Application.Teams.Commands.DeleteTeam;
 using TeamworkSystem.WorkManagement.Application.Teams.Commands.SetTeamAvatar;
 using TeamworkSystem.WorkManagement.Application.Teams.Commands.UpdateTeam;
 using TeamworkSystem.WorkManagement.Application.Teams.Queries.GetTeamById;
+using TeamworkSystem.WorkManagement.Application.Teams.Queries.GetTeamMembers;
 using TeamworkSystem.WorkManagement.Application.Teams.Queries.GetTeams;
 using TeamworkSystem.WorkManagement.Domain.Parameters;
 
@@ -135,6 +136,19 @@ public class TeamsController : ControllerBase
         {
             return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
         }
+    }
+
+    [HttpGet("{teamId:guid}/members")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetMembersAsync([FromRoute] Guid teamId)
+    {
+        var query = new GetTeamMembersQuery { TeamId = teamId };
+        var members = await _mediator.Send(query);
+        return Ok(members);
     }
 
     [HttpPost("members")]
