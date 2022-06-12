@@ -26,7 +26,7 @@ services.AddMassTransit(configuration =>
     {
         configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
         configurator.ReceiveEndpoint(
-            "user-created",
+            "social-user-created",
             endpointConfigurator =>
             {
                 endpointConfigurator.ConfigureConsumer<UserCreatedEventConsumer>(context);
