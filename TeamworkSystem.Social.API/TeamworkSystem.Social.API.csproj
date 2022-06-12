@@ -22,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
       <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
       <ProjectReference Include="..\TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj" />
     </ItemGroup>
