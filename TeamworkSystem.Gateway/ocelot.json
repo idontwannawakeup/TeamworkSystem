@@ -34,6 +34,22 @@
         "Delete"
       ]
     },
+
+    {
+      "DownstreamPathTemplate": "/api/Friends/{id}",
+      "UpstreamPathTemplate": "/SocialService/gateway/Friends/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7158
+        }
+      ],
+      "FileCacheOptions": { "TtlSeconds": 15, "Region": "friends" },
+      "UpstreamHttpMethod": [
+        "Get"
+      ]
+    },
     {
       "DownstreamPathTemplate": "/api/{all}",
       "UpstreamPathTemplate": "/SocialService/gateway/{all}",
