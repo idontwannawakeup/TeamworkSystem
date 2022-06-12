@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Identity.API.Middlewares;
 using TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
@@ -15,6 +16,14 @@ services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+services.AddMassTransit(configuration =>
+{
+    configuration.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+    });
+});
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
