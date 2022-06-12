@@ -2,7 +2,7 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/{all}",
-      "UpstreamPathTemplate": "/gateway/IdentityService/{all}",
+      "UpstreamPathTemplate": "/IdentityService/gateway/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -19,7 +19,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/{all}",
-      "UpstreamPathTemplate": "/gateway/CoreService/{all}",
+      "UpstreamPathTemplate": "/CoreService/gateway/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -36,7 +36,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/{all}",
-      "UpstreamPathTemplate": "/gateway/SocialService/{all}",
+      "UpstreamPathTemplate": "/SocialService/gateway/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
