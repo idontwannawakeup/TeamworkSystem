@@ -4,11 +4,14 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-      <UserSecretsId>acca2bef-5d2c-4ae4-81b6-9453f3e1eb8c</UserSecretsId>
-      <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>acca2bef-5d2c-4ae4-81b6-9453f3e1eb8c</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MassTransit" Version="8.0.3" />
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
           <PrivateAssets>all</PrivateAssets>
