@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  tws-web-app:
+    container_name: tws-web-app
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.WebAPI/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "5000:80"
+      - "5001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+
+    links:
+      - tws-db
+    depends_on:
+      - tws-db
+
+  tws-db:
+    container_name: tws-db
+    hostname: tws.db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    volumes:
+      - tws-data:/var/opt/mssql
+    ports:
+      - "14330:1433"
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+
+volumes:
+  tws-data:
