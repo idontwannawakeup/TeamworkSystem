@@ -1,5 +1,4 @@
-﻿using TeamworkSystem.Content.Application;
-using TeamworkSystem.Content.Application.Interfaces;
+﻿using TeamworkSystem.Content.Application.Interfaces;
 using TeamworkSystem.Content.Application.Interfaces.Repositories;
 
 namespace TeamworkSystem.Content.Persistence.Data;
