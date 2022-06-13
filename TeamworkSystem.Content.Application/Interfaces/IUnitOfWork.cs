@@ -1,6 +1,6 @@
 ﻿using TeamworkSystem.Content.Application.Interfaces.Repositories;
 
-namespace TeamworkSystem.Content.Application;
+namespace TeamworkSystem.Content.Application.Interfaces;
 
 public interface IUnitOfWork
 {
