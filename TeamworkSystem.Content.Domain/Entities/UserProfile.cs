@@ -9,4 +9,6 @@ public class UserProfile
     public string? Profession { get; set; }
     public string? Specialization { get; set; }
     public string? Avatar { get; set; }
+
+    public List<Notification> Notifications { get; set; } = default!;
 }
