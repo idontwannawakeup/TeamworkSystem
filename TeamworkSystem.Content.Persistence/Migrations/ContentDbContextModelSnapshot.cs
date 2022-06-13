@@ -95,7 +95,7 @@ namespace TeamworkSystem.Content.Persistence.Migrations
 
             modelBuilder.Entity("TeamworkSystem.Content.Domain.Entities.RecentRequest", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("UserProfileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RequestedEntityId")
@@ -107,12 +107,7 @@ namespace TeamworkSystem.Content.Persistence.Migrations
                     b.Property<DateTime>("RequestedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserProfileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserId", "RequestedEntityId", "RecentRequestEntityType");
-
-                    b.HasIndex("UserProfileId");
+                    b.HasKey("UserProfileId", "RequestedEntityId", "RecentRequestEntityType");
 
                     b.ToTable("RecentRequests");
                 });
@@ -245,7 +240,9 @@ namespace TeamworkSystem.Content.Persistence.Migrations
                 {
                     b.HasOne("TeamworkSystem.Content.Domain.Entities.UserProfile", null)
                         .WithMany("RecentRequests")
-                        .HasForeignKey("UserProfileId");
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TeamworkSystem.Content.Domain.Entities.UserProfile", b =>
