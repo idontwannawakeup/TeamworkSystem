@@ -49,6 +49,8 @@ services.AddMassTransit(configuration =>
     });
 });
 
+services.AddGrpc();
+
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
 {
@@ -110,6 +112,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+// app.MapGrpcService<>();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
