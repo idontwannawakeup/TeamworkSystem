@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Content.API.DependencyInjection;
+using TeamworkSystem.Content.API.Middlewares;
 using TeamworkSystem.Content.Application.DependencyInjection;
 using TeamworkSystem.Content.Persistence;
 using TeamworkSystem.Content.Persistence.DependencyInjection;
@@ -79,7 +79,7 @@ app.MapControllers();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ContentDbContext>();
-    // await context.Database.MigrateAsync();
+    await context.Database.MigrateAsync();
 }
 
 app.Run();
