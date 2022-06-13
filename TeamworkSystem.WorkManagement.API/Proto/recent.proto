@@ -5,6 +5,7 @@ option csharp_namespace = "TeamworkSystem.WorkManagement.API.Grpc.Definitions";
 service RecentRequestsService {
   rpc GetRecentProjects(GetRecentProjectsRequest) returns (GetRecentProjectsResponse);
   rpc GetRecentTeams(GetRecentTeamsRequest) returns (GetRecentTeamsResponse);
+  rpc GetRecentTickets(GetRecentTicketsRequest) returns (GetRecentTicketsResponse);
 }
 
 message GetRecentProjectsRequest {
@@ -39,4 +40,20 @@ message GetRecentTeamResponse {
 
 message GetRecentTeamsResponse {
   repeated GetRecentTeamResponse teams = 1;
+}
+
+message GetRecentTicketsRequest {
+  repeated string ids = 1;
+}
+
+message GetRecentTicketResponse {
+  string id = 1;
+  string projectId = 2;
+  optional string executorId = 3;
+  string title = 4;
+  string status = 7;
+}
+
+message GetRecentTicketsResponse {
+  repeated GetRecentTicketResponse tickets = 1;
 }

@@ -38,4 +38,9 @@ public class TicketsRepository : GenericRepository<Ticket>, ITicketsRepository
             parameters.PageNumber,
             parameters.PageSize);
     }
+    
+    public async Task<IEnumerable<Ticket>> GetAsync(IEnumerable<Guid> ids)
+    {
+        return await Table.Where(ticket => ids.Contains(ticket.Id)).ToListAsync();
+    }
 }

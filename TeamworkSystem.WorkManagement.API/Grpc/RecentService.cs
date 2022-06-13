@@ -20,7 +20,8 @@ public class RecentService : RecentRequestsService.RecentRequestsServiceBase
         GetRecentProjectsRequest request,
         ServerCallContext context)
     {
-        var projects = await _unitOfWork.ProjectsRepository.GetAsync(request.Ids.Select(Guid.Parse));
+        var projects =
+            await _unitOfWork.ProjectsRepository.GetAsync(request.Ids.Select(Guid.Parse));
         return new GetRecentProjectsResponse
         {
             Projects = { _mapper.Map<IEnumerable<GetRecentProjectResponse>>(projects) }
@@ -35,6 +36,17 @@ public class RecentService : RecentRequestsService.RecentRequestsServiceBase
         return new GetRecentTeamsResponse
         {
             Teams = { _mapper.Map<IEnumerable<GetRecentTeamResponse>>(teams) }
+        };
+    }
+
+    public override async Task<GetRecentTicketsResponse> GetRecentTickets(
+        GetRecentTicketsRequest request,
+        ServerCallContext context)
+    {
+        var tickets = await _unitOfWork.TicketsRepository.GetAsync(request.Ids.Select(Guid.Parse));
+        return new GetRecentTicketsResponse
+        {
+            Tickets = { _mapper.Map<IEnumerable<GetRecentTicketResponse>>(tickets) }
         };
     }
 }

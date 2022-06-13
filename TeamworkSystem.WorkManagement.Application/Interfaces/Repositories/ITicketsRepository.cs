@@ -8,4 +8,5 @@ namespace TeamworkSystem.WorkManagement.Application.Interfaces.Repositories;
 public interface ITicketsRepository : IRepository<Ticket>
 {
     Task<PagedList<Ticket>> GetAsync(TicketsParameters parameters);
+    Task<IEnumerable<Ticket>> GetAsync(IEnumerable<Guid> ids);
 }
