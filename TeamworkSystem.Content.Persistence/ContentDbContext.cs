@@ -3,9 +3,9 @@ using TeamworkSystem.Content.Domain.Entities;
 
 namespace TeamworkSystem.Content.Persistence;
 
-public class ContentContext : DbContext
+public class ContentDbContext : DbContext
 {
-    public ContentContext(DbContextOptions<ContentContext> options) : base(options)
+    public ContentDbContext(DbContextOptions<ContentDbContext> options) : base(options)
     {
     }
 
