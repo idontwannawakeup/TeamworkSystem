@@ -1,5 +1,7 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.Content.API.Consumers;
 using TeamworkSystem.Content.API.DependencyInjection;
 using TeamworkSystem.Content.API.Middlewares;
 using TeamworkSystem.Content.Application.DependencyInjection;
@@ -14,6 +16,22 @@ services.AddApplication();
 services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+services.AddMassTransit(configuration =>
+{
+    configuration.AddConsumer<ProjectAddedToRecentEventConsumer>();
+
+    configuration.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+        configurator.ReceiveEndpoint(
+            "content-recent-project",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<ProjectAddedToRecentEventConsumer>(context);
+            });
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

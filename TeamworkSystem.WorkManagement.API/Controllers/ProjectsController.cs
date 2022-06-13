@@ -1,6 +1,11 @@
-﻿using MediatR;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamworkSystem.EventBus.Messages.RecentEvents;
 using TeamworkSystem.Shared.Pagination;
 using TeamworkSystem.WorkManagement.Application.Common.Responses;
 using TeamworkSystem.WorkManagement.Application.Projects.Commands.CreateProject;
@@ -17,8 +22,13 @@ namespace TeamworkSystem.WorkManagement.API.Controllers;
 public class ProjectsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public ProjectsController(IMediator mediator) => _mediator = mediator;
+    public ProjectsController(IMediator mediator, IPublishEndpoint publishEndpoint)
+    {
+        _mediator = mediator;
+        _publishEndpoint = publishEndpoint;
+    }
 
     [HttpGet]
     [Authorize]
@@ -42,6 +52,23 @@ public class ProjectsController : ControllerBase
     {
         var query = new GetProjectByIdQuery { Id = id };
         var project = await _mediator.Send(query);
+
+        var authorization = HttpContext.Request.Headers.Authorization;
+        if (AuthenticationHeaderValue.TryParse(authorization, out var authorizationHeaderValue))
+        {
+            var token = new JwtSecurityTokenHandler().ReadJwtToken(
+                authorizationHeaderValue.Parameter);
+
+            var userId = Guid.Parse(
+                token.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value);
+
+            await _publishEndpoint.Publish(new ProjectAddedToRecentEvent
+            {
+                UserId = userId,
+                ProjectId = project.Id
+            });
+        }
+
         return Ok(project);
     }
 
