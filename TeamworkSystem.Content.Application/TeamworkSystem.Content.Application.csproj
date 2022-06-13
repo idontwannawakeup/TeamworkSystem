@@ -19,4 +19,13 @@
       <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Notifications\Commands\SendNotification" />
+      <Folder Include="Notifications\Queries\GetNotifications" />
+      <Folder Include="Notifications\Queries\GetTopRecentNotifications" />
+      <Folder Include="Recent\Queries\GetRecentProjects" />
+      <Folder Include="Recent\Queries\GetRecentTeams" />
+      <Folder Include="Recent\Queries\GetRecentTickets" />
+    </ItemGroup>
+
 </Project>
