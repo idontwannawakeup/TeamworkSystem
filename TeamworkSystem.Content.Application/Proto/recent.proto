@@ -1,0 +1,24 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "TeamworkSystem.Content.Application.Grpc.Definitions";
+
+service RecentRequestsService {
+  rpc GetRecentProjects(GetRecentProjectsRequest) returns (GetRecentProjectsResponse);
+}
+
+message GetRecentProjectsRequest {
+  repeated string ids = 1;
+}
+
+message GetRecentProjectResponse {
+  string id = 1;
+  string teamId = 2;
+  string title = 3;
+  optional string type = 4;
+  optional string url = 5;
+  optional string description = 6;
+}
+
+message GetRecentProjectsResponse {
+  repeated GetRecentProjectResponse projects = 1;
+}
