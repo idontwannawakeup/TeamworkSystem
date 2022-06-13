@@ -11,6 +11,7 @@ public class ContentDbContext : DbContext
 
     public DbSet<Notification> Notifications { get; set; } = default!;
     public DbSet<NotificationTemplate> NotificationTemplates { get; set; } = default!;
+    public DbSet<RecentRequest> RecentRequests { get; set; } = default!;
     public DbSet<RecentProject> RecentProjects { get; set; } = default!;
     public DbSet<RecentTeam> RecentTeams { get; set; } = default!;
     public DbSet<RecentTicket> RecentTickets { get; set; } = default!;
