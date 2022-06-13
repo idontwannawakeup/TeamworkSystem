@@ -14,6 +14,15 @@ public class ProjectsMapping : Profile
                 options => options.MapFrom(p => p.Id.ToString()))
             .ForMember(
                 response => response.TeamId,
-                options => options.MapFrom(p => p.TeamId.ToString()));
+                options => options.MapFrom(p => p.TeamId.ToString()))
+            .ForMember(
+                response => response.Type,
+                options => options.MapFrom(p => p.Type ?? string.Empty))
+            .ForMember(
+                response => response.Url,
+                options => options.MapFrom(p => p.Url ?? string.Empty))
+            .ForMember(
+                response => response.Description,
+                options => options.MapFrom(p => p.Description ?? string.Empty));
     }
 }
