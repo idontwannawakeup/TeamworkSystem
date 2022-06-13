@@ -4,6 +4,7 @@ option csharp_namespace = "TeamworkSystem.Content.Application.Grpc.Definitions";
 
 service RecentRequestsService {
   rpc GetRecentProjects(GetRecentProjectsRequest) returns (GetRecentProjectsResponse);
+  rpc GetRecentTeams(GetRecentTeamsRequest) returns (GetRecentTeamsResponse);
 }
 
 message GetRecentProjectsRequest {
@@ -21,4 +22,21 @@ message GetRecentProjectResponse {
 
 message GetRecentProjectsResponse {
   repeated GetRecentProjectResponse projects = 1;
+}
+
+message GetRecentTeamsRequest {
+  repeated string ids = 1;
+}
+
+message GetRecentTeamResponse {
+  string id = 1;
+  optional string leaderId = 2;
+  string name = 3;
+  optional string specialization = 4;
+  optional string about = 5;
+  optional string avatar = 6;
+}
+
+message GetRecentTeamsResponse {
+  repeated GetRecentTeamResponse teams = 1;
 }

@@ -26,4 +26,15 @@ public class RecentService : RecentRequestsService.RecentRequestsServiceBase
             Projects = { _mapper.Map<IEnumerable<GetRecentProjectResponse>>(projects) }
         };
     }
+
+    public override async Task<GetRecentTeamsResponse> GetRecentTeams(
+        GetRecentTeamsRequest request,
+        ServerCallContext context)
+    {
+        var teams = await _unitOfWork.TeamsRepository.GetAsync(request.Ids.Select(Guid.Parse));
+        return new GetRecentTeamsResponse
+        {
+            Teams = { _mapper.Map<IEnumerable<GetRecentTeamResponse>>(teams) }
+        };
+    }
 }

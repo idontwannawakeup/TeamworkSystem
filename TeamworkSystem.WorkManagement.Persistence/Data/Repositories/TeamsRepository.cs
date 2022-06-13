@@ -37,6 +37,11 @@ public class TeamsRepository : GenericRepository<Team>, ITeamsRepository
             parameters.PageSize);
     }
 
+    public async Task<IEnumerable<Team>> GetAsync(IEnumerable<Guid> ids)
+    {
+        return await Table.Where(team => ids.Contains(team.Id)).ToListAsync();
+    }
+
     public async Task<IEnumerable<Team>> GetUserTeams(UserProfile user) =>
         await Table.Where(team => team.Members.Contains(user)).ToListAsync();
 
