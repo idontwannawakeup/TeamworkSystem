@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\TeamworkSystem.Content.Application\TeamworkSystem.Content.Application.csproj" />
       <ProjectReference Include="..\TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj" />
       <ProjectReference Include="..\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
