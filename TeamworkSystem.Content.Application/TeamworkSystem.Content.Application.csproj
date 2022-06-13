@@ -20,7 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Notifications\Queries\GetNotifications" />
       <Folder Include="Notifications\Queries\GetTopRecentNotifications" />
       <Folder Include="Recent\Queries\GetRecentProjects" />
       <Folder Include="Recent\Queries\GetRecentTeams" />
