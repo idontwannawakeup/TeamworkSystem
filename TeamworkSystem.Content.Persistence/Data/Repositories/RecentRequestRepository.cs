@@ -27,12 +27,17 @@ public class RecentRequestRepository : IRecentRequestRepository
 
     public async Task InsertAsync(RecentRequest recentRequest)
     {
+        if (_context.RecentRequests.Contains(recentRequest))
+        {
+            _context.RecentRequests.Update(recentRequest);
+            return;
+        }
+
         Expression<Func<RecentRequest, bool>> requestMatchPredicate =
             e => e.UserProfileId == recentRequest.UserProfileId
                  && e.RecentRequestEntityType == recentRequest.RecentRequestEntityType;
 
         var moreThanFiveRecentRequests = _context.RecentRequests.Count(requestMatchPredicate) > 5;
-
         if (moreThanFiveRecentRequests)
         {
             var requestsToDelete = await _context.RecentRequests
