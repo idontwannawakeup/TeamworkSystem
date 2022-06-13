@@ -20,7 +20,7 @@ public class RecentRequestRepository : IRecentRequestRepository
         RecentRequestEntityType type)
     {
         return await _context.RecentRequests
-                             .Where(e => e.UserId == userId && e.RecentRequestEntityType == type)
+                             .Where(e => e.UserProfileId == userId && e.RecentRequestEntityType == type)
                              .OrderByDescending(e => e.RequestedAt)
                              .ToListAsync();
     }
@@ -28,7 +28,7 @@ public class RecentRequestRepository : IRecentRequestRepository
     public async Task InsertAsync(RecentRequest recentRequest)
     {
         Expression<Func<RecentRequest, bool>> requestMatchPredicate =
-            e => e.UserId == recentRequest.UserId
+            e => e.UserProfileId == recentRequest.UserProfileId
                  && e.RecentRequestEntityType == recentRequest.RecentRequestEntityType;
 
         var moreThanFiveRecentRequests = _context.RecentRequests.Count(requestMatchPredicate) > 5;

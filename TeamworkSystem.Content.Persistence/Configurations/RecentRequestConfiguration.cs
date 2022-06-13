@@ -8,6 +8,6 @@ public class RecentRequestConfiguration : IEntityTypeConfiguration<RecentRequest
 {
     public void Configure(EntityTypeBuilder<RecentRequest> builder)
     {
-        builder.HasKey(e => new { e.UserId, e.RequestedEntityId, e.RecentRequestEntityType });
+        builder.HasKey(e => new { UserId = e.UserProfileId, e.RequestedEntityId, e.RecentRequestEntityType });
     }
 }
