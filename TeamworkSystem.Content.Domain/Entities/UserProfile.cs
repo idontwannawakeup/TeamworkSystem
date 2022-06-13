@@ -11,4 +11,7 @@ public class UserProfile
     public string? Avatar { get; set; }
 
     public List<Notification> Notifications { get; set; } = default!;
+    public List<RecentProject> RecentProjects { get; set; } = default!;
+    public List<RecentTeam> RecentTeams { get; set; } = default!;
+    public List<RecentTicket> RecentTickets { get; set; } = default!;
 }
