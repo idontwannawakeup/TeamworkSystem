@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>9ff69502-aac0-454d-b77a-d969c41a0527</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MassTransit" Version="8.0.3" />
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="IdentityServer4" Version="4.1.2" />
+        <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
+        <ProjectReference Include="..\TeamworkSystem.Identity.BusinessLogic\TeamworkSystem.Identity.BusinessLogic.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -72,6 +72,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Shared", "Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Content.API", "TeamworkSystem.Content.API\TeamworkSystem.Content.API.csproj", "{3C7A2019-8CE4-4A96-9147-9178DC2C233E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.IdentityServer", "TeamworkSystem.IdentityServer\TeamworkSystem.IdentityServer.csproj", "{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +164,10 @@ Global
 		{3C7A2019-8CE4-4A96-9147-9178DC2C233E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C7A2019-8CE4-4A96-9147-9178DC2C233E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C7A2019-8CE4-4A96-9147-9178DC2C233E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{C974C6D5-CDA4-4C66-8711-4CBB488B26F4} = {EDD4E4FD-8A5F-4B8C-98EE-3315EE367962}
 		{68C242A8-0828-4020-8923-4674167CA753} = {E8DAC861-58E2-49F4-BB9E-0F75E1001E90}
 		{3C7A2019-8CE4-4A96-9147-9178DC2C233E} = {ECE28A0C-6C39-40DE-878D-66C413926AB5}
+		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BC4D105-5E3B-4E0D-963C-895BF672E6A2}
