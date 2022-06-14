@@ -4,11 +4,11 @@ namespace TeamworkSystem.Content.API.DependencyInjection;
 
 public static class RedisExtensions
 {
-    public static IServiceCollection AddRedis(this IServiceCollection services)
+    public static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
     {
         var configurationOptions = new ConfigurationOptions
         {
-            EndPoints = { "localhost:6379" },
+            EndPoints = { configuration["CacheSettings:RedisConnectionString"] },
             Ssl = false
         };
 
