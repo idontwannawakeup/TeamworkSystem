@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Microsoft.Extensions.Caching.Distributed;
 using TeamworkSystem.Content.Application.Interfaces;
 using TeamworkSystem.Content.Domain.Entities;
 using TeamworkSystem.Content.Domain.Enums;
@@ -9,8 +10,13 @@ namespace TeamworkSystem.Content.API.Consumers;
 public class ProjectAddedToRecentEventConsumer : IConsumer<ProjectAddedToRecentEvent>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IDistributedCache _cache;
 
-    public ProjectAddedToRecentEventConsumer(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public ProjectAddedToRecentEventConsumer(IUnitOfWork unitOfWork, IDistributedCache cache)
+    {
+        _unitOfWork = unitOfWork;
+        _cache = cache;
+    }
 
     public async Task Consume(ConsumeContext<ProjectAddedToRecentEvent> context)
     {
@@ -23,5 +29,6 @@ public class ProjectAddedToRecentEventConsumer : IConsumer<ProjectAddedToRecentE
         });
 
         await _unitOfWork.SaveChangesAsync();
+        await _cache.RemoveAsync($"{context.Message.UserId}-{0}");
     }
 }
