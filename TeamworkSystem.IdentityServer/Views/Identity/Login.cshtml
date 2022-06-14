@@ -1,0 +1,23 @@
+﻿@model LoginModel
+
+@{
+    Layout = null;
+}
+
+<form asp-controller="Identity" asp-action="Login" method="post">
+    <input type="hidden" asp-for="ReturnUrl">
+    <div>Login</div>
+    <div>
+        <label for="Username">Username</label>
+        <input asp-for="Username">
+        <span asp-validation-for="Username"></span>
+    </div>
+    <div>
+        <label for="Password">Password</label>
+        <input asp-for="Password">
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <button type="submit">Sign in</button>
+    </div>
+</form>
