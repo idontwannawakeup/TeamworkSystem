@@ -22,6 +22,7 @@ services.AddMassTransit(configuration =>
 {
     configuration.AddConsumer<ProjectAddedToRecentEventConsumer>();
     configuration.AddConsumer<TeamAddedToRecentEventConsumer>();
+    configuration.AddConsumer<TicketAddedToRecentEventConsumer>();
 
     configuration.UsingRabbitMq((context, configurator) =>
     {
@@ -38,6 +39,13 @@ services.AddMassTransit(configuration =>
             endpointConfigurator =>
             {
                 endpointConfigurator.ConfigureConsumer<TeamAddedToRecentEventConsumer>(context);
+            });
+
+        configurator.ReceiveEndpoint(
+            "content-recent-ticket",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<TicketAddedToRecentEventConsumer>(context);
             });
     });
 });
