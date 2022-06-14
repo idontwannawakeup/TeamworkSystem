@@ -16,6 +16,7 @@ services.AddApplication();
 services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+services.AddRedis();
 
 services.AddMassTransit(configuration =>
 {
