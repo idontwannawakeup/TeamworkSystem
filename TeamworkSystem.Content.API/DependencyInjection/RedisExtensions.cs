@@ -8,7 +8,7 @@ public static class RedisExtensions
     {
         var configurationOptions = new ConfigurationOptions
         {
-            EndPoints = { "localhost:50654" },
+            EndPoints = { "localhost:6379" },
             Ssl = false
         };
 

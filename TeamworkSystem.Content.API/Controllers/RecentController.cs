@@ -41,7 +41,8 @@ public class RecentController : ControllerBase
         var projects = await _mediator.Send(query);
         await _cache.SetStringAsync(
             $"{id}-{RecentRequestEntityType.Project}",
-            JsonSerializer.Serialize(projects));
+            JsonSerializer.Serialize(projects),
+            new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15) });
 
         return Ok(projects);
     }
