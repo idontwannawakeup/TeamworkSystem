@@ -1,6 +1,11 @@
-﻿using MediatR;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamworkSystem.EventBus.Messages.RecentEvents;
 using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Pagination;
 using TeamworkSystem.WorkManagement.Application.Common.Responses;
@@ -22,8 +27,13 @@ namespace TeamworkSystem.WorkManagement.API.Controllers;
 public class TeamsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public TeamsController(IMediator mediator) => _mediator = mediator;
+    public TeamsController(IMediator mediator, IPublishEndpoint publishEndpoint)
+    {
+        _mediator = mediator;
+        _publishEndpoint = publishEndpoint;
+    }
 
     [HttpGet]
     [Authorize]
@@ -54,6 +64,23 @@ public class TeamsController : ControllerBase
     {
         var query = new GetTeamByIdQuery { Id = id };
         var team = await _mediator.Send(query);
+
+        var authorization = HttpContext.Request.Headers.Authorization;
+        if (AuthenticationHeaderValue.TryParse(authorization, out var authorizationHeaderValue))
+        {
+            var token = new JwtSecurityTokenHandler().ReadJwtToken(
+                authorizationHeaderValue.Parameter);
+
+            var userId = Guid.Parse(
+                token.Claims.First(claim => claim.Type == ClaimTypes.Authentication).Value);
+
+            await _publishEndpoint.Publish(new TeamAddedToRecentEvent
+            {
+                UserId = userId,
+                TeamId = team.Id
+            });
+        }
+
         return Ok(team);
     }
 

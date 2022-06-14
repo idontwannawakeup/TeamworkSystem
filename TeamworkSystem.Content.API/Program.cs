@@ -21,6 +21,7 @@ services.AddRedis();
 services.AddMassTransit(configuration =>
 {
     configuration.AddConsumer<ProjectAddedToRecentEventConsumer>();
+    configuration.AddConsumer<TeamAddedToRecentEventConsumer>();
 
     configuration.UsingRabbitMq((context, configurator) =>
     {
@@ -30,6 +31,13 @@ services.AddMassTransit(configuration =>
             endpointConfigurator =>
             {
                 endpointConfigurator.ConfigureConsumer<ProjectAddedToRecentEventConsumer>(context);
+            });
+
+        configurator.ReceiveEndpoint(
+            "content-recent-team",
+            endpointConfigurator =>
+            {
+                endpointConfigurator.ConfigureConsumer<TeamAddedToRecentEventConsumer>(context);
             });
     });
 });
