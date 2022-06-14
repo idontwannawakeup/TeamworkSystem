@@ -29,6 +29,6 @@ public class ProjectAddedToRecentEventConsumer : IConsumer<ProjectAddedToRecentE
         });
 
         await _unitOfWork.SaveChangesAsync();
-        await _cache.RemoveAsync($"{context.Message.UserId}-{0}");
+        await _cache.RemoveAsync($"{context.Message.UserId}-{RecentRequestEntityType.Project}");
     }
 }
