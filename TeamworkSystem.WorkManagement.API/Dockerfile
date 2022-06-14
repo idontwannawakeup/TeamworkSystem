@@ -12,6 +12,7 @@ COPY ["TeamworkSystem.WorkManagement.Application/TeamworkSystem.WorkManagement.A
 COPY ["TeamworkSystem.WorkManagement.Domain/TeamworkSystem.WorkManagement.Domain.csproj", "TeamworkSystem.WorkManagement.Domain/"]
 COPY ["TeamworkSystem.WorkManagement.Persistence/TeamworkSystem.WorkManagement.Persistence.csproj", "TeamworkSystem.Persistence.Domain/"]
 COPY ["TeamworkSystem.Shared/TeamworkSystem.Shared.csproj", "TeamworkSystem.Shared/"]
+COPY ["TeamworkSystem.EventBus.Messages/TeamworkSystem.EventBus.Messages.csproj", "TeamworkSystem.EventBus.Messages/"]
 RUN dotnet restore "TeamworkSystem.WorkManagement.API/TeamworkSystem.WorkManagement.API.csproj"
 COPY . .
 WORKDIR "/src/TeamworkSystem.WorkManagement.API"

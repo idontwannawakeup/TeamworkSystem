@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.WorkManagement.API.Consumers;
 using TeamworkSystem.WorkManagement.API.DependencyInjection;
+using TeamworkSystem.WorkManagement.API.Grpc;
 using TeamworkSystem.WorkManagement.API.Middlewares;
 using TeamworkSystem.WorkManagement.Application.DependencyInjection;
 using TeamworkSystem.WorkManagement.Persistence;
@@ -48,6 +49,8 @@ services.AddMassTransit(configuration =>
             });
     });
 });
+
+services.AddGrpc();
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
@@ -110,6 +113,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGrpcService<RecentService>();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {

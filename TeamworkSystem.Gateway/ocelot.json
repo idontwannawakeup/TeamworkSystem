@@ -45,7 +45,10 @@
           "Port": 7158
         }
       ],
-      "FileCacheOptions": { "TtlSeconds": 15, "Region": "friends" },
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "friends"
+      },
       "UpstreamHttpMethod": [
         "Get"
       ]
@@ -58,6 +61,24 @@
         {
           "Host": "localhost",
           "Port": 7158
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Recent/{all}",
+      "UpstreamPathTemplate": "/gateway/Recent/{all}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7211
         }
       ],
       "UpstreamHttpMethod": [

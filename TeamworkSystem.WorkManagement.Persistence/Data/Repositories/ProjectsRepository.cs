@@ -36,6 +36,11 @@ public class ProjectsRepository : GenericRepository<Project>, IProjectsRepositor
             parameters.PageSize);
     }
 
+    public async Task<IEnumerable<Project>> GetAsync(IEnumerable<Guid> ids)
+    {
+        return await Table.Where(project => ids.Contains(project.Id)).ToListAsync();
+    }
+
     public async Task<Team> GetRelatedTeamAsync(Guid id)
     {
         var project = await Table.Include(project => project.Team)

@@ -8,4 +8,5 @@ namespace TeamworkSystem.WorkManagement.Application.Interfaces.Repositories;
 public interface IProjectsRepository : IRepository<Project>
 {
     Task<PagedList<Project>> GetAsync(ProjectsParameters parameters);
+    Task<IEnumerable<Project>> GetAsync(IEnumerable<Guid> ids);
 }

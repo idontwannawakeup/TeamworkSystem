@@ -6,11 +6,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>e208b05f-4050-4b89-bb8c-9a2715d9bd89</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-  </PropertyGroup>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.46.0" />
         <PackageReference Include="MassTransit" Version="8.0.3" />
         <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.3" />
@@ -28,6 +29,10 @@
       <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
       <ProjectReference Include="..\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj" />
       <ProjectReference Include="..\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Proto\recent.proto" GrpcServices="Server" />
     </ItemGroup>
 
 </Project>
