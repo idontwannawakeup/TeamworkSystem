@@ -150,6 +150,8 @@ services:
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
       - ElasticUrl=http://elasticsearch:9200
     depends_on:
+      - elasticsearch
+      - kibana
       - tws-db
       - tws-rabbitmq
 
@@ -228,3 +230,4 @@ services:
 
 volumes:
   tws-data:
+  tws-elasticsearch-data:
