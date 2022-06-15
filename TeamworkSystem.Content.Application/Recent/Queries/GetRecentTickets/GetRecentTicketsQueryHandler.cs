@@ -36,7 +36,16 @@ public class GetRecentTicketsQueryHandler
             Ids = { recent.Select(r => r.RequestedEntityId.ToString()) }
         };
 
-        using var channel = GrpcChannel.ForAddress(_settings.WorkManagementUrl);
+        var httpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+        using var channel = GrpcChannel.ForAddress(
+            _settings.WorkManagementUrl,
+            new GrpcChannelOptions { HttpHandler = httpHandler });
+
         var client = new RecentRequestsService.RecentRequestsServiceClient(channel);
         var response = await client.GetRecentTicketsAsync(
             grpcRequest,
