@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 services:
   tws-rabbitmq:
     container_name: tws-rabbitmq
@@ -176,6 +176,28 @@ services:
       - tws-identity-api
       - tws-work-management-api
       - tws-content-api
+
+  tws-client:
+    container_name: tws-client
+    hostname: tws.client
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.WebClient/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "8000:80"
+      - "8001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ApiUrl=https://tws.gateway:443
+    depends_on:
+      - tws-gateway-api
 
 volumes:
   tws-data:
