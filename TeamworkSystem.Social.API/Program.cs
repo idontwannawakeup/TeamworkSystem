@@ -1,6 +1,8 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using TeamworkSystem.Social.API.Consumers;
 using TeamworkSystem.Social.API.DependencyInjection;
 using TeamworkSystem.Social.API.Middlewares;
@@ -10,6 +12,20 @@ using TeamworkSystem.Social.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
+
+builder.Logging.AddSerilog(new LoggerConfiguration()
+                           .Enrich.FromLogContext()
+                           .Enrich.WithMachineName().WriteTo.Console().WriteTo.Elasticsearch(
+                               new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticUrl"]))
+                               {
+                                   IndexFormat = $"teamworksystem-social-api-logs-{DateTime.UtcNow:yyyy-MM}",
+                                   AutoRegisterTemplate = true,
+                                   NumberOfShards = 2,
+                                   NumberOfReplicas = 1
+                               })
+                           .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
+                           .ReadFrom.Configuration(builder.Configuration)
+                           .CreateLogger());
 
 services.AddDatabase(builder.Configuration);
 services.AddData();

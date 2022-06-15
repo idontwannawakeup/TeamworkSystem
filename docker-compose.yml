@@ -30,6 +30,32 @@ services:
       - SA_PASSWORD=YourStrong@Passw0rd
       - ACCEPT_EULA=Y
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    container_name: elasticsearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - node.name=elasticsearch
+      - cluster.name=elasticserach-docker-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - tws-elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.9.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+
   tws-identity-server:
     container_name: tws-identity-server
     hostname: tws.identity.server
@@ -122,6 +148,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
       - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
+      - ElasticUrl=http://elasticsearch:9200
     depends_on:
       - tws-db
       - tws-rabbitmq
