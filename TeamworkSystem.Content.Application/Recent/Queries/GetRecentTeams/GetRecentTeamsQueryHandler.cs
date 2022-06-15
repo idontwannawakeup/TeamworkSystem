@@ -2,6 +2,7 @@
 using Grpc.Net.Client;
 using MediatR;
 using TeamworkSystem.Content.Application.Common.Responses;
+using TeamworkSystem.Content.Application.Common.Settings;
 using TeamworkSystem.Content.Application.Grpc.Definitions;
 using TeamworkSystem.Content.Application.Interfaces;
 using TeamworkSystem.Content.Domain.Enums;
@@ -13,11 +14,13 @@ public class GetRecentTeamsQueryHandler
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ServicesSettings _settings;
 
-    public GetRecentTeamsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public GetRecentTeamsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ServicesSettings settings)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _settings = settings;
     }
 
     public async Task<IEnumerable<TeamResponse>> Handle(
@@ -33,7 +36,16 @@ public class GetRecentTeamsQueryHandler
             Ids = { recent.Select(r => r.RequestedEntityId.ToString()) }
         };
 
-        using var channel = GrpcChannel.ForAddress("https://localhost:7077");
+        var httpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+        using var channel = GrpcChannel.ForAddress(
+            _settings.WorkManagementUrl,
+            new GrpcChannelOptions { HttpHandler = httpHandler });
+
         var client = new RecentRequestsService.RecentRequestsServiceClient(channel);
         var response = await client.GetRecentTeamsAsync(
             grpcRequest,

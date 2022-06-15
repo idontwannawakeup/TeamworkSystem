@@ -5,11 +5,17 @@ using TeamworkSystem.Content.API.Consumers;
 using TeamworkSystem.Content.API.DependencyInjection;
 using TeamworkSystem.Content.API.Middlewares;
 using TeamworkSystem.Content.Application.DependencyInjection;
+using TeamworkSystem.Content.Application.Common.Settings;
 using TeamworkSystem.Content.Persistence;
 using TeamworkSystem.Content.Persistence.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
+
+services.AddSingleton(_ => new ServicesSettings
+{
+    WorkManagementUrl = builder.Configuration["ServicesSettings:WorkManagementUrl"]
+});
 
 services.AddPersistence(builder.Configuration);
 services.AddApplication();

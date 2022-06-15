@@ -1,39 +1,181 @@
 version: "3.9"
 services:
-  tws-web-app:
-    container_name: tws-web-app
-    build:
-      context: .
-      dockerfile: ./TeamworkSystem.WebAPI/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+  tws-rabbitmq:
+    container_name: tws-rabbitmq
+    hostname: tws.rabbitmq
+    image: rabbitmq:3.10.5-management
+    restart: always
     ports:
-      - "5000:80"
-      - "5001:443"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=5001
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - "5672:5672"
+      - "15672:15672"
 
-    links:
-      - tws-db
-    depends_on:
-      - tws-db
+  tws-redis:
+    container_name: tws-redis
+    hostname: tws.redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
 
   tws-db:
     container_name: tws-db
     hostname: tws.db
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
     volumes:
       - tws-data:/var/opt/mssql
     ports:
       - "14330:1433"
     environment:
-      - SA_PASSWORD=${SA_PASSWORD}
+      - SA_PASSWORD=YourStrong@Passw0rd
       - ACCEPT_EULA=Y
+
+  tws-identity-server:
+    container_name: tws-identity-server
+    hostname: tws.identity.server
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.IdentityServer/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "5119:80"
+      - "7119:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7119
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemIdentity;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
+    depends_on:
+      - tws-db
+      - tws-rabbitmq
+
+  tws-identity-api:
+    container_name: tws-identity-api
+    hostname: tws.identity.api
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.Identity.API/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "5137:80"
+      - "7137:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7137
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemIdentity;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
+    depends_on:
+      - tws-db
+      - tws-rabbitmq
+
+  tws-work-management-api:
+    container_name: tws-work-management-api
+    hostname: tws.work.management.api
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.WorkManagement.API/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "5077:80"
+      - "7077:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7077
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemWorkManagement;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
+    depends_on:
+      - tws-db
+      - tws-rabbitmq
+
+  tws-social-api:
+    container_name: tws-social-api
+    hostname: tws.social.api
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.Social.API/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "5158:80"
+      - "7158:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7158
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
+    depends_on:
+      - tws-db
+      - tws-rabbitmq
+
+  tws-content-api:
+    container_name: tws-content-api
+    hostname: tws.content.api
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.Content.API/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "5211:80"
+      - "7211:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7211
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemContent;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
+      - CacheSettings__RedisConnectionString=tws.redis:6379
+      - ServicesSettings__WorkManagementUrl=https://tws.work.management.api:443
+    depends_on:
+      - tws-db
+      - tws-rabbitmq
+      - tws-redis
+      - tws-work-management
+
+  tws-gateway:
+    container_name: tws-gateway
+    hostname: tws.gateway
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.Gateway/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "5161:80"
+      - "7161:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7161
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+    depends_on:
+      - tws-identity-api
+      - tws-work-management-api
+      - tws-content-api
 
 volumes:
   tws-data:
