@@ -6,11 +6,6 @@ services:
     build:
       context: .
       dockerfile: ./TeamworkSystem.IdentityServer/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
-      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
-      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5119:80"
       - "7119:443"
@@ -32,11 +27,6 @@ services:
     build:
       context: .
       dockerfile: ./TeamworkSystem.Identity.API/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
-      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
-      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5137:80"
       - "7137:443"
@@ -58,11 +48,6 @@ services:
     build:
       context: .
       dockerfile: ./TeamworkSystem.WorkManagement.API/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
-      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
-      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5077:80"
       - "7077:443"
@@ -84,11 +69,6 @@ services:
     build:
       context: .
       dockerfile: ./TeamworkSystem.Social.API/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
-      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
-      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5158:80"
       - "7158:443"
@@ -113,11 +93,6 @@ services:
     build:
       context: .
       dockerfile: ./TeamworkSystem.Content.API/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
-      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
-      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5211:80"
       - "7211:443"
@@ -143,11 +118,6 @@ services:
     build:
       context: .
       dockerfile: ./TeamworkSystem.Gateway/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
-      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
-      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5161:80"
       - "7161:443"
@@ -168,11 +138,6 @@ services:
     build:
       context: .
       dockerfile: ./TeamworkSystem.WebClient/Dockerfile
-    volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
-      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
-      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "8000:80"
       - "8001:443"

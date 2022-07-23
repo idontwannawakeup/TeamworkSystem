@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  tws-identity-server:
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+
+  tws-identity-api:
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+
+  tws-work-management-api:
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+
+  tws-social-api:
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+
+  tws-content-api:
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+
+  tws-gateway:
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+
+  tws-client:
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
