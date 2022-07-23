@@ -1,61 +1,5 @@
-version: "3"
+version: "3.9"
 services:
-  tws-rabbitmq:
-    container_name: tws-rabbitmq
-    hostname: tws.rabbitmq
-    image: rabbitmq:3.10.5-management
-    restart: always
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-
-  tws-redis:
-    container_name: tws-redis
-    hostname: tws.redis
-    image: redis:latest
-    restart: always
-    ports:
-      - "6379:6379"
-
-  tws-db:
-    container_name: tws-db
-    hostname: tws.db
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    restart: always
-    volumes:
-      - tws-data:/var/opt/mssql
-    ports:
-      - "14330:1433"
-    environment:
-      - SA_PASSWORD=YourStrong@Passw0rd
-      - ACCEPT_EULA=Y
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
-    container_name: elasticsearch
-    environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - node.name=elasticsearch
-      - cluster.name=elasticserach-docker-cluster
-      - bootstrap.memory_lock=true
-      - discovery.type=single-node
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - tws-elasticsearch-data:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.2
-    container_name: kibana
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-
   tws-identity-server:
     container_name: tws-identity-server
     hostname: tws.identity.server
@@ -63,8 +7,10 @@ services:
       context: .
       dockerfile: ./TeamworkSystem.IdentityServer/Dockerfile
     volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
+      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5119:80"
       - "7119:443"
@@ -77,8 +23,8 @@ services:
       - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemIdentity;User=sa;Password=YourStrong@Passw0rd;
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
     depends_on:
-      - tws-db
-      - tws-rabbitmq
+      - tws-dependency-mssql
+      - tws-dependency-rabbitmq
 
   tws-identity-api:
     container_name: tws-identity-api
@@ -87,8 +33,10 @@ services:
       context: .
       dockerfile: ./TeamworkSystem.Identity.API/Dockerfile
     volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
+      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5137:80"
       - "7137:443"
@@ -101,8 +49,8 @@ services:
       - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemIdentity;User=sa;Password=YourStrong@Passw0rd;
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
     depends_on:
-      - tws-db
-      - tws-rabbitmq
+      - tws-dependency-mssql
+      - tws-dependency-rabbitmq
 
   tws-work-management-api:
     container_name: tws-work-management-api
@@ -111,8 +59,10 @@ services:
       context: .
       dockerfile: ./TeamworkSystem.WorkManagement.API/Dockerfile
     volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
+      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5077:80"
       - "7077:443"
@@ -125,8 +75,8 @@ services:
       - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemWorkManagement;User=sa;Password=YourStrong@Passw0rd;
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
     depends_on:
-      - tws-db
-      - tws-rabbitmq
+      - tws-dependency-mssql
+      - tws-dependency-rabbitmq
 
   tws-social-api:
     container_name: tws-social-api
@@ -135,8 +85,10 @@ services:
       context: .
       dockerfile: ./TeamworkSystem.Social.API/Dockerfile
     volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
+      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5158:80"
       - "7158:443"
@@ -150,10 +102,10 @@ services:
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
       - ElasticUrl=http://elasticsearch:9200
     depends_on:
-      - elasticsearch
-      - kibana
-      - tws-db
-      - tws-rabbitmq
+      - tws-dependency-mssql
+      - tws-dependency-rabbitmq
+      - tws-dependency-elasticsearch
+      - tws-dependency-kibana
 
   tws-content-api:
     container_name: tws-content-api
@@ -162,8 +114,10 @@ services:
       context: .
       dockerfile: ./TeamworkSystem.Content.API/Dockerfile
     volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
+      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5211:80"
       - "7211:443"
@@ -178,9 +132,9 @@ services:
       - CacheSettings__RedisConnectionString=tws.redis:6379
       - ServicesSettings__WorkManagementUrl=https://tws.work.management.api:443
     depends_on:
-      - tws-db
-      - tws-rabbitmq
-      - tws-redis
+      - tws-dependency-mssql
+      - tws-dependency-rabbitmq
+      - tws-dependency-redis
       - tws-work-management
 
   tws-gateway:
@@ -190,8 +144,10 @@ services:
       context: .
       dockerfile: ./TeamworkSystem.Gateway/Dockerfile
     volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
+      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "5161:80"
       - "7161:443"
@@ -213,8 +169,10 @@ services:
       context: .
       dockerfile: ./TeamworkSystem.WebClient/Dockerfile
     volumes:
-      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
-      - "${USERPROFILE}\\.aspnet\\https:/https/"
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets:ro"
+      - "${USERPROFILE}\\.aspnet\\https:/https/:ro"
+      - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
+      - "${HOME}/.aspnet/https:/https/:ro"
     ports:
       - "8000:80"
       - "8001:443"
@@ -227,7 +185,3 @@ services:
       - ApiUrl=https://tws.gateway:443
     depends_on:
       - tws-gateway-api
-
-volumes:
-  tws-data:
-  tws-elasticsearch-data:
