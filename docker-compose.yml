@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 services:
   tws-rabbitmq:
     container_name: tws-rabbitmq
@@ -29,6 +29,32 @@ services:
     environment:
       - SA_PASSWORD=YourStrong@Passw0rd
       - ACCEPT_EULA=Y
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    container_name: elasticsearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - node.name=elasticsearch
+      - cluster.name=elasticserach-docker-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - tws-elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.9.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   tws-identity-server:
     container_name: tws-identity-server
@@ -122,7 +148,10 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
       - ConnectionStrings__DefaultConnection=Server=tws.db;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.rabbitmq:5672
+      - ElasticUrl=http://elasticsearch:9200
     depends_on:
+      - elasticsearch
+      - kibana
       - tws-db
       - tws-rabbitmq
 
@@ -177,5 +206,28 @@ services:
       - tws-work-management-api
       - tws-content-api
 
+  tws-client:
+    container_name: tws-client
+    hostname: tws.client
+    build:
+      context: .
+      dockerfile: ./TeamworkSystem.WebClient/Dockerfile
+    volumes:
+      - "${APPDATA}\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+      - "${USERPROFILE}\\.aspnet\\https:/https/"
+    ports:
+      - "8000:80"
+      - "8001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ApiUrl=https://tws.gateway:443
+    depends_on:
+      - tws-gateway-api
+
 volumes:
   tws-data:
+  tws-elasticsearch-data:

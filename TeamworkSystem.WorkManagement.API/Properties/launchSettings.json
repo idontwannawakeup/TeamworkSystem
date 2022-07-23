@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "TeamworkSystem.Core.API": {
+    "TeamworkSystem.WorkManagement.API": {
       "commandName": "Project",
       "launchUrl": "swagger",
       "environmentVariables": {
