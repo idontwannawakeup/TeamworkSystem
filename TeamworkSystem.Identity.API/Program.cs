@@ -7,8 +7,12 @@ using TeamworkSystem.Identity.DataAccess.DependencyInjection;
 using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
+builder.Logging.AddCustomLogging(
+    builder.Configuration,
+    builder.Environment,
+    "teamwork-system-identity");
 
+var services = builder.Services;
 services.AddDatabase(builder.Configuration);
 services.AddData();
 services.AddFilterFactories();

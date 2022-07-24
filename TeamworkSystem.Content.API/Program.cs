@@ -10,8 +10,12 @@ using TeamworkSystem.Content.Persistence.DependencyInjection;
 using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
+builder.Logging.AddCustomLogging(
+    builder.Configuration,
+    builder.Environment,
+    "teamwork-system-content");
 
+var services = builder.Services;
 services.AddSingleton(_ => new ServicesSettings
 {
     WorkManagementUrl = builder.Configuration["ServicesSettings:WorkManagementUrl"]

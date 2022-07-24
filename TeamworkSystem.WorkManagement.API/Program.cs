@@ -10,8 +10,12 @@ using TeamworkSystem.WorkManagement.Persistence;
 using TeamworkSystem.WorkManagement.Persistence.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
+builder.Logging.AddCustomLogging(
+    builder.Configuration,
+    builder.Environment,
+    "teamwork-system-work-management");
 
+var services = builder.Services;
 services.AddPersistence(builder.Configuration);
 services.AddApplication();
 services.AddValidation();

@@ -1,8 +1,13 @@
 using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddCustomLogging(
+    builder.Configuration,
+    builder.Environment,
+    "teamwork-system-gateway");
 
 builder.Services.AddOcelot().AddCacheManager(x =>
 {

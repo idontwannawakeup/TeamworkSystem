@@ -4,10 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.DataAccess;
 using TeamworkSystem.Identity.DataAccess.Entities;
 using TeamworkSystem.IdentityServer;
+using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
+builder.Logging.AddCustomLogging(
+    builder.Configuration,
+    builder.Environment,
+    "teamwork-system-identity-server");
 
+var services = builder.Services;
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 services.AddMassTransit(configuration =>

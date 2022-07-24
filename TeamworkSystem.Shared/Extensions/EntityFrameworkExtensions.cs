@@ -14,7 +14,7 @@ public static class EntityFrameworkExtensions
             await database.MigrateAsync(cancellationToken);
             return true;
         }
-        catch (Microsoft.Data.SqlClient.SqlException e)
+        catch (Microsoft.Data.SqlClient.SqlException)
         {
             return false;
         }
