@@ -1,8 +1,6 @@
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using Serilog.Sinks.Elasticsearch;
+using TeamworkSystem.Shared.Extensions;
 using TeamworkSystem.Social.API.Consumers;
 using TeamworkSystem.Social.API.DependencyInjection;
 using TeamworkSystem.Social.API.Middlewares;
@@ -11,22 +9,9 @@ using TeamworkSystem.Social.DataAccess;
 using TeamworkSystem.Social.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddCustomLogging(builder.Configuration, builder.Environment);
+
 var services = builder.Services;
-
-builder.Logging.AddSerilog(new LoggerConfiguration()
-                           .Enrich.FromLogContext()
-                           .Enrich.WithMachineName().WriteTo.Console().WriteTo.Elasticsearch(
-                               new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticUrl"]))
-                               {
-                                   IndexFormat = $"teamworksystem-social-api-logs-{DateTime.UtcNow:yyyy-MM}",
-                                   AutoRegisterTemplate = true,
-                                   NumberOfShards = 2,
-                                   NumberOfReplicas = 1
-                               })
-                           .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
-                           .ReadFrom.Configuration(builder.Configuration)
-                           .CreateLogger());
-
 services.AddDatabase(builder.Configuration);
 services.AddData();
 services.AddFilterFactories();
@@ -131,7 +116,12 @@ app.MapControllers();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<SocialDbContext>();
-    await context.Database.MigrateAsync();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var migrationSucceeded =  await context.Database.TryMigrateAsync();
+    if (!migrationSucceeded)
+    {
+        logger.LogError("Migration failed. Check connection to the server.");
+    }
 }
 
 app.Run();
