@@ -9,7 +9,10 @@ using TeamworkSystem.Social.DataAccess;
 using TeamworkSystem.Social.DataAccess.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.AddCustomLogging(builder.Configuration, builder.Environment);
+builder.Logging.AddCustomLogging(
+    builder.Configuration,
+    builder.Environment,
+    "teamwork-system-social");
 
 var services = builder.Services;
 services.AddDatabase(builder.Configuration);

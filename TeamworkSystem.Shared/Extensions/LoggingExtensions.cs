@@ -11,7 +11,8 @@ public static class LoggingExtensions
     public static ILoggingBuilder AddCustomLogging(
         this ILoggingBuilder loggingBuilder,
         IConfiguration configuration,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        string projectName = "application")
     {
         loggingBuilder.ClearProviders();
         loggingBuilder.AddSerilog(new LoggerConfiguration()
@@ -21,7 +22,7 @@ public static class LoggingExtensions
                                   .WriteTo.Elasticsearch(
                                       new ElasticsearchSinkOptions(new Uri(configuration["ElasticUrl"]))
                                       {
-                                          IndexFormat = $"api-logs-{DateTime.UtcNow:yyyy-MM}",
+                                          IndexFormat = $"{projectName}-logs-{DateTime.UtcNow:yyyy-MM}",
                                           AutoRegisterTemplate = true,
                                           NumberOfShards = 2,
                                           NumberOfReplicas = 1
