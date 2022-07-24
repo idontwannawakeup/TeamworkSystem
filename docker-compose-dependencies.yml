@@ -33,30 +33,24 @@ services:
   tws-dependency-elasticsearch:
     container_name: tws-dependency-elasticsearch
     hostname: tws.dependency.elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    image: elasticsearch:8.3.2
     volumes:
       - tws-dependency-elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
+      - "9300:9300"
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - node.name=elasticsearch
-      - cluster.name=elasticserach-docker-cluster
-      - bootstrap.memory_lock=true
       - discovery.type=single-node
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - xpack.security.enabled=false
 
   tws-dependency-kibana:
     container_name: tws-dependency-kibana
     hostname: tws.dependency.kibana
-    image: docker.elastic.co/kibana/kibana:7.9.2
+    image: kibana:8.3.2
     ports:
       - "5601:5601"
     environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=["http://tws.dependency.elasticsearch:9200"]
 
 volumes:
   tws-dependency-mssql-data:
