@@ -148,5 +148,8 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
       - ApiUrl=https://tws.gateway:443
+      - Intermediate__IdentityService=IdentityService/gateway
+      - Intermediate__CoreService=CoreService/gateway
+      - Intermediate__SocialService=SocialService/gateway
     depends_on:
       - tws-gateway-api
