@@ -1,5 +1,4 @@
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Content.API.Consumers;
 using TeamworkSystem.Content.API.DependencyInjection;
@@ -8,6 +7,7 @@ using TeamworkSystem.Content.Application.DependencyInjection;
 using TeamworkSystem.Content.Application.Common.Settings;
 using TeamworkSystem.Content.Persistence;
 using TeamworkSystem.Content.Persistence.DependencyInjection;
+using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -120,7 +120,12 @@ app.MapControllers();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ContentDbContext>();
-    await context.Database.MigrateAsync();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var migrationSucceeded = await context.Database.TryMigrateAsync();
+    if (!migrationSucceeded)
+    {
+        logger.LogError("Migration failed. Check connection to the server.");
+    }
 }
 
-app.Run();
+await app.RunAsync();

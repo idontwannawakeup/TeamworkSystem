@@ -1,6 +1,6 @@
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using TeamworkSystem.Shared.Extensions;
 using TeamworkSystem.WorkManagement.API.Consumers;
 using TeamworkSystem.WorkManagement.API.DependencyInjection;
 using TeamworkSystem.WorkManagement.API.Grpc;
@@ -118,7 +118,12 @@ app.MapGrpcService<RecentService>();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<WorkManagementDbContext>();
-    await context.Database.MigrateAsync();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var migrationSucceeded = await context.Database.TryMigrateAsync();
+    if (!migrationSucceeded)
+    {
+        logger.LogError("Migration failed. Check connection to the server.");
+    }
 }
 
-app.Run();
+await app.RunAsync();
