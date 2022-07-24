@@ -1,14 +1,18 @@
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Identity.API.Middlewares;
 using TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
 using TeamworkSystem.Identity.DataAccess;
 using TeamworkSystem.Identity.DataAccess.DependencyInjection;
+using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
+builder.Logging.AddCustomLogging(
+    builder.Configuration,
+    builder.Environment,
+    "teamwork-system-identity");
 
+var services = builder.Services;
 services.AddDatabase(builder.Configuration);
 services.AddData();
 services.AddFilterFactories();
@@ -92,7 +96,12 @@ app.MapControllers();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<IdentityExtDbContext>();
-    await context.Database.MigrateAsync();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var migrationSucceeded = await context.Database.TryMigrateAsync();
+    if (!migrationSucceeded)
+    {
+        logger.LogError("Migration failed. Check connection to the server.");
+    }
 }
 
-app.Run();
+await app.RunAsync();

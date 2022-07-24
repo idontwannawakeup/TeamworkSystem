@@ -1,0 +1,57 @@
+version: "3.9"
+services:
+  tws-dependency-mssql:
+    container_name: tws-dependency-mssql
+    hostname: tws.dependency.mssql
+    image: mcr.microsoft.com/mssql/server:2019-CU16-ubuntu-20.04
+    restart: always
+    volumes:
+      - tws-dependency-mssql-data:/var/opt/mssql
+    ports:
+      - "14330:1433"
+    environment:
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - ACCEPT_EULA=Y
+
+  tws-dependency-rabbitmq:
+    container_name: tws-dependency-rabbitmq
+    hostname: tws.dependency.rabbitmq
+    image: rabbitmq:3.10.5-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  tws-dependency-redis:
+    container_name: tws-dependency-redis
+    hostname: tws.dependency.redis
+    image: redis:7.0.4
+    restart: always
+    ports:
+      - "6379:6379"
+
+  tws-dependency-elasticsearch:
+    container_name: tws-dependency-elasticsearch
+    hostname: tws.dependency.elasticsearch
+    image: elasticsearch:8.3.2
+    volumes:
+      - tws-dependency-elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+
+  tws-dependency-kibana:
+    container_name: tws-dependency-kibana
+    hostname: tws.dependency.kibana
+    image: kibana:8.3.2
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=["http://tws.dependency.elasticsearch:9200"]
+
+volumes:
+  tws-dependency-mssql-data:
+  tws-dependency-elasticsearch-data:
