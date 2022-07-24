@@ -10,8 +10,8 @@ WORKDIR /src
 COPY ["TeamworkSystem.Content.API/TeamworkSystem.Content.API.csproj", "TeamworkSystem.Content.API/"]
 COPY ["TeamworkSystem.Content.Application/TeamworkSystem.Content.Application.csproj", "TeamworkSystem.Content.Application/"]
 COPY ["TeamworkSystem.Content.Domain/TeamworkSystem.Content.Domain.csproj", "TeamworkSystem.Content.Domain/"]
-COPY ["TeamworkSystem.Shared/TeamworkSystem.Shared.csproj", "TeamworkSystem.Shared/"]
 COPY ["TeamworkSystem.Content.Persistence/TeamworkSystem.Content.Persistence.csproj", "TeamworkSystem.Content.Persistence/"]
+COPY ["TeamworkSystem.Shared/TeamworkSystem.Shared.csproj", "TeamworkSystem.Shared/"]
 COPY ["TeamworkSystem.EventBus.Messages/TeamworkSystem.EventBus.Messages.csproj", "TeamworkSystem.EventBus.Messages/"]
 RUN dotnet restore "TeamworkSystem.Content.API/TeamworkSystem.Content.API.csproj"
 COPY . .
