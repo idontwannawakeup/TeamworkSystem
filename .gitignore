@@ -10,6 +10,8 @@
 /TeamworkSystem.Core.API/wwwroot/Public/Photos/*
 !/TeamworkSystem.Core.API/wwwroot/Public/Photos/.gitkeep
 
+docker-compose.local.ignored.override.yml
+
 .vscode
 .idea
 
