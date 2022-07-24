@@ -33,6 +33,7 @@ services:
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7137
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemIdentity;User=sa;Password=YourStrong@Passw0rd;
+      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
     depends_on:
       - tws-dependency-mssql
@@ -52,6 +53,7 @@ services:
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7077
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemWorkManagement;User=sa;Password=YourStrong@Passw0rd;
+      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
     depends_on:
       - tws-dependency-mssql
@@ -71,8 +73,9 @@ services:
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7158
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
+      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
-      - ElasticUrl=http://elasticsearch:9200
+      - ElasticUrl=http://tws.dependency.elasticsearch:9200
     depends_on:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
@@ -93,6 +96,7 @@ services:
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7211
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemContent;User=sa;Password=YourStrong@Passw0rd;
+      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
       - CacheSettings__RedisConnectionString=tws.dependency.redis:6379
       - ServicesSettings__WorkManagementUrl=https://tws.work.management.api:443
