@@ -4,7 +4,6 @@ services:
     container_name: tws-dependency-mssql
     hostname: tws.dependency.mssql
     image: mcr.microsoft.com/mssql/server:2019-CU16-ubuntu-20.04
-    restart: always
     volumes:
       - tws-dependency-mssql-data:/var/opt/mssql
     ports:
@@ -17,7 +16,6 @@ services:
     container_name: tws-dependency-rabbitmq
     hostname: tws.dependency.rabbitmq
     image: rabbitmq:3.10.5-management
-    restart: always
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -26,7 +24,6 @@ services:
     container_name: tws-dependency-redis
     hostname: tws.dependency.redis
     image: redis:7.0.4
-    restart: always
     ports:
       - "6379:6379"
 
