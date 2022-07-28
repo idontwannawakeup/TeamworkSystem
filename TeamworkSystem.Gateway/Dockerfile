@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["TeamworkSystem.Gateway/TeamworkSystem.Gateway.csproj", "TeamworkSystem.Gateway/"]
+COPY ["TeamworkSystem.Shared/TeamworkSystem.Shared.csproj", "TeamworkSystem.Shared/"]
 RUN dotnet restore "TeamworkSystem.Gateway/TeamworkSystem.Gateway.csproj"
 COPY . .
 WORKDIR "/src/TeamworkSystem.Gateway"
