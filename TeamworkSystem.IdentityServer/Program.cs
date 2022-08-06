@@ -1,4 +1,5 @@
 using System.Reflection;
+using IdentityServer4.EntityFramework.DbContexts;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.Persistence.Configuration;
@@ -67,4 +68,37 @@ app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 
-app.Run();
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<PeopleDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var migrationSucceeded = await context.Database.TryMigrateAsync();
+    if (!migrationSucceeded)
+    {
+        logger.LogError("People DB Migration failed. Check connection to the server.");
+    }
+}
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var migrationSucceeded = await context.Database.TryMigrateAsync();
+    if (!migrationSucceeded)
+    {
+        logger.LogError("Persistent Grant DB Migration failed. Check connection to the server.");
+    }
+}
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var migrationSucceeded = await context.Database.TryMigrateAsync();
+    if (!migrationSucceeded)
+    {
+        logger.LogError("Context DB Migration failed. Check connection to the server.");
+    }
+}
+
+await app.RunAsync();
