@@ -1,10 +1,12 @@
 using System.Reflection;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Mappers;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.Persistence.Configuration;
 using TeamworkSystem.Identity.Persistence.Operational;
 using TeamworkSystem.Identity.Persistence.People;
+using TeamworkSystem.IdentityServer;
 using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -99,6 +101,25 @@ await using (var scope = app.Services.CreateAsyncScope())
     {
         logger.LogError("Context DB Migration failed. Check connection to the server.");
     }
+}
+
+if (args.Contains("--tws-forced-seeding"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+
+    context.ApiScopes.RemoveRange(await context.ApiScopes.ToListAsync());
+    context.IdentityResources.RemoveRange(await context.IdentityResources.ToListAsync());
+    context.ApiResources.RemoveRange(await context.ApiResources.ToListAsync());
+    context.Clients.RemoveRange(await context.Clients.ToListAsync());
+    await context.SaveChangesAsync();
+
+    context.ApiScopes.AddRange(IdentityServerConfiguration.ApiScopes.Select(s => s.ToEntity()));
+    context.IdentityResources.AddRange(IdentityServerConfiguration.IdentityResources.Select(s => s.ToEntity()));
+    context.ApiResources.AddRange(IdentityServerConfiguration.ApiResources.Select(s => s.ToEntity()));
+    context.Clients.AddRange(IdentityServerConfiguration.Clients.Select(s => s.ToEntity()));
+
+    await context.SaveChangesAsync();
 }
 
 await app.RunAsync();
