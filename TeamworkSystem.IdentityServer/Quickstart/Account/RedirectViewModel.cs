@@ -3,7 +3,7 @@
 
 
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TeamworkSystem.IdentityServer.Quickstart.Account
 {
     public class RedirectViewModel
     {

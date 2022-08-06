@@ -1,8 +1,8 @@
-using System;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
+using TeamworkSystem.IdentityServer.Quickstart.Account;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TeamworkSystem.IdentityServer.Quickstart
 {
     public static class Extensions
     {

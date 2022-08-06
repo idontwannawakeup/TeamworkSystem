@@ -3,19 +3,14 @@
 
 
 using IdentityServer4.Events;
+using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using IdentityServer4.Extensions;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityServer4.Validation;
-using System.Collections.Generic;
-using System;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace TeamworkSystem.IdentityServer.Quickstart.Consent
 {
     /// <summary>
     /// This controller processes the consent UI
