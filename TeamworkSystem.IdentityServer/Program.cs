@@ -13,19 +13,19 @@ builder.Logging.AddCustomLogging(
 var services = builder.Services;
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-services.AddMassTransit(configuration =>
-{
-    configuration.UsingRabbitMq((_, configurator) =>
-    {
-        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-    });
-});
+// services.AddMassTransit(configuration =>
+// {
+//     configuration.UsingRabbitMq((_, configurator) =>
+//     {
+//         configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+//     });
+// });
 
-services.AddDbContext<IdentityExtDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlServer(connectionString);
-});
+// services.AddDbContext<IdentityExtDbContext>(options =>
+// {
+//     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//     options.UseSqlServer(connectionString);
+// });
 
 services.AddIdentityServer()
         .AddInMemoryClients(IdentityServerConfiguration.Clients)
@@ -43,8 +43,10 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UseStaticFiles();
 app.UseRouting();
 app.UseIdentityServer();
+app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 
