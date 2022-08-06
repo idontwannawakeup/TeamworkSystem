@@ -25,6 +25,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
+        <ProjectReference Include="..\TeamworkSystem.Identity.Persistence.Configuration\TeamworkSystem.Identity.Persistence.Configuration.csproj" />
+        <ProjectReference Include="..\TeamworkSystem.Identity.Persistence.Operational\TeamworkSystem.Identity.Persistence.Operational.csproj" />
         <ProjectReference Include="..\TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj" />
         <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
     </ItemGroup>

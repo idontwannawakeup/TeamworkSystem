@@ -1,5 +1,8 @@
+using System.Reflection;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using TeamworkSystem.Identity.Persistence.Configuration;
+using TeamworkSystem.Identity.Persistence.Operational;
 using TeamworkSystem.Identity.Persistence.People;
 using TeamworkSystem.Shared.Extensions;
 
@@ -19,22 +22,28 @@ services.AddMassTransit(configuration =>
     });
 });
 
-services.AddDbContext<PeopleDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("PeopleConnection");
-    options.UseSqlServer(connectionString);
-});
+// services.AddDbContext<PeopleDbContext>(options =>
+// {
+//     var connectionString = builder.Configuration.GetConnectionString("PeopleConnection");
+//     options.UseSqlServer(connectionString);
+// });
 
 services.AddIdentityServer()
         .AddConfigurationStore(options =>
         {
             var connectionString = builder.Configuration.GetConnectionString("IdentityServerConfigurationConnection");
-            options.ConfigureDbContext = dbBuilder => dbBuilder.UseSqlServer(connectionString);
+            var migrationAssembly = typeof(ConfigurationAssembly).GetTypeInfo().Assembly.GetName().Name;
+            options.ConfigureDbContext = dbBuilder => dbBuilder.UseSqlServer(
+                connectionString,
+                sqlServerOptions => sqlServerOptions.MigrationsAssembly(migrationAssembly));
         })
         .AddOperationalStore(options =>
         {
             var connectionString = builder.Configuration.GetConnectionString("IdentityServerOperationalConnection");
-            options.ConfigureDbContext = dbBuilder => dbBuilder.UseSqlServer(connectionString);
+            var migrationAssembly = typeof(OperationalAssembly).GetTypeInfo().Assembly.GetName().Name;
+            options.ConfigureDbContext = dbBuilder => dbBuilder.UseSqlServer(
+                connectionString,
+                sqlServerOptions => sqlServerOptions.MigrationsAssembly(migrationAssembly));
         })
         .AddDeveloperSigningCredential();
 
