@@ -55,26 +55,26 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Consent
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(ConsentInputModel model)
+        public async Task<IActionResult> Index(ConsentInputModel? model)
         {
             var result = await ProcessConsent(model);
 
             if (result.IsRedirect)
             {
-                var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+                var context = await _interaction.GetAuthorizationContextAsync(model!.ReturnUrl);
                 if (context?.IsNativeClient() == true)
                 {
                     // The client is native, so this change in how to
                     // return the response is for better UX for the end user.
-                    return this.LoadingPage("Redirect", result.RedirectUri);
+                    return this.LoadingPage("Redirect", result.RedirectUri!);
                 }
 
-                return Redirect(result.RedirectUri);
+                return Redirect(result.RedirectUri!);
             }
 
             if (result.HasValidationError)
             {
-                ModelState.AddModelError(string.Empty, result.ValidationError);
+                ModelState.AddModelError(string.Empty, result.ValidationError!);
             }
 
             if (result.ShowView)
@@ -88,17 +88,18 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Consent
         /*****************************************/
         /* helper APIs for the ConsentController */
         /*****************************************/
-        private async Task<ProcessConsentResult> ProcessConsent(ConsentInputModel model)
+        private async Task<ProcessConsentResult> ProcessConsent(ConsentInputModel? model)
         {
             var result = new ProcessConsentResult();
 
             // validate return url is still valid
-            var request = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            var request = await _interaction.GetAuthorizationContextAsync(model!.ReturnUrl);
             if (request == null) return result;
 
-            ConsentResponse grantedConsent = null;
+            ConsentResponse? grantedConsent = null;
 
             // user clicked 'no' - send back the standard 'access_denied' response
+            // ReSharper disable once ConstantConditionalAccessQualifier
             if (model?.Button == "no")
             {
                 grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
@@ -110,6 +111,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Consent
             else if (model?.Button == "yes")
             {
                 // if the user consented to some scope, build the response model
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (model.ScopesConsented != null && model.ScopesConsented.Any())
                 {
                     var scopes = model.ScopesConsented;
@@ -144,19 +146,19 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Consent
                 await _interaction.GrantConsentAsync(request, grantedConsent);
 
                 // indicate that's it ok to redirect back to authorization endpoint
-                result.RedirectUri = model.ReturnUrl;
+                result.RedirectUri = model!.ReturnUrl;
                 result.Client = request.Client;
             }
             else
             {
                 // we need to redisplay the consent UI
-                result.ViewModel = await BuildViewModelAsync(model.ReturnUrl, model);
+                result.ViewModel = await BuildViewModelAsync(model!.ReturnUrl, model);
             }
 
             return result;
         }
 
-        private async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentInputModel model = null)
+        private async Task<ConsentViewModel?> BuildViewModelAsync(string returnUrl, ConsentInputModel? model = null)
         {
             var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
             if (request != null)
@@ -172,7 +174,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Consent
         }
 
         private ConsentViewModel CreateConsentViewModel(
-            ConsentInputModel model, string returnUrl,
+            ConsentInputModel? model, string returnUrl,
             AuthorizationRequest request)
         {
             var vm = new ConsentViewModel

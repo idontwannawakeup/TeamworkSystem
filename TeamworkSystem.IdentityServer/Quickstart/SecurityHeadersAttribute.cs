@@ -45,6 +45,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+                // ReSharper disable once InconsistentNaming
                 var referrer_policy = "no-referrer";
                 if (!context.HttpContext.Response.Headers.ContainsKey("Referrer-Policy"))
                 {

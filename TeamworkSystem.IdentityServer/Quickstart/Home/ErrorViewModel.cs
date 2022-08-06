@@ -17,6 +17,6 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Home
             Error = new ErrorMessage { Error = error };
         }
 
-        public ErrorMessage Error { get; set; }
+        public ErrorMessage Error { get; set; } = null!;
     }
 }

@@ -6,7 +6,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
 {
     public class ExternalProvider
     {
-        public string DisplayName { get; set; }
-        public string AuthenticationScheme { get; set; }
+        public string DisplayName { get; set; } = null!;
+        public string AuthenticationScheme { get; set; } = null!;
     }
 }

@@ -1,9 +1,10 @@
 ﻿@using IdentityServer4.Extensions
 
 @{
-    string name = null;
+    string? name = null;
     if (!true.Equals(ViewData["signed-out"]))
     {
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
         name = Context.User?.GetDisplayName();
     }
 }

@@ -17,6 +17,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
     {
         private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
+        // ReSharper disable once NotAccessedField.Local
         private readonly IClientStore _clientStore;
         private readonly ILogger<ExternalController> _logger;
         private readonly IEventService _events;
@@ -26,7 +27,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
             IClientStore clientStore,
             IEventService events,
             ILogger<ExternalController> logger,
-            TestUserStore users = null)
+            TestUserStore? users = null)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
@@ -76,6 +77,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
         {
             // read external identity from the temporary cookie
             var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
             if (result?.Succeeded != true)
             {
                 throw new Exception("External authentication error");
@@ -83,12 +85,13 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                var externalClaims = result.Principal.Claims.Select(c => $"{c.Type}: {c.Value}");
+                var externalClaims = result.Principal!.Claims.Select(c => $"{c.Type}: {c.Value}");
                 _logger.LogDebug("External claims: {@claims}", externalClaims);
             }
 
             // lookup our user and external provider info
             var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (user == null)
             {
                 // this might be where you might initiate a custom workflow for user registration
@@ -118,7 +121,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
             await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
             // retrieve return URL
-            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+            var returnUrl = result.Properties!.Items["returnUrl"] ?? "~/";
 
             // check if external login is in the context of an OIDC request
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
@@ -144,7 +147,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
             // try to determine the unique id of the external user (issued by the provider)
             // the most common claim type for that are the sub claim and the NameIdentifier
             // depending on the external provider, some other claim type might be used
-            var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
+            var userIdClaim = externalUser!.FindFirst(JwtClaimTypes.Subject) ??
                               externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
                               throw new Exception("Unknown userid");
 
@@ -152,13 +155,13 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
             var claims = externalUser.Claims.ToList();
             claims.Remove(userIdClaim);
 
-            var provider = result.Properties.Items["scheme"];
+            var provider = result.Properties!.Items["scheme"];
             var providerUserId = userIdClaim.Value;
 
             // find external user
             var user = _users.FindByExternalProvider(provider, providerUserId);
 
-            return (user, provider, providerUserId, claims);
+            return (user, provider, providerUserId, claims)!;
         }
 
         private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
@@ -173,14 +176,14 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
         {
             // if the external system sent a session id claim, copy it over
             // so we can use it for single sign-out
-            var sid = externalResult.Principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
+            var sid = externalResult.Principal!.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
             if (sid != null)
             {
                 localClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
             }
 
             // if the external provider issued an id_token, we'll keep it for signout
-            var idToken = externalResult.Properties.GetTokenValue("id_token");
+            var idToken = externalResult.Properties!.GetTokenValue("id_token");
             if (idToken != null)
             {
                 localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = idToken } });

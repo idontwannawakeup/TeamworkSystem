@@ -6,6 +6,6 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
 {
     public class LogoutInputModel
     {
-        public string LogoutId { get; set; }
+        public string LogoutId { get; set; } = null!;
     }
 }

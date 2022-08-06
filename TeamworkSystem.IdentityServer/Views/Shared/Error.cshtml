@@ -1,8 +1,11 @@
 @model TeamworkSystem.IdentityServer.Quickstart.Home.ErrorViewModel
 
 @{
-    var error = Model?.Error?.Error;
+    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+    // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+    var error = Model != null ? Model.Error?.Error : null;
     var errorDescription = Model?.Error?.ErrorDescription;
+    // ReSharper disable once InconsistentNaming
     var request_id = Model?.Error?.RequestId;
 }
 

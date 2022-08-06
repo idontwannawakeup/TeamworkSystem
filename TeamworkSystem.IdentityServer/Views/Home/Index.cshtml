@@ -1,7 +1,9 @@
 @using System.Diagnostics
 
 @{
+    #pragma warning disable CS8602
     var version = FileVersionInfo.GetVersionInfo(typeof(IdentityServer4.Hosting.IdentityServerMiddleware).Assembly.Location).ProductVersion.Split('+').First();
+    #pragma warning restore CS8602
 }
 
 <div class="welcome-page">

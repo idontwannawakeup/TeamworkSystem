@@ -22,18 +22,15 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Device
         private readonly IDeviceFlowInteractionService _interaction;
         private readonly IEventService _events;
         private readonly IOptions<IdentityServerOptions> _options;
-        private readonly ILogger<DeviceController> _logger;
 
         public DeviceController(
             IDeviceFlowInteractionService interaction,
             IEventService eventService,
-            IOptions<IdentityServerOptions> options,
-            ILogger<DeviceController> logger)
+            IOptions<IdentityServerOptions> options)
         {
             _interaction = interaction;
             _events = eventService;
             _options = options;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -62,7 +59,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Device
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Callback(DeviceAuthorizationInputModel model)
+        public async Task<IActionResult> Callback(DeviceAuthorizationInputModel? model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
@@ -72,14 +69,14 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Device
             return View("Success");
         }
 
-        private async Task<ProcessConsentResult> ProcessConsent(DeviceAuthorizationInputModel model)
+        private async Task<ProcessConsentResult> ProcessConsent(DeviceAuthorizationInputModel? model)
         {
             var result = new ProcessConsentResult();
 
-            var request = await _interaction.GetAuthorizationContextAsync(model.UserCode);
+            var request = await _interaction.GetAuthorizationContextAsync(model!.UserCode);
             if (request == null) return result;
 
-            ConsentResponse grantedConsent = null;
+            ConsentResponse? grantedConsent = null;
 
             // user clicked 'no' - send back the standard 'access_denied' response
             if (model.Button == "no")
@@ -93,6 +90,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Device
             else if (model.Button == "yes")
             {
                 // if the user consented to some scope, build the response model
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (model.ScopesConsented != null && model.ScopesConsented.Any())
                 {
                     var scopes = model.ScopesConsented;
@@ -139,7 +137,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Device
             return result;
         }
 
-        private async Task<DeviceAuthorizationViewModel> BuildViewModelAsync(string userCode, DeviceAuthorizationInputModel model = null)
+        private async Task<DeviceAuthorizationViewModel?> BuildViewModelAsync(string userCode, DeviceAuthorizationInputModel? model = null)
         {
             var request = await _interaction.GetAuthorizationContextAsync(userCode);
             if (request != null)
@@ -150,7 +148,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Device
             return null;
         }
 
-        private DeviceAuthorizationViewModel CreateConsentViewModel(string userCode, DeviceAuthorizationInputModel model, DeviceFlowAuthorizationRequest request)
+        private DeviceAuthorizationViewModel CreateConsentViewModel(string userCode, DeviceAuthorizationInputModel? model, DeviceFlowAuthorizationRequest request)
         {
             var vm = new DeviceAuthorizationViewModel
             {

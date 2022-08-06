@@ -8,7 +8,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Device
 {
     public class DeviceAuthorizationViewModel : ConsentViewModel
     {
-        public string UserCode { get; set; }
+        public string UserCode { get; set; } = null!;
         public bool ConfirmUserCode { get; set; }
     }
 }
