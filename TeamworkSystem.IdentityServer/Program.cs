@@ -1,8 +1,6 @@
 using MassTransit;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.DataAccess;
-using TeamworkSystem.Identity.DataAccess.Entities;
 using TeamworkSystem.IdentityServer;
 using TeamworkSystem.Shared.Extensions;
 
@@ -29,24 +27,12 @@ services.AddDbContext<IdentityExtDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-services.AddIdentity<User, IdentityRole<Guid>>()
-        .AddEntityFrameworkStores<IdentityExtDbContext>()
-        .AddDefaultTokenProviders();
-
 services.AddIdentityServer()
-        .AddAspNetIdentity<User>()
-        .AddInMemoryApiResources(IdentityServerConfiguration.ApiResources)
-        .AddInMemoryIdentityResources(IdentityServerConfiguration.IdentityResources)
-        .AddInMemoryApiScopes(IdentityServerConfiguration.ApiScopes)
         .AddInMemoryClients(IdentityServerConfiguration.Clients)
+        .AddInMemoryIdentityResources(IdentityServerConfiguration.IdentityResources)
+        .AddInMemoryApiResources(IdentityServerConfiguration.ApiResources)
+        .AddInMemoryApiScopes(IdentityServerConfiguration.ApiScopes)
         .AddDeveloperSigningCredential();
-
-services.ConfigureApplicationCookie(config =>
-{
-    config.Cookie.Name = "TeamworkSystem.Identity.Cookie";
-    config.LoginPath = "/Identity/Login";
-    config.LogoutPath = "/Identity/Logout";
-});
 
 services.AddControllersWithViews();
 services.AddEndpointsApiExplorer();
@@ -59,6 +45,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 app.UseIdentityServer();
+
 app.MapDefaultControllerRoute();
 
 app.Run();
