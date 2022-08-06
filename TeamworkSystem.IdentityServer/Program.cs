@@ -10,7 +10,6 @@ builder.Logging.AddCustomLogging(
     "teamwork-system-identity-server");
 
 var services = builder.Services;
-services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 services.AddMassTransit(configuration =>
 {
