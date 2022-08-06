@@ -19,7 +19,7 @@ var services = builder.Services;
 services.AddPersistence(builder.Configuration);
 services.AddApplication();
 services.AddValidation();
-services.AddAuthenticationWithJwtBearer(builder.Configuration);
+services.AddTwsAuthentication(builder.Configuration);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 services.AddMassTransit(configuration =>
