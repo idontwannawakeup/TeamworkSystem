@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TeamworkSystem.Identity.DataAccess.Entities;
-using TeamworkSystem.Identity.DataAccess.Interfaces.Seeders;
+using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Interfaces.Seeders;
 
-namespace TeamworkSystem.Identity.DataAccess.Seeders;
+namespace TeamworkSystem.Identity.Persistence.People.Seeders;
 
 public class UserSeeder : IUserSeeder
 {

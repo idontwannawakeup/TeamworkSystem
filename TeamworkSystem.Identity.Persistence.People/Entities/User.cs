@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace TeamworkSystem.Identity.DataAccess.Entities;
+namespace TeamworkSystem.Identity.Persistence.People.Entities;
 
 public class User : IdentityUser<Guid>
 {

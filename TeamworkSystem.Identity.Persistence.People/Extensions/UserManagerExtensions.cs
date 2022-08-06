@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.Identity.DataAccess.Entities;
-using TeamworkSystem.Identity.DataAccess.Filters.Users;
-using TeamworkSystem.Identity.DataAccess.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Filters.Users;
+using TeamworkSystem.Identity.Persistence.People.Parameters;
 using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Extensions;
 using TeamworkSystem.Shared.Pagination;
 
-namespace TeamworkSystem.Identity.DataAccess.Extensions;
+namespace TeamworkSystem.Identity.Persistence.People.Extensions;
 
 public static class UserManagerExtensions
 {

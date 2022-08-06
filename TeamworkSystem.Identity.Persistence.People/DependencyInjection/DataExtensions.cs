@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TeamworkSystem.Identity.DataAccess.Data;
-using TeamworkSystem.Identity.DataAccess.Interfaces;
+using TeamworkSystem.Identity.Persistence.People.Data;
+using TeamworkSystem.Identity.Persistence.People.Interfaces;
 
-namespace TeamworkSystem.Identity.DataAccess.DependencyInjection;
+namespace TeamworkSystem.Identity.Persistence.People.DependencyInjection;
 
 public static class DataExtensions
 {

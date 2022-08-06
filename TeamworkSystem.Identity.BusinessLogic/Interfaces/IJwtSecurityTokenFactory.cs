@@ -1,5 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using TeamworkSystem.Identity.DataAccess.Entities;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 
 namespace TeamworkSystem.Identity.BusinessLogic.Interfaces;
 

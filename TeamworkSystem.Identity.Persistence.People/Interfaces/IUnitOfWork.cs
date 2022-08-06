@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TeamworkSystem.Identity.DataAccess.Entities;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 
-namespace TeamworkSystem.Identity.DataAccess.Interfaces;
+namespace TeamworkSystem.Identity.Persistence.People.Interfaces;
 
 public interface IUnitOfWork
 {

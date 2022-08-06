@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Responses;
-using TeamworkSystem.Identity.DataAccess.Entities;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 
 namespace TeamworkSystem.Identity.BusinessLogic.Configurations;
 

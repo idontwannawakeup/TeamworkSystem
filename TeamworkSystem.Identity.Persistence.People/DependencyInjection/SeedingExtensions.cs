@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TeamworkSystem.Identity.DataAccess.Interfaces.Seeders;
-using TeamworkSystem.Identity.DataAccess.Seeders;
+using TeamworkSystem.Identity.Persistence.People.Interfaces.Seeders;
+using TeamworkSystem.Identity.Persistence.People.Seeders;
 
-namespace TeamworkSystem.Identity.DataAccess.DependencyInjection;
+namespace TeamworkSystem.Identity.Persistence.People.DependencyInjection;
 
 public static class SeedingExtensions
 {

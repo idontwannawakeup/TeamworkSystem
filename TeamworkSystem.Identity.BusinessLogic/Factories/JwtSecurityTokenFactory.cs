@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using TeamworkSystem.Identity.BusinessLogic.Configurations;
 using TeamworkSystem.Identity.BusinessLogic.Interfaces;
-using TeamworkSystem.Identity.DataAccess.Entities;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 
 namespace TeamworkSystem.Identity.BusinessLogic.Factories;
 

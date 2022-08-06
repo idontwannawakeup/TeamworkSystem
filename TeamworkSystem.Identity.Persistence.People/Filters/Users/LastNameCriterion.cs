@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
-using TeamworkSystem.Identity.DataAccess.Entities;
-using TeamworkSystem.Identity.DataAccess.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Parameters;
 using TeamworkSystem.Shared.Interfaces.Filters;
 
-namespace TeamworkSystem.Identity.DataAccess.Filters.Users;
+namespace TeamworkSystem.Identity.Persistence.People.Filters.Users;
 
 public class LastNameCriterion : IFilterCriterion<User>
 {

@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TeamworkSystem.Identity.DataAccess.Entities;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 
-namespace TeamworkSystem.Identity.DataAccess.DependencyInjection;
+namespace TeamworkSystem.Identity.Persistence.People.DependencyInjection;
 
 public static class DatabaseExtensions
 {
@@ -12,7 +12,7 @@ public static class DatabaseExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<IdentityExtDbContext>(options =>
+        services.AddDbContext<PeopleDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             options.UseSqlServer(connectionString);
@@ -22,7 +22,7 @@ public static class DatabaseExtensions
                 .AddRoles<IdentityRole<Guid>>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<IdentityExtDbContext>();
+                .AddEntityFrameworkStores<PeopleDbContext>();
 
         return services;
     }

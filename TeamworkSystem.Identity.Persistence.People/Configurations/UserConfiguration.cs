@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TeamworkSystem.Identity.DataAccess.Entities;
-using TeamworkSystem.Identity.DataAccess.Seeders;
+using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Seeders;
 
-namespace TeamworkSystem.Identity.DataAccess.Configurations;
+namespace TeamworkSystem.Identity.Persistence.People.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

@@ -5,9 +5,9 @@ using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Identity.BusinessLogic.Interfaces;
 using TeamworkSystem.Identity.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Identity.DataAccess.Entities;
-using TeamworkSystem.Identity.DataAccess.Extensions;
-using TeamworkSystem.Identity.DataAccess.Interfaces;
+using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Extensions;
+using TeamworkSystem.Identity.Persistence.People.Interfaces;
 using TeamworkSystem.Shared.Exceptions;
 
 namespace TeamworkSystem.Identity.BusinessLogic.Services;

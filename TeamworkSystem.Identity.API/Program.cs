@@ -2,8 +2,8 @@ using MassTransit;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Identity.API.Middlewares;
 using TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
-using TeamworkSystem.Identity.DataAccess;
-using TeamworkSystem.Identity.DataAccess.DependencyInjection;
+using TeamworkSystem.Identity.Persistence.People;
+using TeamworkSystem.Identity.Persistence.People.DependencyInjection;
 using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -95,7 +95,7 @@ app.MapControllers();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<IdentityExtDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<PeopleDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     var migrationSucceeded = await context.Database.TryMigrateAsync();
     if (!migrationSucceeded)

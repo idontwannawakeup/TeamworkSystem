@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TeamworkSystem.Identity.DataAccess.Entities;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 using TeamworkSystem.Shared.Filters;
 using TeamworkSystem.Shared.Interfaces.Filters;
 
-namespace TeamworkSystem.Identity.DataAccess.DependencyInjection;
+namespace TeamworkSystem.Identity.Persistence.People.DependencyInjection;
 
 public static class FilterExtensions
 {

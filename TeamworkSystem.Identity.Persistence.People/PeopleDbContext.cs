@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.Identity.DataAccess.Entities;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 
-namespace TeamworkSystem.Identity.DataAccess;
+namespace TeamworkSystem.Identity.Persistence.People;
 
-public class IdentityExtDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+public class PeopleDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
-    public IdentityExtDbContext(DbContextOptions<IdentityExtDbContext> options) : base(options)
+    public PeopleDbContext(DbContextOptions<PeopleDbContext> options) : base(options)
     {
     }
 

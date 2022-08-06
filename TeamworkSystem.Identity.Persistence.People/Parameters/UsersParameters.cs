@@ -1,8 +1,8 @@
-﻿using TeamworkSystem.Identity.DataAccess.Entities;
+﻿using TeamworkSystem.Identity.Persistence.People.Entities;
 using TeamworkSystem.Shared.Interfaces.Filters;
 using TeamworkSystem.Shared.Parameters;
 
-namespace TeamworkSystem.Identity.DataAccess.Parameters;
+namespace TeamworkSystem.Identity.Persistence.People.Parameters;
 
 public class UsersParameters : QueryStringParameters, IFilterParameters<User>
 {
