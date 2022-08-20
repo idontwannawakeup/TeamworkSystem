@@ -108,7 +108,7 @@ services:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
       - tws-dependency-redis
-      - tws-work-management
+      - tws-work-management-api
 
   tws-gateway:
     container_name: tws-gateway
