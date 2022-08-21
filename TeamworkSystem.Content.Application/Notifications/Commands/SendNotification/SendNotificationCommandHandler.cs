@@ -20,6 +20,7 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
         SendNotificationCommand request,
         CancellationToken cancellationToken)
     {
+        // ReSharper disable once UnusedVariable
         var notification = await _unitOfWork.NotificationRepository.InsertAsync(
             _mapper.Map<Notification>(request));
 

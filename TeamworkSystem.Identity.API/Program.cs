@@ -2,7 +2,6 @@ using MassTransit;
 using Microsoft.OpenApi.Models;
 using TeamworkSystem.Identity.API.Middlewares;
 using TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
-using TeamworkSystem.Identity.Persistence.People;
 using TeamworkSystem.Identity.Persistence.People.DependencyInjection;
 using TeamworkSystem.Shared.Extensions;
 
@@ -17,7 +16,6 @@ services.AddDatabase(builder.Configuration);
 services.AddData();
 services.AddFilterFactories();
 services.AddServices();
-services.AddSeeding();
 services.AddValidation();
 services.AddAuthenticationWithJwtBearer(builder.Configuration);
 
@@ -92,16 +90,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-await using (var scope = app.Services.CreateAsyncScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<PeopleDbContext>();
-    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    var migrationSucceeded = await context.Database.TryMigrateAsync();
-    if (!migrationSucceeded)
-    {
-        logger.LogError("Migration failed. Check connection to the server.");
-    }
-}
 
 await app.RunAsync();

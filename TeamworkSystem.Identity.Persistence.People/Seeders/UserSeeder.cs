@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TeamworkSystem.Identity.Persistence.People.Entities;
-using TeamworkSystem.Identity.Persistence.People.Interfaces.Seeders;
+﻿using TeamworkSystem.Identity.Persistence.People.Entities;
 
 namespace TeamworkSystem.Identity.Persistence.People.Seeders;
 
-public class UserSeeder : IUserSeeder
+public class UserSeeder
 {
     // For all seeded users password is "User%password{number}"
     // where number is number from UserName
@@ -188,5 +186,8 @@ public class UserSeeder : IUserSeeder
         }
     };
 
-    public void Seed(EntityTypeBuilder<User> builder) => builder.HasData(Users);
+    public static void Seed(PeopleDbContext context)
+    {
+        context.Users.AddRange(Users);
+    }
 }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.Persistence.Configuration;
 using TeamworkSystem.Identity.Persistence.Operational;
 using TeamworkSystem.Identity.Persistence.People;
+using TeamworkSystem.Identity.Persistence.People.Seeders;
 using TeamworkSystem.IdentityServer;
 using TeamworkSystem.Shared.Extensions;
 
@@ -105,21 +106,37 @@ await using (var scope = app.Services.CreateAsyncScope())
 
 if (args.Contains("--tws-forced-seeding"))
 {
-    await using var scope = app.Services.CreateAsyncScope();
-    var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+    await using (var scope = app.Services.CreateAsyncScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
-    context.ApiScopes.RemoveRange(await context.ApiScopes.ToListAsync());
-    context.IdentityResources.RemoveRange(await context.IdentityResources.ToListAsync());
-    context.ApiResources.RemoveRange(await context.ApiResources.ToListAsync());
-    context.Clients.RemoveRange(await context.Clients.ToListAsync());
-    await context.SaveChangesAsync();
+        context.ApiScopes.RemoveRange(await context.ApiScopes.ToListAsync());
+        context.IdentityResources.RemoveRange(await context.IdentityResources.ToListAsync());
+        context.ApiResources.RemoveRange(await context.ApiResources.ToListAsync());
+        context.Clients.RemoveRange(await context.Clients.ToListAsync());
+        await context.SaveChangesAsync();
 
-    context.ApiScopes.AddRange(IdentityServerConfiguration.ApiScopes.Select(s => s.ToEntity()));
-    context.IdentityResources.AddRange(IdentityServerConfiguration.IdentityResources.Select(s => s.ToEntity()));
-    context.ApiResources.AddRange(IdentityServerConfiguration.ApiResources.Select(s => s.ToEntity()));
-    context.Clients.AddRange(IdentityServerConfiguration.Clients.Select(s => s.ToEntity()));
+        context.ApiScopes.AddRange(IdentityServerConfiguration.ApiScopes.Select(s => s.ToEntity()));
+        context.IdentityResources.AddRange(
+            IdentityServerConfiguration.IdentityResources.Select(s => s.ToEntity()));
 
-    await context.SaveChangesAsync();
+        context.ApiResources.AddRange(
+            IdentityServerConfiguration.ApiResources.Select(s => s.ToEntity()));
+
+        context.Clients.AddRange(IdentityServerConfiguration.Clients.Select(s => s.ToEntity()));
+
+        await context.SaveChangesAsync();
+    }
+
+    await using (var scope = app.Services.CreateAsyncScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<PeopleDbContext>();
+        if (!context.Users.Any())
+        {
+            UserSeeder.Seed(context);
+            await context.SaveChangesAsync();
+        }
+    }
 }
 
 await app.RunAsync();

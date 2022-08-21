@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.Identity.Persistence.People.Entities;
-using TeamworkSystem.Identity.Persistence.People.Seeders;
 
 namespace TeamworkSystem.Identity.Persistence.People.Configurations;
 
@@ -24,7 +23,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(user => user.Specialization)
                .HasMaxLength(50);
-
-        new UserSeeder().Seed(builder);
     }
 }
