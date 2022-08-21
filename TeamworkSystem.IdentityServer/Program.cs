@@ -2,10 +2,12 @@ using System.Reflection;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using MassTransit;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.Persistence.Configuration;
 using TeamworkSystem.Identity.Persistence.Operational;
 using TeamworkSystem.Identity.Persistence.People;
+using TeamworkSystem.Identity.Persistence.People.Entities;
 using TeamworkSystem.Identity.Persistence.People.Seeders;
 using TeamworkSystem.IdentityServer;
 using TeamworkSystem.Shared.Extensions;
@@ -32,7 +34,11 @@ services.AddDbContext<PeopleDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+services.AddIdentity<User, IdentityRole<Guid>>()
+        .AddEntityFrameworkStores<PeopleDbContext>();
+
 services.AddIdentityServer()
+        .AddAspNetIdentity<User>()
         .AddConfigurationStore(options =>
         {
             var configurationConnectionString = builder.Configuration.GetConnectionString(
