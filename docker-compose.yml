@@ -13,6 +13,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7119
+      - Kestrel__Certificates__Development__Password=SuperStrongCertPassword
       - ConnectionStrings__PeopleConnection=Server=tws.dependency.mssql;Database=TeamworkSystemPeople;User=sa;Password=YourStrong@Passw0rd;
       - ConnectionStrings__IdentityServerConfigurationConnection=Server=tws.dependency.mssql;Database=TeamworkSystemConfiguration;User=sa;Password=YourStrong@Passw0rd;
       - ConnectionStrings__IdentityServerOperationalConnection=Server=tws.dependency.mssql;Database=TeamworkSystemOperational;User=sa;Password=YourStrong@Passw0rd;
@@ -35,6 +36,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7137
+      - Kestrel__Certificates__Development__Password=SuperStrongCertPassword
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemPeople;User=sa;Password=YourStrong@Passw0rd;
       - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
@@ -56,6 +58,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7077
+      - Kestrel__Certificates__Development__Password=SuperStrongCertPassword
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemWorkManagement;User=sa;Password=YourStrong@Passw0rd;
       - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
@@ -77,6 +80,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7158
+      - Kestrel__Certificates__Development__Password=SuperStrongCertPassword
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
       - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
@@ -100,6 +104,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7211
+      - Kestrel__Certificates__Development__Password=SuperStrongCertPassword
       - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemContent;User=sa;Password=YourStrong@Passw0rd;
       - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
@@ -125,6 +130,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=7161
+      - Kestrel__Certificates__Development__Password=SuperStrongCertPassword
       - ElasticUrl=http://tws.dependency.elasticsearch:9200
     depends_on:
       - tws-identity-api
@@ -144,6 +150,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=8001
+      - Kestrel__Certificates__Development__Password=SuperStrongCertPassword
       - ApiUrl=https://tws.gateway:443
       - Intermediate__IdentityService=IdentityService/gateway
       - Intermediate__CoreService=CoreService/gateway
