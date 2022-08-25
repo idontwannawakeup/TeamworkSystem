@@ -36,24 +36,6 @@
     },
 
     {
-      "DownstreamPathTemplate": "/api/Friends/{id}",
-      "UpstreamPathTemplate": "/SocialService/gateway/Friends/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7158
-        }
-      ],
-      "FileCacheOptions": {
-        "TtlSeconds": 15,
-        "Region": "friends"
-      },
-      "UpstreamHttpMethod": [
-        "Get"
-      ]
-    },
-    {
       "DownstreamPathTemplate": "/api/{all}",
       "UpstreamPathTemplate": "/SocialService/gateway/{all}",
       "DownstreamScheme": "https",
@@ -122,53 +104,6 @@
         "Put",
         "Delete"
       ]
-    },
-
-    {
-      "Key": "AggregatedTicketExecutor",
-      "DownstreamPathTemplate": "/api/users/{executorId}",
-      "UpstreamPathTemplate": "/IdentityService/gateway/aggregatedTicket/{ticketId}/{executorId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7137
-        }
-      ],
-      "UpstreamHttpMethod": [
-        "Get"
-      ]
-    },
-    {
-      "Key": "AggregatedTicket",
-      "DownstreamPathTemplate": "/api/Tickets/{ticketId}",
-      "UpstreamPathTemplate": "/CoreService/gateway/aggregatedTicket/{ticketId}/{executorId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7077
-        }
-      ],
-      "UpstreamHttpMethod": [
-        "Get"
-      ],
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 1
-      }
-    }
-  ],
-  "Aggregates": [
-    {
-      "RouteKeys": [
-        "AggregatedTicketExecutor",
-        "AggregatedTicket"
-      ],
-      "UpstreamPathTemplate": "/gateway/aggregatedTicket/{ticketId}/{executorId}"
     }
   ]
 }

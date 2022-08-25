@@ -3,11 +3,11 @@
     {
       "DownstreamPathTemplate": "/api/{all}",
       "UpstreamPathTemplate": "/IdentityService/gateway/{all}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.identity.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
@@ -21,11 +21,11 @@
     {
       "DownstreamPathTemplate": "/api/{all}",
       "UpstreamPathTemplate": "/CoreService/gateway/{all}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.work.management.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
@@ -40,11 +40,11 @@
     {
       "DownstreamPathTemplate": "/api/Friends/{id}",
       "UpstreamPathTemplate": "/SocialService/gateway/Friends/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.social.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "FileCacheOptions": {
@@ -59,11 +59,11 @@
     {
       "DownstreamPathTemplate": "/api/{all}",
       "UpstreamPathTemplate": "/SocialService/gateway/{all}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.social.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
@@ -78,11 +78,11 @@
     {
       "DownstreamPathTemplate": "/api/Recent/{all}",
       "UpstreamPathTemplate": "/gateway/Recent/{all}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.content.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
@@ -97,11 +97,11 @@
     {
       "DownstreamPathTemplate": "/Public/Photos/{all}",
       "UpstreamPathTemplate": "/IdentityService/Public/Photos/{all}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.identity.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
@@ -115,11 +115,11 @@
     {
       "DownstreamPathTemplate": "/Public/Photos/{all}",
       "UpstreamPathTemplate": "/CoreService/Public/Photos/{all}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.work.management.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
@@ -135,11 +135,11 @@
       "Key": "AggregatedTicketExecutor",
       "DownstreamPathTemplate": "/api/users/{executorId}",
       "UpstreamPathTemplate": "/IdentityService/gateway/aggregatedTicket/{ticketId}/{executorId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.identity.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
@@ -151,11 +151,11 @@
       "Key": "AggregatedTicket",
       "DownstreamPathTemplate": "/api/Tickets/{ticketId}",
       "UpstreamPathTemplate": "/CoreService/gateway/aggregatedTicket/{ticketId}/{executorId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "tws.work.management.api",
-          "Port": 443
+          "Port": 80
         }
       ],
       "UpstreamHttpMethod": [
