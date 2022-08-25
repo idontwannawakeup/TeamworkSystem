@@ -16,10 +16,10 @@ builder.Logging.AddCustomLogging(
     "teamwork-system-content");
 
 var services = builder.Services;
-services.AddSingleton(_ => new ServicesSettings
-{
-    WorkManagementUrl = builder.Configuration["ServicesSettings:WorkManagementUrl"]
-});
+
+services.AddSingleton(builder.Configuration
+                             .GetSection(nameof(ServicesSettings))
+                             .Get<ServicesSettings>());
 
 services.AddPersistence(builder.Configuration);
 services.AddApplication();
@@ -114,7 +114,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-app.UseHttpsRedirection();
+if (app.Environment.IsStaging() || app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

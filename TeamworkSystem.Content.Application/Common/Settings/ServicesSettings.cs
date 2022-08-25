@@ -2,5 +2,5 @@
 
 public class ServicesSettings
 {
-    public string WorkManagementUrl { get; set; } = default!;
+    public string WorkManagementGrpcUrl { get; set; } = default!;
 }

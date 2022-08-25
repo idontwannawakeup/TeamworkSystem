@@ -16,7 +16,6 @@ builder.Services.AddOcelot().AddCacheManager(x =>
 
 builder.Configuration.AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
 
-
 var app = builder.Build();
 
 app.UseRouting();

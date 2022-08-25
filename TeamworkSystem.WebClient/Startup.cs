@@ -54,64 +54,36 @@ public class Startup
         services.AddHttpClient<IIdentityService, IdentityService>(httpClient =>
         {
             httpClient.BaseAddress = new($"{identityUrl}/Identity/");
-        })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
         services.AddHttpClient<IProjectsService, ProjectsService>(httpClient =>
         {
             httpClient.BaseAddress = new($"{coreUrl}/Projects/");
-        })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
         services.AddHttpClient<IRatingsService, RatingsService>(httpClient =>
         {
             httpClient.BaseAddress = new($"{socialUrl}/Ratings/");
-        })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
         services.AddHttpClient<IFriendsService, FriendsService>(httpClient =>
         {
             httpClient.BaseAddress = new($"{socialUrl}/Friends/");
-        })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
         services.AddHttpClient<ITeamsService, TeamsService>(httpClient =>
         {
             httpClient.BaseAddress = new($"{coreUrl}/Teams/");
-        })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
         services.AddHttpClient<ITicketsService, TicketsService>(httpClient =>
         {
             httpClient.BaseAddress = new($"{coreUrl}/Tickets/");
-        })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
         services.AddHttpClient<IUsersService, UsersService>(httpClient =>
         {
             httpClient.BaseAddress = new($"{identityUrl}/Users/");
-        })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
         services.AddLocalization(options => options.ResourcesPath = "Localization");
