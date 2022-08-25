@@ -14,7 +14,11 @@ builder.Services.AddOcelot().AddCacheManager(x =>
     x.WithDictionaryHandle();
 });
 
-builder.Configuration.AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
+var ocelotConfigurationFile = builder.Configuration.GetValue<bool>("DOTNET_RUNNING_IN_CONTAINER")
+    ? $"ocelot.Docker.{builder.Environment.EnvironmentName}.json"
+    : $"ocelot.{builder.Environment.EnvironmentName}.json";
+
+builder.Configuration.AddJsonFile(ocelotConfigurationFile, true, true);
 
 var app = builder.Build();
 
