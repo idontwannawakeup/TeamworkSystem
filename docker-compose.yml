@@ -35,6 +35,7 @@ services:
       - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemPeople;User=sa;Password=YourStrong@Passw0rd;
       - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
+      - AuthenticationAuthorityUrl=http://host.docker.internal:5119
       - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-dependency-mssql
@@ -74,8 +75,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+
       - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
+      - AuthenticationAuthorityUrl=http://host.docker.internal:5119
       - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-dependency-mssql
@@ -95,10 +96,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+
       - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemContent;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
       - CacheSettings__RedisConnectionString=host.docker.internal:6379
       - ServicesSettings__WorkManagementGrpcUrl=http://tws.work.management.api:90
+      - AuthenticationAuthorityUrl=http://host.docker.internal:5119
       - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-dependency-mssql
