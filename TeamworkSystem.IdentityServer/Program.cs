@@ -10,6 +10,7 @@ using TeamworkSystem.Identity.Persistence.People;
 using TeamworkSystem.Identity.Persistence.People.Entities;
 using TeamworkSystem.Identity.Persistence.People.Seeders;
 using TeamworkSystem.IdentityServer;
+using TeamworkSystem.IdentityServer.Settings;
 using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,10 @@ builder.Logging.AddCustomLogging(
     "teamwork-system-identity-server");
 
 var services = builder.Services;
+
+services.AddSingleton(builder.Configuration
+                             .GetSection(nameof(DevClientSettings))
+                             .Get<DevClientSettings>());
 
 services.AddMassTransit(configuration =>
 {
@@ -115,6 +120,7 @@ if (args.Contains("--tws-forced-seeding"))
     await using (var scope = app.Services.CreateAsyncScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+        var devClientSettings = scope.ServiceProvider.GetRequiredService<DevClientSettings>();
 
         context.ApiScopes.RemoveRange(await context.ApiScopes.ToListAsync());
         context.IdentityResources.RemoveRange(await context.IdentityResources.ToListAsync());
@@ -129,7 +135,8 @@ if (args.Contains("--tws-forced-seeding"))
         context.ApiResources.AddRange(
             IdentityServerConfiguration.ApiResources.Select(s => s.ToEntity()));
 
-        context.Clients.AddRange(IdentityServerConfiguration.Clients.Select(s => s.ToEntity()));
+        context.Clients.AddRange(IdentityServerConfiguration.Clients(devClientSettings)
+                                                            .Select(s => s.ToEntity()));
 
         await context.SaveChangesAsync();
     }

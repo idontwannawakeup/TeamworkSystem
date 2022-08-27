@@ -1,6 +1,7 @@
 ﻿using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
+using TeamworkSystem.IdentityServer.Settings;
 
 namespace TeamworkSystem.IdentityServer;
 
@@ -47,7 +48,7 @@ public static class IdentityServerConfiguration
         }
     };
 
-    public static IEnumerable<Client> Clients => new List<Client>
+    public static IEnumerable<Client> Clients(DevClientSettings settings) => new List<Client>
     {
         new Client
         {
@@ -55,7 +56,7 @@ public static class IdentityServerConfiguration
             ClientName = "TeamworkSystem Dev Client",
             AllowedGrantTypes = GrantTypes.ClientCredentials,
             AllowAccessTokensViaBrowser = true,
-            ClientSecrets = { new Secret("SuperSecretPassword".Sha256()) },
+            ClientSecrets = { new Secret(settings.Secret.Sha256()) },
             AllowedScopes =
             {
                 IdentityServerConstants.StandardScopes.OpenId,

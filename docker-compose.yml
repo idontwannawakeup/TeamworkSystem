@@ -16,6 +16,7 @@ services:
       - ConnectionStrings__IdentityServerOperationalConnection=Server=host.docker.internal,14330;Database=TeamworkSystemOperational;User=sa;Password=YourStrong@Passw0rd;
       - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
       - ElasticUrl=http://host.docker.internal:9200
+      - DevClientSettings__Secret=SuperSecretPassword
     depends_on:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
@@ -54,7 +55,6 @@ services:
       - Kestrel__Endpoints__GrpcInsecure__Url=http://*:90
       - Kestrel__Endpoints__GrpcInsecure__Protocols=Http2
       - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemWorkManagement;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
       - AuthenticationAuthorityUrl=http://host.docker.internal:5119
       - ElasticUrl=http://host.docker.internal:9200
