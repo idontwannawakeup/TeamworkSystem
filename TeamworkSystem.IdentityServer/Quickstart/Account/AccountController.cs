@@ -105,11 +105,7 @@ namespace TeamworkSystem.IdentityServer.Quickstart.Account
             if (ModelState.IsValid)
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
-                var signInResult = await _signInManager.CheckPasswordSignInAsync(
-                    user, model.Password, true);
-
-                // validate username/password against in-memory store
-                if (user is not null && signInResult == SignInResult.Success)
+                if (user is not null && await _signInManager.CheckPasswordSignInAsync(user, model.Password, true) == SignInResult.Success)
                 {
                     await _events.RaiseAsync(new UserLoginSuccessEvent(
                         user.UserName,

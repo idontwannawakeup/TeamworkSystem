@@ -1,15 +1,10 @@
-using System.Reflection;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
-using MassTransit;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.Identity.Persistence.Configuration;
-using TeamworkSystem.Identity.Persistence.Operational;
 using TeamworkSystem.Identity.Persistence.People;
-using TeamworkSystem.Identity.Persistence.People.Entities;
 using TeamworkSystem.Identity.Persistence.People.Seeders;
 using TeamworkSystem.IdentityServer;
+using TeamworkSystem.IdentityServer.DependencyInjection;
 using TeamworkSystem.IdentityServer.Settings;
 using TeamworkSystem.Shared.Extensions;
 
@@ -19,55 +14,10 @@ builder.Logging.AddCustomLogging(
     builder.Environment,
     "teamwork-system-identity-server");
 
-var services = builder.Services;
+builder.Services.AddPresentation(builder.Configuration);
 
-services.AddSingleton(builder.Configuration
-                             .GetSection(nameof(DevClientSettings))
-                             .Get<DevClientSettings>());
-
-services.AddMassTransit(configuration =>
-{
-    configuration.UsingRabbitMq((_, configurator) =>
-    {
-        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-    });
-});
-
-services.AddDbContext<PeopleDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("PeopleConnection");
-    options.UseSqlServer(connectionString);
-});
-
-services.AddIdentity<User, IdentityRole<Guid>>()
-        .AddEntityFrameworkStores<PeopleDbContext>();
-
-services.AddIdentityServer()
-        .AddAspNetIdentity<User>()
-        .AddConfigurationStore(options =>
-        {
-            var configurationConnectionString = builder.Configuration.GetConnectionString(
-                "IdentityServerConfigurationConnection");
-
-            var migrationAssembly = typeof(ConfigurationAssembly).GetTypeInfo().Assembly.GetName().Name;
-            options.ConfigureDbContext = dbBuilder => dbBuilder.UseSqlServer(
-                configurationConnectionString,
-                sqlServerOptions => sqlServerOptions.MigrationsAssembly(migrationAssembly));
-        })
-        .AddOperationalStore(options =>
-        {
-            var operationalConnectionString = builder.Configuration.GetConnectionString(
-                "IdentityServerOperationalConnection");
-
-            var migrationAssembly = typeof(OperationalAssembly).GetTypeInfo().Assembly.GetName().Name;
-            options.ConfigureDbContext = dbBuilder => dbBuilder.UseSqlServer(
-                operationalConnectionString,
-                sqlServerOptions => sqlServerOptions.MigrationsAssembly(migrationAssembly));
-        })
-        .AddDeveloperSigningCredential();
-
-services.AddControllersWithViews();
-services.AddEndpointsApiExplorer();
+builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
