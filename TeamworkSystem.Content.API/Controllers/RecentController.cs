@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using TeamworkSystem.Content.Application.Common.Responses;
 using TeamworkSystem.Content.Application.Recent.Queries.GetRecentProjects;
 using TeamworkSystem.Content.Application.Recent.Queries.GetRecentTeams;
@@ -31,18 +32,35 @@ public class RecentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetRecentProjectsAsync([FromRoute] Guid id)
     {
-        var cachedResponse = await _cache.GetStringAsync($"{id}-{RecentRequestEntityType.Project}");
-        if (cachedResponse is not null)
+        var cacheConnectionIsEstablished = true;
+        var recentProjectsCacheKey = $"{id}-{RecentRequestEntityType.Project}";
+
+        try
         {
-            return Ok(JsonSerializer.Deserialize<IEnumerable<ProjectResponse>>(cachedResponse));
+            var cachedResponse = await _cache.GetStringAsync(recentProjectsCacheKey);
+            if (cachedResponse is not null)
+            {
+                return Ok(JsonSerializer.Deserialize<IEnumerable<ProjectResponse>>(cachedResponse));
+            }
+        }
+        catch (RedisConnectionException)
+        {
+            cacheConnectionIsEstablished = false;
         }
 
         var query = new GetRecentProjectsQuery { UserId = id };
         var projects = await _mediator.Send(query);
-        await _cache.SetStringAsync(
-            $"{id}-{RecentRequestEntityType.Project}",
-            JsonSerializer.Serialize(projects),
-            new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15) });
+
+        if (cacheConnectionIsEstablished)
+        {
+            await _cache.SetStringAsync(
+                recentProjectsCacheKey,
+                JsonSerializer.Serialize(projects),
+                new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15)
+                });
+        }
 
         return Ok(projects);
     }
@@ -54,17 +72,31 @@ public class RecentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetRecentTeamsAsync([FromRoute] Guid id)
     {
-        var cachedResponse = await _cache.GetStringAsync($"{id}-{RecentRequestEntityType.Team}");
-        if (cachedResponse is not null)
+        var cacheConnectionIsEstablished = true;
+        var recentTeamsCacheKey = $"{id}-{RecentRequestEntityType.Team}";
+
+        try
         {
-            return Ok(JsonSerializer.Deserialize<IEnumerable<TeamResponse>>(cachedResponse));
+            var cachedResponse = await _cache.GetStringAsync(recentTeamsCacheKey);
+            if (cachedResponse is not null)
+            {
+                return Ok(JsonSerializer.Deserialize<IEnumerable<TeamResponse>>(cachedResponse));
+            }
+        }
+        catch (RedisConnectionException)
+        {
+            cacheConnectionIsEstablished = false;
         }
 
         var query = new GetRecentTeamsQuery { UserId = id };
         var teams = await _mediator.Send(query);
-        await _cache.SetStringAsync(
-            $"{id}-{RecentRequestEntityType.Team}",
-            JsonSerializer.Serialize(teams));
+
+        if (cacheConnectionIsEstablished)
+        {
+            await _cache.SetStringAsync(
+                $"{id}-{RecentRequestEntityType.Team}",
+                JsonSerializer.Serialize(teams));
+        }
 
         return Ok(teams);
     }
@@ -76,17 +108,31 @@ public class RecentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetRecentTicketsAsync([FromRoute] Guid id)
     {
-        var cachedResponse = await _cache.GetStringAsync($"{id}-{RecentRequestEntityType.Ticket}");
-        if (cachedResponse is not null)
+        var cacheConnectionIsEstablished = true;
+        var recentTicketsCacheKey = $"{id}-{RecentRequestEntityType.Ticket}";
+
+        try
         {
-            return Ok(JsonSerializer.Deserialize<IEnumerable<TicketResponse>>(cachedResponse));
+            var cachedResponse = await _cache.GetStringAsync(recentTicketsCacheKey);
+            if (cachedResponse is not null)
+            {
+                return Ok(JsonSerializer.Deserialize<IEnumerable<TicketResponse>>(cachedResponse));
+            }
+        }
+        catch (RedisConnectionException)
+        {
+            cacheConnectionIsEstablished = false;
         }
 
         var query = new GetRecentTicketsQuery { UserId = id };
         var tickets = await _mediator.Send(query);
-        await _cache.SetStringAsync(
-            $"{id}-{RecentRequestEntityType.Ticket}",
-            JsonSerializer.Serialize(tickets));
+
+        if (cacheConnectionIsEstablished)
+        {
+            await _cache.SetStringAsync(
+                recentTicketsCacheKey,
+                JsonSerializer.Serialize(tickets));
+        }
 
         return Ok(tickets);
     }
