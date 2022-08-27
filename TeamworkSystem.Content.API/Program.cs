@@ -24,7 +24,7 @@ services.AddSingleton(builder.Configuration
 services.AddPersistence(builder.Configuration);
 services.AddApplication();
 services.AddValidation();
-services.AddAuthenticationWithJwtBearer(builder.Configuration);
+services.AddTwsAuthentication(builder.Configuration);
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 services.AddRedis(builder.Configuration);
 

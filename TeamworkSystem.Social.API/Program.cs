@@ -21,7 +21,7 @@ services.AddFilterFactories();
 services.AddServices();
 services.AddSeeding();
 services.AddValidation();
-services.AddAuthenticationWithJwtBearer(builder.Configuration);
+services.AddTwsAuthentication(builder.Configuration);
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
