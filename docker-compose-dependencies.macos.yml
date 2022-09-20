@@ -6,6 +6,9 @@ services:
     image: mcr.microsoft.com/azure-sql-edge:1.0.6
     volumes:
       - tws-dependency-mssql-data:/var/opt/mssql
+      - tws-dependency-mssql-extensibility-data:/var/opt/mssql-extensibility
+      - tws-dependency-mssql-extensibility-data-data:/var/opt/mssql-extensibility/data
+      - tws-dependency-mssql-extensibility-log-data:/var/opt/mssql-extensibility/log
     ports:
       - "14330:1433"
     environment:
@@ -17,6 +20,8 @@ services:
     container_name: tws-dependency-rabbitmq
     hostname: tws.dependency.rabbitmq
     image: rabbitmq:3.10.5-management
+    volumes:
+      - tws-dependency-rabbitmq-data:/var/lib/rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -25,6 +30,8 @@ services:
     container_name: tws-dependency-redis
     hostname: tws.dependency.redis
     image: redis:7.0.4
+    volumes:
+      - "tws-dependency-redis-data:/data"
     ports:
       - "6379:6379"
 
@@ -51,4 +58,9 @@ services:
 
 volumes:
   tws-dependency-mssql-data:
+  tws-dependency-mssql-extensibility-data:
+  tws-dependency-mssql-extensibility-data-data:
+  tws-dependency-mssql-extensibility-log-data:
+  tws-dependency-rabbitmq-data:
+  tws-dependency-redis-data: 
   tws-dependency-elasticsearch-data:
