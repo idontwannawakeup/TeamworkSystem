@@ -62,5 +62,5 @@ volumes:
   tws-dependency-mssql-extensibility-data-data:
   tws-dependency-mssql-extensibility-log-data:
   tws-dependency-rabbitmq-data:
-  tws-dependency-redis-data: 
+  tws-dependency-redis-data:
   tws-dependency-elasticsearch-data:
