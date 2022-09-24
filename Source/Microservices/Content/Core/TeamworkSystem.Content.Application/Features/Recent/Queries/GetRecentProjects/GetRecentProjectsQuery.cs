@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TeamworkSystem.Content.Application.Common.Responses;
+using TeamworkSystem.Content.Application.Common.Models.Responses;
 
 namespace TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentProjects;
 

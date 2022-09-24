@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace TeamworkSystem.Content.API.DependencyInjection;
+namespace TeamworkSystem.Content.API.Extensions.Dependencies;
 
 public static class SwaggerExtensions
 {

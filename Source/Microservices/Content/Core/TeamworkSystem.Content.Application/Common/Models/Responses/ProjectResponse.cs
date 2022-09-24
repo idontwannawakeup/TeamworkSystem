@@ -1,4 +1,4 @@
-﻿namespace TeamworkSystem.Content.Application.Common.Responses;
+﻿namespace TeamworkSystem.Content.Application.Common.Models.Responses;
 
 public class ProjectResponse
 {

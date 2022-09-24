@@ -2,7 +2,7 @@ using MassTransit;
 using TeamworkSystem.Content.API.Consumers;
 using TeamworkSystem.Content.Application.Common.Settings;
 
-namespace TeamworkSystem.Content.API.DependencyInjection;
+namespace TeamworkSystem.Content.API.Extensions.Dependencies;
 
 public static class PresentationExtensions
 {

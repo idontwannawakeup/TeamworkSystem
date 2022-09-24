@@ -1,4 +1,4 @@
-﻿using TeamworkSystem.Content.Application.Interfaces.Repositories;
+﻿using TeamworkSystem.Content.Application.Interfaces.Data.Repositories;
 using TeamworkSystem.Content.Domain.Entities;
 using TeamworkSystem.Content.Domain.Enums;
 

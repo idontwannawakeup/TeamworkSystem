@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.Content.Application.Interfaces.Repositories;
+using TeamworkSystem.Content.Application.Interfaces.Data.Repositories;
 using TeamworkSystem.Content.Domain.Entities;
 using TeamworkSystem.Shared.Exceptions;
 

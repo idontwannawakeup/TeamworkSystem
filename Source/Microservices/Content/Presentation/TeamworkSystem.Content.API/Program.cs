@@ -1,8 +1,8 @@
-using TeamworkSystem.Content.API.DependencyInjection;
+using TeamworkSystem.Content.API.Extensions.Dependencies;
 using TeamworkSystem.Content.API.Middlewares;
-using TeamworkSystem.Content.Application.DependencyInjection;
+using TeamworkSystem.Content.Application.Extensions.Dependencies;
 using TeamworkSystem.Content.Persistence;
-using TeamworkSystem.Content.Persistence.DependencyInjection;
+using TeamworkSystem.Content.Persistence.Extensions.Dependencies;
 using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

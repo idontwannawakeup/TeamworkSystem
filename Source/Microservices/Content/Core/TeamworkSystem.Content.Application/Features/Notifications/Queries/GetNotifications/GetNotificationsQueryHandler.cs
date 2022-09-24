@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using TeamworkSystem.Content.Application.Common.Responses;
-using TeamworkSystem.Content.Application.Interfaces;
+using TeamworkSystem.Content.Application.Common.Models.Responses;
+using TeamworkSystem.Content.Application.Interfaces.Data;
 
 namespace TeamworkSystem.Content.Application.Features.Notifications.Queries.GetNotifications;
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
-using TeamworkSystem.Content.Application.Common.Responses;
+using TeamworkSystem.Content.Application.Common.Models.Responses;
 using TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentProjects;
 using TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentTeams;
 using TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentTickets;

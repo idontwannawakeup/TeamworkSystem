@@ -2,9 +2,9 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TeamworkSystem.Content.Application.DependencyInjection;
+namespace TeamworkSystem.Content.Application.Extensions.Dependencies;
 
-public static class ApplicationExtensions
+public static class ApplicationDependenciesExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {

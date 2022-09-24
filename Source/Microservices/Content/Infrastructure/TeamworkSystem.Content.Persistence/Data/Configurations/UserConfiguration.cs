@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.Content.Domain.Entities;
-using TeamworkSystem.Content.Persistence.Seeders;
+using TeamworkSystem.Content.Persistence.Data.Seeders;
 
-namespace TeamworkSystem.Content.Persistence.Configurations;
+namespace TeamworkSystem.Content.Persistence.Data.Configurations;
 
 public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 {

@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Caching.Distributed;
-using TeamworkSystem.Content.Application.Interfaces;
+using TeamworkSystem.Content.Application.Interfaces.Data;
 using TeamworkSystem.Content.Domain.Entities;
 using TeamworkSystem.Content.Domain.Enums;
 using TeamworkSystem.EventBus.Messages.RecentEvents;

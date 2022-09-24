@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TeamworkSystem.Content.Application.Common.Responses;
+using TeamworkSystem.Content.Application.Common.Models.Responses;
 using TeamworkSystem.Content.Application.Grpc.Definitions;
 
 namespace TeamworkSystem.Content.Application.Common.Mapping;

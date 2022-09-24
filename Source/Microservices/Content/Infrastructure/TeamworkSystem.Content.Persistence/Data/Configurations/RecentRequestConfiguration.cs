@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.Content.Domain.Entities;
 
-namespace TeamworkSystem.Content.Persistence.Configurations;
+namespace TeamworkSystem.Content.Persistence.Data.Configurations;
 
 public class RecentRequestConfiguration : IEntityTypeConfiguration<RecentRequest>
 {

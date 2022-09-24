@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.Content.Domain.Entities;
 
-namespace TeamworkSystem.Content.Persistence.Seeders;
+namespace TeamworkSystem.Content.Persistence.Data.Seeders;
 
 public class UserProfileSeeder
 {

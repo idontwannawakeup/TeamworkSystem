@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using TeamworkSystem.Content.Application.Interfaces;
+using TeamworkSystem.Content.Application.Interfaces.Data;
 using TeamworkSystem.Content.Domain.Entities;
 
 namespace TeamworkSystem.Content.Application.Features.Notifications.Commands.SendNotification;

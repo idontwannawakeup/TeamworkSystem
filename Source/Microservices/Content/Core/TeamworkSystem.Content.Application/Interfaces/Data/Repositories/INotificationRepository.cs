@@ -1,6 +1,6 @@
 ﻿using TeamworkSystem.Content.Domain.Entities;
 
-namespace TeamworkSystem.Content.Application.Interfaces.Repositories;
+namespace TeamworkSystem.Content.Application.Interfaces.Data.Repositories;
 
 public interface INotificationRepository
 {

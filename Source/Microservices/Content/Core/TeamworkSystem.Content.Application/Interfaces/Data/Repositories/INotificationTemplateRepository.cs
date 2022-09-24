@@ -1,7 +1,7 @@
 ﻿using TeamworkSystem.Content.Domain.Entities;
 using TeamworkSystem.Content.Domain.Enums;
 
-namespace TeamworkSystem.Content.Application.Interfaces.Repositories;
+namespace TeamworkSystem.Content.Application.Interfaces.Data.Repositories;
 
 public interface INotificationTemplateRepository
 {

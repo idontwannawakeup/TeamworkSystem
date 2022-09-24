@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace TeamworkSystem.Content.API.DependencyInjection;
+namespace TeamworkSystem.Content.API.Extensions.Dependencies;
 
 public static class AuthenticationExtensions
 {

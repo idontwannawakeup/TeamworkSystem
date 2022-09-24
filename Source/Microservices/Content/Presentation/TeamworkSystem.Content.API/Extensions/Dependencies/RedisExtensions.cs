@@ -1,6 +1,6 @@
 ﻿using StackExchange.Redis;
 
-namespace TeamworkSystem.Content.API.DependencyInjection;
+namespace TeamworkSystem.Content.API.Extensions.Dependencies;
 
 public static class RedisExtensions
 {

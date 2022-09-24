@@ -2,7 +2,7 @@
 using FluentValidation.AspNetCore;
 using TeamworkSystem.Content.Application.Common.Validation;
 
-namespace TeamworkSystem.Content.API.DependencyInjection;
+namespace TeamworkSystem.Content.API.Extensions.Dependencies;
 
 public static class ValidationExtensions
 {

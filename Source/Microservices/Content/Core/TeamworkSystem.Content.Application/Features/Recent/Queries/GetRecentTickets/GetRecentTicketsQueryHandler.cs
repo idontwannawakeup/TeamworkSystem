@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Grpc.Net.Client;
 using MediatR;
-using TeamworkSystem.Content.Application.Common.Responses;
+using TeamworkSystem.Content.Application.Common.Models.Responses;
 using TeamworkSystem.Content.Application.Common.Settings;
 using TeamworkSystem.Content.Application.Grpc.Definitions;
-using TeamworkSystem.Content.Application.Interfaces;
+using TeamworkSystem.Content.Application.Interfaces.Data;
 using TeamworkSystem.Content.Domain.Enums;
 
 namespace TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentTickets;

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeamworkSystem.Content.Domain.Entities;
 using TeamworkSystem.Content.Domain.Enums;
 
-namespace TeamworkSystem.Content.Persistence.Configurations;
+namespace TeamworkSystem.Content.Persistence.Data.Configurations;
 
 public class NotificationTemplateConfiguration : IEntityTypeConfiguration<NotificationTemplate>
 {
