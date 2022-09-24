@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Persistence", "Source\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj", "{39117289-408C-4122-BE96-51F0004991B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.EventBus.Messages", "Source\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj", "{238CA245-3AF6-4A6C-B86B-87978D4081EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.EventBus.Messages", "Source\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj", "{238CA245-3AF6-4A6C-B86B-87978D4081EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{12F35831-66D2-4AF6-BA7B-4EE5015DAEB4}"
 EndProject
@@ -62,7 +62,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Doma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Persistence", "Source\TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj", "{68C242A8-0828-4020-8923-4674167CA753}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Shared", "Source\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj", "{A57A6729-E985-4655-885D-5FC9FD13D8F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Shared", "Source\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj", "{A57A6729-E985-4655-885D-5FC9FD13D8F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.API", "Source\TeamworkSystem.Content.API\TeamworkSystem.Content.API.csproj", "{3C7A2019-8CE4-4A96-9147-9178DC2C233E}"
 EndProject
@@ -75,6 +75,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Persistence.Operational", "Source\TeamworkSystem.Identity.Persistence.Operational\TeamworkSystem.Identity.Persistence.Operational.csproj", "{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "People", "People", "{D21F8C38-F309-482E-9208-3036B81D4B58}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{F0ADF472-8B3E-4E5D-8D7B-AFD9EBC9F564}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -192,6 +194,8 @@ Global
 		{D21F8C38-F309-482E-9208-3036B81D4B58} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
 		{364B12B3-B348-4EAA-8594-E33006FF5BA8} = {D21F8C38-F309-482E-9208-3036B81D4B58}
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC} = {D21F8C38-F309-482E-9208-3036B81D4B58}
+		{A57A6729-E985-4655-885D-5FC9FD13D8F8} = {F0ADF472-8B3E-4E5D-8D7B-AFD9EBC9F564}
+		{238CA245-3AF6-4A6C-B86B-87978D4081EC} = {F0ADF472-8B3E-4E5D-8D7B-AFD9EBC9F564}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BC4D105-5E3B-4E0D-963C-895BF672E6A2}

@@ -18,18 +18,18 @@
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
-      <ProjectReference Include="..\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
-      <ProjectReference Include="..\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj" />
-      <ProjectReference Include="..\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj" />
+        <ProjectReference Include="..\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj" />
+        <ProjectReference Include="..\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj" />
+        <ProjectReference Include="..\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
+        <ProjectReference Include="..\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
