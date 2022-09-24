@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.Identity.Persistence.People.Entities;
-using TeamworkSystem.Identity.Persistence.People.Filters.Users;
-using TeamworkSystem.Identity.Persistence.People.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Common.Filters.Users;
+using TeamworkSystem.Identity.Persistence.People.Common.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Data.Entities;
 using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Extensions;
 using TeamworkSystem.Shared.Pagination;

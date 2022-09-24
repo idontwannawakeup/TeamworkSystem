@@ -3,10 +3,10 @@ using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.EventBus.Messages;
-using TeamworkSystem.Identity.People.BusinessLogic.DTO.Requests;
-using TeamworkSystem.Identity.People.BusinessLogic.DTO.Responses;
+using TeamworkSystem.Identity.People.BusinessLogic.Common.Models.Requests;
+using TeamworkSystem.Identity.People.BusinessLogic.Common.Models.Responses;
 using TeamworkSystem.Identity.People.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Identity.Persistence.People.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Common.Parameters;
 using TeamworkSystem.Shared.Pagination;
 
 namespace TeamworkSystem.Identity.People.API.Controllers;

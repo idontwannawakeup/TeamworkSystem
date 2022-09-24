@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TeamworkSystem.Identity.Persistence.People.Data;
-using TeamworkSystem.Identity.Persistence.People.Interfaces;
+using TeamworkSystem.Identity.Persistence.People.Interfaces.Data;
 
 namespace TeamworkSystem.Identity.Persistence.People.Extensions.Dependencies;
 

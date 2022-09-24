@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using TeamworkSystem.Identity.People.BusinessLogic.Validation;
+using TeamworkSystem.Identity.People.BusinessLogic.Common.Validation;
 
 namespace TeamworkSystem.Identity.People.BusinessLogic.Extensions.Dependencies;
 

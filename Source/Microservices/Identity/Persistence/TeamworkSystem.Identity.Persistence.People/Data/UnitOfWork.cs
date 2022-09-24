@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TeamworkSystem.Identity.Persistence.People.Entities;
-using TeamworkSystem.Identity.Persistence.People.Interfaces;
+using TeamworkSystem.Identity.Persistence.People.Data.Entities;
+using TeamworkSystem.Identity.Persistence.People.Interfaces.Data;
 
 namespace TeamworkSystem.Identity.Persistence.People.Data;
 

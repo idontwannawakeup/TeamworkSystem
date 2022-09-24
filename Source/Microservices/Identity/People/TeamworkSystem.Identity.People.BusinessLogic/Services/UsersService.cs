@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.Identity.People.BusinessLogic.DTO.Requests;
-using TeamworkSystem.Identity.People.BusinessLogic.DTO.Responses;
+using TeamworkSystem.Identity.People.BusinessLogic.Common.Models.Requests;
+using TeamworkSystem.Identity.People.BusinessLogic.Common.Models.Responses;
 using TeamworkSystem.Identity.People.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Common.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Data.Entities;
 using TeamworkSystem.Identity.Persistence.People.Extensions;
-using TeamworkSystem.Identity.Persistence.People.Interfaces;
-using TeamworkSystem.Identity.Persistence.People.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Interfaces.Data;
 using TeamworkSystem.Shared.Pagination;
 
 namespace TeamworkSystem.Identity.People.BusinessLogic.Services;

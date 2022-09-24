@@ -2,9 +2,9 @@ using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.Persistence.People;
-using TeamworkSystem.Identity.Persistence.People.Seeders;
-using TeamworkSystem.IdentityServer;
-using TeamworkSystem.IdentityServer.DependencyInjection;
+using TeamworkSystem.Identity.Persistence.People.Data.Seeders;
+using TeamworkSystem.IdentityServer.Configurations;
+using TeamworkSystem.IdentityServer.Extensions.Dependencies;
 using TeamworkSystem.IdentityServer.Settings;
 using TeamworkSystem.Shared.Extensions;
 

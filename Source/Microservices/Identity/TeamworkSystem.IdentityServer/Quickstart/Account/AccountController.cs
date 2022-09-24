@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Data.Entities;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace TeamworkSystem.IdentityServer.Quickstart.Account

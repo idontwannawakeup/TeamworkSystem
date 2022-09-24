@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Data.Entities;
 using TeamworkSystem.Shared.Filters;
 using TeamworkSystem.Shared.Interfaces.Filters;
 
