@@ -3,7 +3,7 @@ using MediatR;
 using TeamworkSystem.Content.Application.Interfaces;
 using TeamworkSystem.Content.Domain.Entities;
 
-namespace TeamworkSystem.Content.Application.Notifications.Commands.SendNotification;
+namespace TeamworkSystem.Content.Application.Features.Notifications.Commands.SendNotification;
 
 public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand>
 {

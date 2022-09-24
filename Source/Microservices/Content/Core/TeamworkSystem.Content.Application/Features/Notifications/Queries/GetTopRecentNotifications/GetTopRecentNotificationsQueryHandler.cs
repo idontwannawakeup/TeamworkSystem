@@ -3,7 +3,7 @@ using MediatR;
 using TeamworkSystem.Content.Application.Common.Responses;
 using TeamworkSystem.Content.Application.Interfaces;
 
-namespace TeamworkSystem.Content.Application.Notifications.Queries.GetTopRecentNotifications;
+namespace TeamworkSystem.Content.Application.Features.Notifications.Queries.GetTopRecentNotifications;
 
 public class GetTopRecentNotificationsQueryHandler
     : IRequestHandler<GetTopRecentNotificationsQuery, IEnumerable<NotificationResponse>>

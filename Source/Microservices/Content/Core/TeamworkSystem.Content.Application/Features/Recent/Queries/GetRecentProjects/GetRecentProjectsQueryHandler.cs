@@ -7,41 +7,41 @@ using TeamworkSystem.Content.Application.Grpc.Definitions;
 using TeamworkSystem.Content.Application.Interfaces;
 using TeamworkSystem.Content.Domain.Enums;
 
-namespace TeamworkSystem.Content.Application.Recent.Queries.GetRecentTickets;
+namespace TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentProjects;
 
-public class GetRecentTicketsQueryHandler
-    : IRequestHandler<GetRecentTicketsQuery, IEnumerable<TicketResponse>>
+public class GetRecentProjectsQueryHandler
+    : IRequestHandler<GetRecentProjectsQuery, IEnumerable<ProjectResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ServicesSettings _settings;
 
-    public GetRecentTicketsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ServicesSettings settings)
+    public GetRecentProjectsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ServicesSettings settings)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _settings = settings;
     }
 
-    public async Task<IEnumerable<TicketResponse>> Handle(
-        GetRecentTicketsQuery request,
+    public async Task<IEnumerable<ProjectResponse>> Handle(
+        GetRecentProjectsQuery request,
         CancellationToken cancellationToken)
     {
         var recent = await _unitOfWork.RecentRequestRepository.GetAsync(
             request.UserId,
-            RecentRequestEntityType.Ticket);
+            RecentRequestEntityType.Project);
 
-        var grpcRequest = new GetRecentTicketsRequest
+        var grpcRequest = new GetRecentProjectsRequest
         {
             Ids = { recent.Select(r => r.RequestedEntityId.ToString()) }
         };
 
         using var channel = GrpcChannel.ForAddress(_settings.WorkManagementGrpcUrl);
         var client = new RecentRequestsService.RecentRequestsServiceClient(channel);
-        var response = await client.GetRecentTicketsAsync(
+        var response = await client.GetRecentProjectsAsync(
             grpcRequest,
             cancellationToken: cancellationToken);
 
-        return _mapper.Map<IEnumerable<TicketResponse>>(response.Tickets);
+        return _mapper.Map<IEnumerable<ProjectResponse>>(response.Projects);
     }
 }

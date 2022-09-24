@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TeamworkSystem.Content.Application.Common.Responses;
 
-namespace TeamworkSystem.Content.Application.Notifications.Queries.GetNotifications;
+namespace TeamworkSystem.Content.Application.Features.Notifications.Queries.GetNotifications;
 
 public class GetNotificationsQuery : IRequest<IEnumerable<NotificationResponse>>
 {

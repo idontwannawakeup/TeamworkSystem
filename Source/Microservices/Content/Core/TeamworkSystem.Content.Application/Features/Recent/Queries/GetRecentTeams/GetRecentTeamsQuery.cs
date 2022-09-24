@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TeamworkSystem.Content.Application.Common.Responses;
 
-namespace TeamworkSystem.Content.Application.Recent.Queries.GetRecentTeams;
+namespace TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentTeams;
 
 public class GetRecentTeamsQuery : IRequest<IEnumerable<TeamResponse>>
 {

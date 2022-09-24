@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
 using TeamworkSystem.Content.Application.Common.Responses;
-using TeamworkSystem.Content.Application.Recent.Queries.GetRecentProjects;
-using TeamworkSystem.Content.Application.Recent.Queries.GetRecentTeams;
-using TeamworkSystem.Content.Application.Recent.Queries.GetRecentTickets;
+using TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentProjects;
+using TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentTeams;
+using TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentTickets;
 using TeamworkSystem.Content.Domain.Enums;
 
 namespace TeamworkSystem.Content.API.Controllers;

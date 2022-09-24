@@ -7,7 +7,7 @@ using TeamworkSystem.Content.Application.Grpc.Definitions;
 using TeamworkSystem.Content.Application.Interfaces;
 using TeamworkSystem.Content.Domain.Enums;
 
-namespace TeamworkSystem.Content.Application.Recent.Queries.GetRecentTeams;
+namespace TeamworkSystem.Content.Application.Features.Recent.Queries.GetRecentTeams;
 
 public class GetRecentTeamsQueryHandler
     : IRequestHandler<GetRecentTeamsQuery, IEnumerable<TeamResponse>>

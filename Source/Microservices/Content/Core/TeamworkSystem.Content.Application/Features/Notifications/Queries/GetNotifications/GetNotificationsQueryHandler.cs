@@ -3,7 +3,7 @@ using MediatR;
 using TeamworkSystem.Content.Application.Common.Responses;
 using TeamworkSystem.Content.Application.Interfaces;
 
-namespace TeamworkSystem.Content.Application.Notifications.Queries.GetNotifications;
+namespace TeamworkSystem.Content.Application.Features.Notifications.Queries.GetNotifications;
 
 public class GetNotificationsQueryHandler
     : IRequestHandler<GetNotificationsQuery, IEnumerable<NotificationResponse>>
