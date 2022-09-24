@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TeamworkSystem.WorkManagement.Application.Tickets.Commands.ExtendDeadline;
+using TeamworkSystem.WorkManagement.Application.Features.Tickets.Commands.ExtendDeadline;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Validation.Commands;
 

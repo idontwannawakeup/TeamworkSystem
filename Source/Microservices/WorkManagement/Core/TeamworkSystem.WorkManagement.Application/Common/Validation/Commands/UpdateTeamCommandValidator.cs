@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TeamworkSystem.WorkManagement.Application.Teams.Commands.UpdateTeam;
+using TeamworkSystem.WorkManagement.Application.Features.Teams.Commands.UpdateTeam;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Validation.Commands;
 

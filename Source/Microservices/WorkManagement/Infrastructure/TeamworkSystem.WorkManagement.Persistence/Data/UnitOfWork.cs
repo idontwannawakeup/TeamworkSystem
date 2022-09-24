@@ -1,5 +1,5 @@
-﻿using TeamworkSystem.WorkManagement.Application.Interfaces;
-using TeamworkSystem.WorkManagement.Application.Interfaces.Repositories;
+﻿using TeamworkSystem.WorkManagement.Application.Interfaces.Data;
+using TeamworkSystem.WorkManagement.Application.Interfaces.Data.Repositories;
 
 namespace TeamworkSystem.WorkManagement.Persistence.Data;
 

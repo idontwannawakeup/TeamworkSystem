@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TeamworkSystem.WorkManagement.Application.Teams.Commands.DeleteTeam;
+using TeamworkSystem.WorkManagement.Application.Features.Teams.Commands.DeleteTeam;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Validation.Commands;
 

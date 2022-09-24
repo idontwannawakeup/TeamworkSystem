@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using TeamworkSystem.WorkManagement.Application.Common.Responses;
-using TeamworkSystem.WorkManagement.Application.Teams.Commands.CreateTeam;
-using TeamworkSystem.WorkManagement.Application.Teams.Commands.UpdateTeam;
+using TeamworkSystem.WorkManagement.Application.Common.Models.Responses;
+using TeamworkSystem.WorkManagement.Application.Features.Teams.Commands.CreateTeam;
+using TeamworkSystem.WorkManagement.Application.Features.Teams.Commands.UpdateTeam;
 using TeamworkSystem.WorkManagement.Domain.Entities;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Mapping;

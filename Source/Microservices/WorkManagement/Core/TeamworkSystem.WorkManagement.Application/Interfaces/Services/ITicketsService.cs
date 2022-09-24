@@ -1,6 +1,6 @@
 ﻿using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.Application.Common.Requests;
-using TeamworkSystem.WorkManagement.Application.Common.Responses;
+using TeamworkSystem.WorkManagement.Application.Common.Models.Requests;
+using TeamworkSystem.WorkManagement.Application.Common.Models.Responses;
 using TeamworkSystem.WorkManagement.Domain.Parameters;
 
 namespace TeamworkSystem.WorkManagement.Application.Interfaces.Services;

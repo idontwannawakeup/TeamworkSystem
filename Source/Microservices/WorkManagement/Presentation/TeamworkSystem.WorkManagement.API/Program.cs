@@ -1,10 +1,10 @@
 using TeamworkSystem.Shared.Extensions;
-using TeamworkSystem.WorkManagement.API.DependencyInjection;
+using TeamworkSystem.WorkManagement.API.Extensions.Dependencies;
 using TeamworkSystem.WorkManagement.API.Grpc;
 using TeamworkSystem.WorkManagement.API.Middlewares;
-using TeamworkSystem.WorkManagement.Application.DependencyInjection;
+using TeamworkSystem.WorkManagement.Application.Extensions.Dependencies;
 using TeamworkSystem.WorkManagement.Persistence;
-using TeamworkSystem.WorkManagement.Persistence.DependencyInjection;
+using TeamworkSystem.WorkManagement.Persistence.Extensions.Dependencies;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddCustomLogging(

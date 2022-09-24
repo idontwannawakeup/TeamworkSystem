@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.Application.Common.Requests;
-using TeamworkSystem.WorkManagement.Application.Common.Responses;
-using TeamworkSystem.WorkManagement.Application.Interfaces;
-using TeamworkSystem.WorkManagement.Application.Interfaces.Repositories;
+using TeamworkSystem.WorkManagement.Application.Common.Models.Requests;
+using TeamworkSystem.WorkManagement.Application.Common.Models.Responses;
+using TeamworkSystem.WorkManagement.Application.Interfaces.Data;
+using TeamworkSystem.WorkManagement.Application.Interfaces.Data.Repositories;
 using TeamworkSystem.WorkManagement.Application.Interfaces.Services;
 using TeamworkSystem.WorkManagement.Domain.Entities;
 using TeamworkSystem.WorkManagement.Domain.Parameters;

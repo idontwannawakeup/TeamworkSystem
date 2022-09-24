@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TeamworkSystem.WorkManagement.Application.Projects.Commands.DeleteProject;
+using TeamworkSystem.WorkManagement.Application.Features.Projects.Commands.DeleteProject;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Validation.Commands;
 

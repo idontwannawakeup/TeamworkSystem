@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using TeamworkSystem.WorkManagement.Application.Interfaces.Storages;
+using TeamworkSystem.WorkManagement.Application.Interfaces.Data.Storages;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Storages;
 

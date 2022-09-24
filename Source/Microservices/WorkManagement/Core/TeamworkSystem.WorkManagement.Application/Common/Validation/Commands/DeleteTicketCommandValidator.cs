@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TeamworkSystem.WorkManagement.Application.Tickets.Commands.DeleteTicket;
+using TeamworkSystem.WorkManagement.Application.Features.Tickets.Commands.DeleteTicket;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Validation.Commands;
 

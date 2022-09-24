@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TeamworkSystem.WorkManagement.Application.Tickets.Commands.UpdateTicket;
+using TeamworkSystem.WorkManagement.Application.Features.Tickets.Commands.UpdateTicket;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Validation.Commands;
 

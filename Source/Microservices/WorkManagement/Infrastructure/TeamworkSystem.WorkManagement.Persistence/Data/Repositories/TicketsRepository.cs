@@ -3,7 +3,7 @@ using TeamworkSystem.Shared.Exceptions;
 using TeamworkSystem.Shared.Extensions;
 using TeamworkSystem.Shared.Interfaces.Filters;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.Application.Interfaces.Repositories;
+using TeamworkSystem.WorkManagement.Application.Interfaces.Data.Repositories;
 using TeamworkSystem.WorkManagement.Domain.Entities;
 using TeamworkSystem.WorkManagement.Domain.Parameters;
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Grpc.Core;
 using TeamworkSystem.WorkManagement.API.Grpc.Definitions;
-using TeamworkSystem.WorkManagement.Application.Interfaces;
+using TeamworkSystem.WorkManagement.Application.Interfaces.Data;
 
 namespace TeamworkSystem.WorkManagement.API.Grpc;
 

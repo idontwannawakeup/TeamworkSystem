@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TeamworkSystem.WorkManagement.Application.Common.Responses;
+using TeamworkSystem.WorkManagement.Application.Common.Models.Responses;
 using TeamworkSystem.WorkManagement.Domain.Entities;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Mapping;

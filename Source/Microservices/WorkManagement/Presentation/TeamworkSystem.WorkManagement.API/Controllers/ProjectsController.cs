@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamworkSystem.EventBus.Messages.RecentEvents;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.WorkManagement.Application.Common.Responses;
-using TeamworkSystem.WorkManagement.Application.Projects.Commands.CreateProject;
-using TeamworkSystem.WorkManagement.Application.Projects.Commands.DeleteProject;
-using TeamworkSystem.WorkManagement.Application.Projects.Commands.UpdateProject;
-using TeamworkSystem.WorkManagement.Application.Projects.Queries.GetProjectById;
-using TeamworkSystem.WorkManagement.Application.Projects.Queries.GetProjects;
+using TeamworkSystem.WorkManagement.Application.Common.Models.Responses;
+using TeamworkSystem.WorkManagement.Application.Features.Projects.Commands.CreateProject;
+using TeamworkSystem.WorkManagement.Application.Features.Projects.Commands.DeleteProject;
+using TeamworkSystem.WorkManagement.Application.Features.Projects.Commands.UpdateProject;
+using TeamworkSystem.WorkManagement.Application.Features.Projects.Queries.GetProjectById;
+using TeamworkSystem.WorkManagement.Application.Features.Projects.Queries.GetProjects;
 using TeamworkSystem.WorkManagement.Domain.Parameters;
 
 namespace TeamworkSystem.WorkManagement.API.Controllers;

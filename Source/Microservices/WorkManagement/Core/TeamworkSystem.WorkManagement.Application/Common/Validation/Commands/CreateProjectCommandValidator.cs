@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TeamworkSystem.WorkManagement.Application.Projects.Commands.CreateProject;
+using TeamworkSystem.WorkManagement.Application.Features.Projects.Commands.CreateProject;
 
 namespace TeamworkSystem.WorkManagement.Application.Common.Validation.Commands;
 
