@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using TeamworkSystem.Identity.Persistence.People.Data.Entities;
-using TeamworkSystem.Identity.Persistence.People.Interfaces.Data;
+﻿using TeamworkSystem.Identity.Persistence.People.Interfaces.Data;
+using TeamworkSystem.Identity.Persistence.People.Interfaces.Data.Repositories;
 
 namespace TeamworkSystem.Identity.Persistence.People.Data;
 
@@ -10,13 +9,13 @@ public class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(
         PeopleDbContext databaseContext,
-        UserManager<User> userManager)
+        IUsersRepository usersRepository)
     {
         DatabaseContext = databaseContext;
-        UserManager = userManager;
+        UsersRepository = usersRepository;
     }
 
-    public UserManager<User> UserManager { get; }
+    public IUsersRepository UsersRepository { get; set; }
 
     public async Task SaveChangesAsync() => await DatabaseContext.SaveChangesAsync();
 }

@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using TeamworkSystem.Identity.Persistence.People.Data.Entities;
+﻿using TeamworkSystem.Identity.Persistence.People.Interfaces.Data.Repositories;
 
 namespace TeamworkSystem.Identity.Persistence.People.Interfaces.Data;
 
 public interface IUnitOfWork
 {
-    UserManager<User> UserManager { get; }
+    IUsersRepository UsersRepository { get; set; }
 
     Task SaveChangesAsync();
 }
