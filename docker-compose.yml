@@ -33,7 +33,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+
       - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemPeople;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
       - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
       - AuthenticationAuthorityUrl=http://host.docker.internal:5119
       - ElasticUrl=http://host.docker.internal:9200
