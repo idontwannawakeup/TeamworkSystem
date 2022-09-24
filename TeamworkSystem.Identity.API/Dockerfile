@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["TeamworkSystem.Identity.API/TeamworkSystem.Identity.API.csproj", "TeamworkSystem.Identity.API/"]
 COPY ["TeamworkSystem.Identity.BusinessLogic/TeamworkSystem.Identity.BusinessLogic.csproj", "TeamworkSystem.Identity.BusinessLogic/"]
-COPY ["TeamworkSystem.Identity.DataAccess/TeamworkSystem.Identity.DataAccess.csproj", "TeamworkSystem.Identity.DataAccess/"]
+COPY ["TeamworkSystem.Identity.Persistence.People/TeamworkSystem.Identity.Persistence.People.csproj", "TeamworkSystem.Identity.Persistence.People/"]
 COPY ["TeamworkSystem.Shared/TeamworkSystem.Shared.csproj", "TeamworkSystem.Shared/"]
 COPY ["TeamworkSystem.EventBus.Messages/TeamworkSystem.EventBus.Messages.csproj", "TeamworkSystem.EventBus.Messages/"]
 RUN dotnet restore "TeamworkSystem.Identity.API/TeamworkSystem.Identity.API.csproj"

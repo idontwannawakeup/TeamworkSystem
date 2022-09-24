@@ -10,6 +10,7 @@
   "profiles": {
     "TeamworkSystem.IdentityServer": {
       "commandName": "Project",
+      "commandLineArgs": "--tws-forced-seeding",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.API
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.BusinessLogic", "TeamworkSystem.Identity.BusinessLogic\TeamworkSystem.Identity.BusinessLogic.csproj", "{364B12B3-B348-4EAA-8594-E33006FF5BA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.DataAccess", "TeamworkSystem.Identity.DataAccess\TeamworkSystem.Identity.DataAccess.csproj", "{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.Persistence.People", "TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj", "{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Social", "Social", "{84CDE9D4-C6D9-4910-A990-B5785BD2C92D}"
 EndProject
@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.linux.override.yml = docker-compose.linux.override.yml
 		docker-compose.windows.override.yml = docker-compose.windows.override.yml
 		docker-compose.yml = docker-compose.yml
+		docker-compose-dependencies.macos.yml = docker-compose-dependencies.macos.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B8F05D9D-66CC-432A-BE03-C92A8FB59E0A}"
@@ -76,6 +77,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.API", "TeamworkSystem.Content.API\TeamworkSystem.Content.API.csproj", "{3C7A2019-8CE4-4A96-9147-9178DC2C233E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.IdentityServer", "TeamworkSystem.IdentityServer\TeamworkSystem.IdentityServer.csproj", "{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{CE79B757-23C9-4FAE-8EA5-053823C06A73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Persistence.Configuration", "TeamworkSystem.Identity.Persistence.Configuration\TeamworkSystem.Identity.Persistence.Configuration.csproj", "{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Persistence.Operational", "TeamworkSystem.Identity.Persistence.Operational\TeamworkSystem.Identity.Persistence.Operational.csproj", "{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "People", "People", "{D21F8C38-F309-482E-9208-3036B81D4B58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +180,14 @@ Global
 		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,9 +196,6 @@ Global
 		{D194DDC2-370D-4DBB-BD09-903564C3C95C} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
 		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
 		{44F5F84B-864B-43AE-B6C9-49BACA602BAA} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
-		{A26C9176-93B6-436B-82D4-D7EEA5491FAC} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
-		{364B12B3-B348-4EAA-8594-E33006FF5BA8} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
-		{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
 		{5D9FB114-CA77-446D-988A-A00643B55161} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
 		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
 		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
@@ -200,6 +214,13 @@ Global
 		{68C242A8-0828-4020-8923-4674167CA753} = {E8DAC861-58E2-49F4-BB9E-0F75E1001E90}
 		{3C7A2019-8CE4-4A96-9147-9178DC2C233E} = {ECE28A0C-6C39-40DE-878D-66C413926AB5}
 		{2FCD86C2-2954-459B-AFD4-47A034AB7BD1} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
+		{CE79B757-23C9-4FAE-8EA5-053823C06A73} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
+		{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA} = {CE79B757-23C9-4FAE-8EA5-053823C06A73}
+		{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE} = {CE79B757-23C9-4FAE-8EA5-053823C06A73}
+		{1C6A8E20-B036-48CE-977B-1661D9FE1C2D} = {CE79B757-23C9-4FAE-8EA5-053823C06A73}
+		{D21F8C38-F309-482E-9208-3036B81D4B58} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
+		{364B12B3-B348-4EAA-8594-E33006FF5BA8} = {D21F8C38-F309-482E-9208-3036B81D4B58}
+		{A26C9176-93B6-436B-82D4-D7EEA5491FAC} = {D21F8C38-F309-482E-9208-3036B81D4B58}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BC4D105-5E3B-4E0D-963C-895BF672E6A2}

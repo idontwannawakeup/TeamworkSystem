@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TeamworkSystem.Identity.DataAccess\TeamworkSystem.Identity.DataAccess.csproj" />
+      <ProjectReference Include="..\TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="AutoMapper" Version="11.0.0" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
       <PackageReference Include="FluentValidation" Version="10.3.6" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />

@@ -8,14 +8,15 @@ services:
       dockerfile: ./TeamworkSystem.IdentityServer/Dockerfile
     ports:
       - "5119:80"
-      - "7119:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=7119
-      - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemIdentity;User=sa;Password=YourStrong@Passw0rd;
-      - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
-      - ElasticUrl=http://tws.dependency.elasticsearch:9200
+      - ASPNETCORE_URLS=http://+
+      - ConnectionStrings__PeopleConnection=Server=host.docker.internal,14330;Database=TeamworkSystemPeople;User=sa;Password=YourStrong@Passw0rd;
+      - ConnectionStrings__IdentityServerConfigurationConnection=Server=host.docker.internal,14330;Database=TeamworkSystemConfiguration;User=sa;Password=YourStrong@Passw0rd;
+      - ConnectionStrings__IdentityServerOperationalConnection=Server=host.docker.internal,14330;Database=TeamworkSystemOperational;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
+      - ElasticUrl=http://host.docker.internal:9200
+      - DevClientSettings__Secret=SuperSecretPassword
     depends_on:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
@@ -28,15 +29,13 @@ services:
       dockerfile: ./TeamworkSystem.Identity.API/Dockerfile
     ports:
       - "5137:80"
-      - "7137:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=7137
-      - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemIdentity;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
-      - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
-      - ElasticUrl=http://tws.dependency.elasticsearch:9200
+      - ASPNETCORE_URLS=http://+
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemPeople;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
+      - AuthenticationAuthorityUrl=http://host.docker.internal:5119
+      - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
@@ -49,15 +48,16 @@ services:
       dockerfile: ./TeamworkSystem.WorkManagement.API/Dockerfile
     ports:
       - "5077:80"
-      - "7077:443"
+      - "6077:90"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=7077
-      - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemWorkManagement;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
-      - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
-      - ElasticUrl=http://tws.dependency.elasticsearch:9200
+      - Kestrel__Endpoints__Http__Url=http://*:80
+      - Kestrel__Endpoints__GrpcInsecure__Url=http://*:90
+      - Kestrel__Endpoints__GrpcInsecure__Protocols=Http2
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemWorkManagement;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
+      - AuthenticationAuthorityUrl=http://host.docker.internal:5119
+      - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
@@ -70,15 +70,13 @@ services:
       dockerfile: ./TeamworkSystem.Social.API/Dockerfile
     ports:
       - "5158:80"
-      - "7158:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=7158
-      - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
-      - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
-      - ElasticUrl=http://tws.dependency.elasticsearch:9200
+      - ASPNETCORE_URLS=http://+
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemSocial;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
+      - AuthenticationAuthorityUrl=http://host.docker.internal:5119
+      - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
@@ -93,22 +91,20 @@ services:
       dockerfile: ./TeamworkSystem.Content.API/Dockerfile
     ports:
       - "5211:80"
-      - "7211:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=7211
-      - ConnectionStrings__DefaultConnection=Server=tws.dependency.mssql;Database=TeamworkSystemContent;User=sa;Password=YourStrong@Passw0rd;
-      - JwtSecurityKey=SomeVeryRandomSecrityValue
-      - EventBusSettings__HostAddress=amqp://guest:guest@tws.dependency.rabbitmq:5672
-      - CacheSettings__RedisConnectionString=tws.dependency.redis:6379
-      - ServicesSettings__WorkManagementUrl=https://tws.work.management.api:443
-      - ElasticUrl=http://tws.dependency.elasticsearch:9200
+      - ASPNETCORE_URLS=http://+
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal,14330;Database=TeamworkSystemContent;User=sa;Password=YourStrong@Passw0rd;
+      - EventBusSettings__HostAddress=amqp://guest:guest@host.docker.internal:5672
+      - CacheSettings__RedisConnectionString=host.docker.internal:6379
+      - ServicesSettings__WorkManagementGrpcUrl=http://tws.work.management.api:90
+      - AuthenticationAuthorityUrl=http://host.docker.internal:5119
+      - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-dependency-mssql
       - tws-dependency-rabbitmq
       - tws-dependency-redis
-      - tws-work-management
+      - tws-work-management-api
 
   tws-gateway:
     container_name: tws-gateway
@@ -118,12 +114,10 @@ services:
       dockerfile: ./TeamworkSystem.Gateway/Dockerfile
     ports:
       - "5161:80"
-      - "7161:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=7161
-      - ElasticUrl=http://tws.dependency.elasticsearch:9200
+      - ASPNETCORE_URLS=http://+
+      - ElasticUrl=http://host.docker.internal:9200
     depends_on:
       - tws-identity-api
       - tws-work-management-api
@@ -137,14 +131,12 @@ services:
       dockerfile: ./TeamworkSystem.WebClient/Dockerfile
     ports:
       - "8000:80"
-      - "8001:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORT=8001
-      - ApiUrl=https://tws.gateway:443
+      - ASPNETCORE_URLS=http://+
+      - ApiUrl=http://tws.gateway:80
       - Intermediate__IdentityService=IdentityService/gateway
       - Intermediate__CoreService=CoreService/gateway
       - Intermediate__SocialService=SocialService/gateway
     depends_on:
-      - tws-gateway-api
+      - tws-gateway

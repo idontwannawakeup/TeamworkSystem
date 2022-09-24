@@ -36,16 +36,7 @@ public class GetRecentTeamsQueryHandler
             Ids = { recent.Select(r => r.RequestedEntityId.ToString()) }
         };
 
-        var httpHandler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback =
-                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
-
-        using var channel = GrpcChannel.ForAddress(
-            _settings.WorkManagementUrl,
-            new GrpcChannelOptions { HttpHandler = httpHandler });
-
+        using var channel = GrpcChannel.ForAddress(_settings.WorkManagementGrpcUrl);
         var client = new RecentRequestsService.RecentRequestsServiceClient(channel);
         var response = await client.GetRecentTeamsAsync(
             grpcRequest,

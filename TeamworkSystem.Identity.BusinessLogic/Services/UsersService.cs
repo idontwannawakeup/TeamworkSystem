@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Responses;
 using TeamworkSystem.Identity.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Identity.DataAccess.Entities;
-using TeamworkSystem.Identity.DataAccess.Extensions;
-using TeamworkSystem.Identity.DataAccess.Interfaces;
-using TeamworkSystem.Identity.DataAccess.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Entities;
+using TeamworkSystem.Identity.Persistence.People.Extensions;
+using TeamworkSystem.Identity.Persistence.People.Interfaces;
+using TeamworkSystem.Identity.Persistence.People.Parameters;
 using TeamworkSystem.Shared.Pagination;
 
 namespace TeamworkSystem.Identity.BusinessLogic.Services;

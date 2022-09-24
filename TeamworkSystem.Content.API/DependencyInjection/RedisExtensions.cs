@@ -4,7 +4,9 @@ namespace TeamworkSystem.Content.API.DependencyInjection;
 
 public static class RedisExtensions
 {
-    public static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddRedis(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         var configurationOptions = new ConfigurationOptions
         {
@@ -12,8 +14,8 @@ public static class RedisExtensions
             Ssl = false
         };
 
-        services.AddStackExchangeRedisCache(options =>
-                    options.ConfigurationOptions = configurationOptions)
+        services.AddStackExchangeRedisCache(
+                    options => options.ConfigurationOptions = configurationOptions)
                 .BuildServiceProvider();
 
         return services;

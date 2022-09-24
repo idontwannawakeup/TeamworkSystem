@@ -1,4 +1,4 @@
-{
+﻿{
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/{all}",
@@ -6,8 +6,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "tws.identity.api",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 7137
         }
       ],
       "UpstreamHttpMethod": [
@@ -15,8 +15,7 @@
         "Post",
         "Put",
         "Delete"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      ]
     },
     {
       "DownstreamPathTemplate": "/api/{all}",
@@ -24,8 +23,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "tws.work.management.api",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 7077
         }
       ],
       "UpstreamHttpMethod": [
@@ -33,37 +32,17 @@
         "Post",
         "Put",
         "Delete"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      ]
     },
 
-    {
-      "DownstreamPathTemplate": "/api/Friends/{id}",
-      "UpstreamPathTemplate": "/SocialService/gateway/Friends/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "tws.social.api",
-          "Port": 443
-        }
-      ],
-      "FileCacheOptions": {
-        "TtlSeconds": 15,
-        "Region": "friends"
-      },
-      "UpstreamHttpMethod": [
-        "Get"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
     {
       "DownstreamPathTemplate": "/api/{all}",
       "UpstreamPathTemplate": "/SocialService/gateway/{all}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "tws.social.api",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 7158
         }
       ],
       "UpstreamHttpMethod": [
@@ -71,8 +50,7 @@
         "Post",
         "Put",
         "Delete"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      ]
     },
 
     {
@@ -81,8 +59,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "tws.content.api",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 7211
         }
       ],
       "UpstreamHttpMethod": [
@@ -90,8 +68,7 @@
         "Post",
         "Put",
         "Delete"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      ]
     },
 
     {
@@ -100,8 +77,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "tws.identity.api",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 7137
         }
       ],
       "UpstreamHttpMethod": [
@@ -109,8 +86,7 @@
         "Post",
         "Put",
         "Delete"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      ]
     },
     {
       "DownstreamPathTemplate": "/Public/Photos/{all}",
@@ -118,8 +94,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "tws.work.management.api",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 7077
         }
       ],
       "UpstreamHttpMethod": [
@@ -127,57 +103,7 @@
         "Post",
         "Put",
         "Delete"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-
-    {
-      "Key": "AggregatedTicketExecutor",
-      "DownstreamPathTemplate": "/api/users/{executorId}",
-      "UpstreamPathTemplate": "/IdentityService/gateway/aggregatedTicket/{ticketId}/{executorId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "tws.identity.api",
-          "Port": 443
-        }
-      ],
-      "UpstreamHttpMethod": [
-        "Get"
-      ],
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-    {
-      "Key": "AggregatedTicket",
-      "DownstreamPathTemplate": "/api/Tickets/{ticketId}",
-      "UpstreamPathTemplate": "/CoreService/gateway/aggregatedTicket/{ticketId}/{executorId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "tws.work.management.api",
-          "Port": 443
-        }
-      ],
-      "UpstreamHttpMethod": [
-        "Get"
-      ],
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 1
-      },
-      "DangerousAcceptAnyServerCertificateValidator": true
-    }
-  ],
-  "Aggregates": [
-    {
-      "RouteKeys": [
-        "AggregatedTicketExecutor",
-        "AggregatedTicket"
-      ],
-      "UpstreamPathTemplate": "/gateway/aggregatedTicket/{ticketId}/{executorId}"
+      ]
     }
   ]
 }

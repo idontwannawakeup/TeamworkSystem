@@ -1,6 +1,6 @@
 ﻿using TeamworkSystem.Identity.BusinessLogic.DTO.Requests;
 using TeamworkSystem.Identity.BusinessLogic.DTO.Responses;
-using TeamworkSystem.Identity.DataAccess.Parameters;
+using TeamworkSystem.Identity.Persistence.People.Parameters;
 using TeamworkSystem.Shared.Pagination;
 
 namespace TeamworkSystem.Identity.BusinessLogic.Interfaces.Services;

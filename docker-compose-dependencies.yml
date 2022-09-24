@@ -16,6 +16,8 @@ services:
     container_name: tws-dependency-rabbitmq
     hostname: tws.dependency.rabbitmq
     image: rabbitmq:3.10.5-management
+    volumes:
+      - tws-dependency-rabbitmq-data:/var/lib/rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -24,6 +26,8 @@ services:
     container_name: tws-dependency-redis
     hostname: tws.dependency.redis
     image: redis:7.0.4
+    volumes:
+      - "tws-dependency-redis-data:/data"
     ports:
       - "6379:6379"
 
@@ -50,4 +54,6 @@ services:
 
 volumes:
   tws-dependency-mssql-data:
+  tws-dependency-rabbitmq-data:
+  tws-dependency-redis-data:
   tws-dependency-elasticsearch-data:

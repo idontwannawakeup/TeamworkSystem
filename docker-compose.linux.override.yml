@@ -3,34 +3,34 @@ services:
   tws-identity-server:
     volumes:
       - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
+      - "${HOME}/.aspnet/https:/root/.aspnet/https/:ro"
 
   tws-identity-api:
     volumes:
       - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
+      - "${HOME}/.aspnet/https:/root/.aspnet/https/:ro"
 
   tws-work-management-api:
     volumes:
       - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
+      - "${HOME}/.aspnet/https:/root/.aspnet/https/:ro"
 
   tws-social-api:
     volumes:
       - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
+      - "${HOME}/.aspnet/https:/root/.aspnet/https/:ro"
 
   tws-content-api:
     volumes:
       - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
+      - "${HOME}/.aspnet/https:/root/.aspnet/https/:ro"
 
   tws-gateway:
     volumes:
       - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
+      - "${HOME}/.aspnet/https:/root/.aspnet/https/:ro"
 
   tws-client:
     volumes:
       - "${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro"
-      - "${HOME}/.aspnet/https:/https/:ro"
+      - "${HOME}/.aspnet/https:/root/.aspnet/https/:ro"

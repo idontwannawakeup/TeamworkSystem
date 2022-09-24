@@ -1,28 +1,21 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace TeamworkSystem.Content.API.DependencyInjection;
 
 public static class AuthenticationExtensions
 {
-    public static IServiceCollection AddAuthenticationWithJwtBearer(
+    public static IServiceCollection AddTwsAuthentication(
         this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
+                .AddIdentityServerAuthentication(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    options =>
                     {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"])),
-                        ClockSkew = TimeSpan.Zero
-                    };
-                });
+                        options.ApiName = "content-api";
+                        options.Authority = configuration["AuthenticationAuthorityUrl"];
+                    });
 
         return services;
     }
