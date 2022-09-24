@@ -3,9 +3,9 @@ using TeamworkSystem.Identity.Persistence.People.Entities;
 using TeamworkSystem.Shared.Filters;
 using TeamworkSystem.Shared.Interfaces.Filters;
 
-namespace TeamworkSystem.Identity.Persistence.People.DependencyInjection;
+namespace TeamworkSystem.Identity.Persistence.People.Extensions.Dependencies;
 
-public static class FilterExtensions
+public static class FiltersDependenciesExtensions
 {
     public static IServiceCollection AddFilterFactories(this IServiceCollection services)
     {

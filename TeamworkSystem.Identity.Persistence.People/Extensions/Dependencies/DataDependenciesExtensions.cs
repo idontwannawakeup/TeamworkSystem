@@ -2,9 +2,9 @@
 using TeamworkSystem.Identity.Persistence.People.Data;
 using TeamworkSystem.Identity.Persistence.People.Interfaces;
 
-namespace TeamworkSystem.Identity.Persistence.People.DependencyInjection;
+namespace TeamworkSystem.Identity.Persistence.People.Extensions.Dependencies;
 
-public static class DataExtensions
+public static class DataDependenciesExtensions
 {
     public static IServiceCollection AddData(this IServiceCollection services)
     {

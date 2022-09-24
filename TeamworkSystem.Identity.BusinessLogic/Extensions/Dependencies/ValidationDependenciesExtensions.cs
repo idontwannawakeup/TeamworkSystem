@@ -3,9 +3,9 @@ using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using TeamworkSystem.Identity.BusinessLogic.Validation;
 
-namespace TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
+namespace TeamworkSystem.Identity.BusinessLogic.Extensions.Dependencies;
 
-public static class ValidationExtensions
+public static class ValidationDependenciesExtensions
 {
     public static IServiceCollection AddValidation(this IServiceCollection services)
     {

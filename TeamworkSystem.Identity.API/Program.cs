@@ -1,7 +1,7 @@
 using TeamworkSystem.Identity.API.Extensions.Dependencies;
 using TeamworkSystem.Identity.API.Middlewares;
-using TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
-using TeamworkSystem.Identity.Persistence.People.DependencyInjection;
+using TeamworkSystem.Identity.BusinessLogic.Extensions.Dependencies;
+using TeamworkSystem.Identity.Persistence.People.Extensions.Dependencies;
 using TeamworkSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,15 +10,10 @@ builder.Logging.AddCustomLogging(
     builder.Environment,
     "teamwork-system-identity");
 
-var services = builder.Services;
-services.AddDatabase(builder.Configuration);
-services.AddData();
-services.AddFilterFactories();
-services.AddServices();
-services.AddValidation();
-
-services.AddPresentation(builder.Configuration);
-services.AddEndpointsApiExplorer();
+builder.Services.AddDataAccess(builder.Configuration);
+builder.Services.AddBusinessLogic();
+builder.Services.AddPresentation(builder.Configuration);
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 

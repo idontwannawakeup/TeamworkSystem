@@ -2,9 +2,9 @@
 using TeamworkSystem.Identity.BusinessLogic.Interfaces.Services;
 using TeamworkSystem.Identity.BusinessLogic.Services;
 
-namespace TeamworkSystem.Identity.BusinessLogic.DependencyInjection;
+namespace TeamworkSystem.Identity.BusinessLogic.Extensions.Dependencies;
 
-public static class ServicesExtensions
+public static class ServicesDependenciesExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {

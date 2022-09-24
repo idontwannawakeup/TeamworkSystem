@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TeamworkSystem.Identity.Persistence.People.Entities;
 
-namespace TeamworkSystem.Identity.Persistence.People.DependencyInjection;
+namespace TeamworkSystem.Identity.Persistence.People.Extensions.Dependencies;
 
-public static class DatabaseExtensions
+public static class DatabaseDependenciesExtensions
 {
     public static IServiceCollection AddDatabase(
         this IServiceCollection services,
