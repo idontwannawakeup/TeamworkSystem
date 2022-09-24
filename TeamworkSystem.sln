@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WebAPI", "Source\TeamworkSystem.WebAPI\TeamworkSystem.WebAPI.csproj", "{D194DDC2-370D-4DBB-BD09-903564C3C95C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.DataAccessLayer", "Source\TeamworkSystem.DataAccessLayer\TeamworkSystem.DataAccessLayer.csproj", "{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.BusinessLogicLayer", "Source\TeamworkSystem.BusinessLogicLayer\TeamworkSystem.BusinessLogicLayer.csproj", "{44F5F84B-864B-43AE-B6C9-49BACA602BAA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.API", "Source\TeamworkSystem.Identity.API\TeamworkSystem.Identity.API.csproj", "{A26C9176-93B6-436B-82D4-D7EEA5491FAC}"
@@ -28,8 +22,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkManagement", "WorkManagement", "{41ADC202-2A0B-40C6-8B41-2FF5528F60E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.API", "Source\TeamworkSystem.WorkManagement.API\TeamworkSystem.WorkManagement.API.csproj", "{A13AB74F-4B35-4A0B-BD6A-66A4D1D37E0E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monolith", "Monolith", "{A7C8356E-8C51-49B0-A894-B17B160349B6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Gateway", "Source\TeamworkSystem.Gateway\TeamworkSystem.Gateway.csproj", "{36DA7203-BE84-4597-BC75-B44E1E98F2DE}"
 EndProject
@@ -92,18 +84,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -193,9 +173,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
 		{5D9FB114-CA77-446D-988A-A00643B55161} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
 		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
 		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
