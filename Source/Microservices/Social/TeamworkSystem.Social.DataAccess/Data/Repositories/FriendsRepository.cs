@@ -2,9 +2,9 @@
 using System.Text;
 using Dapper;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.Social.DataAccess.Entities;
-using TeamworkSystem.Social.DataAccess.Interfaces.Repositories;
-using TeamworkSystem.Social.DataAccess.Parameters;
+using TeamworkSystem.Social.DataAccess.Common.Parameters;
+using TeamworkSystem.Social.DataAccess.Data.Entities;
+using TeamworkSystem.Social.DataAccess.Interfaces.Data.Repositories;
 
 namespace TeamworkSystem.Social.DataAccess.Data.Repositories;
 

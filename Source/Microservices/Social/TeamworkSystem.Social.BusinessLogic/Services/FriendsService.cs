@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using TeamworkSystem.Shared.Pagination;
-using TeamworkSystem.Social.BusinessLogic.DTO.Requests;
-using TeamworkSystem.Social.BusinessLogic.DTO.Responses;
+using TeamworkSystem.Social.BusinessLogic.Common.Models.Requests;
+using TeamworkSystem.Social.BusinessLogic.Common.Models.Responses;
 using TeamworkSystem.Social.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Social.DataAccess.Entities;
-using TeamworkSystem.Social.DataAccess.Interfaces;
-using TeamworkSystem.Social.DataAccess.Parameters;
+using TeamworkSystem.Social.DataAccess.Common.Parameters;
+using TeamworkSystem.Social.DataAccess.Data.Entities;
+using TeamworkSystem.Social.DataAccess.Interfaces.Data;
 
 namespace TeamworkSystem.Social.BusinessLogic.Services;
 

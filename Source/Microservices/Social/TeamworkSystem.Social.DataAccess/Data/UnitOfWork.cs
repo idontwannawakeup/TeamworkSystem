@@ -1,5 +1,5 @@
-﻿using TeamworkSystem.Social.DataAccess.Interfaces;
-using TeamworkSystem.Social.DataAccess.Interfaces.Repositories;
+﻿using TeamworkSystem.Social.DataAccess.Interfaces.Data;
+using TeamworkSystem.Social.DataAccess.Interfaces.Data.Repositories;
 
 namespace TeamworkSystem.Social.DataAccess.Data;
 

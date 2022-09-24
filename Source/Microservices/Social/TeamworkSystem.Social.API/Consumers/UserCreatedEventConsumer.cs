@@ -2,7 +2,7 @@
 using MassTransit;
 using TeamworkSystem.EventBus.Messages;
 using TeamworkSystem.Social.DataAccess;
-using TeamworkSystem.Social.DataAccess.Entities;
+using TeamworkSystem.Social.DataAccess.Data.Entities;
 
 namespace TeamworkSystem.Social.API.Consumers;
 

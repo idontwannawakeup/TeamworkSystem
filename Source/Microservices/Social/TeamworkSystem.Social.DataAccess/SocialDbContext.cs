@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TeamworkSystem.Social.DataAccess.Entities;
+using TeamworkSystem.Social.DataAccess.Data.Entities;
 
 namespace TeamworkSystem.Social.DataAccess;
 

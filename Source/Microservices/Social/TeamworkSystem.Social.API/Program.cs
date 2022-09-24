@@ -1,9 +1,9 @@
 using TeamworkSystem.Shared.Extensions;
-using TeamworkSystem.Social.API.DependencyInjection;
+using TeamworkSystem.Social.API.Extensions.Dependencies;
 using TeamworkSystem.Social.API.Middlewares;
-using TeamworkSystem.Social.BusinessLogic.DependencyInjection;
+using TeamworkSystem.Social.BusinessLogic.Extensions.Dependencies;
 using TeamworkSystem.Social.DataAccess;
-using TeamworkSystem.Social.DataAccess.DependencyInjection;
+using TeamworkSystem.Social.DataAccess.Extensions.Dependencies;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddCustomLogging(

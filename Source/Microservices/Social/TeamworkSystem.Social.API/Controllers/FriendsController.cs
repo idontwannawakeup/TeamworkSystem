@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TeamworkSystem.Social.BusinessLogic.DTO.Requests;
+using TeamworkSystem.Social.BusinessLogic.Common.Models.Requests;
 using TeamworkSystem.Social.BusinessLogic.Interfaces.Services;
-using TeamworkSystem.Social.DataAccess.Parameters;
+using TeamworkSystem.Social.DataAccess.Common.Parameters;
 
 namespace TeamworkSystem.Social.API.Controllers;
 

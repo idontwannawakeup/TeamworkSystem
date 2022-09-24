@@ -4,7 +4,6 @@ using TeamworkSystem.Social.DataAccess;
 
 namespace TeamworkSystem.Social.API.Consumers;
 
-
 public class UserChangedEventConsumer : IConsumer<UserChangedEvent>
 {
     private readonly SocialDbContext _dbContext;
