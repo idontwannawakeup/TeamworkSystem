@@ -5,7 +5,7 @@ services:
     hostname: tws.identity.server
     build:
       context: .
-      dockerfile: ./TeamworkSystem.IdentityServer/Dockerfile
+      dockerfile: ./Source/Microservices/Identity/TeamworkSystem.IdentityServer/Dockerfile
     ports:
       - "5119:80"
     environment:
@@ -26,7 +26,7 @@ services:
     hostname: tws.identity.api
     build:
       context: .
-      dockerfile: ./TeamworkSystem.Identity.API/Dockerfile
+      dockerfile: ./Source/Microservices/Identity/People/TeamworkSystem.Identity.People.API/Dockerfile
     ports:
       - "5137:80"
     environment:
@@ -45,7 +45,7 @@ services:
     hostname: tws.work.management.api
     build:
       context: .
-      dockerfile: ./TeamworkSystem.WorkManagement.API/Dockerfile
+      dockerfile: ./Source/Microservices/WorkManagement/Presentation/TeamworkSystem.WorkManagement.API/Dockerfile
     ports:
       - "5077:80"
       - "6077:90"
@@ -67,7 +67,7 @@ services:
     hostname: tws.social.api
     build:
       context: .
-      dockerfile: ./TeamworkSystem.Social.API/Dockerfile
+      dockerfile: ./Source/Microservices/Social/TeamworkSystem.Social.API/Dockerfile
     ports:
       - "5158:80"
     environment:
@@ -88,7 +88,7 @@ services:
     hostname: tws.content.api
     build:
       context: .
-      dockerfile: ./TeamworkSystem.Content.API/Dockerfile
+      dockerfile: ./Source/Microservices/Content/Presentation/TeamworkSystem.Content.API/Dockerfile
     ports:
       - "5211:80"
     environment:
@@ -111,7 +111,7 @@ services:
     hostname: tws.gateway
     build:
       context: .
-      dockerfile: ./TeamworkSystem.Gateway/Dockerfile
+      dockerfile: ./Source/TeamworkSystem.Gateway/Dockerfile
     ports:
       - "5161:80"
     environment:
@@ -122,21 +122,3 @@ services:
       - tws-identity-api
       - tws-work-management-api
       - tws-content-api
-
-  tws-client:
-    container_name: tws-client
-    hostname: tws.client
-    build:
-      context: .
-      dockerfile: ./TeamworkSystem.WebClient/Dockerfile
-    ports:
-      - "8000:80"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+
-      - ApiUrl=http://tws.gateway:80
-      - Intermediate__IdentityService=IdentityService/gateway
-      - Intermediate__CoreService=CoreService/gateway
-      - Intermediate__SocialService=SocialService/gateway
-    depends_on:
-      - tws-gateway
