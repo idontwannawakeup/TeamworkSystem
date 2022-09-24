@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.Per
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Social", "Social", "{84CDE9D4-C6D9-4910-A990-B5785BD2C92D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.API", "Source\TeamworkSystem.Social.API\TeamworkSystem.Social.API.csproj", "{5D9FB114-CA77-446D-988A-A00643B55161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.API", "Source\Microservices\Social\TeamworkSystem.Social.API\TeamworkSystem.Social.API.csproj", "{5D9FB114-CA77-446D-988A-A00643B55161}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.BusinessLogic", "Source\TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj", "{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.BusinessLogic", "Source\Microservices\Social\TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj", "{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.DataAccess", "Source\TeamworkSystem.Social.DataAccess\TeamworkSystem.Social.DataAccess.csproj", "{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.DataAccess", "Source\Microservices\Social\TeamworkSystem.Social.DataAccess\TeamworkSystem.Social.DataAccess.csproj", "{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkManagement", "WorkManagement", "{41ADC202-2A0B-40C6-8B41-2FF5528F60E4}"
 EndProject

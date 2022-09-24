@@ -24,8 +24,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj" />
-        <ProjectReference Include="..\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
-        <ProjectReference Include="..\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
+        <ProjectReference Include="..\..\..\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
+        <ProjectReference Include="..\..\..\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
     </ItemGroup>
 
 </Project>
