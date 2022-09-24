@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.API", "Source\Microservices\Identity\People\TeamworkSystem.Identity.API\TeamworkSystem.Identity.API.csproj", "{A26C9176-93B6-436B-82D4-D7EEA5491FAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.People.API", "Source\Microservices\Identity\People\TeamworkSystem.Identity.People.API\TeamworkSystem.Identity.People.API.csproj", "{A26C9176-93B6-436B-82D4-D7EEA5491FAC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.BusinessLogic", "Source\Microservices\Identity\People\TeamworkSystem.Identity.BusinessLogic\TeamworkSystem.Identity.BusinessLogic.csproj", "{364B12B3-B348-4EAA-8594-E33006FF5BA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.People.BusinessLogic", "Source\Microservices\Identity\People\TeamworkSystem.Identity.People.BusinessLogic\TeamworkSystem.Identity.People.BusinessLogic.csproj", "{364B12B3-B348-4EAA-8594-E33006FF5BA8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.Persistence.People", "Source\Microservices\Identity\Persistence\TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj", "{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}"
 EndProject
