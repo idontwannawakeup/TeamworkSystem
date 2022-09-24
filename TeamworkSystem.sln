@@ -56,15 +56,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{ECE28A0C-6C39-40DE-878D-66C413926AB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Application", "Source\Microservices\Content\TeamworkSystem.Content.Application\TeamworkSystem.Content.Application.csproj", "{5A72B3B5-8482-4818-BC29-11FB61A46BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Application", "Source\Microservices\Content\Core\TeamworkSystem.Content.Application\TeamworkSystem.Content.Application.csproj", "{5A72B3B5-8482-4818-BC29-11FB61A46BD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Domain", "Source\Microservices\Content\TeamworkSystem.Content.Domain\TeamworkSystem.Content.Domain.csproj", "{C974C6D5-CDA4-4C66-8711-4CBB488B26F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Domain", "Source\Microservices\Content\Core\TeamworkSystem.Content.Domain\TeamworkSystem.Content.Domain.csproj", "{C974C6D5-CDA4-4C66-8711-4CBB488B26F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Persistence", "Source\Microservices\Content\TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj", "{68C242A8-0828-4020-8923-4674167CA753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Persistence", "Source\Microservices\Content\Infrastructure\TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj", "{68C242A8-0828-4020-8923-4674167CA753}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Shared", "Source\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj", "{A57A6729-E985-4655-885D-5FC9FD13D8F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.API", "Source\Microservices\Content\TeamworkSystem.Content.API\TeamworkSystem.Content.API.csproj", "{3C7A2019-8CE4-4A96-9147-9178DC2C233E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.API", "Source\Microservices\Content\Presentation\TeamworkSystem.Content.API\TeamworkSystem.Content.API.csproj", "{3C7A2019-8CE4-4A96-9147-9178DC2C233E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.IdentityServer", "Source\Microservices\Identity\TeamworkSystem.IdentityServer\TeamworkSystem.IdentityServer.csproj", "{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}"
 EndProject

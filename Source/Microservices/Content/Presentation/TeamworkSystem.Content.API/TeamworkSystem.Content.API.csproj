@@ -26,10 +26,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TeamworkSystem.Content.Application\TeamworkSystem.Content.Application.csproj" />
-        <ProjectReference Include="..\TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj" />
-        <ProjectReference Include="..\..\..\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
-        <ProjectReference Include="..\..\..\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
+        <ProjectReference Include="..\..\Core\TeamworkSystem.Content.Application\TeamworkSystem.Content.Application.csproj" />
+        <ProjectReference Include="..\..\Infrastructure\TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
     </ItemGroup>
 
 </Project>
