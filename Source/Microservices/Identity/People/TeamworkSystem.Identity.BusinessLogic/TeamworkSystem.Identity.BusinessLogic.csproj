@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Persistence\TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj" />
+      <ProjectReference Include="..\..\Persistence\TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj" />
     </ItemGroup>
 
     <ItemGroup>
