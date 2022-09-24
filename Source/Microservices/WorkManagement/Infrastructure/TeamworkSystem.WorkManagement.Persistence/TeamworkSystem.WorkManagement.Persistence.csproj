@@ -16,8 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj" />
-        <ProjectReference Include="..\TeamworkSystem.WorkManagement.Domain\TeamworkSystem.WorkManagement.Domain.csproj" />
+        <ProjectReference Include="..\..\Core\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj" />
+        <ProjectReference Include="..\..\Core\TeamworkSystem.WorkManagement.Domain\TeamworkSystem.WorkManagement.Domain.csproj" />
     </ItemGroup>
 
 </Project>

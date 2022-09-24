@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj" />
     </ItemGroup>
 
 </Project>

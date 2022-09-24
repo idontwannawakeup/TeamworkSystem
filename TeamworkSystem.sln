@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.DataA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkManagement", "WorkManagement", "{41ADC202-2A0B-40C6-8B41-2FF5528F60E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.API", "Source\Microservices\WorkManagement\TeamworkSystem.WorkManagement.API\TeamworkSystem.WorkManagement.API.csproj", "{A13AB74F-4B35-4A0B-BD6A-66A4D1D37E0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.API", "Source\Microservices\WorkManagement\Presentation\TeamworkSystem.WorkManagement.API\TeamworkSystem.WorkManagement.API.csproj", "{A13AB74F-4B35-4A0B-BD6A-66A4D1D37E0E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Gateway", "Source\TeamworkSystem.Gateway\TeamworkSystem.Gateway.csproj", "{36DA7203-BE84-4597-BC75-B44E1E98F2DE}"
 EndProject
@@ -40,11 +40,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{3E50F54E-7D8B-46D0-8281-9BE3D4AAF761}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Domain", "Source\Microservices\WorkManagement\TeamworkSystem.WorkManagement.Domain\TeamworkSystem.WorkManagement.Domain.csproj", "{46559AF1-B63E-4C2A-8A70-F6B333F38DDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Domain", "Source\Microservices\WorkManagement\Core\TeamworkSystem.WorkManagement.Domain\TeamworkSystem.WorkManagement.Domain.csproj", "{46559AF1-B63E-4C2A-8A70-F6B333F38DDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Application", "Source\Microservices\WorkManagement\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj", "{D088A869-5352-4D8E-8F9C-1CD71902D637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Application", "Source\Microservices\WorkManagement\Core\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj", "{D088A869-5352-4D8E-8F9C-1CD71902D637}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Persistence", "Source\Microservices\WorkManagement\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj", "{39117289-408C-4122-BE96-51F0004991B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Persistence", "Source\Microservices\WorkManagement\Infrastructure\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj", "{39117289-408C-4122-BE96-51F0004991B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.EventBus.Messages", "Source\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj", "{238CA245-3AF6-4A6C-B86B-87978D4081EC}"
 EndProject
