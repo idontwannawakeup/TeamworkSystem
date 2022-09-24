@@ -28,7 +28,7 @@ await app.UseOcelot();
 
 {
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    logger.LogInformation("Environment - {}", app.Environment.EnvironmentName);
+    logger.LogInformation("Environment - {EnvironmentName}", app.Environment.EnvironmentName);
 }
 
 app.Run();
