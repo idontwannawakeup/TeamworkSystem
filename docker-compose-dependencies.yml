@@ -3,7 +3,7 @@ services:
   tws-dependency-mssql:
     container_name: tws-dependency-mssql
     hostname: tws.dependency.mssql
-    image: mcr.microsoft.com/mssql/server:2019-CU16-ubuntu-20.04
+    image: mcr.microsoft.com/mssql/server:2022-CU1-ubuntu-20.04
     volumes:
       - tws-dependency-mssql-data:/var/opt/mssql
     ports:
