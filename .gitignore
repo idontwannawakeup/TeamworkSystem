@@ -8,6 +8,8 @@ wwwroot/public/photos/*
 
 .vscode/*
 .vscode
+.idea
+.DS_Store
 
 # User-specific files
 *.rsuser
