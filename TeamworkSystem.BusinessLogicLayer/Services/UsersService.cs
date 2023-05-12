@@ -81,7 +81,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             string id,
             UsersParameters parameters)
         {
-            var friends = await userManager.GetFriendsAsync(id, parameters);
+            // var friends = await userManager.GetFriendsAsync(id, parameters);
+            var friends = await friendsRepository.GetAsync(id, parameters);
             return friends?.Map(mapper.Map<User, UserResponse>);
         }
 

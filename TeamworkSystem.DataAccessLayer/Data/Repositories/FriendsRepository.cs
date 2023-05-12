@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using TeamworkSystem.DataAccessLayer.Entities;
+using TeamworkSystem.DataAccessLayer.Pagination;
+using TeamworkSystem.DataAccessLayer.Parameters;
 
 namespace TeamworkSystem.DataAccessLayer.Data.Repositories;
 
@@ -22,31 +26,31 @@ public class FriendsRepository
             new { UserId = userId });
     }
 
-    // public async Task<PagedList<User>> GetAsync(Guid userId, FriendsParameters parameters)
-    // {
-    //     var queryBuilder = new StringBuilder(
-    //         @"select * from AspNetUsers up
-    //           join Friends f on up.Id = f.SecondId
-    //           join AspNetUsers fup on fup.Id = f.SecondId
-    //           where f.FirstId = @UserId");
-    //
-    //     if (!string.IsNullOrWhiteSpace(parameters.LastName))
-    //     {
-    //         queryBuilder.Append(" and fup.LastName like '%' + @LastName + '%'");
-    //     }
-    //
-    //     var enumerable = await _connection.QueryAsync<UserProfile>(
-    //         queryBuilder.ToString(),
-    //         new { UserId = userId });
-    //
-    //     var friends = enumerable as UserProfile[] ?? enumerable.ToArray();
-    //     int pageNumber = parameters.PageNumber, pageSize = parameters.PageSize;
-    //     return new PagedList<UserProfile>(
-    //         friends.Skip((pageNumber - 1) * pageSize).Take(pageSize),
-    //         friends.Length,
-    //         pageNumber,
-    //         pageSize);
-    // }
+    public async Task<PagedList<User>> GetAsync(string userId, UsersParameters parameters)
+    {
+        var queryBuilder = new StringBuilder(
+            @"select * from AspNetUsers up
+              join Friends f on up.Id = f.SecondId
+              join AspNetUsers fup on fup.Id = f.SecondId
+              where f.FirstId = @UserId");
+    
+        if (!string.IsNullOrWhiteSpace(parameters.LastName))
+        {
+            queryBuilder.Append(" and fup.LastName like '%' + @LastName + '%'");
+        }
+
+        var enumerable = await _connection.QueryAsync<User>(
+            queryBuilder.ToString(),
+            new { UserId = userId });
+
+        var friends = enumerable as User[] ?? enumerable.ToArray();
+        int pageNumber = parameters.PageNumber, pageSize = parameters.PageSize;
+        return new PagedList<User>(
+            friends.Skip((pageNumber - 1) * pageSize).Take(pageSize),
+            friends.Length,
+            pageNumber,
+            pageSize);
+    }
 
     public async Task AddToFriendsAsync(string firstId, string secondId)
     {
