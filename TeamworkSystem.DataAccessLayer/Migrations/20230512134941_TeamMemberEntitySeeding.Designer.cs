@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamworkSystem.DataAccessLayer;
 
@@ -11,9 +12,10 @@ using TeamworkSystem.DataAccessLayer;
 namespace TeamworkSystem.DataAccessLayer.Migrations
 {
     [DbContext(typeof(TeamworkSystemContext))]
-    partial class TeamworkSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20230512134941_TeamMemberEntitySeeding")]
+    partial class TeamMemberEntitySeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,60 +262,6 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                             TeamId = 9,
                             Title = "Blog",
                             Type = "Website"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "A web application for managing projects",
-                            TeamId = 1,
-                            Title = "Project A",
-                            Type = "Web Application",
-                            Url = "https://projecta.com"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "A mobile application for tracking tasks",
-                            TeamId = 1,
-                            Title = "Project B",
-                            Type = "Mobile Application",
-                            Url = "https://projectb.com"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "A desktop application for managing finances",
-                            TeamId = 2,
-                            Title = "Project C",
-                            Type = "Desktop Application",
-                            Url = "https://projectc.com"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "A web application for managing projects",
-                            TeamId = 2,
-                            Title = "Project D",
-                            Type = "Web Application",
-                            Url = "https://projectd.com"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "A mobile application for tracking tasks",
-                            TeamId = 3,
-                            Title = "Project E",
-                            Type = "Mobile Application",
-                            Url = "https://projecte.com"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "A desktop application for managing finances",
-                            TeamId = 3,
-                            Title = "Project F",
-                            Type = "Desktop Application",
-                            Url = "https://projectf.com"
                         });
                 });
 
@@ -527,7 +475,7 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            CreationTime = new DateTime(2023, 5, 12, 17, 12, 17, 22, DateTimeKind.Local).AddTicks(6790),
+                            CreationTime = new DateTime(2023, 5, 12, 16, 49, 40, 547, DateTimeKind.Local).AddTicks(4580),
                             Description = "There's unknown bug. Just fix it.",
                             ExecutorId = "61dfb9e3-1c27-424a-9963-9586ca110220",
                             Priority = "Medium",
@@ -535,54 +483,6 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                             Status = "Backlog",
                             Title = "Fix bug",
                             Type = "Epic"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreationTime = new DateTime(2023, 5, 12, 17, 12, 17, 29, DateTimeKind.Local).AddTicks(3190),
-                            Description = "There's a known bug. Just fix it.",
-                            ExecutorId = "013a2014-4a25-4a3d-9fae-e0f783d42ef9",
-                            Priority = "Medium",
-                            ProjectId = 2,
-                            Status = "Backlog",
-                            Title = "Fix a regular bug",
-                            Type = "Epic"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreationTime = new DateTime(2023, 5, 12, 17, 12, 17, 29, DateTimeKind.Local).AddTicks(3210),
-                            Description = "There's a mess of bugs, you have to figure out how to fix them. Good Luck.",
-                            ExecutorId = "61dfb9e3-1c27-424a-9963-9586ca110220",
-                            Priority = "High",
-                            ProjectId = 1,
-                            Status = "Chosen For Development",
-                            Title = "Fix something there",
-                            Type = "Bug"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreationTime = new DateTime(2023, 5, 12, 17, 12, 17, 29, DateTimeKind.Local).AddTicks(3210),
-                            Description = "This task involves identifying outdated software versions and updating them to the latest version to ensure optimal performance and security.",
-                            ExecutorId = "61dfb9e3-1c27-424a-9963-9586ca110220",
-                            Priority = "Low",
-                            ProjectId = 1,
-                            Status = "In Progress",
-                            Title = "Updating Software Versions",
-                            Type = "Task"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreationTime = new DateTime(2023, 5, 12, 17, 12, 17, 29, DateTimeKind.Local).AddTicks(3210),
-                            Description = "In this task, you will diagnose and resolve network connectivity issues, including identifying faulty hardware, configuring network settings, and resolving software conflicts.",
-                            ExecutorId = "61dfb9e3-1c27-424a-9963-9586ca110220",
-                            Priority = "High",
-                            ProjectId = 1,
-                            Status = "Chosen For Development",
-                            Title = "Troubleshooting Network Connectivity Issues",
-                            Type = "Task"
                         });
                 });
 
@@ -676,16 +576,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "3b333929-f974-444e-a8d3-68f50a0459c0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d98c7c22-b540-40c4-8573-ce679db409ce",
+                            ConcurrencyStamp = "93de0921-3b56-495b-86ce-3247548c64a8",
                             EmailConfirmed = false,
                             FirstName = "Esmaralda",
                             LastName = "Voigt",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIYSnwqUgPVutFLiVAo7Inz1oeyJLl4Chn4OMT/kHYYUUODEfH9h98UzGeu8mIas9w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEI4yYfgX1a8bC+gr6UOaax0A7YK5Pflb9Pj6iCgc1IKej9OmtIfFi7KrARf2bV53gA==",
                             PhoneNumberConfirmed = false,
                             Profession = "Developer",
-                            SecurityStamp = "eb4fd28e-f36b-40fc-96b0-fb369d1af78a",
+                            SecurityStamp = "a2f37dde-d1e6-4870-baf8-f23432369b68",
                             Specialization = "Frontend",
                             TwoFactorEnabled = false,
                             UserName = "User1"
@@ -694,16 +594,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "61dfb9e3-1c27-424a-9963-9586ca110220",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9de65b95-b57a-44a2-a6cd-6a88561f92e4",
+                            ConcurrencyStamp = "089ecf77-72e1-4c18-b463-ee33f046819e",
                             EmailConfirmed = false,
                             FirstName = "Ostap",
                             LastName = "Bleier",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAENc9bzpz34FwM8bKGx/ftusG182+M2I877Pj8O+H3D9S9MR0LdfZBDoQwScVyKdiPQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOjacqWu4vBuTmeiGOPgks5KwUNZPX91rJb5uaIVpYnBWcI2VNlAV4eKpUWr12GvRg==",
                             PhoneNumberConfirmed = false,
                             Profession = "Tester",
-                            SecurityStamp = "2541e15a-f6b7-408d-9922-8b43cf8d0b19",
+                            SecurityStamp = "2c23c74c-fc95-4ba1-8763-232d183706c5",
                             Specialization = "Backend",
                             TwoFactorEnabled = false,
                             UserName = "User2"
@@ -712,15 +612,15 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "a36b02e1-81a9-47f4-89b6-d33c4f40ed5f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5433c7d1-3d99-43ac-9bc6-b4f6090fc7a2",
+                            ConcurrencyStamp = "b4d27eb9-1d16-4c1c-98d8-f38e00521b44",
                             EmailConfirmed = false,
                             FirstName = "Sophia",
                             LastName = "Beringer",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER3",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIPuGZ4OxXVgEI8Bzu3XYSq9ak9xDaoIPNfhIWYmSIkeac1efNISR4aZEKCLF2C3/g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAyNiYgnGk2/f9nEccutrzMoHBeNRvyzc2yNK5Y7RGwmBjw8B1YQd+is/l5GrOGA3A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e2449611-b786-41ab-9142-52a5fc0e1862",
+                            SecurityStamp = "06ae68f4-c72d-4c1f-91d5-15f13d8931a5",
                             Specialization = "Fullstack",
                             TwoFactorEnabled = false,
                             UserName = "User3"
@@ -729,16 +629,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "013a2014-4a25-4a3d-9fae-e0f783d42ef9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3a068b47-4d38-4f2e-9b0a-210ab8c5ae59",
+                            ConcurrencyStamp = "74504b78-10b2-4d8a-a6b0-0e083442af82",
                             EmailConfirmed = false,
                             FirstName = "Marlyn",
                             LastName = "Hendry",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER4",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBwkowso5jN7UrUcfHBLFRBQFtby0sUY6d7/7Amrap4hS0PdWsNT7Cw9Z2zH/UxqkQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMXiHoBaEwDK0w0asAgu0oEM4skyEXqIYoM6AF4fL4f+6gLq30oJZrb326KLBpUBWw==",
                             PhoneNumberConfirmed = false,
                             Profession = "Artist",
-                            SecurityStamp = "42a745c8-e225-44a8-943f-29a7b1f1846c",
+                            SecurityStamp = "07a5e66c-6bb6-4810-9b6d-e120f9b5fb10",
                             TwoFactorEnabled = false,
                             UserName = "User4"
                         },
@@ -746,16 +646,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "ae557ffc-2906-4913-bd26-40aa98a55570",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d4ab2bab-d377-4df6-927f-78747ba4c97c",
+                            ConcurrencyStamp = "59645b64-1a28-4728-adf4-94daf26f3b5c",
                             EmailConfirmed = false,
                             FirstName = "Vlasi",
                             LastName = "Arterberry",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER5",
-                            PasswordHash = "AQAAAAEAACcQAAAAED6IxE1G9PNgnV7hI8dVPHINtQjWg5tc59vBOZSSyKDl9RLRAQ1QDUA08H2vjUv1ow==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAQs5X5DCkJph/KJo0OPuZBRPyzunaGu50Q3Ti5dYU2XRL1+awZKTEV1arGXXAvjGw==",
                             PhoneNumberConfirmed = false,
                             Profession = "Designer",
-                            SecurityStamp = "d461fe95-ea69-4e7e-b319-44fb42fb83c2",
+                            SecurityStamp = "85bba475-f28c-4b2a-9941-6fed1667bf4c",
                             Specialization = "Interier",
                             TwoFactorEnabled = false,
                             UserName = "User5"
@@ -764,15 +664,15 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "e5ca09a8-d3c6-4114-99a0-6b2f86ff1df2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "467b6c3d-4448-403e-b174-95c6f756daa7",
+                            ConcurrencyStamp = "a4a48e1b-55fc-4e59-8dee-7d1832654528",
                             EmailConfirmed = false,
                             FirstName = "Chasity",
                             LastName = "Ilbert",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER6",
-                            PasswordHash = "AQAAAAEAACcQAAAAEI3HMC+EollhVUF62infoBnSbzZ8EHnWvEEzUzjOpmsbeow7o5wzs31gwXaM5Ta4lg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKb7pqfMFay59L96EzJyjtSunfpo4zf8XfK4zJbMNI6MES9O+lYv/dd4hAf+jBOK2A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f56aa8d9-f058-4cb5-bcee-88102bd90f9c",
+                            SecurityStamp = "56c1e466-0fa6-4406-8baa-73fdda7fefe3",
                             TwoFactorEnabled = false,
                             UserName = "User6"
                         },
@@ -780,16 +680,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "bc0c5522-0a02-4f23-bb6a-319529716a94",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "943aadb8-8e25-4210-b34f-e3fd1d6eb763",
+                            ConcurrencyStamp = "b7d3f4c2-0803-467e-87c9-fe703df49f90",
                             EmailConfirmed = false,
                             FirstName = "Seraphina",
                             LastName = "Salmon",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER7",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAFQ9z66ugIS6/L6U2i2Rtcf6qeLWmfVDAdcDdYEfEv0kfa8qK7CCSgt6QdmPUkAdA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENQDUSNXuU76doUG+f8IYJhUWzsHxyWljscKDyDBKN2KvRDL2jkDc2DxZy9vcG0xOw==",
                             PhoneNumberConfirmed = false,
                             Profession = "Developer",
-                            SecurityStamp = "b999b6fb-ecb4-49a2-981a-217796b92fdd",
+                            SecurityStamp = "8b636e72-407f-4c62-bbcc-a0cce07f0245",
                             Specialization = "Backend",
                             TwoFactorEnabled = false,
                             UserName = "User7"
@@ -798,16 +698,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "7484e532-dc8e-4005-8b67-15ad8a421a37",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2baa5585-2f71-47d3-ba87-c83ccea0e85d",
+                            ConcurrencyStamp = "2ecd7577-32b6-4bea-bfac-22b9ad0dcdb8",
                             EmailConfirmed = false,
                             FirstName = "Chas",
                             LastName = "Hope",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER8",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGPzOIRwcfw1rwEOd2nZjoSXg0tiI/xwr8eeLLLw4oOU6NkKs5FXSZ49n6J3Wdkw4g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDzmaJdErPtZDGQtIanihXBIkAGDHX2NaUslpgMGewLuQxcq9GdPef1LadVnoryOkA==",
                             PhoneNumberConfirmed = false,
                             Profession = "Designer",
-                            SecurityStamp = "5bd17206-f83a-437b-a35a-05bf6ea16602",
+                            SecurityStamp = "7f560c27-5100-4d8a-9a76-7459587b06b8",
                             TwoFactorEnabled = false,
                             UserName = "User8"
                         },
@@ -815,15 +715,15 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "3f036c83-88e8-4aeb-ad33-290d60cf6b66",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "188a108c-48e8-43f1-a369-6939918c77e0",
+                            ConcurrencyStamp = "91a5ae87-e86f-4edb-9e9a-535eed35784b",
                             EmailConfirmed = false,
                             FirstName = "Nadezhda",
                             LastName = "Haynes",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER9",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPUW0yqqx6IqhY9yrA7KTk3ZZyYqANfBRS+zFnLduX/56aDuCk8WKbUw8bwGnsvIBQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMgPcYb0i4X2GpQ3UmW3bkoDttD8ulkBNAFjgZSBv0arSUU7My02aJRmo3bzfG9cpQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a996ea53-5213-4aad-b245-d0f3b75f5a5d",
+                            SecurityStamp = "58959855-646d-402b-9789-e54f398180fc",
                             TwoFactorEnabled = false,
                             UserName = "User9"
                         },
@@ -831,16 +731,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "7ad5c481-f391-45bb-a79c-cfcb1adb448b",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d3c58844-8ee1-4de5-8e39-be014b0632c1",
+                            ConcurrencyStamp = "a199a688-096c-4207-b22d-35d976c2e10c",
                             EmailConfirmed = false,
                             FirstName = "Sonny",
                             LastName = "Gibb",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER10",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJ9uuAU72418Qh3z03XFTAddbb4lyNpHSjg9EeC9o+Rw0A/rSLm/TmNYhT3xoyFEEg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHYEiOu6d5/54HocfWU96sNdl0OJN1IVeBdag1lG04EIz7NvgGatjaN4oEscyssEDw==",
                             PhoneNumberConfirmed = false,
                             Profession = "Tester",
-                            SecurityStamp = "30326557-3f81-412b-be97-f00876215d51",
+                            SecurityStamp = "6279c8e6-fb87-4153-ad1b-8c2a09cade41",
                             TwoFactorEnabled = false,
                             UserName = "User10"
                         },
@@ -848,16 +748,16 @@ namespace TeamworkSystem.DataAccessLayer.Migrations
                         {
                             Id = "0a906f06-fc52-417b-bc81-352df8bbe721",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1eb9759e-f1b0-400b-b2ff-2ec16bfc5a5f",
+                            ConcurrencyStamp = "42ce2464-be9d-4d1d-8ea7-4e60baced763",
                             EmailConfirmed = false,
                             FirstName = "Eric",
                             LastName = "Lincoln",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER11",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPhqZI0KEYcO8PMp7x2Un2EZy+0vVGl4wx8mf3Oo1bIkwkFwmpjAc+0EZcpDG7xpUA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEU2C6Om55qUYdxs44zvIsKqCO/op9DwDEC2Ea03oIh2esjP7YSqV0ku+xRR8SuYGA==",
                             PhoneNumberConfirmed = false,
                             Profession = "Designer",
-                            SecurityStamp = "9dc94bbe-31ad-4d32-82e1-af09f6ac7f09",
+                            SecurityStamp = "62da28ee-62c3-46e5-9223-0e135471a3db",
                             TwoFactorEnabled = false,
                             UserName = "User11"
                         });
