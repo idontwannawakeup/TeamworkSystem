@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,9 +40,14 @@ namespace TeamworkSystem.WebAPI
         // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IDbConnection>(_ =>
+            {
+                var connectionString = Configuration.GetConnectionString("DefaultConnection");
+                return new SqlConnection(connectionString);
+            });
             services.AddDbContext<TeamworkSystemContext>(options =>
             {
-                string connectionString = Configuration.GetConnectionString("DefaultConnection");
+                var connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
 
@@ -48,6 +55,7 @@ namespace TeamworkSystem.WebAPI
             services.AddTransient<IRatingsRepository, RatingsRepository>();
             services.AddTransient<ITeamsRepository, TeamsRepository>();
             services.AddTransient<ITicketsRepository, TicketsRepository>();
+            services.AddTransient<FriendsRepository>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 

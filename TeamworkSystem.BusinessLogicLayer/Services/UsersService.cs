@@ -9,6 +9,7 @@ using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Extensions;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
+using TeamworkSystem.DataAccessLayer.Data.Repositories;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Pagination;
@@ -25,6 +26,8 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         private readonly UserManager<User> userManager;
 
         private readonly IPhotosService photosService;
+        
+        private readonly FriendsRepository friendsRepository;
 
         public async Task<IEnumerable<UserResponse>> GetAsync()
         {
@@ -43,14 +46,6 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         {
             var user = await userManager.GetCompleteEntityAsync(id);
             return mapper.Map<User, UserResponse>(user);
-        }
-
-        public async Task<PagedList<UserResponse>> GetFriendsAsync(
-            string id,
-            UsersParameters parameters)
-        {
-            var friends = await userManager.GetFriendsAsync(id, parameters);
-            return friends?.Map(mapper.Map<User, UserResponse>);
         }
 
         public async Task UpdateAsync(UserRequest request)
@@ -82,40 +77,32 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AddFriendAsync(FriendsRequest friendsRequest) =>
-            await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
-            {
-                firstUser.Friends.Add(secondUser);
-                secondUser.Friends.Add(firstUser);
-            });
-
-        public async Task DeleteFriendAsync(FriendsRequest friendsRequest) =>
-            await MakeActionWithFriends(friendsRequest, (firstUser, secondUser) =>
-            {
-                firstUser.Friends.Remove(secondUser);
-                secondUser.Friends.Remove(firstUser);
-            });
-
-        private async Task MakeActionWithFriends(
-            FriendsRequest friendsRequest,
-            Action<User, User> action)
+        public async Task<PagedList<UserResponse>> GetFriendsAsync(
+            string id,
+            UsersParameters parameters)
         {
-            var firstUser = await userManager.GetCompleteEntityAsync(friendsRequest.FirstId);
-            var secondUser = await userManager.GetCompleteEntityAsync(friendsRequest.SecondId);
-
-            action?.Invoke(firstUser, secondUser);
-            await userManager.UpdateAsync(firstUser);
-            await userManager.UpdateAsync(secondUser);
-
-            await unitOfWork.SaveChangesAsync();
+            var friends = await userManager.GetFriendsAsync(id, parameters);
+            return friends?.Map(mapper.Map<User, UserResponse>);
         }
 
-        public UsersService(IUnitOfWork unitOfWork, IMapper mapper, IPhotosService photosService)
+        public async Task AddFriendAsync(FriendsRequest friendsRequest)
+        {
+            await friendsRepository.AddToFriendsAsync(friendsRequest.FirstId, friendsRequest.SecondId);
+        }
+
+        public async Task DeleteFriendAsync(FriendsRequest friendsRequest)
+        {
+            await friendsRepository.DeleteFromFriendsAsync(friendsRequest.FirstId, friendsRequest.SecondId);
+        }
+
+        public UsersService(IUnitOfWork unitOfWork, IMapper mapper, IPhotosService photosService,
+            FriendsRepository friendsRepository)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.photosService = photosService;
             userManager = this.unitOfWork.UserManager;
+            this.friendsRepository = friendsRepository;
         }
     }
 }
