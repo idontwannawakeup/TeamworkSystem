@@ -31,7 +31,6 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
                     entity.Property("MembersId").HasColumnName("UserId");
                     entity.Property("TeamsId").HasColumnName("TeamId");
                     entity.HasData(
-                        new { MembersId = "61dfb9e3-1c27-424a-9963-9586ca110220", TeamsId = 9 },
                         new { MembersId = "013a2014-4a25-4a3d-9fae-e0f783d42ef9", TeamsId = 1 },
                         new { MembersId = "0a906f06-fc52-417b-bc81-352df8bbe721", TeamsId = 2 },
                         new { MembersId = "61dfb9e3-1c27-424a-9963-9586ca110220", TeamsId = 3 },
@@ -39,7 +38,17 @@ namespace TeamworkSystem.DataAccessLayer.Configurations
                         new { MembersId = "3f036c83-88e8-4aeb-ad33-290d60cf6b66", TeamsId = 5 },
                         new { MembersId = "7ad5c481-f391-45bb-a79c-cfcb1adb448b", TeamsId = 6 },
                         new { MembersId = "3b333929-f974-444e-a8d3-68f50a0459c0", TeamsId = 7 },
-                        new { MembersId = "3b333929-f974-444e-a8d3-68f50a0459c0", TeamsId = 8 });
+                        new { MembersId = "3b333929-f974-444e-a8d3-68f50a0459c0", TeamsId = 8 },
+                        new { MembersId = "61dfb9e3-1c27-424a-9963-9586ca110220", TeamsId = 9 },
+                        new { MembersId = "61dfb9e3-1c27-424a-9963-9586ca110220", TeamsId = 10 },
+                        new { MembersId = "3b333929-f974-444e-a8d3-68f50a0459c0", TeamsId = 11 },
+                        new { MembersId = "7ad5c481-f391-45bb-a79c-cfcb1adb448b", TeamsId = 12 },
+                        new { MembersId = "61dfb9e3-1c27-424a-9963-9586ca110220", TeamsId = 13 },
+                        new { MembersId = "3b333929-f974-444e-a8d3-68f50a0459c0", TeamsId = 14 },
+                        new { MembersId = "7ad5c481-f391-45bb-a79c-cfcb1adb448b", TeamsId = 15 },
+                        new { MembersId = "61dfb9e3-1c27-424a-9963-9586ca110220", TeamsId = 16 },
+                        new { MembersId = "3b333929-f974-444e-a8d3-68f50a0459c0", TeamsId = 17 },
+                        new { MembersId = "7ad5c481-f391-45bb-a79c-cfcb1adb448b", TeamsId = 18 });
                 });
 
             new TeamSeeder().Seed(builder);

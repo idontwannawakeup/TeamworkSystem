@@ -80,7 +80,79 @@ namespace TeamworkSystem.DataAccessLayer.Seeding
                 LeaderId = "61dfb9e3-1c27-424a-9963-9586ca110220",
                 Specialization = "Writing bugs",
                 About = "We are writing bugs, fear us"
-            }
+            },
+            new Team
+            {
+                Id = 10,
+                Name = "Gale",
+                LeaderId = "61dfb9e3-1c27-424a-9963-9586ca110220",
+                Specialization = "Cloud Computing",
+                About = "We offer reliable, secure data storage and processing services over the internet"
+            },
+            new Team
+            {
+                Id = 11,
+                Name = "Lightning",
+                LeaderId = "3b333929-f974-444e-a8d3-68f50a0459c0",
+                Specialization = "Testing",
+                About = "We ensure all software runs smoothly and efficiently"
+            },
+            new Team
+            {
+                Id = 12,
+                Name = "Blizzard",
+                LeaderId = "7ad5c481-f391-45bb-a79c-cfcb1adb448b",
+                Specialization = "UI/UX Design",
+                About = "We create intuitive and aesthetic user interfaces"
+            },
+            new Team
+            {
+                Id = 13,
+                Name = "Hurricane",
+                LeaderId = "61dfb9e3-1c27-424a-9963-9586ca110220",
+                Specialization = "Backend Development",
+                About = "We build robust and scalable server-side applications"
+            },
+            new Team
+            {
+                Id = 14,
+                Name = "Cyclone",
+                LeaderId = "3b333929-f974-444e-a8d3-68f50a0459c0",
+                Specialization = "Frontend Development",
+                About = "We create interactive and responsive web pages"
+            },
+            new Team
+            {
+                Id = 15,
+                Name = "Tornado",
+                LeaderId = "7ad5c481-f391-45bb-a79c-cfcb1adb448b",
+                Specialization = "Data Analysis",
+                About = "We extract insights and patterns from complex data"
+            },
+            new Team
+            {
+                Id = 16,
+                Name = "Tempest",
+                LeaderId = "61dfb9e3-1c27-424a-9963-9586ca110220",
+                Specialization = "Database Management",
+                About = "We manage and organize complex databases efficiently"
+            },
+            new Team
+            {
+                Id = 17,
+                Name = "Whirlwind",
+                LeaderId = "3b333929-f974-444e-a8d3-68f50a0459c0",
+                Specialization = "Machine Learning",
+                About = "We develop algorithms that can learn from and make decisions or predictions"
+            },
+            new Team
+            {
+                Id = 18,
+                Name = "Typhoon",
+                LeaderId = "7ad5c481-f391-45bb-a79c-cfcb1adb448b",
+                Specialization = "Cybersecurity",
+                About = "We protect computer systems from theft or damage to their hardware, software, or data"
+            },
         };
 
         public void Seed(EntityTypeBuilder<Team> builder) => builder.HasData(teams);
