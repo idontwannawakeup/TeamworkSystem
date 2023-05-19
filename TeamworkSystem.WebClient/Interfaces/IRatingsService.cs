@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
+using TeamworkSystem.WebClient.ViewModels.DapperViewModels;
 
 namespace TeamworkSystem.WebClient.Interfaces
 {
@@ -21,5 +22,7 @@ namespace TeamworkSystem.WebClient.Interfaces
         Task UpdateAsync(RatingViewModel viewModel);
 
         Task DeleteAsync(int id);
+
+        Task<RatingAverageScoresViewModel> GetAverageScoresByUserIdAsync(string userId);
     }
 }

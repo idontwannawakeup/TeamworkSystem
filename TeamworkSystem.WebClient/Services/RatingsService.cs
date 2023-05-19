@@ -6,6 +6,7 @@ using TeamworkSystem.WebClient.Extensions;
 using TeamworkSystem.WebClient.Interfaces;
 using TeamworkSystem.WebClient.Parameters;
 using TeamworkSystem.WebClient.ViewModels;
+using TeamworkSystem.WebClient.ViewModels.DapperViewModels;
 
 namespace TeamworkSystem.WebClient.Services
 {
@@ -29,6 +30,9 @@ namespace TeamworkSystem.WebClient.Services
 
         public async Task<RatingViewModel> GetByIdAsync(int id) =>
             await httpClient.GetAsync<RatingViewModel>($"{id}");
+        
+        public async Task<RatingAverageScoresViewModel> GetAverageScoresByUserIdAsync(string userId) =>
+            await httpClient.GetAsync<RatingAverageScoresViewModel>($"average/{userId}");
 
         public async Task CreateAsync(RatingViewModel viewModel) =>
             await httpClient.PostAsync(string.Empty, viewModel);

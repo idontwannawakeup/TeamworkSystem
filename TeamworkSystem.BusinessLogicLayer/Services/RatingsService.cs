@@ -5,6 +5,7 @@ using AutoMapper;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
 using TeamworkSystem.BusinessLogicLayer.Interfaces.Services;
+using TeamworkSystem.DataAccessLayer.Data.Repositories;
 using TeamworkSystem.DataAccessLayer.Entities;
 using TeamworkSystem.DataAccessLayer.Interfaces;
 using TeamworkSystem.DataAccessLayer.Interfaces.Repositories;
@@ -20,6 +21,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
         private readonly IMapper mapper;
 
         private readonly IRatingsRepository ratingsRepository;
+        private readonly RatingsDapperRepository ratingsDapperRepository;
 
         public async Task<IEnumerable<RatingResponse>> GetAsync()
         {
@@ -72,10 +74,16 @@ namespace TeamworkSystem.BusinessLogicLayer.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public RatingsService(IUnitOfWork unitOfWork, IMapper mapper)
+        public async Task<RatingAverageScores> GetAverageScoresForUserAsync(string ratedUserId)
+        {
+            return await ratingsDapperRepository.GetAverageScoresForUserAsync(ratedUserId);
+        }
+
+        public RatingsService(IUnitOfWork unitOfWork, IMapper mapper, RatingsDapperRepository ratingsDapperRepository)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.ratingsDapperRepository = ratingsDapperRepository;
             ratingsRepository = this.unitOfWork.RatingsRepository;
         }
     }

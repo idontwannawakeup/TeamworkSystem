@@ -22,7 +22,8 @@ public class FriendsRepository
         return await _connection.QueryAsync<User>(
             @"select * from AspNetUsers up
               join Friends f on up.Id = f.SecondId
-              where f.FirstId = @UserId",
+              where f.FirstId = @UserId or f.SecondId = @UserId
+              order by up.FirstName, up.LastName",
             new { UserId = userId });
     }
 
@@ -32,7 +33,8 @@ public class FriendsRepository
             @"select * from AspNetUsers up
               join Friends f on up.Id = f.SecondId
               join AspNetUsers fup on fup.Id = f.SecondId
-              where f.FirstId = @UserId");
+              where f.FirstId = @UserId or f.SecondId = @UserId
+              order by up.FirstName, up.LastName");
     
         if (!string.IsNullOrWhiteSpace(parameters.LastName))
         {
@@ -56,13 +58,13 @@ public class FriendsRepository
     {
         const string query = @"insert into Friends (FirstId, SecondId) values (@FirstId, @SecondId)";
         await _connection.ExecuteAsync(query, new { FirstId = firstId, SecondId = secondId });
-        await _connection.ExecuteAsync(query, new { FirstId = secondId, SecondId = firstId });
+        // await _connection.ExecuteAsync(query, new { FirstId = secondId, SecondId = firstId });
     }
 
     public async Task DeleteFromFriendsAsync(string firstId, string secondId)
     {
         const string query = @"delete f from Friends f where f.FirstId = @FirstId and f.SecondId = @SecondId";
         await _connection.ExecuteAsync(query, new { FirstId = firstId, SecondId = secondId });
-        await _connection.ExecuteAsync(query, new { FirstId = secondId, SecondId = firstId });
+        // await _connection.ExecuteAsync(query, new { FirstId = secondId, SecondId = firstId });
     }
 }

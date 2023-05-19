@@ -56,6 +56,7 @@ namespace TeamworkSystem.WebAPI
             services.AddTransient<ITeamsRepository, TeamsRepository>();
             services.AddTransient<ITicketsRepository, TicketsRepository>();
             services.AddTransient<FriendsRepository>();
+            services.AddTransient<RatingsDapperRepository>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 

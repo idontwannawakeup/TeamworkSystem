@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TeamworkSystem.BusinessLogicLayer.DTO.Requests;
 using TeamworkSystem.BusinessLogicLayer.DTO.Responses;
+using TeamworkSystem.DataAccessLayer.Data.Repositories;
 using TeamworkSystem.DataAccessLayer.Pagination;
 using TeamworkSystem.DataAccessLayer.Parameters;
 
@@ -20,5 +21,7 @@ namespace TeamworkSystem.BusinessLogicLayer.Interfaces.Services
         Task UpdateAsync(RatingRequest request);
 
         Task DeleteAsync(int id);
+
+        Task<RatingAverageScores> GetAverageScoresForUserAsync(string ratedUserId);
     }
 }

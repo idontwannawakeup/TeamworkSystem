@@ -124,6 +124,27 @@ namespace TeamworkSystem.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
             }
         }
+        
+        [HttpGet("average/{userId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] string userId)
+        {
+            try
+            {
+                return Ok(await ratingsService.GetAverageScoresForUserAsync(userId));
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(new { e.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { e.Message });
+            }
+        }
 
         public RatingsController(IRatingsService ratingsService)
         {
