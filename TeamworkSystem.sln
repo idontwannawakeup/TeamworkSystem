@@ -3,37 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WebAPI", "TeamworkSystem.WebAPI\TeamworkSystem.WebAPI.csproj", "{D194DDC2-370D-4DBB-BD09-903564C3C95C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.DataAccessLayer", "TeamworkSystem.DataAccessLayer\TeamworkSystem.DataAccessLayer.csproj", "{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.BusinessLogicLayer", "TeamworkSystem.BusinessLogicLayer\TeamworkSystem.BusinessLogicLayer.csproj", "{44F5F84B-864B-43AE-B6C9-49BACA602BAA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.API", "TeamworkSystem.Identity.API\TeamworkSystem.Identity.API.csproj", "{A26C9176-93B6-436B-82D4-D7EEA5491FAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.People.API", "Source\Microservices\Identity\People\TeamworkSystem.Identity.People.API\TeamworkSystem.Identity.People.API.csproj", "{A26C9176-93B6-436B-82D4-D7EEA5491FAC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.BusinessLogic", "TeamworkSystem.Identity.BusinessLogic\TeamworkSystem.Identity.BusinessLogic.csproj", "{364B12B3-B348-4EAA-8594-E33006FF5BA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.People.BusinessLogic", "Source\Microservices\Identity\People\TeamworkSystem.Identity.People.BusinessLogic\TeamworkSystem.Identity.People.BusinessLogic.csproj", "{364B12B3-B348-4EAA-8594-E33006FF5BA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.Persistence.People", "TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj", "{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Identity.Persistence.People", "Source\Microservices\Identity\Persistence\TeamworkSystem.Identity.Persistence.People\TeamworkSystem.Identity.Persistence.People.csproj", "{BCCD2771-75FA-49E7-BAE9-F91F04E48EDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Social", "Social", "{84CDE9D4-C6D9-4910-A990-B5785BD2C92D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.API", "TeamworkSystem.Social.API\TeamworkSystem.Social.API.csproj", "{5D9FB114-CA77-446D-988A-A00643B55161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.API", "Source\Microservices\Social\TeamworkSystem.Social.API\TeamworkSystem.Social.API.csproj", "{5D9FB114-CA77-446D-988A-A00643B55161}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.BusinessLogic", "TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj", "{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.BusinessLogic", "Source\Microservices\Social\TeamworkSystem.Social.BusinessLogic\TeamworkSystem.Social.BusinessLogic.csproj", "{E328CBAE-226E-4F74-BFD0-83D6A359AC3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.DataAccess", "TeamworkSystem.Social.DataAccess\TeamworkSystem.Social.DataAccess.csproj", "{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Social.DataAccess", "Source\Microservices\Social\TeamworkSystem.Social.DataAccess\TeamworkSystem.Social.DataAccess.csproj", "{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkManagement", "WorkManagement", "{41ADC202-2A0B-40C6-8B41-2FF5528F60E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.API", "TeamworkSystem.WorkManagement.API\TeamworkSystem.WorkManagement.API.csproj", "{A13AB74F-4B35-4A0B-BD6A-66A4D1D37E0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.API", "Source\Microservices\WorkManagement\Presentation\TeamworkSystem.WorkManagement.API\TeamworkSystem.WorkManagement.API.csproj", "{A13AB74F-4B35-4A0B-BD6A-66A4D1D37E0E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monolith", "Monolith", "{A7C8356E-8C51-49B0-A894-B17B160349B6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Gateway", "TeamworkSystem.Gateway\TeamworkSystem.Gateway.csproj", "{36DA7203-BE84-4597-BC75-B44E1E98F2DE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WebClient", "TeamworkSystem.WebClient\TeamworkSystem.WebClient.csproj", "{FB33EDC8-2123-4C0F-9795-F860D0DF50EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Gateway", "Source\TeamworkSystem.Gateway\TeamworkSystem.Gateway.csproj", "{36DA7203-BE84-4597-BC75-B44E1E98F2DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47877FC6-DBBA-4554-B155-8D59935414AC}"
 	ProjectSection(SolutionItems) = preProject
@@ -41,7 +31,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.linux.override.yml = docker-compose.linux.override.yml
 		docker-compose.windows.override.yml = docker-compose.windows.override.yml
 		docker-compose.yml = docker-compose.yml
-		docker-compose-dependencies.macos.yml = docker-compose-dependencies.macos.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B8F05D9D-66CC-432A-BE03-C92A8FB59E0A}"
@@ -50,13 +39,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{3E50F54E-7D8B-46D0-8281-9BE3D4AAF761}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Domain", "TeamworkSystem.WorkManagement.Domain\TeamworkSystem.WorkManagement.Domain.csproj", "{46559AF1-B63E-4C2A-8A70-F6B333F38DDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Domain", "Source\Microservices\WorkManagement\Core\TeamworkSystem.WorkManagement.Domain\TeamworkSystem.WorkManagement.Domain.csproj", "{46559AF1-B63E-4C2A-8A70-F6B333F38DDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Application", "TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj", "{D088A869-5352-4D8E-8F9C-1CD71902D637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Application", "Source\Microservices\WorkManagement\Core\TeamworkSystem.WorkManagement.Application\TeamworkSystem.WorkManagement.Application.csproj", "{D088A869-5352-4D8E-8F9C-1CD71902D637}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Persistence", "TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj", "{39117289-408C-4122-BE96-51F0004991B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.WorkManagement.Persistence", "Source\Microservices\WorkManagement\Infrastructure\TeamworkSystem.WorkManagement.Persistence\TeamworkSystem.WorkManagement.Persistence.csproj", "{39117289-408C-4122-BE96-51F0004991B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.EventBus.Messages", "TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj", "{238CA245-3AF6-4A6C-B86B-87978D4081EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.EventBus.Messages", "Source\Libraries\TeamworkSystem.EventBus.Messages\TeamworkSystem.EventBus.Messages.csproj", "{238CA245-3AF6-4A6C-B86B-87978D4081EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{12F35831-66D2-4AF6-BA7B-4EE5015DAEB4}"
 EndProject
@@ -66,25 +55,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{ECE28A0C-6C39-40DE-878D-66C413926AB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Application", "TeamworkSystem.Content.Application\TeamworkSystem.Content.Application.csproj", "{5A72B3B5-8482-4818-BC29-11FB61A46BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Application", "Source\Microservices\Content\Core\TeamworkSystem.Content.Application\TeamworkSystem.Content.Application.csproj", "{5A72B3B5-8482-4818-BC29-11FB61A46BD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Domain", "TeamworkSystem.Content.Domain\TeamworkSystem.Content.Domain.csproj", "{C974C6D5-CDA4-4C66-8711-4CBB488B26F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Domain", "Source\Microservices\Content\Core\TeamworkSystem.Content.Domain\TeamworkSystem.Content.Domain.csproj", "{C974C6D5-CDA4-4C66-8711-4CBB488B26F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Persistence", "TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj", "{68C242A8-0828-4020-8923-4674167CA753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.Persistence", "Source\Microservices\Content\Infrastructure\TeamworkSystem.Content.Persistence\TeamworkSystem.Content.Persistence.csproj", "{68C242A8-0828-4020-8923-4674167CA753}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Shared", "TeamworkSystem.Shared\TeamworkSystem.Shared.csproj", "{A57A6729-E985-4655-885D-5FC9FD13D8F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Shared", "Source\Libraries\TeamworkSystem.Shared\TeamworkSystem.Shared.csproj", "{A57A6729-E985-4655-885D-5FC9FD13D8F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.API", "TeamworkSystem.Content.API\TeamworkSystem.Content.API.csproj", "{3C7A2019-8CE4-4A96-9147-9178DC2C233E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.Content.API", "Source\Microservices\Content\Presentation\TeamworkSystem.Content.API\TeamworkSystem.Content.API.csproj", "{3C7A2019-8CE4-4A96-9147-9178DC2C233E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.IdentityServer", "TeamworkSystem.IdentityServer\TeamworkSystem.IdentityServer.csproj", "{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamworkSystem.IdentityServer", "Source\Microservices\Identity\TeamworkSystem.IdentityServer\TeamworkSystem.IdentityServer.csproj", "{2FCD86C2-2954-459B-AFD4-47A034AB7BD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{CE79B757-23C9-4FAE-8EA5-053823C06A73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Persistence.Configuration", "TeamworkSystem.Identity.Persistence.Configuration\TeamworkSystem.Identity.Persistence.Configuration.csproj", "{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Persistence.Configuration", "Source\Microservices\Identity\Persistence\TeamworkSystem.Identity.Persistence.Configuration\TeamworkSystem.Identity.Persistence.Configuration.csproj", "{0C1F2444-A86B-4A57-B70F-9E6059C1F2DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Persistence.Operational", "TeamworkSystem.Identity.Persistence.Operational\TeamworkSystem.Identity.Persistence.Operational.csproj", "{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamworkSystem.Identity.Persistence.Operational", "Source\Microservices\Identity\Persistence\TeamworkSystem.Identity.Persistence.Operational\TeamworkSystem.Identity.Persistence.Operational.csproj", "{1C6A8E20-B036-48CE-977B-1661D9FE1C2D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "People", "People", "{D21F8C38-F309-482E-9208-3036B81D4B58}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{F0ADF472-8B3E-4E5D-8D7B-AFD9EBC9F564}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{91D93103-43A3-4829-83F7-E01FD4BDE63E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{8D86C781-27B2-4B88-9231-57782335413D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,18 +87,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -136,10 +119,6 @@ Global
 		{36DA7203-BE84-4597-BC75-B44E1E98F2DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36DA7203-BE84-4597-BC75-B44E1E98F2DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36DA7203-BE84-4597-BC75-B44E1E98F2DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB33EDC8-2123-4C0F-9795-F860D0DF50EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB33EDC8-2123-4C0F-9795-F860D0DF50EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB33EDC8-2123-4C0F-9795-F860D0DF50EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB33EDC8-2123-4C0F-9795-F860D0DF50EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{46559AF1-B63E-4C2A-8A70-F6B333F38DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{46559AF1-B63E-4C2A-8A70-F6B333F38DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46559AF1-B63E-4C2A-8A70-F6B333F38DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -193,9 +172,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D194DDC2-370D-4DBB-BD09-903564C3C95C} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
-		{9D3E69B5-8F4F-426E-B96A-3338FF0E36D3} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
-		{44F5F84B-864B-43AE-B6C9-49BACA602BAA} = {A7C8356E-8C51-49B0-A894-B17B160349B6}
 		{5D9FB114-CA77-446D-988A-A00643B55161} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
 		{E328CBAE-226E-4F74-BFD0-83D6A359AC3C} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
 		{46271B80-A3A9-4C7E-B943-01F6EF1C6FAD} = {84CDE9D4-C6D9-4910-A990-B5785BD2C92D}
@@ -221,6 +197,15 @@ Global
 		{D21F8C38-F309-482E-9208-3036B81D4B58} = {672CA72A-3AEC-4C7E-A5D2-7273F6C3C676}
 		{364B12B3-B348-4EAA-8594-E33006FF5BA8} = {D21F8C38-F309-482E-9208-3036B81D4B58}
 		{A26C9176-93B6-436B-82D4-D7EEA5491FAC} = {D21F8C38-F309-482E-9208-3036B81D4B58}
+		{A57A6729-E985-4655-885D-5FC9FD13D8F8} = {F0ADF472-8B3E-4E5D-8D7B-AFD9EBC9F564}
+		{238CA245-3AF6-4A6C-B86B-87978D4081EC} = {F0ADF472-8B3E-4E5D-8D7B-AFD9EBC9F564}
+		{672CA72A-3AEC-4C7E-A5D2-7273F6C3C676} = {91D93103-43A3-4829-83F7-E01FD4BDE63E}
+		{84CDE9D4-C6D9-4910-A990-B5785BD2C92D} = {91D93103-43A3-4829-83F7-E01FD4BDE63E}
+		{12F35831-66D2-4AF6-BA7B-4EE5015DAEB4} = {91D93103-43A3-4829-83F7-E01FD4BDE63E}
+		{41ADC202-2A0B-40C6-8B41-2FF5528F60E4} = {91D93103-43A3-4829-83F7-E01FD4BDE63E}
+		{36DA7203-BE84-4597-BC75-B44E1E98F2DE} = {8D86C781-27B2-4B88-9231-57782335413D}
+		{91D93103-43A3-4829-83F7-E01FD4BDE63E} = {8D86C781-27B2-4B88-9231-57782335413D}
+		{F0ADF472-8B3E-4E5D-8D7B-AFD9EBC9F564} = {8D86C781-27B2-4B88-9231-57782335413D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BC4D105-5E3B-4E0D-963C-895BF672E6A2}

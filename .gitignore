@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+.DS_Store
+
 /TeamworkSystem.WebAPI/wwwroot/Public/Photos/*
 !/TeamworkSystem.WebAPI/wwwroot/Public/Photos/.gitkeep
 /TeamworkSystem.Identity.API/wwwroot/Public/Photos/*
